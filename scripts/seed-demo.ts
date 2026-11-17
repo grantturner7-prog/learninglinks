@@ -11,6 +11,7 @@ import { LANGUAGES, LEVELS, SUBJECTS } from "../src/lib/taxonomy";
 if (process.env.NODE_ENV === "production") throw new Error("seed-demo must never run in production");
 
 const EMAIL_SUFFIX = "@demo.invalid";
+const DEMO_OWNER = "demo-school-owner";
 const NAMES = ["Alex T.", "Brenda L.", "Chris W.", "Dana K.", "Emil H.", "Fiona C.", "Grace Y.", "Henry P.", "Iris M.", "Jack S.", "Kelly N.", "Leo R.", "Mia B.", "Noah D.", "Olivia F.", "Peter G.", "Quinn A.", "Rosa V.", "Sam J.", "Tina Z."];
 
 let seed = 42;
@@ -21,8 +22,11 @@ const some = <T,>(a: readonly T[], n: number): T[] => [...a].sort(() => rnd() - 
 async function main() {
   const db = getDb();
   if (process.argv.includes("--remove")) {
-    await db.delete(schema.user).where(like(schema.user.email, `%${EMAIL_SUFFIX}`));
     await db.delete(schema.jobs).where(like(schema.jobs.title, "[demo]%"));
+    // The demo campuses' memberships hang off one demo order (orders have no cascade from the user).
+    await db.delete(schema.memberships).where(sql`${schema.memberships.orderId} in (select id from orders where created_by_user_id = ${DEMO_OWNER})`);
+    await db.delete(schema.orders).where(eq(schema.orders.createdByUserId, DEMO_OWNER));
+    await db.delete(schema.user).where(like(schema.user.email, `%${EMAIL_SUFFIX}`));
     console.log("Demo data removed.");
     return;
   }
@@ -54,7 +58,21 @@ async function main() {
     const s = pick(schools);
     demoJobs.push({ organizationId: s.id, title: `[demo] ${pick(["English teacher", "Homeroom teacher", "After-school helper", "Phonics teacher"])}`, type: pick(["full_time", "part_time"] as const), city: s.city, subjects: some(SUBJECTS, 1), applyContact: "demo@demo.invalid", salaryMin: 45000, salaryMax: 65000, salaryUnit: "month" as const, status: "open" as const });
   }
-  if (demoJobs.length) await db.insert(schema.jobs).values(demoJobs);
+  if (demoJobs.length) {
+    await db.insert(schema.jobs).values(demoJobs);
+    // Job posts only show while their campus holds an active membership, so give the demo campuses one.
+    const orgIds = [...new Set(demoJobs.map((j) => j.organizationId))];
+    await db.insert(schema.user).values({ id: DEMO_OWNER, name: "Demo school owner", email: `${DEMO_OWNER}${EMAIL_SUFFIX}`, accountType: "school", emailVerified: true }).onConflictDoNothing();
+    await db.delete(schema.memberships).where(sql`${schema.memberships.orderId} in (select id from orders where created_by_user_id = ${DEMO_OWNER})`);
+    await db.delete(schema.orders).where(eq(schema.orders.createdByUserId, DEMO_OWNER));
+    const [order] = await db
+      .insert(schema.orders)
+      .values({ holderType: "user", holderId: DEMO_OWNER, planCode: "school_tw", amount: 10_000 * orgIds.length, campuses: orgIds.length, currency: "TWD", countryCode: "TW", status: "paid", provider: "demo", referenceCode: "LL-DEMO-0000", createdByUserId: DEMO_OWNER, paidAt: new Date() })
+      .returning({ id: schema.orders.id });
+    const starts = new Date(Date.now() - 86_400_000);
+    const ends = new Date(Date.now() + 364 * 86_400_000);
+    await db.insert(schema.memberships).values(orgIds.map((holderId) => ({ holderType: "org" as const, holderId, orderId: order!.id, planCode: "school_tw", campuses: 1, startsAt: starts, endsAt: ends })));
+  }
   console.log(`Seeded ${n} demo educators and ${demoJobs.length} demo job posts.`);
 }
 

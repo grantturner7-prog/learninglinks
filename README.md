@@ -10,8 +10,9 @@ Built so far (Phase 1, Taiwan):
 
 - **Step 1:** marketing pages, sign-up with the compliance acknowledgement enforced on the server, sign-in, email verification, password reset.
 - **Step 2:** the educator side. A guided, one-question-at-a-time profile flow with a live preview card (the "Concierge" design; contact and ID scanner on free text, photo upload with metadata stripped), a waiver recorded with the exact wording shown, publish/hide/withdraw/delete, **audience-filtered member directory** (families see tutors, schools see full-/part-time educators), **job posts visible only to signed-in educators with a profile**, and the **map views**: an educator map for paying members (district level, never an address) and a school map with job pins for educators. Maps are self-hosted: no third-party tiles or scripts.
+- **Step 3:** schools and families. Guided join and checkout flows (family NT$2,000; school NT$10,000 per campus, each campus its own 12 months), a bank-transfer order page with a reference code, an **admin desk** (`/admin`, admins are the verified emails in `ADMIN_EMAILS`) to confirm transfers and approve school claims, memberships that start on confirmation and never auto-renew, **contact reveal** with a daily cap and an educator-side "who asked" list, school **job posting** (full-time/part-time only), renewal reminders (`POST /api/cron/reminders` daily with `Authorization: Bearer $CRON_SECRET`), and real dashboards.
 
-Not built yet: school and family memberships and payments (bank transfer first), contact reveal, school job posting, reports, final legal text, deployment. Until memberships exist (Step 3), the member directory can only be exercised with test data.
+Not built yet: credit-card payments (later), reports, final legal text, deployment (Step 4). Set the `BANK_*` variables so the order page shows where to send the transfer.
 
 ## Run it locally
 
