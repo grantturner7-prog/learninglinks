@@ -14,10 +14,25 @@ body{margin:0}
 .ecard{display:flex;flex-direction:column;gap:14px}
 .ecard h3{font-size:18px}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
+.proto{background:var(--i900);color:#fff;padding:10px 0}
+.proto .seg{border-color:#445}
+.plan{border:2px solid var(--i200);border-radius:16px;background:#fff;padding:22px}
+.price{font-size:32px;font-weight:800;color:var(--b800);letter-spacing:-0.02em}
+.was{text-decoration:line-through;color:var(--i500);font-weight:600}
 </style>
 </helmet>
 <div class="pg {{rootClass}}">
   <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <div class="proto">
+    <div class="wrap row" style="justify-content:space-between">
+      <span class="small"><span class="en">Prototype control: preview this page as</span><span class="zh">原型控制：切換檢視身分</span></span>
+      <div class="seg" role="group" aria-label="Preview as">
+        <button type="button" class="{{visitorCls}}" aria-pressed="{{visitorOn}}" onClick="{{setVisitor}}"><span class="en">Visitor (no membership)</span><span class="zh">訪客（未加入會員）</span></button>
+        <button type="button" class="{{memberCls}}" aria-pressed="{{memberOn}}" onClick="{{setMember}}"><span class="en">Paying member</span><span class="zh">付費會員</span></button>
+      </div>
+    </div>
+  </div>
 
   <header class="hdr">
     <div class="wrap">
@@ -41,143 +56,190 @@ body{margin:0}
     </div>
   </header>
 
-  <main class="wrap" style="padding-top:32px;padding-bottom:64px">
-    <div class="row" style="justify-content:space-between;align-items:flex-end;gap:16px">
-      <div>
-        <h1 class="h2"><span class="en">Find educators</span><span class="zh">尋找教師</span></h1>
-        <p class="muted" style="margin-top:4px"><span class="en">Taiwan · 6 educators match your filters</span><span class="zh">台灣 · 6 位符合篩選條件的教師</span></p>
+  <sc-if value="{{isVisitor}}" hint-placeholder-val="{{ true }}">
+    <main class="wrap" style="padding-top:48px;padding-bottom:64px">
+      <div class="stack" style="gap:16px;max-width:760px;margin:0 auto;align-items:center;text-align:center">
+        <span class="icon-tile" style="width:64px;height:64px;border-radius:18px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+        <h1 class="h2"><span class="en">Educators are visible to members only</span><span class="zh">教師資料僅限會員查看</span></h1>
+        <p class="lead" style="font-size:18px"><span class="en">Educators on LearningLinks share their profiles only with paying schools and families. Join for 12 months to search and contact every educator. Educators never pay.</span><span class="zh">LearningLinks 的教師僅將檔案提供給付費的學校與家長。加入 12 個月會員即可搜尋並聯絡所有教師。教師永遠免費。</span></p>
       </div>
-      <div class="row" style="flex:1 1 380px;max-width:520px;justify-content:flex-end;flex-wrap:nowrap">
-        <label class="lbl" for="q" style="position:absolute;left:-9999px">Search</label>
-        <input id="q" class="field" type="search" value="phonics">
-        <button type="button" class="btn btn-p"><span class="en">Search</span><span class="zh">搜尋</span></button>
+
+      <div class="g2" style="max-width:900px;margin:32px auto 0;gap:20px">
+        <div class="plan stack" style="gap:8px">
+          <div class="row" style="justify-content:space-between"><span class="h3"><span class="en">For schools</span><span class="zh">學校方案</span></span><span class="badge-m"><span class="en">12 months</span><span class="zh">12 個月</span></span></div>
+          <div class="row" style="align-items:baseline;gap:10px"><span class="price">NT$5,940</span><span class="was">NT$9,900</span></div>
+          <span class="small muted"><span class="en">founding price, incl. VAT · draft pricing</span><span class="zh">創始會員價，含稅 · 價格為草案</span></span>
+          <a class="btn btn-p btn-block" style="margin-top:8px" href="School-membership.dc.html"><span class="en">Join as a school</span><span class="zh">以學校身分加入</span></a>
+        </div>
+        <div class="plan stack" style="gap:8px">
+          <div class="row" style="justify-content:space-between"><span class="h3"><span class="en">For families</span><span class="zh">家長方案</span></span><span class="badge-w"><span class="en">Opening soon</span><span class="zh">即將開放</span></span></div>
+          <div class="row" style="align-items:baseline;gap:10px"><span class="price">NT$470</span><span class="was">NT$790</span></div>
+          <span class="small muted"><span class="en">founding price, incl. VAT · draft pricing</span><span class="zh">創始會員價，含稅 · 價格為草案</span></span>
+          <a class="btn btn-a btn-block" style="margin-top:8px" href="Families.dc.html"><span class="en">Reserve my founding price</span><span class="zh">預約創始會員價</span></a>
+        </div>
       </div>
-    </div>
 
-    <div class="notice" style="margin-top:20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--b700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-      <span style="flex:1 1 360px"><b class="en">Browsing is free.</b><b class="zh">瀏覽免費。</b> <span class="en">Contact details unlock with a 12-month school or family membership.</span><span class="zh">聯絡方式需加入 12 個月的學校或家長會員才能查看。</span></span>
-      <a class="btn btn-p" href="School-membership.dc.html"><span class="en">See memberships</span><span class="zh">查看會員方案</span></a>
-    </div>
-
-    <div class="split" style="margin-top:28px">
-      <aside class="side">
-        <div class="card stack" style="gap:20px" aria-label="Filters">
-          <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Filters</span><span class="zh">篩選</span></h2><a href="#" class="small"><span class="en">Clear</span><span class="zh">清除</span></a></div>
-          <div><label class="lbl" for="city"><span class="en">City</span><span class="zh">縣市</span></label>
-            <select id="city" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option><option>New Taipei City 新北市</option></select></div>
-          <div><span class="lbl"><span class="en">District</span><span class="zh">行政區</span></span>
-            <div class="tags"><span class="chip on">Xitun 西屯區</span><span class="chip on">Nantun 南屯區</span><span class="chip">Beitun 北屯區</span><span class="chip">Central 中區</span><span class="chip">+25</span></div></div>
-          <div><span class="lbl"><span class="en">Subject</span><span class="zh">科目</span></span>
-            <div class="tags"><span class="chip on"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip"><span class="en">Mathematics</span><span class="zh">數學</span></span><span class="chip"><span class="en">Science</span><span class="zh">自然科學</span></span><span class="chip"><span class="en">Test prep</span><span class="zh">檢定備考</span></span></div></div>
-          <div><span class="lbl"><span class="en">Level</span><span class="zh">年級</span></span>
-            <div class="tags"><span class="chip on"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span><span class="chip"><span class="en">Elementary</span><span class="zh">國小</span></span><span class="chip"><span class="en">Junior high</span><span class="zh">國中</span></span><span class="chip"><span class="en">Senior high</span><span class="zh">高中職</span></span></div></div>
-          <div><span class="lbl"><span class="en">Open to</span><span class="zh">希望的工作型態</span></span>
-            <div class="tags"><span class="chip on"><span class="en">Full-time</span><span class="zh">全職</span></span><span class="chip"><span class="en">Part-time</span><span class="zh">兼職</span></span><span class="chip"><span class="en">Substitute</span><span class="zh">代課</span></span><span class="chip"><span class="en">Private tutoring</span><span class="zh">家教</span></span></div></div>
-          <div><span class="lbl"><span class="en">Mode</span><span class="zh">授課方式</span></span>
-            <div class="tags"><span class="chip"><span class="en">In person</span><span class="zh">實體</span></span><span class="chip"><span class="en">Online</span><span class="zh">線上</span></span></div></div>
-          <div><label class="lbl" for="wa"><span class="en">Work authorization (self-declared)</span><span class="zh">工作許可（自行聲明）</span></label>
-            <select id="wa" class="field"><option>Any 不限</option><option>Citizen or permanent resident 本國籍或永久居留</option><option>Open work rights 擁有開放工作權</option><option>Employer-sponsored 由雇主聘僱</option></select>
-            <p class="hint"><span class="en">Always verify permits directly before hiring.</span><span class="zh">聘僱前請務必親自確認工作許可。</span></p></div>
+      <div class="g2" style="max-width:900px;margin:32px auto 0;gap:20px;align-items:start">
+        <div class="card stack" style="gap:10px">
+          <h2 class="h3"><span class="en">What members get</span><span class="zh">會員可使用的功能</span></h2>
+          <ul style="margin:0;padding-left:20px" class="small">
+            <li><span class="en">Search every educator by subject, level, area and work type</span><span class="zh">依科目、年級、地區與工作型態搜尋所有教師</span></li>
+            <li><span class="en">See full profiles and self-declared credentials</span><span class="zh">查看完整檔案與自行聲明的資歷</span></li>
+            <li><span class="en">Show contact details (Email, LINE, WhatsApp) and message directly</span><span class="zh">查看聯絡方式（Email、LINE、WhatsApp）並直接聯絡</span></li>
+            <li><span class="en">No placement fees. It never renews on its own.</span><span class="zh">沒有仲介費，也不會自動續約。</span></li>
+          </ul>
         </div>
-      </aside>
-
-      <section class="main" aria-label="Results">
-        <div class="g2" style="gap:20px">
-
-          <article class="card ecard">
-            <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar">ER</span>
-              <div style="flex:1;min-width:0"><h3>Emily R.</h3><p class="small muted"><span class="en">Kindergarten English teacher: phonics and storytelling</span><span class="zh">幼兒園英語老師：自然發音與繪本故事</span></p></div></div>
-            <div class="tags"><span class="chip"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span></div>
-            <div class="small muted stack" style="gap:4px">
-              <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Taichung · Xitun, Nantun</span><span class="zh">臺中市 · 西屯區、南屯區</span></span>
-              <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Full-time, part-time · 5–9 years</span><span class="zh">全職、兼職 · 5–9 年經驗</span></span>
-              <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Open work rights</span><span class="zh">擁有開放工作權</span></span>
-            </div>
-            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Email · LINE · members only</span><span class="zh">Email · LINE · 僅限會員</span></div>
-            <a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">View profile</span><span class="zh">查看檔案</span></a>
-          </article>
-
-          <article class="card ecard">
-            <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t3">KL</span>
-              <div style="flex:1;min-width:0"><h3>Kevin L. 林老師</h3><p class="small muted"><span class="en">Bilingual kindergarten: English and music</span><span class="zh">雙語幼兒園：英語與音樂</span></p></div></div>
-            <div class="tags"><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip"><span class="en">Music</span><span class="zh">音樂</span></span><span class="chip"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span></div>
-            <div class="small muted stack" style="gap:4px">
-              <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Taichung · Nantun, Beitun</span><span class="zh">臺中市 · 南屯區、北屯區</span></span>
-              <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Full-time · 2–4 years</span><span class="zh">全職 · 2–4 年經驗</span></span>
-              <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Citizen or permanent resident</span><span class="zh">本國籍或永久居留</span></span>
-            </div>
-            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Email · LINE · phone · members only</span><span class="zh">Email · LINE · 電話 · 僅限會員</span></div>
-            <a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">View profile</span><span class="zh">查看檔案</span></a>
-          </article>
-
-          <article class="card ecard">
-            <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t2">MC</span>
-              <div style="flex:1;min-width:0"><h3>Michael Chen 陳老師</h3><p class="small muted"><span class="en">Junior high maths and CAP exam prep</span><span class="zh">國中數學與會考準備</span></p></div></div>
-            <div class="tags"><span class="chip"><span class="en">Mathematics</span><span class="zh">數學</span></span><span class="chip"><span class="en">Taiwan exam prep</span><span class="zh">升學考試準備</span></span><span class="chip"><span class="en">Junior high</span><span class="zh">國中</span></span></div>
-            <div class="small muted stack" style="gap:4px">
-              <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Taipei · Da'an, Xinyi · also online</span><span class="zh">臺北市 · 大安區、信義區 · 亦可線上</span></span>
-              <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Private tutoring · NT$800–1,200 / hr</span><span class="zh">家教 · NT$800–1,200／小時</span></span>
-              <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Citizen or permanent resident</span><span class="zh">本國籍或永久居留</span></span>
-            </div>
-            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">LINE · phone · members only</span><span class="zh">LINE · 電話 · 僅限會員</span></div>
-            <a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">View profile</span><span class="zh">查看檔案</span></a>
-          </article>
-
-          <article class="card ecard">
-            <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t4">AT</span>
-              <div style="flex:1;min-width:0"><h3>Aroha T.</h3><p class="small muted"><span class="en">Hands-on science and STEM for elementary students</span><span class="zh">國小動手做科學與 STEM</span></p></div></div>
-            <div class="tags"><span class="chip"><span class="en">Science</span><span class="zh">自然科學</span></span><span class="chip"><span class="en">STEM &amp; robotics</span><span class="zh">STEM／機器人</span></span><span class="chip"><span class="en">Elementary</span><span class="zh">國小</span></span></div>
-            <div class="small muted stack" style="gap:4px">
-              <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">New Taipei · Banqiao, Zhonghe</span><span class="zh">新北市 · 板橋區、中和區</span></span>
-              <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Substitute, part-time · 2–4 years</span><span class="zh">代課、兼職 · 2–4 年經驗</span></span>
-              <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Employer-sponsored</span><span class="zh">由雇主聘僱</span></span>
-            </div>
-            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Email · WhatsApp · members only</span><span class="zh">Email · WhatsApp · 僅限會員</span></div>
-            <a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">View profile</span><span class="zh">查看檔案</span></a>
-          </article>
-
-          <article class="card ecard">
-            <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t3">PS</span>
-              <div style="flex:1;min-width:0"><h3>Priya S.</h3><p class="small muted"><span class="en">IELTS and TOEFL coach, online from abroad</span><span class="zh">雅思與托福線上教練（海外授課）</span></p></div></div>
-            <div class="tags"><span class="chip"><span class="en">English test prep</span><span class="zh">英語檢定備考</span></span><span class="chip"><span class="en">University</span><span class="zh">大學</span></span><span class="chip"><span class="en">Adult</span><span class="zh">成人</span></span></div>
-            <div class="small muted stack" style="gap:4px">
-              <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Online only, from abroad</span><span class="zh">僅限線上，人在海外</span></span>
-              <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Private tutoring · NT$600–900 / hr</span><span class="zh">家教 · NT$600–900／小時</span></span>
-              <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Online only, from abroad</span><span class="zh">僅限從海外線上授課</span></span>
-            </div>
-            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Email · WhatsApp · members only</span><span class="zh">Email · WhatsApp · 僅限會員</span></div>
-            <a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">View profile</span><span class="zh">查看檔案</span></a>
-          </article>
-
-          <article class="card ecard">
-            <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar">SM</span>
-              <div style="flex:1;min-width:0"><h3>Sofia M.</h3><p class="small muted"><span class="en">Creative writing and public speaking for teens</span><span class="zh">青少年創意寫作與演講</span></p></div></div>
-            <div class="tags"><span class="chip"><span class="en">Creative writing</span><span class="zh">創意寫作</span></span><span class="chip"><span class="en">Public speaking</span><span class="zh">演講與辯論</span></span><span class="chip"><span class="en">Senior high</span><span class="zh">高中職</span></span></div>
-            <div class="small muted stack" style="gap:4px">
-              <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Kaohsiung · in person and online</span><span class="zh">高雄市 · 實體與線上</span></span>
-              <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Part-time, private tutoring · 5–9 years</span><span class="zh">兼職、家教 · 5–9 年經驗</span></span>
-              <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Open work rights</span><span class="zh">擁有開放工作權</span></span>
-            </div>
-            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Email · LINE · members only</span><span class="zh">Email · LINE · 僅限會員</span></div>
-            <a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">View profile</span><span class="zh">查看檔案</span></a>
-          </article>
-
+        <div class="card stack" style="gap:10px">
+          <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">What a profile looks like</span><span class="zh">檔案內容範例</span></h2><span class="badge-w"><span class="en">Sample, not a real educator</span><span class="zh">範例，非真實教師</span></span></div>
+          <div class="card-flat stack" style="gap:10px">
+            <div class="row" style="flex-wrap:nowrap"><span class="avatar t3">SE</span><div style="flex:1;min-width:0"><div class="strong">Sample Educator</div><div class="small muted"><span class="en">Phonics · English conversation · Xitun</span><span class="zh">自然發音 · 英語會話 · 西屯區</span></div></div></div>
+            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Contact details shown on request</span><span class="zh">聯絡方式需點選才顯示</span></div>
+          </div>
         </div>
-        <div class="row" style="justify-content:center;margin-top:28px;gap:8px">
-          <a class="btn btn-s" href="#"><span class="en">Previous</span><span class="zh">上一頁</span></a>
-          <span class="chip on">1</span><a class="btn btn-s" href="#">2</a><a class="btn btn-s" href="#">3</a>
-          <a class="btn btn-s" href="#"><span class="en">Next</span><span class="zh">下一頁</span></a>
+      </div>
+
+      <p class="small muted center" style="margin-top:28px;max-width:640px;margin-left:auto;margin-right:auto"><b><span class="en">Why can't I look around first?</span><span class="zh">為什麼不能先看看？</span></b> <span class="en">Educators agreed to share their profiles only with paying members, and that is what keeps their details out of the open.</span><span class="zh">教師僅同意將檔案提供給付費會員，這也是保護他們資料不被公開的方式。</span></p>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{isMember}}" hint-placeholder-val="{{ false }}">
+    <main class="wrap" style="padding-top:32px;padding-bottom:64px">
+      <div class="row" style="justify-content:space-between;align-items:flex-end;gap:16px">
+        <div>
+          <h1 class="h2"><span class="en">Find educators</span><span class="zh">尋找教師</span> <span class="badge" style="vertical-align:middle;margin-left:8px"><span class="en">Member view</span><span class="zh">會員檢視</span></span></h1>
+          <p class="muted" style="margin-top:4px"><span class="en">Taiwan · 6 educators match your filters</span><span class="zh">台灣 · 6 位符合篩選條件的教師</span></p>
         </div>
-      </section>
-    </div>
-  </main>
+        <div class="row" style="flex:1 1 380px;max-width:520px;justify-content:flex-end;flex-wrap:nowrap">
+          <label class="lbl" for="q" style="position:absolute;left:-9999px">Search</label>
+          <input id="q" class="field" type="search" value="phonics">
+          <button type="button" class="btn btn-p"><span class="en">Search</span><span class="zh">搜尋</span></button>
+        </div>
+      </div>
+
+      <div class="notice" style="margin-top:20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <span style="flex:1 1 360px"><span class="en">Contact views today: <b>13 of 100</b>. The daily limit protects educators from bulk copying. Viewing the same educator again doesn't count.</span><span class="zh">今日聯絡方式查看次數：<b>13／100</b>。每日上限可避免教師資料被大量複製，重複查看同一位教師不會計次。</span></span>
+        <span class="badge-m"><span class="en">Campus plan · active</span><span class="zh">單校方案 · 有效</span></span>
+      </div>
+
+      <div class="split" style="margin-top:28px">
+        <aside class="side">
+          <div class="card stack" style="gap:20px" aria-label="Filters">
+            <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Filters</span><span class="zh">篩選</span></h2><a href="#" class="small"><span class="en">Clear</span><span class="zh">清除</span></a></div>
+            <div><label class="lbl" for="city"><span class="en">City</span><span class="zh">縣市</span></label>
+              <select id="city" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option><option>New Taipei City 新北市</option></select></div>
+            <div><span class="lbl"><span class="en">District</span><span class="zh">行政區</span></span>
+              <div class="tags"><span class="chip on">Xitun 西屯區</span><span class="chip on">Nantun 南屯區</span><span class="chip">Beitun 北屯區</span><span class="chip">Central 中區</span><span class="chip">+25</span></div></div>
+            <div><span class="lbl"><span class="en">Subject</span><span class="zh">科目</span></span>
+              <div class="tags"><span class="chip on"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip"><span class="en">Mathematics</span><span class="zh">數學</span></span><span class="chip"><span class="en">Science</span><span class="zh">自然科學</span></span><span class="chip"><span class="en">Test prep</span><span class="zh">檢定備考</span></span></div></div>
+            <div><span class="lbl"><span class="en">Level</span><span class="zh">年級</span></span>
+              <div class="tags"><span class="chip on"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span><span class="chip"><span class="en">Elementary</span><span class="zh">國小</span></span><span class="chip"><span class="en">Junior high</span><span class="zh">國中</span></span><span class="chip"><span class="en">Senior high</span><span class="zh">高中職</span></span></div></div>
+            <div><span class="lbl"><span class="en">Open to</span><span class="zh">希望的工作型態</span></span>
+              <div class="tags"><span class="chip on"><span class="en">Full-time</span><span class="zh">全職</span></span><span class="chip"><span class="en">Part-time</span><span class="zh">兼職</span></span><span class="chip"><span class="en">Substitute</span><span class="zh">代課</span></span><span class="chip"><span class="en">Private tutoring</span><span class="zh">家教</span></span></div></div>
+            <div><span class="lbl"><span class="en">Mode</span><span class="zh">授課方式</span></span>
+              <div class="tags"><span class="chip"><span class="en">In person</span><span class="zh">實體</span></span><span class="chip"><span class="en">Online</span><span class="zh">線上</span></span></div></div>
+            <div><label class="lbl" for="wa"><span class="en">Work authorization (self-declared)</span><span class="zh">工作許可（自行聲明）</span></label>
+              <select id="wa" class="field"><option>Any 不限</option><option>Citizen or permanent resident 本國籍或永久居留</option><option>Open work rights 擁有開放工作權</option><option>Employer-sponsored 由雇主聘僱</option></select>
+              <p class="hint"><span class="en">Always verify permits directly before hiring.</span><span class="zh">聘僱前請務必親自確認工作許可。</span></p></div>
+          </div>
+        </aside>
+
+        <section class="main" aria-label="Results">
+          <div class="g2" style="gap:20px">
+
+            <article class="card ecard">
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar">ER</span>
+                <div style="flex:1;min-width:0"><h3>Emily R.</h3><p class="small muted"><span class="en">Kindergarten English teacher: phonics and storytelling</span><span class="zh">幼兒園英語老師：自然發音與繪本故事</span></p></div></div>
+              <div class="tags"><span class="chip"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span></div>
+              <div class="small muted stack" style="gap:4px">
+                <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Taichung · Xitun, Nantun</span><span class="zh">臺中市 · 西屯區、南屯區</span></span>
+                <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Full-time, part-time · 5–9 years</span><span class="zh">全職、兼職 · 5–9 年經驗</span></span>
+                <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Open work rights</span><span class="zh">擁有開放工作權</span></span>
+              </div>
+              <div class="soft stack" style="gap:2px;padding:10px 14px">
+                <div class="kv small" style="padding:6px 0"><span class="muted">Email</span><b>emily.r@example.com</b></div>
+                <div class="kv small" style="padding:6px 0"><span class="muted">LINE</span><b>emily_teaches</b></div>
+              </div>
+              <a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">View full profile</span><span class="zh">查看完整檔案</span></a>
+            </article>
+
+            <article class="card ecard">
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t3">KL</span>
+                <div style="flex:1;min-width:0"><h3>Kevin L. 林老師</h3><p class="small muted"><span class="en">Bilingual kindergarten: English and music</span><span class="zh">雙語幼兒園：英語與音樂</span></p></div></div>
+              <div class="tags"><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip"><span class="en">Music</span><span class="zh">音樂</span></span><span class="chip"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span></div>
+              <div class="small muted stack" style="gap:4px">
+                <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Taichung · Nantun, Beitun</span><span class="zh">臺中市 · 南屯區、北屯區</span></span>
+                <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Full-time · 2–4 years</span><span class="zh">全職 · 2–4 年經驗</span></span>
+                <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Citizen or permanent resident</span><span class="zh">本國籍或永久居留</span></span>
+              </div>
+              <div class="row"><button type="button" class="btn btn-p" style="flex:1 1 auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Show contact details</span><span class="zh">顯示聯絡方式</span></button><a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">Profile</span><span class="zh">檔案</span></a></div>
+            </article>
+
+            <article class="card ecard">
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t2">MC</span>
+                <div style="flex:1;min-width:0"><h3>Michael Chen 陳老師</h3><p class="small muted"><span class="en">Junior high maths and CAP exam prep</span><span class="zh">國中數學與會考準備</span></p></div></div>
+              <div class="tags"><span class="chip"><span class="en">Mathematics</span><span class="zh">數學</span></span><span class="chip"><span class="en">Taiwan exam prep</span><span class="zh">升學考試準備</span></span><span class="chip"><span class="en">Junior high</span><span class="zh">國中</span></span></div>
+              <div class="small muted stack" style="gap:4px">
+                <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Taipei · Da'an, Xinyi · also online</span><span class="zh">臺北市 · 大安區、信義區 · 亦可線上</span></span>
+                <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Private tutoring · NT$800–1,200 / hr</span><span class="zh">家教 · NT$800–1,200／小時</span></span>
+                <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Citizen or permanent resident</span><span class="zh">本國籍或永久居留</span></span>
+              </div>
+              <div class="row"><button type="button" class="btn btn-p" style="flex:1 1 auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Show contact details</span><span class="zh">顯示聯絡方式</span></button><a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">Profile</span><span class="zh">檔案</span></a></div>
+            </article>
+
+            <article class="card ecard">
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t4">AT</span>
+                <div style="flex:1;min-width:0"><h3>Aroha T.</h3><p class="small muted"><span class="en">Hands-on science and STEM for elementary students</span><span class="zh">國小動手做科學與 STEM</span></p></div></div>
+              <div class="tags"><span class="chip"><span class="en">Science</span><span class="zh">自然科學</span></span><span class="chip"><span class="en">STEM &amp; robotics</span><span class="zh">STEM／機器人</span></span><span class="chip"><span class="en">Elementary</span><span class="zh">國小</span></span></div>
+              <div class="small muted stack" style="gap:4px">
+                <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">New Taipei · Banqiao, Zhonghe</span><span class="zh">新北市 · 板橋區、中和區</span></span>
+                <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Substitute, part-time · 2–4 years</span><span class="zh">代課、兼職 · 2–4 年經驗</span></span>
+                <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Employer-sponsored</span><span class="zh">由雇主聘僱</span></span>
+              </div>
+              <div class="row"><button type="button" class="btn btn-p" style="flex:1 1 auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Show contact details</span><span class="zh">顯示聯絡方式</span></button><a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">Profile</span><span class="zh">檔案</span></a></div>
+            </article>
+
+            <article class="card ecard">
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar t3">PS</span>
+                <div style="flex:1;min-width:0"><h3>Priya S.</h3><p class="small muted"><span class="en">IELTS and TOEFL coach, online from abroad</span><span class="zh">雅思與托福線上教練（海外授課）</span></p></div></div>
+              <div class="tags"><span class="chip"><span class="en">English test prep</span><span class="zh">英語檢定備考</span></span><span class="chip"><span class="en">University</span><span class="zh">大學</span></span><span class="chip"><span class="en">Adult</span><span class="zh">成人</span></span></div>
+              <div class="small muted stack" style="gap:4px">
+                <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Online only, from abroad</span><span class="zh">僅限線上，人在海外</span></span>
+                <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Private tutoring · NT$600–900 / hr</span><span class="zh">家教 · NT$600–900／小時</span></span>
+                <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Online only, from abroad</span><span class="zh">僅限從海外線上授課</span></span>
+              </div>
+              <div class="row"><button type="button" class="btn btn-p" style="flex:1 1 auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Show contact details</span><span class="zh">顯示聯絡方式</span></button><a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">Profile</span><span class="zh">檔案</span></a></div>
+            </article>
+
+            <article class="card ecard">
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="avatar">SM</span>
+                <div style="flex:1;min-width:0"><h3>Sofia M.</h3><p class="small muted"><span class="en">Creative writing and public speaking for teens</span><span class="zh">青少年創意寫作與演講</span></p></div></div>
+              <div class="tags"><span class="chip"><span class="en">Creative writing</span><span class="zh">創意寫作</span></span><span class="chip"><span class="en">Public speaking</span><span class="zh">演講與辯論</span></span><span class="chip"><span class="en">Senior high</span><span class="zh">高中職</span></span></div>
+              <div class="small muted stack" style="gap:4px">
+                <span><b class="strong en">Where:</b><b class="strong zh">地點：</b> <span class="en">Kaohsiung · in person and online</span><span class="zh">高雄市 · 實體與線上</span></span>
+                <span><b class="strong en">Open to:</b><b class="strong zh">希望：</b> <span class="en">Part-time, private tutoring · 5–9 years</span><span class="zh">兼職、家教 · 5–9 年經驗</span></span>
+                <span><span class="badge-m"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span> <span class="en">Open work rights</span><span class="zh">擁有開放工作權</span></span>
+              </div>
+              <div class="row"><button type="button" class="btn btn-p" style="flex:1 1 auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Show contact details</span><span class="zh">顯示聯絡方式</span></button><a class="btn btn-s" href="Educator-profile.dc.html"><span class="en">Profile</span><span class="zh">檔案</span></a></div>
+            </article>
+
+          </div>
+          <div class="row" style="justify-content:center;margin-top:28px;gap:8px">
+            <a class="btn btn-s" href="#"><span class="en">Previous</span><span class="zh">上一頁</span></a>
+            <span class="chip on">1</span><a class="btn btn-s" href="#">2</a><a class="btn btn-s" href="#">3</a>
+            <a class="btn btn-s" href="#"><span class="en">Next</span><span class="zh">下一頁</span></a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1900}}'>
 class Component extends DCLogic {
   renderVals() {
-    const lang = (this.state && this.state.lang) || 'en';
+    const s = this.state || {};
+    const lang = s.lang || 'en';
+    const member = !!s.member;
     return {
       rootClass: 'lang-' + lang,
       enCls: lang === 'en' ? 'on' : '',
@@ -185,7 +247,15 @@ class Component extends DCLogic {
       enOn: lang === 'en',
       zhOn: lang === 'zh',
       setEn: () => this.setState({ lang: 'en' }),
-      setZh: () => this.setState({ lang: 'zh' })
+      setZh: () => this.setState({ lang: 'zh' }),
+      isMember: member,
+      isVisitor: !member,
+      visitorCls: member ? '' : 'on',
+      memberCls: member ? 'on' : '',
+      visitorOn: !member,
+      memberOn: member,
+      setVisitor: () => this.setState({ member: false }),
+      setMember: () => this.setState({ member: true })
     };
   }
 }

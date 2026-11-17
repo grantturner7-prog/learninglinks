@@ -49,15 +49,15 @@ body{margin:0}
         <div class="main" style="flex:1 1 520px">
           <span class="badge-w"><span class="en">Opening in Taiwan soon. Reserve your founding price.</span><span class="zh">即將在台灣開放，預約創始會員價。</span></span>
           <h1 class="h1" style="margin-top:16px"><span class="en">Find a tutor you trust.<br>Pay once for the year.</span><span class="zh">找到信任的家教，<br>一年只需付一次。</span></h1>
-          <p class="lead" style="margin-top:16px;max-width:560px"><span class="en">Browse tutors for free. A family membership lets you contact as many tutors as you need for 12 months, for your whole family. No commission on lessons. It never renews on its own.</span><span class="zh">免費瀏覽家教。家長會員可在 12 個月內聯絡所需的家教，全家共用。不抽課程費用，也不會自動續約。</span></p>
-          <div class="row" style="margin-top:24px"><a class="btn btn-p btn-lg" href="Find-educators.dc.html"><span class="en">Browse tutors</span><span class="zh">瀏覽家教</span></a></div>
+          <p class="lead" style="margin-top:16px;max-width:560px"><span class="en">A family membership lets you search every tutor and contact as many as you need for 12 months, for your whole family. No commission on lessons. It never renews on its own.</span><span class="zh">家長會員可在 12 個月內搜尋所有家教並聯絡所需的人選，全家共用。不抽課程費用，也不會自動續約。</span></p>
+          <p class="small muted" style="margin-top:20px"><span class="en">Tutor profiles are visible to members only. Tutors never pay us anything.</span><span class="zh">家教檔案僅限會員查看。家教不需付任何費用給我們。</span></p>
         </div>
         <div class="side" style="flex:1 1 400px;max-width:480px">
           <div class="card stack" style="gap:14px">
             <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Family membership</span><span class="zh">家長會員</span></h2><span class="badge-m"><span class="en">12 months</span><span class="zh">12 個月</span></span></div>
             <div class="row" style="align-items:baseline;gap:12px"><span class="price">NT$470</span><span class="was">NT$790</span></div>
             <span class="small muted"><span class="en">founding price, incl. 5% VAT · draft pricing, to be validated</span><span class="zh">創始會員價，含 5% 營業稅 · 價格為草案，待驗證</span></span>
-            <ul class="small" style="margin:0;padding-left:20px"><li><span class="en">Contact any tutor, for all your children</span><span class="zh">可聯絡任何家教，全家小孩共用</span></li><li><span class="en">Re-hire or switch tutors any time in the year</span><span class="zh">一年內可隨時更換或再次聘請</span></li><li><span class="en">Safety checklist for every first lesson</span><span class="zh">每次首次上課的安全檢查清單</span></li></ul>
+            <ul class="small" style="margin:0;padding-left:20px"><li><span class="en">Search every tutor and contact any of them, for all your children</span><span class="zh">搜尋所有家教並可聯絡任何一位，全家小孩共用</span></li><li><span class="en">Re-hire or switch tutors any time in the year</span><span class="zh">一年內可隨時更換或再次聘請</span></li><li><span class="en">Safety checklist for every first lesson</span><span class="zh">每次首次上課的安全檢查清單</span></li></ul>
             <hr class="hr" style="margin:6px 0">
             <sc-if value="{{notReserved}}" hint-placeholder-val="{{ true }}">
               <form class="stack" style="gap:12px" onSubmit="{{noop}}">
@@ -80,8 +80,8 @@ body{margin:0}
     <div class="wrap">
       <h2 class="h2 center"><span class="en">How it works for families</span><span class="zh">家長如何使用</span></h2>
       <div class="g3" style="margin-top:32px">
-        <div class="stack" style="gap:10px"><span class="num">1</span><h3 class="h3"><span class="en">Browse for free</span><span class="zh">免費瀏覽</span></h3><p class="muted"><span class="en">Filter by subject, level, area, price and online or in-person. See profiles, credentials (self-declared) and availability.</span><span class="zh">依科目、年級、地區、價格與實體／線上篩選。查看檔案、自行聲明的資歷與可上課時間。</span></p></div>
-        <div class="stack" style="gap:10px"><span class="num">2</span><h3 class="h3"><span class="en">Join for 12 months</span><span class="zh">加入 12 個月</span></h3><p class="muted"><span class="en">One payment unlocks every tutor's contact details. It ends after 12 months unless you choose to renew.</span><span class="zh">一次付款即可查看所有家教的聯絡方式。12 個月後到期，是否續約由您決定。</span></p></div>
+        <div class="stack" style="gap:10px"><span class="num">1</span><h3 class="h3"><span class="en">Join for 12 months</span><span class="zh">加入 12 個月</span></h3><p class="muted"><span class="en">One payment opens every tutor profile and contact detail. It ends after 12 months unless you choose to renew.</span><span class="zh">一次付款即可查看所有家教檔案與聯絡方式。12 個月後到期，是否續約由您決定。</span></p></div>
+        <div class="stack" style="gap:10px"><span class="num">2</span><h3 class="h3"><span class="en">Browse and filter</span><span class="zh">瀏覽並篩選</span></h3><p class="muted"><span class="en">Filter by subject, level, area, price and online or in-person. See profiles, self-declared credentials and availability.</span><span class="zh">依科目、年級、地區、價格與實體／線上篩選。查看檔案、自行聲明的資歷與可上課時間。</span></p></div>
         <div class="stack" style="gap:10px"><span class="num">3</span><h3 class="h3"><span class="en">Contact tutors directly</span><span class="zh">直接聯絡家教</span></h3><p class="muted"><span class="en">Message by LINE or email, agree on price and schedule between you. We never take a cut of lessons.</span><span class="zh">以 LINE 或 Email 聯絡，價格與時間由雙方約定。我們不抽取課程費用。</span></p></div>
       </div>
     </div>
@@ -102,6 +102,7 @@ body{margin:0}
           <details open><summary><span class="en">What if I find a tutor in two weeks?</span><span class="zh">如果兩週就找到家教怎麼辦？</span></summary><p><span class="en">Your membership still covers re-hires, new subjects and siblings for the rest of the 12 months.</span><span class="zh">會員資格在剩餘的 12 個月內仍可用於更換家教、新增科目與兄弟姊妹。</span></p></details>
           <details><summary><span class="en">Do you take a commission on lessons?</span><span class="zh">課程費用會被抽成嗎？</span></summary><p><span class="en">No. You pay the tutor directly. Tutors never pay us anything.</span><span class="zh">不會。您直接付費給家教，家教也不需付任何費用給我們。</span></p></details>
           <details><summary><span class="en">Does it renew automatically?</span><span class="zh">會自動續約嗎？</span></summary><p><span class="en">Never. We'll remind you before it ends, and renewal is always your choice.</span><span class="zh">不會。到期前我們會提醒您，是否續約由您決定。</span></p></details>
+          <details><summary><span class="en">Can I look around before paying?</span><span class="zh">付費之前可以先看看嗎？</span></summary><p><span class="en">No. Tutors agreed to share their profiles only with paying members. We show sample profiles on our site so you know what to expect.</span><span class="zh">不行。家教僅同意將檔案提供給付費會員查看。我們在網站上提供範例檔案，讓您了解內容。</span></p></details>
           <details><summary><span class="en">Do you check the tutors?</span><span class="zh">你們會審查家教嗎？</span></summary><p><span class="en">No. We're a directory, not an agent. Profiles are self-declared, so please use the checklist and verify directly.</span><span class="zh">不會。我們是名錄，不是仲介。檔案內容為自行聲明，請使用檢查清單並親自確認。</span></p></details>
         </div>
       </div>

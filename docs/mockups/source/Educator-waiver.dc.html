@@ -50,13 +50,13 @@ body{margin:0}
         <div>
           <span class="badge"><span class="en">Free forever for educators</span><span class="zh">教師永遠免費</span></span>
           <h1 class="h2" style="margin-top:12px"><span class="en">Before you publish: what you're agreeing to</span><span class="zh">發布之前：您同意的內容</span></h1>
-          <p class="lead" style="font-size:18px;margin-top:8px;max-width:720px"><span class="en">A 30-second summary in plain language. You decide what is shown, and you can hide or delete your profile in one click, any time.</span><span class="zh">30 秒白話摘要。公開什麼由您決定，且隨時可一鍵隱藏或刪除個人檔案。</span></p>
+          <p class="lead" style="font-size:18px;margin-top:8px;max-width:720px"><span class="en">A 30-second summary in plain language. Nothing is public: only paying schools and families can see your profile, and you can hide or delete it in one click, any time.</span><span class="zh">30 秒白話摘要。內容不會公開：只有付費的學校與家長能看到您的檔案，且隨時可一鍵隱藏或刪除。</span></p>
         </div>
 
         <div class="g3" style="gap:16px">
           <div class="card col">
-            <span class="badge"><span class="en">Public</span><span class="zh">公開</span></span>
-            <h3 style="margin-top:10px"><span class="en">Anyone can see</span><span class="zh">任何人可見</span></h3>
+            <span class="badge"><span class="en">Members only</span><span class="zh">僅限會員</span></span>
+            <h3 style="margin-top:10px"><span class="en">Your profile</span><span class="zh">您的個人檔案</span></h3>
             <ul>
               <li><span class="en">Display name, optional photo</span><span class="zh">顯示名稱、可選照片</span></li>
               <li><span class="en">Headline and short bio</span><span class="zh">標題與簡短自我介紹</span></li>
@@ -67,13 +67,14 @@ body{margin:0}
             </ul>
           </div>
           <div class="card col">
-            <span class="badge-w"><span class="en">Members only</span><span class="zh">僅限會員</span></span>
-            <h3 style="margin-top:10px"><span class="en">Paying schools and families</span><span class="zh">付費學校與家長</span></h3>
+            <span class="badge-w"><span class="en">On request</span><span class="zh">需點選才顯示</span></span>
+            <h3 style="margin-top:10px"><span class="en">Contact details, one at a time</span><span class="zh">聯絡方式，逐一顯示</span></h3>
             <ul>
               <li><span class="en">Email</span><span class="zh">Email</span></li>
               <li><span class="en">LINE, WhatsApp, WeChat, phone</span><span class="zh">LINE、WhatsApp、WeChat、電話</span></li>
               <li><span class="en">Only the ones you choose to add</span><span class="zh">僅限您自行新增的項目</span></li>
               <li><span class="en">You can see who viewed them</span><span class="zh">您可看到誰查看過</span></li>
+              <li><span class="en">Members have a daily viewing limit</span><span class="zh">會員每日查看次數有上限</span></li>
             </ul>
           </div>
           <div class="card col">
@@ -91,11 +92,10 @@ body{margin:0}
         <div class="card stack" style="gap:12px">
           <h2 class="h3"><span class="en">Please confirm each item</span><span class="zh">請逐項確認</span></h2>
           <label class="chk {{c1Cls}}"><input type="checkbox" checked="{{c1}}" onChange="{{tog1}}"><span><span class="en">I have read the <a href="#">Terms of use</a> and <a href="#">Privacy policy</a>.</span><span class="zh">我已閱讀<a href="#">使用條款</a>與<a href="#">隱私權政策</a>。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
-          <label class="chk {{c2Cls}}"><input type="checkbox" checked="{{c2}}" onChange="{{tog2}}"><span><span class="en">I agree to publish the <b>public</b> fields above on my LearningLinks profile.</span><span class="zh">我同意將上述<b>公開</b>欄位刊登於我的 LearningLinks 個人檔案。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
-          <label class="chk {{c3Cls}}"><input type="checkbox" checked="{{c3}}" onChange="{{tog3}}"><span><span class="en">I agree to share the contact details I add with <b>paying school and family members</b> of LearningLinks.</span><span class="zh">我同意將我所填寫的聯絡方式，提供給 LearningLinks 的<b>付費學校與家長會員</b>查看。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
+          <label class="chk {{c2Cls}}"><input type="checkbox" checked="{{c2}}" onChange="{{tog2}}"><span><span class="en">I agree to show my profile (the items under "Your profile") to <b>paying school and family members</b> of LearningLinks.</span><span class="zh">我同意將我的個人檔案（「您的個人檔案」所列項目）提供給 LearningLinks 的<b>付費學校與家長會員</b>查看。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
+          <label class="chk {{c3Cls}}"><input type="checkbox" checked="{{c3}}" onChange="{{tog3}}"><span><span class="en">I agree that members can see the contact details I add when they ask to view them.</span><span class="zh">我同意會員在點選查看時，可看到我所填寫的聯絡方式。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
           <label class="chk {{c4Cls}}"><input type="checkbox" checked="{{c4}}" onChange="{{tog4}}"><span><span class="en">My information is true, and I have the right to work or teach in the ways I describe.</span><span class="zh">我提供的資料屬實，且我有權以所述方式工作或授課。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
-          <label class="chk {{c5Cls}}"><input type="checkbox" checked="{{c5}}" onChange="{{tog5}}"><span><span class="en">Let search engines (like Google) index my public profile page.</span><span class="zh">允許搜尋引擎（如 Google）索引我的公開檔案頁面。</span> <span class="badge-m"><span class="en">Optional</span><span class="zh">選填</span></span></span></label>
-          <label class="chk {{c6Cls}}"><input type="checkbox" checked="{{c6}}" onChange="{{tog6}}"><span><span class="en">Send me tips and news about LearningLinks.</span><span class="zh">寄送 LearningLinks 的資訊與最新消息給我。</span> <span class="badge-m"><span class="en">Optional</span><span class="zh">選填</span></span></span></label>
+                    <label class="chk {{c6Cls}}"><input type="checkbox" checked="{{c6}}" onChange="{{tog6}}"><span><span class="en">Send me tips and news about LearningLinks.</span><span class="zh">寄送 LearningLinks 的資訊與最新消息給我。</span> <span class="badge-m"><span class="en">Optional</span><span class="zh">選填</span></span></span></label>
 
           <div class="row" style="margin-top:8px;justify-content:space-between">
             <span class="small muted"><span class="en">{{doneCount}} of 4 required items confirmed</span><span class="zh">已確認 {{doneCount}}／4 個必填項目</span></span>

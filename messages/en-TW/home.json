@@ -24,7 +24,7 @@
       },
       "control": {
         "title": "You control what's shown",
-        "body": "Educators choose what is public and what only paying members can see, and can hide or delete their profile in one click."
+        "body": "Only paying members can see your profile. You choose what to share, and can hide or delete it in one click."
       },
       "sensitive": {
         "title": "No sensitive documents",
@@ -53,8 +53,8 @@
     "family": {
       "title": "Families",
       "steps": [
-        "Browse tutors for free",
         "Join for 12 months (no auto-renewal)",
+        "Browse and filter tutors",
         "Contact tutors directly"
       ]
     }

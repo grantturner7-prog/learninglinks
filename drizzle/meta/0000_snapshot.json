@@ -1,5 +1,5 @@
 {
-  "id": "08204a07-a1e2-4a46-8cd1-5296704ed1db",
+  "id": "85196c26-7421-4a95-a9ea-7efe8368d545",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -962,13 +962,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'[]'::jsonb"
-        },
-        "allow_search_indexing": {
-          "name": "allow_search_indexing",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
         },
         "published_at": {
           "name": "published_at",

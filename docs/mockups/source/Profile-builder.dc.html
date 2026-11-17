@@ -54,7 +54,7 @@ body{margin:0}
       <form class="main stack" style="gap:20px" onSubmit="{{noop}}">
 
         <section class="card sec stack" style="gap:16px">
-          <div class="row" style="justify-content:space-between"><h2><span class="en">About you</span><span class="zh">關於您</span></h2><span class="badge"><span class="en">Public</span><span class="zh">公開</span></span></div>
+          <div class="row" style="justify-content:space-between"><h2><span class="en">About you</span><span class="zh">關於您</span></h2><span class="badge"><span class="en">Members only</span><span class="zh">僅限會員</span></span></div>
           <div class="row" style="gap:18px;flex-wrap:nowrap;align-items:center">
             <span class="avatar lg">ER</span>
             <div><button type="button" class="btn btn-s"><span class="en">Upload photo (optional)</span><span class="zh">上傳照片（選填）</span></button>
@@ -66,11 +66,11 @@ body{margin:0}
           </div>
           <div><label class="lbl" for="bio"><span class="en">About</span><span class="zh">自我介紹</span></label>
             <textarea id="bio" class="field">I teach kindergarten and lower-elementary classes using phonics, songs and picture books. I like small groups, clear routines and keeping parents in the loop.</textarea>
-            <div class="row" style="justify-content:space-between"><p class="hint"><span class="en">Please don't put phone numbers, emails or links here. Add them under Contact so only members see them.</span><span class="zh">請勿在此填寫電話、Email 或連結，請於「聯絡方式」欄位填寫，僅會員可見。</span></p><span class="hint">161 / 600</span></div></div>
+            <div class="row" style="justify-content:space-between"><p class="hint"><span class="en">Please don't put phone numbers, emails or links here. Add them under Contact, where members see them only when they ask.</span><span class="zh">請勿在此填寫電話、Email 或連結，請於「聯絡方式」欄位填寫，會員需點選才會看到。</span></p><span class="hint">161 / 600</span></div></div>
         </section>
 
         <section class="card sec stack" style="gap:16px">
-          <div class="row" style="justify-content:space-between"><h2><span class="en">What you teach</span><span class="zh">您教什麼</span></h2><span class="badge"><span class="en">Public</span><span class="zh">公開</span></span></div>
+          <div class="row" style="justify-content:space-between"><h2><span class="en">What you teach</span><span class="zh">您教什麼</span></h2><span class="badge"><span class="en">Members only</span><span class="zh">僅限會員</span></span></div>
           <div><span class="lbl"><span class="en">Subjects</span><span class="zh">科目</span></span>
             <div class="tags"><span class="chip on"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip on"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip on"><span class="en">Reading comprehension</span><span class="zh">閱讀理解</span></span><span class="chip"><span class="en">Grammar</span><span class="zh">文法</span></span><span class="chip"><span class="en">Creative writing</span><span class="zh">創意寫作</span></span><span class="chip"><span class="en">Mathematics</span><span class="zh">數學</span></span><span class="chip"><span class="en">Science</span><span class="zh">自然科學</span></span><span class="chip"><span class="en">Music</span><span class="zh">音樂</span></span><span class="chip">+14</span></div></div>
           <div><span class="lbl"><span class="en">Levels</span><span class="zh">年級</span></span>
@@ -84,7 +84,7 @@ body{margin:0}
         </section>
 
         <section class="card sec stack" style="gap:16px">
-          <div class="row" style="justify-content:space-between"><h2><span class="en">Where and what kind of work</span><span class="zh">地區與工作型態</span></h2><span class="badge"><span class="en">Public</span><span class="zh">公開</span></span></div>
+          <div class="row" style="justify-content:space-between"><h2><span class="en">Where and what kind of work</span><span class="zh">地區與工作型態</span></h2><span class="badge"><span class="en">Members only</span><span class="zh">僅限會員</span></span></div>
           <div class="g2" style="gap:16px">
             <div><label class="lbl" for="c"><span class="en">City</span><span class="zh">縣市</span></label><select id="c" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option></select></div>
             <div><span class="lbl"><span class="en">Districts you can reach</span><span class="zh">可前往的行政區</span></span><div class="tags"><span class="chip on">Xitun 西屯區</span><span class="chip on">Nantun 南屯區</span><span class="chip">Beitun 北屯區</span><span class="chip">+26</span></div></div>
@@ -122,7 +122,7 @@ body{margin:0}
 
         <section class="card sec stack" style="gap:12px">
           <h2><span class="en">Visibility</span><span class="zh">能見度</span></h2>
-          <label class="chk"><input type="checkbox" checked="{{seo}}" onChange="{{togSeo}}"><span><span class="en">Let search engines index my public profile page</span><span class="zh">允許搜尋引擎索引我的公開檔案頁面</span><span class="hint" style="display:block"><span class="en">You chose "off" on the waiver. Change it any time.</span><span class="zh">您在同意書中選擇了「不允許」，可隨時變更。</span></span></span></label>
+          <div class="soft small"><span class="en">Your profile is visible only to logged-in paying members. It is never public and never indexed by search engines. You can hide it any time.</span><span class="zh">您的檔案僅供已登入的付費會員查看，不會公開，也不會被搜尋引擎索引。您可隨時隱藏。</span></div>
         </section>
       </form>
 
@@ -132,7 +132,7 @@ body{margin:0}
           <div class="card-flat stack" style="gap:10px">
             <div class="row" style="flex-wrap:nowrap"><span class="avatar">ER</span><div><div class="strong">Emily R.</div><div class="small muted"><span class="en">Kindergarten English teacher</span><span class="zh">幼兒園英語老師</span></div></div></div>
             <div class="tags"><span class="chip"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span></div>
-            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Email · LINE · members only</span><span class="zh">Email · LINE · 僅限會員</span></div>
+            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Contact details shown when a member taps "Show contact"</span><span class="zh">會員點選「顯示聯絡方式」時才會顯示</span></div>
           </div>
         </div>
         <div class="card stack" style="gap:10px">

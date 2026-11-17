@@ -117,7 +117,6 @@ CREATE TABLE "educator_profiles" (
 	"rate_min" integer,
 	"rate_max" integer,
 	"credentials" jsonb DEFAULT '[]'::jsonb NOT NULL,
-	"allow_search_indexing" boolean DEFAULT false NOT NULL,
 	"published_at" timestamp with time zone,
 	"hidden_at" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,

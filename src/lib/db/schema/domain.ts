@@ -18,8 +18,9 @@ export interface Credential {
 }
 
 /**
- * PUBLIC-SAFE educator data only. Contact details live in `educator_contacts` so that
- * no public query can leak them by accident.
+ * Member-visible educator profile. NOTHING here is ever public: only logged-in members with an
+ * active membership may read it, and it is never indexed by search engines. Contact details live
+ * in `educator_contacts` and are revealed one educator at a time (logged, capped per day).
  */
 export const educatorProfiles = pgTable(
   "educator_profiles",
@@ -47,8 +48,6 @@ export const educatorProfiles = pgTable(
     rateMin: integer("rate_min"),
     rateMax: integer("rate_max"),
     credentials: jsonb("credentials").$type<Credential[]>().notNull().default(sql`'[]'::jsonb`),
-    /** Search engines may index the public page only if the educator opted in. */
-    allowSearchIndexing: boolean("allow_search_indexing").notNull().default(false),
     publishedAt: ts("published_at"),
     hiddenAt: ts("hidden_at"),
     createdAt: createdAt(),

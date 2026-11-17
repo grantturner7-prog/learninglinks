@@ -19,6 +19,7 @@
 | Launch order | **Phase 1: Taiwan. Phase 2: Thailand and Vietnam. Phase 3: Japan, Korea and China.** Hong Kong and the Philippines are not launch markets. The Philippines remains useful as an *educator supply source* (educators can list "open to work in" other countries). |
 | URL and locale pattern | `/{language}-{COUNTRY}/…`, e.g. `/zh-TW/`, `/en-TW/`, later `/th-TH/`, `/vi-VN/`. The locale carries the country, so routing, hreflang and country config share one key. |
 | Phase 1 school data | The old map holds 5,477 mostly public schools with **no contact data**, and only 2 language schools. The main buyers, about 17,700 licensed cram schools, are missing. Phase 1 needs a cram-school import from government open data, with a licence check. |
+| **Visibility (corrected 17 Nov 2026)** | **No one sees any educator without a paid membership. There is no free browsing, no public profiles and no teasers, for schools or for parents.** This replaces the "public teaser + member-only contact" model in the first draft below (§0 call 2, §5.2, §5.3, §7, §9, Appendix A). Educators are free and their profiles are visible to logged-in paying members only; contact details are shown one at a time on request, logged and capped per day. Profile pages are never indexed by search engines. Unauthenticated visitors get a members-only wall, with a clearly labelled **sample** profile so they know what they would be buying. |
 | Build status | Paused for design approval. See `docs/mockups/`. |
 
 ---
@@ -29,7 +30,7 @@
 
 - Educators pay nothing, ever.
 - Schools/centres and families pay a flat 12-month membership. It does not auto-renew.
-- The membership unlocks educators' contact details.
+- The membership unlocks everything: without it, nobody can see any educator's profile or contact details.
 - There are no placement fees and no commissions.
 - We never hold sensitive documents such as criminal records or ID.
 
@@ -47,7 +48,7 @@
 **Five strategic calls**
 
 1. **Supply first.** Free educators are the inventory. Switch the paywall on per city only after a density threshold is met (§9).
-2. **Show the count, gate the contact.** Browsing and teasers are free. The membership buys contact details. Never show "13 teachers" on a home page — hide counters until they are impressive.
+2. **Gate everything.** No free browsing for anyone. The membership buys access to educators (profiles and contact details). Because visitors cannot look inside, the marketing pages must carry the persuasion: a labelled sample profile, clear promises, and city-level counts only once they are impressive (never "13 teachers" on a home page).
 3. **Trust without storage.** Use self-declared labels, links to third-party-hosted proof, and later partner badges where the partner holds the documents and we hold only a pass/fail flag.
 4. **Build a self-service directory, not a broker.** "We take no agency fee" does not by itself keep us outside employment-agency licensing. Regulators look at what we do. [ask counsel, per country]
 5. **One-time annual payments, not subscriptions.** This removes auto-renewal consent rules, card-on-file risk and recurring-billing gateway limits. It also lets us use local rails (bank transfer, convenience-store codes, LINE Pay).
@@ -87,7 +88,7 @@
 
 | Role | Pays | Gets |
 |---|---|---|
-| **Educator** (teacher, tutor, instructor) | **Nothing, ever** | A public profile page, being found by schools and families, job alerts, "who contacted me" visibility, control over what is shown |
+| **Educator** (teacher, tutor, instructor) | **Nothing, ever** | A profile that paying schools and families can see, job alerts, "who contacted me" visibility, control over what is shown |
 | **School / centre** (kindergarten, cram school, language school, international/private school, chains) | **Flat annual membership**, one-time payment, 12 months, no auto-renew | Search with full filters, educators' contact details, job posts, shortlists, team seats, claimed school profile |
 | **Family** (parents looking for a tutor) | **Flat annual membership**, one-time payment, 12 months, no auto-renew | Tutor search, contact details, safety guidance, shortlist |
 
@@ -168,7 +169,7 @@ Published estimates of the private-tutoring market range from about US$14.8B to 
 
 | Capability | v1 (Taiwan: educators + schools) | v2 (Taiwan: families, scale) | v3 (multi-country) |
 |---|---|---|---|
-| Educator profile (public teaser + member-only contact) | ✓ | ✓ | ✓ |
+| Educator profile (members-only; contact shown on request) | ✓ | ✓ | ✓ |
 | Waiver + consent log + one-click hide/delete | ✓ | ✓ | per-country versions |
 | "I also tutor privately" toggle (collects tutor supply early) | ✓ | ✓ | ✓ |
 | School claim flow (free), then paid membership | ✓ | ✓ | ✓ |
@@ -180,22 +181,25 @@ Published estimates of the private-tutoring market range from about US$14.8B to 
 | Chain/group accounts + invoice + 統一編號 | | ✓ | local equivalents |
 | Renewal engine (60/30/7-day reminders, one-click renew, stacking) | basic | ✓ | ✓ |
 | LINE integration (login + notifications) | login | ✓ | KakaoTalk, Zalo, WeChat |
-| Programmatic SEO pages (city/district/subject) | ✓ | ✓ | ✓ |
+| SEO landing pages for the service and guides (never educator profiles) | ✓ | ✓ | ✓ |
 | Admin: moderation queue, reports, school verification | ✓ | ✓ | ✓ |
 | Languages | EN + 繁中 | EN + 繁中 | + 繁中-HK, Vietnamese, Japanese, Korean, Thai... |
 | Verification-partner badges (pass/fail only) | | | ✓ |
 
 ### 5.3 Visibility model (the heart of the waiver)
 
+*Corrected 17 Nov 2026: there is no public tier. The first draft of this section assumed free teasers; that was wrong.*
+
 | Tier | Who sees it | Examples |
 |---|---|---|
-| **Public** | Anyone, including search engines (if the educator allows) | First name or display name, photo (optional), subjects, levels, languages, area (district, never an address), short bio, teaching modes, self-declared credentials, availability summary |
-| **Members only** | Logged-in schools/families with an active membership | Email, phone, LINE/Kakao/Zalo/WhatsApp IDs, any link the educator chose to share, rate card |
+| **Members only: profile** | Logged-in schools/families with an active membership | Display name, photo (optional), subjects, levels, languages, area (district, never an address), bio, teaching modes, self-declared credentials, work-authorization category, rate range |
+| **Members only: contact, on request** | The same members, one educator at a time, after they press "Show contact details" | Email, phone, LINE/Kakao/Zalo/WhatsApp IDs, any link the educator chose to share |
 | **Private** | Only the educator and, where required by law, our admins | Login details, consent log, reveal history |
+| **Everyone** | Anyone, signed in or not | Nothing about any educator. Marketing pages show only a labelled **sample** profile. |
 
-A reveal is **logged**, rate-limited, and shown to the educator ("a member viewed your contact details"). The educator's shared profile link and QR code (a free-supply growth loop) lead to the public page, whose button says "Become a member to contact".
+A contact reveal is **logged**, capped per day and shown to the educator ("a member viewed your contact details"). A profile link shared by an educator (for example in LINE) leads a non-member to a "members only" wall, never to the profile.
 
-*My interpretation of your wording ("contact details on the website… happy to share publicly") is this two-tier model. If you meant contact details are fully public, the paywall has nothing to sell. Please confirm in §13.*
+*Open question for you: should an educator be able to switch on an optional public link to their own profile, so they can send it to a school that has not joined? My default is no, because it would let schools skip the membership.*
 
 ### 5.4 Trust layer, without storing sensitive data
 
@@ -225,7 +229,7 @@ A reveal is **logged**, rate-limited, and shown to the educator ("a member viewe
 - **One language at a time** with a switcher, not interleaved double text. It's cleaner, better for SEO, and scales to many languages.
 - **Home page:** one clear promise per audience, the school map as the hero, and no counters until they are impressive.
 - **Map plus list.** Keep map discovery, add a list view, saved searches and filters.
-- **Profile pages are shareable assets.** Educators post them on LINE, Instagram and Facebook, and each page also serves SEO.
+- **Members-only wall done well.** Visitors who reach a profile link or the directory see a clear explanation, the price, a labelled sample profile and one-tap joining, and never any real educator data.
 - **Trust UI:** "self-declared" labels, the verify checklist, and the report button in plain sight.
 - **Accessibility and speed:** WCAG AA, lightweight pages for mobile networks.
 
@@ -254,7 +258,7 @@ A reveal is **logged**, rate-limited, and shown to the educator ("a member viewe
 
 | Layer | Recommendation | Why |
 |---|---|---|
-| Web app | **Next.js (App Router) + TypeScript**, server-rendered | The current SPA is poorly indexable and gives empty link previews. Programmatic pages (e.g. "English tutor in Xinyi, Taipei") are the main free acquisition channel for families. |
+| Web app | **Next.js (App Router) + TypeScript**, server-rendered | The current SPA is poorly indexable and gives empty link previews. Server rendering still matters for the marketing, guide and pricing pages and for link previews in LINE and Facebook. Educator profiles are never public, so they are not an SEO channel. |
 | i18n | `next-intl`, URL pattern `/{country}/{locale}/…` (e.g. `/tw/zh-tw/`, `/tw/en/`) | One codebase for many countries and languages. |
 | Database | **PostgreSQL + PostGIS** (managed) | Relational data, geo search, full-text search to start. Add Typesense/Meilisearch later if needed. |
 | ORM/migrations | Drizzle or Prisma | Type-safe, versioned schema. |
@@ -316,7 +320,7 @@ A reveal is **logged**, rate-limited, and shown to the educator ("a member viewe
 **Demand next.**
 
 - **Schools:** the claim-your-school funnel over the public dataset, plus outbound sales by city to cram schools, kindergartens, language and international schools, and chain headquarters. Founding-member offer. Time sales ahead of hiring peaks (Taiwan: before the September and February semesters, with the main peak June–August [my read]).
-- **Families:** SEO city/district/subject pages, parent communities (Dcard, Facebook, LINE groups), kindergarten partnerships, and exam-season campaigns.
+- **Families:** guide and city-level landing pages that explain the service (no educator names, to avoid thin content), parent communities (Dcard, Facebook, LINE groups), kindergarten partnerships, and exam-season campaigns. Because nothing can be browsed first, conversion depends on the sample profile, clear promises and trust signals, so test it with the priced "reserve" page before building.
 
 **Density threshold before the paywall (initial proposals, tune with data).**
 
@@ -368,7 +372,7 @@ A reveal is **logged**, rate-limited, and shown to the educator ("a member viewe
 |---|---|---|---|
 | 1 | **Where are you and your company based?** | Decides payments (Stripe vs local), tax, licensing, and which country's law applies to your entity | Tell me; I'll adapt §7 |
 | 2 | **Brand:** keep Taiwan EduConnect, or go pan-Asia? | A Taiwan name blocks expansion. Three names are in use now | **LearningLinks** as a working name + country sub-sites. Needs domain, trademark and Chinese-name checks |
-| 3 | **Contact details gated behind membership; basic teaser free?** | It is the whole paywall | Yes (§5.3) |
+| 3 | ~~Contact details gated behind membership; basic teaser free?~~ | **Resolved 17 Nov 2026: no free teaser. Everything about educators is members-only.** | Done (§5.3) |
 | 4 | **Include local (non-foreign) teachers and tutors from day one?** | The family market is mostly local test-prep | Yes |
 | 5 | **Annual-only, no auto-renew, confirmed?** | Simplifies payment and consent law; hurts renewals unless reminders work | Yes, with strong reminders |
 | 6 | **Families in v1 or v2?** | Supply readiness | v2, but collect tutor supply from v1 with the "I also tutor" toggle |
@@ -397,8 +401,8 @@ A reveal is **logged**, rate-limited, and shown to the educator ("a member viewe
 Present as **unbundled checkboxes in the educator's chosen language**, never one blanket "I agree":
 
 1. **Who we are and what we do.** We are a directory. We are not an employer or agent, we charge educators nothing, and we don't guarantee work.
-2. **What you are publishing.** A field-by-field list with its tier (Public or Members-only).
-3. **Who will see it.** Paying schools and families (and the public, for Public fields), in the countries you select, and search engines if you opt in.
+2. **What you are sharing.** A field-by-field list, split into "your profile" and "contact details, shown on request". Nothing is public.
+3. **Who will see it.** Only logged-in paying schools and families, in the countries you select. Never the public and never search engines.
 4. **What we never ask for or store.** ID/passport/ARC numbers, criminal records, health or financial data, children's data. Don't put them in your profile.
 5. **Sensitive documents.** Share them directly with a school or family if you choose. We are not part of that exchange.
 6. **Accuracy and authorization.** You confirm your information is true and that you have the right to work or teach as described.
