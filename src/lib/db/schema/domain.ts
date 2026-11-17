@@ -196,6 +196,11 @@ export const orders = pgTable(
     createdByUserId: text("created_by_user_id").notNull().references(() => user.id),
     paidAt: ts("paid_at"),
     cancelledAt: ts("cancelled_at"),
+    /** What an admin recorded when matching the bank transfer. */
+    paidAmount: integer("paid_amount"),
+    paidOn: date("paid_on"),
+    paidNote: text("paid_note"),
+    confirmedBy: text("confirmed_by"),
     createdAt: createdAt(),
   },
   (t) => [
@@ -214,7 +219,7 @@ export const memberships = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     holderType: text("holder_type").$type<HolderType>().notNull(),
     holderId: text("holder_id").notNull(),
-    orderId: uuid("order_id").notNull().unique().references(() => orders.id),
+    orderId: uuid("order_id").notNull().references(() => orders.id),
     planCode: text("plan_code").notNull(),
     campuses: integer("campuses").notNull().default(1),
     startsAt: ts("starts_at").notNull(),
@@ -224,6 +229,7 @@ export const memberships = pgTable(
   (t) => [
     check("membership_term_check", sql`${t.endsAt} > ${t.startsAt}`),
     index("membership_holder_idx").on(t.holderType, t.holderId, t.endsAt),
+    index("membership_order_idx").on(t.orderId),
   ],
 );
 
@@ -233,15 +239,40 @@ export const contactReveals = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-    organizationId: uuid("organization_id").notNull().references(() => organizations.id, { onDelete: "cascade" }),
+    /** The campus that revealed it (schools). Null for a family, whose daily cap is counted per user. */
+    organizationId: uuid("organization_id").references(() => organizations.id, { onDelete: "cascade" }),
+    audience: text("audience").$type<"school" | "family">().notNull().default("school"),
     educatorId: uuid("educator_id").notNull().references(() => educatorProfiles.id, { onDelete: "cascade" }),
     channels: text("channels").array().notNull(),
     createdAt: createdAt(),
   },
   (t) => [
     index("reveal_org_day_idx").on(t.organizationId, t.createdAt),
+    index("reveal_user_day_idx").on(t.userId, t.createdAt),
     index("reveal_educator_idx").on(t.educatorId, t.createdAt),
   ],
+);
+
+/** Which campuses an order pays for (a school order lists one row per campus; each gets its own 12 months). */
+export const orderItems = pgTable(
+  "order_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    orderId: uuid("order_id").notNull().references(() => orders.id, { onDelete: "cascade" }),
+    organizationId: uuid("organization_id").notNull().references(() => organizations.id),
+  },
+  (t) => [uniqueIndex("order_item_uq").on(t.orderId, t.organizationId)],
+);
+
+/** Which renewal reminders (60/30/7/0 days before the end) have been sent, so none is sent twice. */
+export const membershipReminders = pgTable(
+  "membership_reminders",
+  {
+    membershipId: uuid("membership_id").notNull().references(() => memberships.id, { onDelete: "cascade" }),
+    daysBefore: integer("days_before").notNull(),
+    sentAt: ts("sent_at").notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.membershipId, t.daysBefore] })],
 );
 
 export type JobType = "full_time" | "part_time";

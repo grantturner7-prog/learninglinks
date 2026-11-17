@@ -1,0 +1,61 @@
+import { getBankDetails } from "@/lib/billing/bank";
+import { formatMoney } from "@/lib/plans";
+import { siteUrl } from "@/lib/site-url";
+import noticeEn from "../../../messages/en-TW/notice.json";
+import noticeZh from "../../../messages/zh-TW/notice.json";
+import type { EmailMessage } from "@/lib/email";
+
+/**
+ * Transactional emails are bilingual (繁體中文 first, then English) because we do not store a language per person.
+ * Every one ends with the compliance notice, in both languages, from the canonical wording.
+ */
+const footer = `\n\n${noticeZh.short}\n${noticeEn.short}`;
+
+export function orderPlacedEmail(to: string, o: { referenceCode: string; amount: number; currency: string; campuses: number; orderUrl?: string }): EmailMessage {
+  const bank = getBankDetails();
+  const amountZh = formatMoney(o.amount, o.currency, "zh-TW");
+  const amountEn = formatMoney(o.amount, o.currency, "en-TW");
+  const where = bank
+    ? `${bank.bankName}${bank.branch ? ` ${bank.branch}` : ""} / ${bank.accountName} / ${bank.accountNumber}`
+    : "(see the order page / 請見訂單頁面)";
+  return {
+    to,
+    subject: `LearningLinks order ${o.referenceCode} / 訂單 ${o.referenceCode}`,
+    text: [
+      `您的訂單已建立。請以銀行轉帳 ${amountZh}（含稅），並在匯款備註填寫參考碼：${o.referenceCode}`,
+      `Your order is placed. Please transfer ${amountEn} (VAT included) and put this reference in the transfer note: ${o.referenceCode}`,
+      `${where}`,
+      o.orderUrl ? `${o.orderUrl}` : `${siteUrl()}/dashboard`,
+      `我們確認收款後，會員資格即刻開始，期限 12 個月，不會自動續約。/ Once we confirm the payment your 12 months begin. It never renews automatically.`,
+    ].join("\n\n") + footer,
+  };
+}
+
+export function orderPaidEmail(to: string, o: { referenceCode: string; terms: { endsAt: Date }[] }): EmailMessage {
+  const latest = o.terms.reduce((a, t) => (t.endsAt > a ? t.endsAt : a), o.terms[0]!.endsAt);
+  const day = latest.toISOString().slice(0, 10);
+  return {
+    to,
+    subject: `LearningLinks payment confirmed / 已確認收款 ${o.referenceCode}`,
+    text: [
+      `已確認收款，您的會員資格有效至 ${day}。不會自動續約。`,
+      `Payment confirmed. Your membership runs until ${day}. It never renews automatically.`,
+      `${siteUrl()}/dashboard`,
+    ].join("\n\n") + footer,
+  };
+}
+
+export function renewalReminderEmail(to: string, o: { name: string; endsAt: Date; daysLeft: number }): EmailMessage {
+  const day = o.endsAt.toISOString().slice(0, 10);
+  const zh = o.daysLeft <= 0 ? `${o.name} 的會員資格今天（${day}）到期。` : `${o.name} 的會員資格將於 ${day} 到期（約 ${o.daysLeft} 天後）。`;
+  const en = o.daysLeft <= 0 ? `Membership for ${o.name} ends today (${day}).` : `Membership for ${o.name} ends on ${day} (in about ${o.daysLeft} days).`;
+  return {
+    to,
+    subject: `LearningLinks membership ends ${day} / 會員資格將於 ${day} 到期`,
+    text: [
+      `${zh} 如要繼續，請在儀表板重新購買；提早購買不會損失任何天數。我們不會自動扣款或自動續約。`,
+      `${en} To continue, renew from your dashboard; renewing early loses no days. We never charge you or renew automatically.`,
+      `${siteUrl()}/dashboard`,
+    ].join("\n\n") + footer,
+  };
+}

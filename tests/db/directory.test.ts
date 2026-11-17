@@ -162,6 +162,10 @@ describe.skipIf(!TEST_DB_URL)("job posts and the school map (real Postgres)", ()
   async function seedJobs() {
     const [org] = await db.insert(schema.organizations).values({ name: "Sunshine English", type: "cram_school", city: "taichung", latitude: 24.15, longitude: 120.65 }).returning();
     await db.insert(schema.organizations).values({ name: "No Coordinates", type: "cram_school", city: "taichung" });
+    // Posts show only while the campus holds an active membership.
+    const owner = await makeUser(db, "school");
+    const [o] = await db.insert(schema.orders).values({ holderType: "user", holderId: owner.id, planCode: "school_tw", amount: 10000, currency: "TWD", countryCode: "TW", status: "paid", provider: "bank_transfer", referenceCode: `R${Math.random()}`, createdByUserId: owner.id }).returning();
+    await db.insert(schema.memberships).values({ holderType: "org", holderId: org!.id, orderId: o!.id, planCode: "school_tw", startsAt: nowPlus(-1), endsAt: nowPlus(364) });
     await db.insert(schema.jobs).values([
       { organizationId: org!.id, title: "Kindergarten teacher", type: "full_time", city: "taichung", subjects: ["phonics"], applyContact: "hr@sunshine.example" },
       { organizationId: org!.id, title: "After-school helper", type: "part_time", city: "taichung" },
