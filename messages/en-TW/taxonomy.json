@@ -1,0 +1,99 @@
+{
+  "subjects": {
+    "english-conversation": "English conversation",
+    "phonics": "Phonics",
+    "grammar": "Grammar",
+    "reading-comprehension": "Reading comprehension",
+    "creative-writing": "Creative writing",
+    "public-speaking-debate": "Public speaking & debate",
+    "test-prep-english": "English test prep (TOEIC/TOEFL/IELTS)",
+    "mandarin": "Mandarin",
+    "mathematics": "Mathematics",
+    "science": "Science",
+    "social-studies": "Social studies",
+    "history": "History",
+    "geography": "Geography",
+    "art": "Art",
+    "music": "Music",
+    "physical-education": "Physical education",
+    "computer-science-coding": "Computer science & coding",
+    "stem-robotics": "STEM & robotics",
+    "drama-theater": "Drama & theater",
+    "literature": "Literature",
+    "business-economics": "Business & economics",
+    "exam-prep-taiwan": "Taiwan exam prep (CAP / GSAT)"
+  },
+  "levels": {
+    "kindergarten": "Kindergarten",
+    "elementary-lower": "Elementary (grades 1–3)",
+    "elementary-upper": "Elementary (grades 4–6)",
+    "junior-high": "Junior high",
+    "senior-high": "Senior high",
+    "university": "University",
+    "adult": "Adult"
+  },
+  "modes": {
+    "in_person": "In person",
+    "online": "Online"
+  },
+  "openTo": {
+    "full_time": "Full-time",
+    "part_time": "Part-time",
+    "substitute": "Substitute / cover",
+    "private_tutoring": "Private tutoring"
+  },
+  "workAuth": {
+    "citizen_or_pr": "Citizen or permanent resident",
+    "open_work_rights": "Open work rights",
+    "employer_sponsored": "Employer-sponsored (new employer needs a new permit)",
+    "overseas_needs_sponsorship": "Overseas, needs sponsorship",
+    "online_from_abroad": "Online only, from abroad"
+  },
+  "schoolTypes": {
+    "kindergarten": "Kindergarten",
+    "elementary": "Elementary school",
+    "junior_high": "Junior high school",
+    "senior_high": "Senior high school",
+    "university": "University",
+    "cram_school": "Cram school (buxiban)",
+    "language_school": "Language school",
+    "international_school": "International school",
+    "other": "Other"
+  },
+  "languages": {
+    "en": "English",
+    "zh": "Mandarin",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "th": "Thai",
+    "vi": "Vietnamese",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "other": "Other"
+  },
+  "channels": {
+    "email": "Email",
+    "phone": "Phone",
+    "line": "LINE",
+    "whatsapp": "WhatsApp",
+    "wechat": "WeChat",
+    "kakao": "KakaoTalk",
+    "zalo": "Zalo",
+    "link": "Other link"
+  },
+  "experience": {
+    "0-1": "Under 2 years",
+    "2-4": "2–4 years",
+    "5-9": "5–9 years",
+    "10+": "10+ years"
+  },
+  "countries": {
+    "TW": "Taiwan",
+    "TH": "Thailand",
+    "VN": "Vietnam",
+    "JP": "Japan",
+    "KR": "Korea",
+    "CN": "China"
+  }
+}

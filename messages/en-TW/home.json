@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "LearningLinks: find educators, directly",
+    "description": "A directory connecting schools, cram schools and families with teachers and tutors. Educators join free. No placement fees, no commissions."
+  },
+  "hero": {
+    "eyebrow": "Live in Taiwan",
+    "title": "Find great educators. Educators never pay.",
+    "subtitle": "LearningLinks connects schools, cram schools and families with teachers and tutors, directly. One flat 12-month membership. No placement fees. No commissions.",
+    "ctaEducator": "I'm an educator — join free",
+    "ctaSchool": "I'm a school — find educators",
+    "ctaFamily": "I'm a parent — find a tutor"
+  },
+  "promises": {
+    "title": "How we're different",
+    "items": {
+      "free": {
+        "title": "Free for educators, always",
+        "body": "Create a profile, get found, and never pay us anything."
+      },
+      "fees": {
+        "title": "No placement fees",
+        "body": "Schools and families pay one flat membership for 12 months. We never take a cut of a salary or a lesson."
+      },
+      "control": {
+        "title": "You control what's shown",
+        "body": "Educators choose what is public and what only paying members can see, and can hide or delete their profile in one click."
+      },
+      "sensitive": {
+        "title": "No sensitive documents",
+        "body": "We never store IDs, criminal records or financial data. Share those directly, and only when you choose."
+      }
+    }
+  },
+  "how": {
+    "title": "How it works",
+    "educator": {
+      "title": "Educators",
+      "steps": [
+        "Create a profile in minutes",
+        "Read and accept the publication waiver",
+        "Get contacted directly by schools and families"
+      ]
+    },
+    "school": {
+      "title": "Schools",
+      "steps": [
+        "Find and claim your school",
+        "Choose a 12-month membership",
+        "Search educators and contact them directly"
+      ]
+    },
+    "family": {
+      "title": "Families",
+      "steps": [
+        "Browse tutors for free",
+        "Join for 12 months (no auto-renewal)",
+        "Contact tutors directly"
+      ]
+    }
+  },
+  "trust": {
+    "title": "A directory, not an agent",
+    "body": "We connect people. We do not screen, employ or guarantee anyone. Always verify credentials, work authorization and background checks directly before you hire or book.",
+    "link": "Read the safety guide"
+  },
+  "markets": {
+    "title": "Where we are",
+    "live": "Live now",
+    "next": "Coming next",
+    "later": "Later",
+    "liveList": "Taiwan",
+    "nextList": "Thailand, Vietnam",
+    "laterList": "Japan, Korea, China",
+    "waitlistTitle": "Get notified when we open in your country"
+  }
+}

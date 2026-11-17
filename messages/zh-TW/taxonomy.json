@@ -1,0 +1,99 @@
+{
+  "subjects": {
+    "english-conversation": "英語會話",
+    "phonics": "自然發音",
+    "grammar": "文法",
+    "reading-comprehension": "閱讀理解",
+    "creative-writing": "創意寫作",
+    "public-speaking-debate": "演講與辯論",
+    "test-prep-english": "英語檢定備考（多益／托福／雅思）",
+    "mandarin": "華語",
+    "mathematics": "數學",
+    "science": "自然科學",
+    "social-studies": "社會",
+    "history": "歷史",
+    "geography": "地理",
+    "art": "美術",
+    "music": "音樂",
+    "physical-education": "體育",
+    "computer-science-coding": "資訊與程式設計",
+    "stem-robotics": "STEM／機器人",
+    "drama-theater": "戲劇",
+    "literature": "文學",
+    "business-economics": "商業／經濟",
+    "exam-prep-taiwan": "升學考試準備（會考／學測）"
+  },
+  "levels": {
+    "kindergarten": "幼兒園",
+    "elementary-lower": "國小低年級",
+    "elementary-upper": "國小中高年級",
+    "junior-high": "國中",
+    "senior-high": "高中職",
+    "university": "大學",
+    "adult": "成人"
+  },
+  "modes": {
+    "in_person": "實體授課",
+    "online": "線上授課"
+  },
+  "openTo": {
+    "full_time": "全職",
+    "part_time": "兼職",
+    "substitute": "代課",
+    "private_tutoring": "家教／個別指導"
+  },
+  "workAuth": {
+    "citizen_or_pr": "本國籍或永久居留",
+    "open_work_rights": "擁有開放工作權",
+    "employer_sponsored": "由雇主聘僱（更換雇主須重新申請許可）",
+    "overseas_needs_sponsorship": "人在海外，需要雇主申請聘僱",
+    "online_from_abroad": "僅限從海外線上授課"
+  },
+  "schoolTypes": {
+    "kindergarten": "幼兒園",
+    "elementary": "國小",
+    "junior_high": "國中",
+    "senior_high": "高中職",
+    "university": "大專院校",
+    "cram_school": "補習班",
+    "language_school": "語言學校",
+    "international_school": "國際學校",
+    "other": "其他"
+  },
+  "languages": {
+    "en": "英語",
+    "zh": "華語",
+    "ja": "日語",
+    "ko": "韓語",
+    "th": "泰語",
+    "vi": "越南語",
+    "es": "西班牙語",
+    "fr": "法語",
+    "de": "德語",
+    "other": "其他"
+  },
+  "channels": {
+    "email": "Email",
+    "phone": "電話",
+    "line": "LINE",
+    "whatsapp": "WhatsApp",
+    "wechat": "WeChat",
+    "kakao": "KakaoTalk",
+    "zalo": "Zalo",
+    "link": "其他連結"
+  },
+  "experience": {
+    "0-1": "2 年以下",
+    "2-4": "2–4 年",
+    "5-9": "5–9 年",
+    "10+": "10 年以上"
+  },
+  "countries": {
+    "TW": "台灣",
+    "TH": "泰國",
+    "VN": "越南",
+    "JP": "日本",
+    "KR": "韓國",
+    "CN": "中國"
+  }
+}
