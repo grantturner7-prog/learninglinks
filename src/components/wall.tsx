@@ -48,7 +48,7 @@ export async function MembersWall() {
         </div>
         <div className="flex flex-col gap-2.5 rounded-xl border border-ink-200 p-3.5">
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#dbe7fb] text-lg font-extrabold text-[#1f3f7a]">S</span>
+            <span className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-rose-100 text-lg font-extrabold text-[#8a2447]">S</span>
             <div>
               <div className="font-bold">{t("sample.name")}</div>
               <div className="text-sm text-ink-500">{t("sample.line")}</div>

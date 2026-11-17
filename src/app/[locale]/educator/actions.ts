@@ -10,7 +10,7 @@ import { buildWaiverSnapshot } from "@/lib/consent/waiver-text";
 import { hashIp, readWaiverItems } from "@/lib/consent/waiver";
 import { getDb } from "@/lib/db";
 import { parseProfileForm, type FieldErrors, type ProfileInput } from "@/lib/educators/profile-input";
-import { deleteEducatorData, hideProfile, publishProfile, recordWaiver, saveProfile, withdrawWaiver } from "@/lib/educators/service";
+import { deleteEducatorData, hasValidWaiver, hideProfile, publishProfile, recordWaiver, saveProfile, withdrawWaiver } from "@/lib/educators/service";
 import { getEnv } from "@/lib/env";
 import { deletePhoto } from "@/lib/uploads/photos";
 import { redirect } from "@/i18n/navigation";
@@ -41,7 +41,7 @@ export async function acceptWaiverAction(_prev: WaiverState, fd: FormData): Prom
     ipHash: hashIp(ip, getEnv().BETTER_AUTH_SECRET),
   });
   revalidatePath(`/${locale}/educator`, "layout");
-  return redirect({ href: "/educator/profile", locale });
+  return redirect({ href: "/educator/profile?step=9", locale });
 }
 
 /* ---------- profile ---------- */
@@ -76,6 +76,38 @@ export async function saveProfileAction(_prev: ProfileState, fd: FormData): Prom
     return { message: saved.unpublished ? "unpublished" : "saved", values, nonce };
   } catch (err) {
     console.error("save profile failed", err);
+    return { message: "server", values, nonce };
+  }
+}
+
+/**
+ * Last step of the guided flow: record the agreement (if it is not already on file), save the profile and
+ * publish it. The agreement is recorded with the exact wording of the waiver as shown on that step.
+ */
+export async function publishJourneyAction(_prev: ProfileState, fd: FormData): Promise<ProfileState> {
+  const user = await educator();
+  const locale = localeOf(fd.get("locale"));
+  const nonce = Date.now();
+  if (!user) return { message: "server", nonce };
+  const { values, errors } = parseProfileForm(fd);
+  if (Object.keys(errors).length > 0) return { message: "fix", errors, values, nonce };
+  try {
+    const db = getDb();
+    if (!(await hasValidWaiver(db, user.id))) {
+      const check = readWaiverItems((n) => fd.get(n));
+      if (!check.ok) return { message: "fix", blockers: ["waiver"], values, nonce };
+      const h = await headers();
+      const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? h.get("x-real-ip");
+      await recordWaiver(db, user.id, { locale, items: check.items, snapshot: await buildWaiverSnapshot(locale), ipHash: hashIp(ip, getEnv().BETTER_AUTH_SECRET) });
+    }
+    await saveProfile(db, user.id, values);
+    const res = await publishProfile(db, user.id);
+    revalidatePath(`/${locale}/educator`, "layout");
+    revalidatePath(`/${locale}/dashboard`);
+    if (!res.ok) return { message: res.suspended ? "suspended" : "saved", blockers: res.blockers, values, nonce };
+    return { message: "published", values, nonce };
+  } catch (err) {
+    console.error("publish failed", err);
     return { message: "server", values, nonce };
   }
 }

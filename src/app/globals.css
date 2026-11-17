@@ -1,35 +1,42 @@
 @import "tailwindcss";
+@import "@fontsource-variable/plus-jakarta-sans";
 
 @theme {
-  --color-brand-50: #eef7f3;
-  --color-brand-100: #d5ece2;
-  --color-brand-200: #aed9c6;
-  --color-brand-300: #7dc0a4;
-  --color-brand-400: #4aa081;
-  --color-brand-500: #2e8468;
-  --color-brand-600: #236a53;
-  --color-brand-700: #1c5643;
-  --color-brand-800: #164536;
-  --color-brand-900: #102f26;
-  --color-accent-300: #f9cd7b;
-  --color-accent-400: #f5b544;
-  --color-accent-500: #ec9f1d;
-  --color-accent-600: #c97f0c;
-  --color-ink-900: #14201b;
-  --color-ink-700: #33423b;
-  --color-ink-600: #4b5b54;
-  --color-ink-500: #6a7a73;
-  --color-ink-300: #b8c4be;
-  --color-ink-200: #d9e1dd;
-  --color-ink-100: #eaefec;
-  --color-ink-50: #f5f8f6;
+  /* The "Concierge" look (owner choice, 17 Nov 2026): blush canvas, aubergine ink, lilac and apricot.
+     Chosen so no single Taiwanese party colour (green, blue, red, teal) dominates. */
+  --color-brand-50: #f5f0fc;
+  --color-brand-100: #ebe3f8;
+  --color-brand-200: #dccff3;
+  --color-brand-300: #b7a0e3;
+  --color-brand-400: #9a80d1;
+  --color-brand-500: #7c5fba;
+  --color-brand-600: #66489e;
+  --color-brand-700: #553a8c;
+  --color-brand-800: #3f2a68;
+  --color-brand-900: #2b1730;
+  --color-accent-300: #fde3cc;
+  --color-accent-400: #f7a96b;
+  --color-accent-500: #f08f45;
+  --color-accent-600: #a94a0e;
+  --color-rose-100: #fadde3;
+  --color-rose-300: #eda9b8;
+  --color-ink-900: #2b1730;
+  --color-ink-700: #4a3550;
+  --color-ink-600: #5b4560;
+  --color-ink-500: #6e5a73;
+  --color-ink-300: #cdbfd2;
+  --color-ink-200: #e2cdd0;
+  --color-ink-100: #efdfdb;
+  --color-ink-50: #fcf3ee;
+  --color-paper: #fffdfb;
   --color-danger-50: #fdf0ef;
   --color-danger-600: #b42318;
-  --color-warn-50: #fff7e6;
-  --color-warn-700: #8a5a00;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang TC",
-    "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
-  --shadow-card: 0 1px 2px rgb(16 47 38 / 0.06), 0 8px 24px -12px rgb(16 47 38 / 0.18);
+  --color-warn-50: #fff0e2;
+  --color-warn-700: #7a3a0b;
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+  --shadow-card: 0 1px 2px rgb(60 25 70 / 0.06), 0 8px 20px -10px rgb(60 25 70 / 0.16);
+  --shadow-soft: 0 2px 4px rgb(60 25 70 / 0.04), 0 22px 44px -18px rgb(60 25 70 / 0.24);
 }
 
 @layer base {
@@ -61,16 +68,18 @@
   .btn-secondary,
   .btn-danger,
   .btn-ghost {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-[15px] font-semibold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-2.5 text-[15px] font-bold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
-    @apply bg-brand-700 text-white hover:bg-brand-800;
+    @apply bg-brand-900 text-white hover:bg-brand-800;
+    box-shadow: 0 14px 26px -14px rgb(43 23 48 / 0.6);
   }
   .btn-accent {
     @apply bg-accent-400 text-ink-900 hover:bg-accent-300;
+    box-shadow: 0 14px 26px -16px rgb(240 143 69 / 0.9);
   }
   .btn-secondary {
-    @apply border border-ink-200 bg-white text-ink-900 hover:bg-ink-50;
+    @apply border-2 border-ink-200 bg-white/70 text-ink-900 hover:bg-white;
   }
   .btn-danger {
     @apply border border-danger-600/30 bg-white text-danger-600 hover:bg-danger-50;
@@ -79,11 +88,11 @@
     @apply text-brand-700 hover:bg-brand-50;
   }
   .card {
-    @apply rounded-2xl border border-ink-100 bg-white p-6;
+    @apply rounded-[28px] border border-ink-100 bg-paper p-6;
     box-shadow: var(--shadow-card);
   }
   .field {
-    @apply block w-full min-h-11 rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-[15px] text-ink-900 placeholder:text-ink-300 focus:border-brand-500;
+    @apply block w-full min-h-11 rounded-2xl border-2 border-ink-200 bg-paper px-4 py-2.5 text-[15px] text-ink-900 placeholder:text-ink-500/60 focus:border-brand-500;
   }
   .label {
     @apply mb-1.5 block text-sm font-semibold text-ink-700;
@@ -125,7 +134,7 @@
     @apply gap-2.5 px-3 py-2.5 text-[13px];
   }
   .compliance b {
-    color: #5c3b00;
+    color: #4a2208;
   }
   .radio-card {
     @apply flex cursor-pointer flex-col gap-1 rounded-xl border-2 border-ink-200 bg-white p-4 transition-colors hover:border-brand-300 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent-400;

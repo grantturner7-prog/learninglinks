@@ -19,7 +19,7 @@ const PROMISES = [
   { key: "sensitive", Icon: FileX, tone: "bg-brand-50 text-brand-700 border-brand-100" },
 ] as const;
 
-const AVATAR_TONES = ["bg-brand-100 text-brand-800", "bg-[#dbe7fb] text-[#1f3f7a]", "bg-[#fde8c4] text-[#7a4f00]"] as const;
+const AVATAR_TONES = ["bg-brand-100 text-brand-800", "bg-rose-100 text-[#8a2447]", "bg-accent-300 text-accent-600"] as const;
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;

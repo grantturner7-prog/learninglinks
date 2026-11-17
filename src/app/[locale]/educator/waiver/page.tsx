@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { WaiverForm } from "@/components/educator/waiver-form";
-import { EducatorSteps } from "@/components/educator/steps";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { getEducatorState } from "@/lib/educators/service";
@@ -29,7 +28,6 @@ export default async function WaiverPage({ params }: Props) {
 
   return (
     <div className="container-page py-10">
-      <EducatorSteps waiverDone={state.waiverValid} profileDone={!!state.profile} published={state.profile?.status === "published"} />
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section className="flex flex-col gap-6" aria-label={t("title")}>
           <div>

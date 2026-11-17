@@ -14,7 +14,7 @@ export async function SiteHeader() {
       {/* Phone: row 1 = logo + sign-in/join, row 2 = nav + language. From md up: one row. */}
       <div className="container-page flex min-h-[70px] flex-wrap items-center gap-x-2 gap-y-1 py-2 md:gap-x-5">
         <Link href="/" className="order-1 mr-auto inline-flex items-center gap-1.5 text-[17px] font-extrabold tracking-tight text-brand-800 no-underline md:mr-0 md:gap-2.5 md:text-xl">
-          <LogoMark />
+          <LogoMark size={28} />
           LearningLinks
         </Link>
         <div className="order-2 flex items-center gap-2 md:order-4 md:gap-2.5">

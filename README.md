@@ -9,7 +9,7 @@ A connection website between educators and the schools and families who need the
 Built so far (Phase 1, Taiwan):
 
 - **Step 1:** marketing pages, sign-up with the compliance acknowledgement enforced on the server, sign-in, email verification, password reset.
-- **Step 2:** the educator side. Waiver with a consent log, profile builder (contact and ID scanner on free text, photo upload with metadata stripped), publish/hide/withdraw/delete, **audience-filtered member directory** (families see tutors, schools see full-/part-time educators), **job posts visible only to signed-in educators with a profile**, and the **map views**: an educator map for paying members (district level, never an address) and a school map with job pins for educators. Maps are self-hosted: no third-party tiles or scripts.
+- **Step 2:** the educator side. A guided, one-question-at-a-time profile flow with a live preview card (the "Concierge" design; contact and ID scanner on free text, photo upload with metadata stripped), a waiver recorded with the exact wording shown, publish/hide/withdraw/delete, **audience-filtered member directory** (families see tutors, schools see full-/part-time educators), **job posts visible only to signed-in educators with a profile**, and the **map views**: an educator map for paying members (district level, never an address) and a school map with job pins for educators. Maps are self-hosted: no third-party tiles or scripts.
 
 Not built yet: school and family memberships and payments (bank transfer first), contact reveal, school job posting, reports, final legal text, deployment. Until memberships exist (Step 3), the member directory can only be exercised with test data.
 

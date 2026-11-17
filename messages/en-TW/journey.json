@@ -1,0 +1,127 @@
+{
+  "meta": "Create your card",
+  "top": {
+    "saved": "Draft saved",
+    "saving": "Saving…",
+    "unsaved": "Not saved yet",
+    "finishLater": "Finish later",
+    "stepOf": "Step {n} of {total}",
+    "here": "You are here",
+    "path": "Your progress",
+    "stepAria": "Step {n}: {name}"
+  },
+  "nav": {
+    "back": "Back",
+    "continue": "Continue",
+    "skip": "Skip this one for now",
+    "choose": "Pick as many as you like.",
+    "max12": "Choose up to 12."
+  },
+  "cheer": {
+    "c1": "Let's start with the easy part.",
+    "c2": "A friendly face and a few words.",
+    "c3": "Nearly a third of the way there.",
+    "c4": "A third of the way there. About three minutes to go.",
+    "c5": "Halfway. You are doing great.",
+    "c6": "This one decides who can see you.",
+    "c7": "Optional, but it builds trust.",
+    "c8": "Almost there.",
+    "c9": "The last step."
+  },
+  "say": {
+    "s1": "Hi, I'm Link. I ask one small question at a time, so nobody fills in a form here.",
+    "s2": "Lovely to meet you, {name}. Now a face and a few words.",
+    "s3": "Now, the way you teach.",
+    "s4": "Lovely, {name}. Now the fun part: what do you love teaching?",
+    "s5": "Who do you teach, and where?",
+    "s6": "What kind of work are you open to? This decides who can see you.",
+    "s7": "If you like, share proof of your experience. Links only, never documents.",
+    "s8": "Last question about you: how can members reach you?",
+    "s9": "Before you publish, one honest thing…"
+  },
+  "q": {
+    "s1": "What should members call you?",
+    "s2": "Tell members a little about you",
+    "s3": "How do you teach?",
+    "s4": "What do you teach?",
+    "s5": "Who and where?",
+    "s6": "What work are you open to?",
+    "s7": "Anything that shows your experience?",
+    "s8": "How can people reach you?",
+    "s9": "Agree and publish"
+  },
+  "name": {
+    "s1": "Name",
+    "s2": "About you",
+    "s3": "How you teach",
+    "s4": "What you teach",
+    "s5": "Who and where",
+    "s6": "Work you are open to",
+    "s7": "Credentials",
+    "s8": "How to reach you",
+    "s9": "Agree and publish"
+  },
+  "help": {
+    "s1": "First name and an initial is enough, like Emily R. No numbers, links or contact details.",
+    "s2": "A photo is optional. Please don't put phone numbers, emails or links in the text: you add contact details near the end, and members see them only when they ask.",
+    "s5": "Members see areas on the map, never an address.",
+    "s7": "Link to proof hosted by the issuer, starting with https://. We store links, never documents.",
+    "s8": "Only paying members see these, and only when they ask. Add the ones you really check. At least one is needed to publish."
+  },
+  "reassure": "Only paying members can see this. You can hide it any time.",
+  "tile": {
+    "addOwn": "Add your own"
+  },
+  "fields": {
+    "photoStep": "A friendly face",
+    "workOpen": "Tick what applies",
+    "schoolWorkTitle": "Work at schools",
+    "tutoringTitle": "Private tutoring and coaching",
+    "rateGoes": "Your hourly rate goes to families only. Schools never see it.",
+    "perHour": "per hour",
+    "noneYet": "Nothing added yet."
+  },
+  "preview": {
+    "title": "Your card builds as you answer",
+    "families": "Families see",
+    "schools": "Schools see",
+    "tag": "Preview",
+    "teaches": "Teaches",
+    "where": "Where",
+    "rate": "Hourly rate",
+    "openTo": "Open to",
+    "yourName": "Your name",
+    "districtsNext": "+ your districts, next",
+    "rateComing": "NT$ _ _ _ per hour",
+    "rateLater": "coming at step 6",
+    "askConnect": "Ask to connect",
+    "rateNote": "Your rate goes to families only. Schools never see it, and families never see your school-work wishes.",
+    "schoolsNotTutor": "Schools see only your school-work side.",
+    "invisible": "Nobody sees you in this view until you choose what you are open to (step 6).",
+    "strength": "Profile strength",
+    "gettingThere": "Getting there",
+    "great": "Looking great",
+    "safeTitle": "Nothing is public until you publish.",
+    "safeBody": "Hide or delete your card any time, in one click. We never ask for your ID, home address or documents.",
+    "status": "Status"
+  },
+  "publish": {
+    "title": "Before you publish, one honest thing…",
+    "aboutYou": "What members will see",
+    "alreadyAgreed": "You have already agreed to the current waiver. You can review or withdraw it in settings.",
+    "button": "Publish my card",
+    "publishing": "Publishing…",
+    "needAgree": "Tick every required item to publish.",
+    "missing": "Almost there. Still needed:",
+    "goStep": "Go to step {n}",
+    "doneTitle": "Your card is live",
+    "doneBody": "Paying schools and families can now find you, each seeing only their side. You can hide it any time.",
+    "toDashboard": "Back to my dashboard",
+    "keepEditing": "Keep editing",
+    "suspended": "This card was suspended by LearningLinks and cannot be published."
+  },
+  "errors": {
+    "server": "Something went wrong. Please try again.",
+    "fixStep": "Please check this step: something needs fixing."
+  }
+}

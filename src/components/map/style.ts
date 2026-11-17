@@ -3,17 +3,17 @@ import type { CountryMapConfig } from "@/lib/geo";
 
 /** Brand tokens (see globals.css) as literals, because MapLibre paints need real colour values. */
 export const PALETTE = {
-  land: "#f7f4ec",
-  landEdge: "#b7c7be",
-  countyLine: "#aebfb5",
-  districtLine: "#d4dbd2",
-  shadow: "rgba(20, 52, 62, 0.20)",
+  land: "#fbf6f1",
+  landEdge: "#c9b9d6",
+  countyLine: "#bfaed0",
+  districtLine: "#e3d6e6",
+  shadow: "rgba(60, 25, 70, 0.20)",
   /** Density ramp, lightest to deepest (index 0 is "no data" and uses the land colour). */
-  ramp: ["#e6f3ec", "#c8e7d7", "#a0d4bc", "#6dba9b", "#3c9276"],
-  brand700: "#1c5643",
-  brand800: "#164536",
-  amber: "#f5b544",
-  amberDeep: "#c97f0c",
+  ramp: ["#f1e9fa", "#dccff3", "#c3a9e8", "#9a80d1", "#66489e"],
+  brand700: "#553a8c",
+  brand800: "#3f2a68",
+  amber: "#f7a96b",
+  amberDeep: "#a94a0e",
 } as const;
 
 /** No tiles, no glyphs, no sprites: nothing is requested from any other server. The sea is CSS. */
@@ -40,7 +40,7 @@ export function addBase(map: MlMap, country: CountryMapConfig): void {
     {
       id: "land-inner", type: "line", source: SOURCE.counties,
       layout: { "line-join": "round" },
-      paint: { "line-color": "rgba(28, 86, 67, 0.07)", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 9], "line-blur": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 7], "line-offset": ["interpolate", ["linear"], ["zoom"], 5, -1.5, 10, -4] },
+      paint: { "line-color": "rgba(60, 25, 70, 0.07)", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 9], "line-blur": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 7], "line-offset": ["interpolate", ["linear"], ["zoom"], 5, -1.5, 10, -4] },
     },
     {
       id: LAYER.districtLine, type: "line", source: SOURCE.districts,

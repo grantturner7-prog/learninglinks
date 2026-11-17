@@ -25,6 +25,13 @@ Discovery is **map-first**, not just lists: the owner loved the map on the old s
 - **Signed-in educators with a profile** get a school map with open job posts on the pins (old-map style).
 - Map and list always go together (same filters, same data service). Do not ship a discovery screen without its map.
 
+## Design direction: "Concierge" (owner choice, 17 Nov 2026)
+The owner rejected the first designs ("feels like filling out a form at the airport, too sterile") and chose the **Concierge** concept after reviewing five (Postcards, Notice Board, Journal, Playground, Concierge; mock-ups: https://claude.ai/artifact/3EfBUBPvyXM8QuGbfet1Ao).
+- **Never a wall of labelled boxes.** Flows ask **one question at a time**, in a friendly voice ("Link", a guide drawn as two linked rings), with big tiles/pills, warm encouragement, a live preview of the result, and reassurance where people feel unsure. Sign-up, school onboarding and family checkout should follow the same pattern (not yet built).
+- **Colour:** blush canvas `#fcf3ee`, aubergine ink `#2b1730`, lilac (`brand-*`), apricot (`accent-*`). **No single party colour (green, blue, red, teal, strong yellow) may dominate**, in Taiwan these read as a political stance. All text pairs must keep 4.5:1 contrast.
+- **Type:** Plus Jakarta Sans (self-hosted via fontsource, never from a third-party CDN) with the system Traditional Chinese fonts as fallback.
+- The tokens live in `src/app/globals.css` (`@theme`). Do not hard-code colours elsewhere (the map reads `src/components/map/style.ts`).
+
 ## Features that were removed on purpose: do not build them
 The owner removed **live matching** (a live substitute board with chat) and **substitute work** as an option, to stay above board legally. Schools and educators discuss substitute cover **between themselves**, using the contact details an educator chose to share. Do not add a substitute option, availability board, presence, or in-app chat without the owner's explicit approval and a lawyer's opinion.
 

@@ -15,6 +15,7 @@ import educator from "./educator.json";
 import jobs from "./jobs.json";
 import directory from "./directory.json";
 import map from "./map.json";
+import journey from "./journey.json";
 
-const messages = { map, common, nav, footer, taxonomy, home, notice, wall, forSchools, forFamilies, safety, legal, auth, dashboard, educator, jobs, directory };
+const messages = { map, common, nav, footer, taxonomy, home, notice, wall, forSchools, forFamilies, safety, legal, auth, dashboard, educator, jobs, directory, journey };
 export default messages;
