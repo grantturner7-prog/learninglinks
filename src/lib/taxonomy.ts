@@ -17,8 +17,11 @@ export type Level = (typeof LEVELS)[number];
 export const TEACHING_MODES = ["in_person", "online"] as const;
 export type TeachingMode = (typeof TEACHING_MODES)[number];
 
-/** What kind of work the educator is open to. */
-export const OPEN_TO = ["full_time", "part_time", "substitute", "private_tutoring"] as const;
+/**
+ * What kind of work the educator is open to. Substitute work and live matching were removed on
+ * 17 Nov 2026 to stay above board: schools and educators arrange cover between themselves.
+ */
+export const OPEN_TO = ["full_time", "part_time", "private_tutoring"] as const;
 export type OpenTo = (typeof OPEN_TO)[number];
 
 /**

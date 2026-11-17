@@ -178,6 +178,8 @@ export const orders = pgTable(
     planCode: text("plan_code").notNull(),
     /** Amount in the currency's major unit (TWD has no minor unit). Tax-inclusive. */
     amount: integer("amount").notNull(),
+    /** Number of campuses covered (schools). Total = first campus + extra campuses. Families: 1. */
+    campuses: integer("campuses").notNull().default(1),
     currency: text("currency").notNull(),
     countryCode: text("country_code").notNull(),
     status: text("status").$type<OrderStatus>().notNull().default("pending"),
@@ -197,6 +199,7 @@ export const orders = pgTable(
   (t) => [
     check("order_status_check", sql`${t.status} in ('pending','paid','cancelled')`),
     check("order_amount_check", sql`${t.amount} >= 0`),
+    check("order_campuses_check", sql`${t.campuses} >= 1`),
     index("order_holder_idx").on(t.holderType, t.holderId),
     index("order_status_idx").on(t.status, t.createdAt),
   ],
@@ -211,6 +214,7 @@ export const memberships = pgTable(
     holderId: text("holder_id").notNull(),
     orderId: uuid("order_id").notNull().unique().references(() => orders.id),
     planCode: text("plan_code").notNull(),
+    campuses: integer("campuses").notNull().default(1),
     startsAt: ts("starts_at").notNull(),
     endsAt: ts("ends_at").notNull(),
     createdAt: createdAt(),
@@ -238,7 +242,7 @@ export const contactReveals = pgTable(
   ],
 );
 
-export type JobType = "full_time" | "part_time" | "substitute";
+export type JobType = "full_time" | "part_time";
 export type JobStatus = "open" | "closed";
 
 export const jobs = pgTable(
@@ -318,64 +322,3 @@ export const waitlistSignups = pgTable(
   (t) => [uniqueIndex("waitlist_uq").on(t.email, t.countryCode, t.audience)],
 );
 
-/**
- * Live substitute board. An educator "goes online" for a limited time; schools with an active
- * membership can see who is available and start a chat. One row per educator, replaced each time.
- */
-export const substituteAvailability = pgTable(
-  "substitute_availability",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    educatorId: uuid("educator_id").notNull().unique().references(() => educatorProfiles.id, { onDelete: "cascade" }),
-    availableFrom: ts("available_from").notNull().defaultNow(),
-    /** Online while this is in the future (maximum window enforced in code). */
-    availableUntil: ts("available_until").notNull(),
-    districts: text("districts").array().notNull().default(sql`'{}'::text[]`),
-    subjects: text("subjects").array().notNull().default(sql`'{}'::text[]`),
-    levels: text("levels").array().notNull().default(sql`'{}'::text[]`),
-    /** Short note. Scanned so it cannot carry phone numbers, emails or links. */
-    note: text("note"),
-    lastHeartbeatAt: ts("last_heartbeat_at").notNull().defaultNow(),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-  },
-  (t) => [index("substitute_until_idx").on(t.availableUntil)],
-);
-
-export type ConversationStatus = "open" | "blocked" | "closed";
-
-/** A chat between one school (organisation) and one educator. Started by the school. */
-export const conversations = pgTable(
-  "conversations",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    organizationId: uuid("organization_id").notNull().references(() => organizations.id, { onDelete: "cascade" }),
-    educatorId: uuid("educator_id").notNull().references(() => educatorProfiles.id, { onDelete: "cascade" }),
-    startedByUserId: text("started_by_user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-    status: text("status").$type<ConversationStatus>().notNull().default("open"),
-    lastMessageAt: ts("last_message_at").notNull().defaultNow(),
-    createdAt: createdAt(),
-  },
-  (t) => [
-    check("conversation_status_check", sql`${t.status} in ('open','blocked','closed')`),
-    uniqueIndex("conversation_pair_uq").on(t.organizationId, t.educatorId),
-    index("conversation_educator_idx").on(t.educatorId, t.lastMessageAt),
-    index("conversation_org_idx").on(t.organizationId, t.lastMessageAt),
-  ],
-);
-
-export const messages = pgTable(
-  "messages",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    conversationId: uuid("conversation_id").notNull().references(() => conversations.id, { onDelete: "cascade" }),
-    senderUserId: text("sender_user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-    body: text("body").notNull(),
-    createdAt: createdAt(),
-    readAt: ts("read_at"),
-  },
-  (t) => [
-    check("message_body_check", sql`char_length(${t.body}) between 1 and 2000`),
-    index("message_conversation_idx").on(t.conversationId, t.createdAt),
-  ],
-);

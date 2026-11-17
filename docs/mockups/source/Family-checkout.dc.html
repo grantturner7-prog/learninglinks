@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Family membership and checkout</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.plancard{background:#fff;border:2px solid var(--b600);border-radius:16px;padding:24px}
+.plancard ul{margin:12px 0 0;padding-left:20px;font-size:15px}
+.plancard li{margin:6px 0}
+.pay{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid var(--i200);border-radius:12px;background:#fff}
+.pay.on{border-color:var(--b500);background:var(--b50)}
+.pay.off{opacity:.6}
+.sticky{position:sticky;top:16px}
+.bank{background:#fff;border:1px dashed var(--b500);border-radius:12px;padding:6px 16px}
+.refcode{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;font-weight:800;letter-spacing:.06em;color:var(--b800)}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="Find-educators.dc.html"><span class="en">Find educators</span><span class="zh">尋找教師</span></a>
+        <a href="School-membership.dc.html"><span class="en">For schools</span><span class="zh">學校專區</span></a>
+        <a class="on" href="Families.dc.html"><span class="en">For families</span><span class="zh">家長專區</span></a>
+      </nav>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+        <a class="btn btn-s" href="Find-educators.dc.html"><span class="en">Sign in</span><span class="zh">登入</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px;padding-bottom:24px">
+    <div style="max-width:760px">
+      <span class="badge"><span class="en">Family membership</span><span class="zh">家長會員</span></span>
+      <h1 class="h2" style="margin-top:12px"><span class="en">NT$2,000 for 12 months</span><span class="zh">12 個月 NT$2,000</span></h1>
+      <p class="lead" style="font-size:18px;margin-top:8px"><span class="en">One payment, VAT included. It never renews on its own, and we take no share of lessons.</span><span class="zh">一次付款，含營業稅。不會自動續約，也不抽取課程費用。</span></p>
+    </div>
+
+    <div class="split" style="margin-top:28px">
+      <section class="main stack" style="gap:20px" aria-label="Details">
+
+        <sc-if value="{{stepOne}}" hint-placeholder-val="{{ true }}">
+          <div class="plancard">
+            <div class="row" style="justify-content:space-between"><span class="h3"><span class="en">What your family gets</span><span class="zh">您的家庭可使用的功能</span></span><span class="badge-m"><span class="en">12 months</span><span class="zh">12 個月</span></span></div>
+            <ul>
+              <li><span class="en">See educators who offer <b>private tutoring and coaching</b>, with hourly rates</span><span class="zh">查看提供<b>私人家教與輔導</b>的教師及其每小時費用</span></li>
+              <li><span class="en">Full profiles, and contact details shown on request</span><span class="zh">完整檔案，聯絡方式需點選才顯示</span></li>
+              <li><span class="en">One membership for all your children, and re-hires or new tutors any time</span><span class="zh">全家小孩共用一個會員，可隨時再次聘請或更換家教</span></li>
+            </ul>
+            <p class="small muted" style="margin-top:12px"><span class="en">Educators who are only looking for school work are never shown to families.</span><span class="zh">只尋找學校工作的教師不會顯示給家長。</span></p>
+          </div>
+
+          <div class="card stack" style="gap:16px">
+            <h2 class="h3"><span class="en">Receipt details</span><span class="zh">收據資料</span></h2>
+            <div class="g2" style="gap:16px">
+              <div><label class="lbl" for="nm"><span class="en">Name</span><span class="zh">姓名</span></label><input id="nm" class="field" value="Lin Mei-ling 林美玲"></div>
+              <div><label class="lbl" for="em"><span class="en">Email for your e-invoice</span><span class="zh">電子發票 Email</span></label><input id="em" class="field" value="parent@example.com"></div>
+            </div>
+            <p class="hint"><span class="en">We don't ask for any information about your children.</span><span class="zh">我們不會詢問任何關於您孩子的資料。</span></p>
+          </div>
+
+          <div class="card stack" style="gap:12px">
+            <h2 class="h3"><span class="en">Payment method</span><span class="zh">付款方式</span></h2>
+            <label class="pay on"><input type="radio" name="pm" checked style="width:20px;height:20px;accent-color:var(--b700);margin-top:3px"><span><b><span class="en">Bank transfer / ATM</span><span class="zh">銀行轉帳／ATM</span></b><span class="hint" style="display:block"><span class="en">You'll get our account details and a reference code. Membership starts when we confirm the transfer, usually within 1 business day.</span><span class="zh">下單後會取得匯款帳號與參考碼。確認收款後（通常 1 個工作天內）會員資格即開始。</span></span></span></label>
+            <label class="pay off"><input type="radio" name="pm" disabled style="width:20px;height:20px;margin-top:3px"><span><b><span class="en">Credit card</span><span class="zh">信用卡</span></b> <span class="badge-m"><span class="en">Coming soon</span><span class="zh">即將推出</span></span></span></label>
+            <label class="pay off"><input type="radio" name="pm" disabled style="width:20px;height:20px;margin-top:3px"><span><b><span class="en">Convenience-store payment code</span><span class="zh">超商代碼繳費</span></b> <span class="badge-m"><span class="en">Coming soon</span><span class="zh">即將推出</span></span></span></label>
+          </div>
+
+          <div class="card stack" style="gap:12px">
+            <h2 class="h3"><span class="en">Before you order</span><span class="zh">下單前請確認</span></h2>
+            <div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div>
+            <div class="notice-warn"><span class="en"><b>Private tutoring may not be allowed on some work permits.</b> Check the rules that apply before you book lessons, and check each tutor yourself.</span><span class="zh"><b>部分工作許可可能不允許私人家教。</b>預約課程前請先確認適用的規定，並自行查核每位家教。</span></div>
+            <label class="chk {{ackCls}}"><input type="checkbox" checked="{{ack}}" onChange="{{togAck}}"><span><span class="en">I understand that LearningLinks is only a connection website, that it does not perform background checks on teachers, schools or families, and that I am responsible for all checks and for following all government laws, policies and procedures that apply to me.</span><span class="zh">我了解 LearningLinks 僅為連結平台，不對教師、學校或家長進行背景調查，且我須自行負責所有查核，並遵守適用於我的所有政府法令、政策與程序。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{stepTwo}}" hint-placeholder-val="{{ false }}">
+          <div class="card stack" style="gap:16px">
+            <div class="row"><span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span><h2 class="h2" style="font-size:24px"><span class="en">Order placed. Please transfer the amount</span><span class="zh">訂單已成立，請完成匯款</span></h2></div>
+            <div class="bank">
+              <div class="kv"><span class="muted"><span class="en">Amount</span><span class="zh">金額</span></span><b>NT$2,000</b></div>
+              <div class="kv"><span class="muted"><span class="en">Bank</span><span class="zh">銀行</span></span><b>[YOUR BANK] · [BRANCH]</b></div>
+              <div class="kv"><span class="muted"><span class="en">Account name</span><span class="zh">戶名</span></span><b>[ACCOUNT NAME]</b></div>
+              <div class="kv"><span class="muted"><span class="en">Account number</span><span class="zh">帳號</span></span><b>[ACCOUNT NUMBER]</b></div>
+              <div class="kv"><span class="muted"><span class="en">Reference code</span><span class="zh">匯款參考碼</span></span><span class="refcode">LL-4M8X2D</span></div>
+            </div>
+            <div class="notice-warn"><span class="en"><b>Please include the reference code</b> in the transfer note so we can match your payment.</span><span class="zh"><b>請於匯款備註填寫參考碼</b>，以便我們核對您的款項。</span></div>
+            <h3 class="h3"><span class="en">What happens next</span><span class="zh">接下來</span></h3>
+            <div class="stack" style="gap:10px">
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">1</span><span><span class="en">We confirm your transfer (usually within 1 business day).</span><span class="zh">我們確認收款（通常 1 個工作天內）。</span></span></div>
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">2</span><span><span class="en">Your 12 months start that day and you get an email.</span><span class="zh">當天起算 12 個月，並以 Email 通知您。</span></span></div>
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">3</span><span><span class="en">Browse tutors, and your e-invoice is sent to the address above.</span><span class="zh">開始瀏覽家教，電子發票將寄至上方 Email。</span></span></div>
+            </div>
+            <div class="row"><a class="btn btn-p" href="Find-educators.dc.html"><span class="en">Go to find tutors</span><span class="zh">前往尋找家教</span></a><button type="button" class="btn btn-g" onClick="{{backToStart}}"><span class="en">Change order</span><span class="zh">修改訂單</span></button></div>
+          </div>
+        </sc-if>
+      </section>
+
+      <aside class="side sticky stack" style="gap:16px" aria-label="Order summary">
+        <div class="card stack" style="gap:6px">
+          <h2 class="h3"><span class="en">Order summary</span><span class="zh">訂單摘要</span></h2>
+          <div class="kv"><span><span class="en">Family membership (12 months)</span><span class="zh">家長會員（12 個月）</span></span><b>NT$2,000</b></div>
+          <div class="kv small"><span class="muted"><span class="en">Net amount</span><span class="zh">未稅金額</span></span><span>NT$1,905</span></div>
+          <div class="kv small"><span class="muted"><span class="en">VAT 5% (included)</span><span class="zh">營業稅 5%（已含）</span></span><span>NT$95</span></div>
+          <div class="kv"><b><span class="en">Total</span><span class="zh">總額</span></b><b style="font-size:20px">NT$2,000</b></div>
+          <sc-if value="{{canOrder}}" hint-placeholder-val="{{ false }}">
+            <button type="button" class="btn btn-p btn-lg btn-block" style="margin-top:8px" onClick="{{placeOrder}}"><span class="en">Place order</span><span class="zh">送出訂單</span></button>
+          </sc-if>
+          <sc-if value="{{cannotOrder}}" hint-placeholder-val="{{ true }}">
+            <button type="button" class="btn btn-p btn-lg btn-block" style="margin-top:8px" disabled><span class="en">Place order</span><span class="zh">送出訂單</span></button>
+            <p class="tiny muted"><span class="en">Please tick the confirmation box first.</span><span class="zh">請先勾選確認方塊。</span></p>
+          </sc-if>
+          <p class="tiny muted" style="margin-top:6px"><span class="en">As a consumer you may have cancellation rights under Taiwan consumer law; final wording to be set with a lawyer.</span><span class="zh">消費者依台灣消費者保護法可能享有解除權；最終文字將與律師確認。</span></p>
+        </div>
+        <div class="soft small stack" style="gap:6px">
+          <b><span class="en">What you're buying</span><span class="zh">您購買的內容</span></b>
+          <span><span class="en">12 months of access to see tutors and their contact details. Without a membership, tutor profiles are not visible. We are a directory: we don't screen, employ or guarantee anyone.</span><span class="zh">12 個月內查看家教與其聯絡方式的權限。未加入會員時無法查看家教檔案。我們是名錄平台，不審查、不聘僱，也不擔保任何人。</span></span>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const lang = s.lang || 'en';
+    const step = s.step || 1;
+    const ack = !!s.ack;
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' }),
+      ack: ack,
+      ackCls: ack ? 'on' : '',
+      togAck: () => this.setState({ ack: !(this.state && this.state.ack) }),
+      canOrder: step === 1 && ack,
+      cannotOrder: step === 1 && !ack,
+      stepOne: step === 1,
+      stepTwo: step === 2,
+      placeOrder: () => this.setState({ step: 2 }),
+      backToStart: () => this.setState({ step: 1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -8,20 +8,21 @@ export interface Plan {
   audience: "school" | "family";
   countryCode: CountryCode;
   /**
-   * Flat price for one 12-month term, in the currency's major unit.
-   * Set by the owner on 17 Nov 2026: schools NT$10,000, families NT$2,000.
-   * ASSUMED tax-inclusive (5% VAT included). Confirm with the accountant before launch.
+   * Price for one 12-month term, in the currency's major unit, VAT INCLUDED (confirmed by the owner,
+   * 17 Nov 2026). Schools: NT$10,000 covers the first campus. Families: NT$2,000.
    */
   listPrice: number;
-  /** false = shown as "coming soon" and cannot be bought yet (families arrive in Phase 2). */
+  /** Extra price per additional campus for the same term. Null where campuses do not apply. */
+  additionalCampusPrice: number | null;
+  /** false = cannot be bought yet. Both Taiwan plans are open at launch. */
   available: boolean;
 }
 
 export const TERM_MONTHS = 12;
 
 export const PLANS: Record<PlanCode, Plan> = {
-  school_tw: { code: "school_tw", audience: "school", countryCode: "TW", listPrice: 10_000, available: true },
-  family_tw: { code: "family_tw", audience: "family", countryCode: "TW", listPrice: 2_000, available: false },
+  school_tw: { code: "school_tw", audience: "school", countryCode: "TW", listPrice: 10_000, additionalCampusPrice: 5_000, available: true },
+  family_tw: { code: "family_tw", audience: "family", countryCode: "TW", listPrice: 2_000, additionalCampusPrice: null, available: true },
 };
 
 export function isPlanCode(v: unknown): v is PlanCode {
@@ -32,11 +33,17 @@ export function planFor(audience: Plan["audience"], country: CountryCode): Plan 
   return Object.values(PLANS).find((p) => p.audience === audience && p.countryCode === country);
 }
 
-/** Price to charge. Prices are flat: a discount applies only if the owner explicitly configures one. */
-export function priceFor(plan: Plan, discountPercent = 0): number {
-  const pct = Math.min(90, Math.max(0, Math.trunc(discountPercent)));
-  if (pct === 0) return plan.listPrice;
-  return Math.min(plan.listPrice, Math.max(0, Math.round((plan.listPrice * (100 - pct)) / 100 / 10) * 10));
+/**
+ * Total for a term. Schools pay the list price for the first campus plus the additional-campus price for
+ * each campus after that (so 3 campuses = 10,000 + 2 x 5,000 = 20,000). Families always pay the list price.
+ */
+export function priceForCampuses(plan: Plan, campuses = 1): number {
+  if (!Number.isInteger(campuses) || campuses < 1) throw new Error("campuses must be a whole number of at least 1");
+  if (plan.additionalCampusPrice === null) {
+    if (campuses !== 1) throw new Error("This plan does not have campuses");
+    return plan.listPrice;
+  }
+  return plan.listPrice + (campuses - 1) * plan.additionalCampusPrice;
 }
 
 /** Split a tax-inclusive amount into net + tax (for invoices). net + tax always equals gross. */

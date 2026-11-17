@@ -21,11 +21,11 @@
 | Phase 1 school data | The old map holds 5,477 mostly public schools with **no contact data**, and only 2 language schools. The main buyers, about 17,700 licensed cram schools, are missing. Phase 1 needs a cram-school import from government open data, with a licence check. |
 | **Visibility (corrected 17 Nov 2026)** | **No one sees any educator without a paid membership. There is no free browsing, no public profiles and no teasers, for schools or for parents.** This replaces the "public teaser + member-only contact" model in the first draft below (§0 call 2, §5.2, §5.3, §7, §9, Appendix A). Educators are free and their profiles are visible to logged-in paying members only; contact details are shown one at a time on request, logged and capped per day. Profile pages are never indexed by search engines. Unauthenticated visitors get a members-only wall, with a clearly labelled **sample** profile so they know what they would be buying. |
 | Public profile link / sample profile | **No public profile link for educators, ever. The labelled sample profile stays** on marketing pages and on the members-only wall. |
-| **Pricing (set 17 Nov 2026)** | **Schools NT$10,000 for 12 months. Families NT$2,000 for 12 months.** Flat prices, one payment, no auto-renewal. This replaces every price and the founding discount in §6 and §9–§10. Assumed tax-inclusive (5% VAT included): confirm with your accountant. One school plan only, so no seat limits or multi-campus tier are defined yet (open question for chains). |
-| **Audience-specific visibility (set 17 Nov 2026)** | **Families see only educators who offer private tutoring or coaching. Schools see only educators open to full-time, part-time or substitute work, and never tutoring-only educators.** An educator in both groups is shown to each audience with only that audience's side: schools do not see tutoring or rates, families do not see school-work wishes. Hourly rates are for families only. *Assumption to confirm: part-time counts as school work.* Rules live in `src/lib/visibility.ts` and are unit-tested. |
-| **Live substitute board + chat (set 17 Nov 2026)** | Educators can **go online** for a limited time to offer substitute cover. **Only schools with an active membership** can see who is online and chat with them in real time. Chats are started by schools; educators reply, block and report. Details in §5.2a. |
+| **Pricing (set 17 Nov 2026)** | **Schools: NT$10,000 for 12 months covers the first campus; each additional campus is NT$5,000** (3 campuses = NT$20,000). **Families: NT$2,000 for 12 months.** **VAT is included** in these prices (confirmed). Flat, one payment, no auto-renewal. This replaces every earlier price and the founding discount in §6 and §9–§10. *Assumption to confirm: a campus added mid-year pays NT$5,000 for the same term, with no proration.* |
+| **Audience-specific visibility (set 17 Nov 2026)** | **Families see only educators who offer private tutoring or coaching. Schools see only educators open to full-time or part-time work (these two work together), and never tutoring-only educators.** An educator in both groups is shown to each audience with only that audience's side: schools do not see tutoring or rates, families do not see school-work wishes. Hourly rates are for families only. *Confirmed 17 Nov 2026: part-time and full-time work together.* Rules live in `src/lib/visibility.ts` and are unit-tested. |
+| **Live matching and substitute work: REMOVED (17 Nov 2026)** | To stay above board legally there is **no live substitute board, no in-app chat and no "substitute" option**. Schools and educators discuss substitute cover **between themselves**, using the contact details an educator chose to share. This removes the largest legal risk of the earlier draft. It must not come back without your explicit approval and a lawyer's opinion. |
 | **Compliance notice: always (set 17 Nov 2026)** | **Every page and flow, for every party, carries a notice that LearningLinks is only a connection website, does not run background checks on teachers, schools or families, and that everyone must complete all checks and follow all government laws, policies and procedures that apply to them.** Sign-up, checkout and consent flows also require an acknowledgement checkbox. Canonical wording: `messages/*/notice.json`, guarded by a test. A standing rule is also recorded in `CLAUDE.md`. |
-| Families launch | Still Phase 2 (a "reserve my place" page runs in Phase 1). Tell me if you want families at launch. |
+| **Families launch in Phase 1 (17 Nov 2026)** | Families launch together with schools. Phase 2 is Thailand and Vietnam. Phase 3 is Japan, Korea and China. |
 | Build status | Paused for design approval. See `docs/mockups/`. |
 
 ---
@@ -59,7 +59,7 @@
 4. **Build a self-service directory, not a broker.** "We take no agency fee" does not by itself keep us outside employment-agency licensing. Regulators look at what we do. [ask counsel, per country]
 5. **One-time annual payments, not subscriptions.** This removes auto-renewal consent rules, card-on-file risk and recurring-billing gateway limits. It also lets us use local rails (bank transfer, convenience-store codes, LINE Pay).
 
-**Sequence.** Taiwan educators + schools → Taiwan families → Hong Kong + Vietnam → Japan, Korea, Philippines (as a supply hub), Thailand/Singapore/Malaysia → China last, and partner-led.
+**Sequence (updated 17 Nov 2026).** Phase 1: Taiwan (educators, schools and families together) → Phase 2: Thailand and Vietnam → Phase 3: Japan, Korea and China (China partner-led).
 
 **Needed from you:** the decisions in §13. The most important are where your company is based (it decides payments and tax), the brand name, and access to the Replit source.
 
@@ -159,9 +159,9 @@ Published estimates of the private-tutoring market range from about US$14.8B to 
 | 8 | **Consumer cooling-off rights** | Taiwan gives 7 days to cancel distance sales, with an exception for online services fully performed once begun, with prior consent and notice. [verified from a 2015-era summary] A year-long membership may not fit that exception. | Build a per-country refund path; counsel to define it. [ask counsel] |
 | 9 | **Payments depend on where your company is** | Sources conflict on whether a Taiwan company can use Stripe directly. [verified conflict] | Entity decision first (§13); a `PaymentProvider` abstraction; one-time payments make local gateways easy. |
 | 10 | **China** | Needs a local entity or partner, ICP filing, data localisation, WeChat/Alipay, and a different network environment. [my read] | Last wave, partner-led (§8). |
-| 12 | **Live substitute board looks like dispatch** | A real-time "who is available now" board with in-app chat resembles job matching more than a directory, which raises the employment-agency licensing question in §4 #2. [ask counsel] | Keep it self-service: no recommendations, no automatic matching, no brokering of terms. Counsel must approve this feature before launch. |
-| 13 | **Substitute work and work permits** | Substitute cover for several schools can breach employer-tied work permits, and some substitute roles need teaching qualifications. [ask counsel] | Notices on the board, the educator's go-online screen and in chat. A required acknowledgement before an educator goes online. Work-authorization category shown on every card. |
-| 14 | **Chat is a new data store** | Messages are personal data and can carry sensitive documents by accident. | Chats started by schools only, educator can block and report, retention limit (decide with counsel), warning not to send IDs or documents, no attachments in v1, abuse caps on new chats per day. |
+| 12 | **Live matching: removed** | The earlier draft had a live substitute board with chat. It looked like job matching, so you removed it (17 Nov 2026). | Do not rebuild it. Schools and educators arrange cover themselves. |
+| 13 | **Cover arranged off-platform** | Educators and schools may still agree cover between themselves, and a foreign teacher covering classes for several schools can breach an employer-tied work permit. [ask counsel] | We do not facilitate it. The compliance notice reminds everyone to follow all government rules and that foreign teachers may need permission for each school. |
+| 14 | **Job posts are still advertisements** | Schools can still post jobs (full-time or part-time). A job-posting service can fall under Taiwan's employment-service rules (§4 #2). [ask counsel] | Ask counsel. If there is any doubt, launch without job posts and add them later. |
 | 11 | **Discrimination exposure** | Collecting and filtering on gender, age or nationality can expose schools and us under anti-discrimination rules. [ask counsel] | Don't offer these as default filters. Use work authorization and languages instead (§5.4). |
 
 ---
@@ -171,23 +171,23 @@ Published estimates of the private-tutoring market range from about US$14.8B to 
 ### 5.1 Core jobs to be done
 
 - **Educator:** "Get found by good employers and families without paying or exposing sensitive data."
-- **School:** "Fill a vacancy or a substitute gap fast, with someone I can contact today."
+- **School:** "Fill a vacancy fast, with someone I can contact today."
 - **Family:** "Find a tutor near me (or online) for this subject and level, and contact them directly."
 
 ### 5.2 Release map
 
-| Capability | v1 (Taiwan: educators + schools) | v2 (Taiwan: families, scale) | v3 (multi-country) |
+| Capability | v1 (Taiwan launch: educators, schools and families) | v2 (Taiwan scale; Thailand and Vietnam) | v3 (Japan, Korea, China) |
 |---|---|---|---|
 | Educator profile (members-only; contact shown on request) | ✓ | ✓ | ✓ |
 | Waiver + consent log + one-click hide/delete | ✓ | ✓ | per-country versions |
 | "I also tutor privately" toggle (collects tutor supply early) | ✓ | ✓ | ✓ |
 | School claim flow (free), then paid membership | ✓ | ✓ | ✓ |
 | School search with filters + shortlist + team seats | ✓ | ✓ | ✓ |
-| Job posts (full-time, part-time, substitute, urgent) | ✓ | ✓ | ✓ |
+| Job posts (full-time, part-time), subject to counsel's view on job advertising | ✓ | ✓ | ✓ |
 | Contact reveal with audit log + "who contacted me" for educators | ✓ | ✓ | ✓ |
-| Family membership + tutor search (rates, subjects, exam prep) | | ✓ | ✓ |
+| Family membership + tutor search (rates, subjects, exam prep) | ✓ | ✓ | ✓ |
 | Optional request board (families post a need, tutors respond free) | | ✓ | ✓ |
-| Chain/group accounts + invoice + 統一編號 | | ✓ | local equivalents |
+| Multi-campus pricing (NT$10,000 + NT$5,000 per extra campus), invoice + 統一編號 | ✓ | ✓ | local equivalents |
 | Renewal engine (60/30/7-day reminders, one-click renew, stacking) | basic | ✓ | ✓ |
 | LINE integration (login + notifications) | login | ✓ | KakaoTalk, Zalo, WeChat |
 | SEO landing pages for the service and guides (never educator profiles) | ✓ | ✓ | ✓ |
@@ -195,22 +195,11 @@ Published estimates of the private-tutoring market range from about US$14.8B to 
 | Languages | EN + 繁中 | EN + 繁中 | + 繁中-HK, Vietnamese, Japanese, Korean, Thai... |
 | Verification-partner badges (pass/fail only) | | | ✓ |
 | **Audience-specific visibility** (schools see school-work seekers, families see tutors) | ✓ | ✓ | ✓ |
-| **Live substitute board + real-time chat** (schools only) | ✓ | ✓ | ✓ |
 | **Compliance notice on every page + acknowledgement checkbox** | ✓ | ✓ | ✓ |
 
-### 5.2a Live substitute board and chat (new, 17 Nov 2026)
+### 5.2a Removed: live substitute board and chat (17 Nov 2026)
 
-**What it is.** An educator who is free to cover a class goes **online** for a chosen time (1 hour up to 12 hours, then automatically offline) with their districts, subjects, levels and a short note. Schools with an active membership see a **live list** of who is online and can start a **real-time chat**. Families never see it.
-
-**Rules**
-- Chats are **started by schools** only. Educators reply, and can block or report a school. A school may start a limited number of new chats a day (default 30) to prevent spam.
-- Phone and email are **not** shown on the board. The chat is the channel, and people may agree to share contacts themselves.
-- The note cannot contain phone numbers, emails or links (the same scan as the profile bio).
-- To go online an educator must tick an acknowledgement about permits and licensing. Schools see the substitute-work notice on the board.
-- No attachments in v1. A warning in the chat reminds both sides not to send ID numbers or documents.
-- Messages are kept for a limited period (to decide with counsel) and are visible only to the two parties and, for abuse reports, our admins.
-
-**Build notes.** Presence is a row with an expiry time and a heartbeat (`substitute_availability`). Chat is `conversations` and `messages`. Real-time delivery uses server-sent events on a long-running Node host (a serverless-only host will not work), with Postgres `LISTEN/NOTIFY` fanning messages out. Push alerts to educators go through LINE once the LINE integration exists. Mock-ups: boards 11 and 12.
+The earlier draft had a live substitute board with real-time chat. You removed it, together with "substitute" as a work type, to stay above board legally. Schools and educators discuss cover between themselves; nothing in the product facilitates it. Do not rebuild it without your explicit approval and a lawyer's opinion.
 
 ### 5.3 Visibility model (the heart of the waiver)
 
@@ -266,10 +255,11 @@ A contact reveal is **logged**, capped per day and shown to the educator ("a mem
 | Plan | Price | Notes |
 |---|---|---|
 | **Educator** | **Free** | Permanent promise. |
-| **School** | **NT$10,000 for 12 months** | One plan. Net NT$9,524 + VAT NT$476 if tax-inclusive (to confirm). Replaces today's $99/month (about NT$37,000 a year). |
-| **Family** | **NT$2,000 for 12 months** | One pass covers all children and re-hires. Opens in Phase 2. |
+| **School** | **NT$10,000 for 12 months** (first campus) | VAT included: net NT$9,524 + VAT NT$476. Replaces today's $99/month (about NT$37,000 a year). |
+| **Additional campus** | **NT$5,000** each, same term | 3 campuses = NT$20,000 (net NT$19,048 + VAT NT$952). |
+| **Family** | **NT$2,000 for 12 months** | VAT included: net NT$1,905 + VAT NT$95. One pass covers all children and re-hires. Opens at launch. |
 
-*Still open: a price for chains or multi-campus groups, any seat limits, and whether VAT is included in the NT$10,000 and NT$2,000.*
+*Still open: whether a campus added mid-year pays NT$5,000 for the remaining term or a full year, and whether campuses may be added after the first payment at all.*
 
 - Charge in local currency with round numbers and tax-inclusive prices for consumers.
 - Competitors collect from **tutors** (HK TutorCircle's admin fee; Kim Gwaoe's reported ~25% of first-month tuition [unverified: from an app-store reply]). Our flat fee is on the other side, so the story to **tutors** is "keep 100%, pay nothing". It isn't a price anchor for parents.
@@ -344,12 +334,12 @@ A contact reveal is **logged**, capped per day and shown to the educator ("a mem
 
 **Demand next.**
 
-- **Schools:** the claim-your-school funnel over the public dataset, plus outbound sales by city to cram schools, kindergartens, language and international schools, and chain headquarters. Founding-member offer. Time sales ahead of hiring peaks (Taiwan: before the September and February semesters, with the main peak June–August [my read]).
+- **Schools:** the claim-your-school funnel over the public dataset, plus outbound sales by city to cram schools, kindergartens, language and international schools, and chain headquarters. Time sales ahead of hiring peaks (Taiwan: before the September and February semesters, with the main peak June–August [my read]).
 - **Families:** guide and city-level landing pages that explain the service (no educator names, to avoid thin content), parent communities (Dcard, Facebook, LINE groups), kindergarten partnerships, and exam-season campaigns. Because nothing can be browsed first, conversion depends on the sample profile, clear promises and trust signals, so test it with the priced "reserve" page before building.
 
 **Density threshold before the paywall (initial proposals, tune with data).**
 
-- At least 300 active, ≥60%-complete educator profiles in the metro, and at least 15 schools pre-sold at the founding price.
+- At least 300 active, ≥60%-complete educator profiles in the metro, and at least 15 schools pre-sold.
 - Roll out city by city: Taipei/New Taipei → Taichung → Kaohsiung → Taoyuan/Hsinchu → rest of Taiwan.
 
 ---
@@ -361,11 +351,9 @@ A contact reveal is **logged**, capped per day and shown to the educator ("a mem
 | Phase | When | Scope | Exit criteria |
 |---|---|---|---|
 | **0. Foundations** | Now → mid-Dec 2026 (about 3 weeks, in parallel with design) | Export Replit code/data to GitHub; re-consent email to the 13 teachers; Taiwan counsel consult (§4 #2, #3, #5, #8); brand/domain/trademark check; entity and payment path; 15 interviews; design system, IA and zh-TW/EN copy | Written legal go/no-go; payment path confirmed; name chosen |
-| **1. Taiwan MVP: educators + schools** | Dec 2026 → Feb 2027 (6–8 weeks) | Everything in the v1 column of §5.2. Soft launch in Taipei/New Taipei; founding-member pre-sales | ~500 educators nationwide (≥60% complete profiles); ≥25 paying founding schools; consent log live; no critical security findings |
-| **2. Taiwan families + scale** | Mar → Jun 2027 | v2 column of §5.2, and sales ready for the June–August hiring peak | ~2,000 educators; ~150 schools; ~1,500 families; renewal reminders live; leading indicators tracked |
-| **3. Multi-country foundation + Wave 2** | Jul → Dec 2027 | Country config layer; currencies/tax; HK + Vietnamese locales; HK and Vietnam launches, each with counsel and a local lead; Philippines supply onboarding | HK and Vietnam each pass the §8 gate and meet density |
-| **4. Wave 3** | 2028 | Japan, Korea, Thailand/Singapore/Malaysia; partner verification badges; salary-benchmark insight for schools (aggregate, anonymised, from job posts) | Per-country gate and density |
-| **5. China evaluation** | 2028+ | Partner/entity decision | Go/no-go memo |
+| **1. Taiwan launch: educators, schools and families** | Dec 2026 → Feb 2027 (6–8 weeks; families add about 2 weeks) | Everything in the v1 column of §5.2, including family memberships. Soft launch in Taipei, New Taipei and Taichung; pre-sales to schools | ~500 educators nationwide (≥60% complete profiles); ≥25 paying schools; first families; consent log live; no critical security findings |
+| **2. Thailand and Vietnam** | Mar → Dec 2027 | Country config layer; currencies and tax; Thai and Vietnamese locales; each launch with counsel and a local lead; a payment path per country; Taiwan scale-up continues alongside | Each country passes the §8 gate and meets density |
+| **3. Japan, Korea and China** | 2028 | Per-country legal pack; partner verification badges if counsel agrees; China partner-led | Per-country gate and density |
 
 **The first 12 months of data is thin.** Because contracts are annual and don't auto-renew, you won't see a real renewal rate until about 12 months after the first paying cohort. Use the leading indicators in §5.5 and the 60/30/7-day reminders to manage in the meantime.
 
@@ -400,7 +388,7 @@ A contact reveal is **logged**, capped per day and shown to the educator ("a mem
 | 3 | ~~Contact details gated behind membership; basic teaser free?~~ | **Resolved 17 Nov 2026: no free teaser. Everything about educators is members-only.** | Done (§5.3) |
 | 4 | **Include local (non-foreign) teachers and tutors from day one?** | The family market is mostly local test-prep | Yes |
 | 5 | **Annual-only, no auto-renew, confirmed?** | Simplifies payment and consent law; hurts renewals unless reminders work | Yes, with strong reminders |
-| 6 | **Families in v1 or v2?** | Supply readiness | v2, but collect tutor supply from v1 with the "I also tutor" toggle |
+| 6 | ~~Families in v1 or v2?~~ | **Resolved 17 Nov 2026: families launch in Phase 1.** | Done |
 | 7 | **Do you still have the Replit source and database?** | I only have the compiled bundle. I want the schema and the 15 accounts | Export to GitHub |
 | 8 | **Country list and order** | Your list ended at "Philippines," | §8 order |
 | 9 | **Auth provider:** keep Clerk for v1 or move now? | Cost at scale and LINE/Kakao/Zalo login | Move now if you can afford the time; otherwise keep for v1 and plan the switch |
@@ -444,7 +432,7 @@ Present as **unbundled checkboxes in the educator's chosen language**, never one
 - `users`, `accounts`, `roles`
 - `educator_profiles` (field-level visibility), `educator_consents`, `subjects`, `languages`, `service_areas` (district-level), `availability`, `work_authorization` (enum), `credentials` (self-declared, optional external link)
 - `organizations` (schools), `org_members`, `org_claims`, `school_directory` (import source and licence)
-- `job_posts` (type: full-time, part-time, substitute, tutoring)
+- `job_posts` (type: full-time or part-time), `memberships` and `orders` carry a campus count
 - `memberships` (holder = organization or family, plan, starts_at, ends_at, price, currency), `payments`, `invoices`
 - `contact_reveals` (member, educator, channel, timestamp), `reports`, `moderation_actions`, `audit_log`, `notifications`
 

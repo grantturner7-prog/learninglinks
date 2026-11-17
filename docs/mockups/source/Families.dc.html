@@ -11,9 +11,7 @@
 <helmet>
 <style>
 body{margin:0}
-.tags{display:flex;flex-wrap:wrap;gap:8px}
 .price{font-size:44px;font-weight:800;color:var(--b800);letter-spacing:-0.02em}
-.was{text-decoration:line-through;color:var(--i500);font-weight:600;font-size:20px}
 .faq details{border-bottom:1px solid var(--i100);padding:14px 0}
 .faq summary{font-weight:700;cursor:pointer;font-size:17px}
 .faq p{margin-top:8px;color:var(--i600)}
@@ -38,7 +36,7 @@ body{margin:0}
           <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
           <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
         </div>
-        <a class="btn btn-s" href="School-dashboard.dc.html"><span class="en">Sign in</span><span class="zh">登入</span></a>
+        <a class="btn btn-s" href="Find-educators.dc.html"><span class="en">Sign in</span><span class="zh">登入</span></a>
       </div>
     </div>
   </header>
@@ -47,7 +45,7 @@ body{margin:0}
     <div class="wrap">
       <div class="split" style="align-items:center;gap:48px">
         <div class="main" style="flex:1 1 520px">
-          <span class="badge-w"><span class="en">Opening in Taiwan soon. Reserve your place.</span><span class="zh">即將在台灣開放，預約您的名額。</span></span>
+          <span class="badge"><span class="en">For families</span><span class="zh">給家長</span></span>
           <h1 class="h1" style="margin-top:16px"><span class="en">Find a tutor you trust.<br>Pay once for the year.</span><span class="zh">找到信任的家教，<br>一年只需付一次。</span></h1>
           <p class="lead" style="margin-top:16px;max-width:560px"><span class="en">A family membership lets you search every tutor and contact as many as you need for 12 months, for your whole family. No commission on lessons. It never renews on its own.</span><span class="zh">家長會員可在 12 個月內搜尋所有家教並聯絡所需的人選，全家共用。不抽課程費用，也不會自動續約。</span></p>
           <p class="small muted" style="margin-top:20px"><span class="en">Tutor profiles are visible to members only. Tutors never pay us anything.</span><span class="zh">家教檔案僅限會員查看。家教不需付任何費用給我們。</span></p>
@@ -55,21 +53,11 @@ body{margin:0}
         <div class="side" style="flex:1 1 400px;max-width:480px">
           <div class="card stack" style="gap:14px">
             <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Family membership</span><span class="zh">家長會員</span></h2><span class="badge-m"><span class="en">12 months</span><span class="zh">12 個月</span></span></div>
-            <div class="row" style="align-items:baseline;gap:12px"><span class="price">NT$2,000</span></div>
-            <span class="small muted"><span class="en">one payment for 12 months, incl. 5% VAT · no auto-renewal</span><span class="zh">一次付款 12 個月，含 5% 營業稅 · 不會自動續約</span></span>
+            <div class="price">NT$2,000</div>
+            <span class="small muted"><span class="en">one payment for 12 months, VAT included · no auto-renewal</span><span class="zh">一次付款 12 個月，含營業稅 · 不會自動續約</span></span>
             <ul class="small" style="margin:0;padding-left:20px"><li><span class="en">Search every tutor and contact any of them, for all your children</span><span class="zh">搜尋所有家教並可聯絡任何一位，全家小孩共用</span></li><li><span class="en">You see educators who offer private tutoring and coaching, with their hourly rates</span><span class="zh">您會看到提供私人家教與輔導的教師，以及他們的每小時費用</span></li><li><span class="en">Re-hire or switch tutors any time in the year</span><span class="zh">一年內可隨時更換或再次聘請</span></li><li><span class="en">Safety checklist for every first lesson</span><span class="zh">每次首次上課的安全檢查清單</span></li></ul>
-            <hr class="hr" style="margin:6px 0">
-            <sc-if value="{{notReserved}}" hint-placeholder-val="{{ true }}">
-              <form class="stack" style="gap:12px" onSubmit="{{noop}}">
-                <div><label class="lbl" for="fe"><span class="en">Email</span><span class="zh">Email</span></label><input id="fe" class="field" type="email" value="parent@example.com"></div>
-                <div><label class="lbl" for="fc"><span class="en">City</span><span class="zh">縣市</span></label><select id="fc" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option><option>New Taipei City 新北市</option><option>Kaohsiung City 高雄市</option></select></div>
-                <button type="button" class="btn btn-a btn-lg btn-block" onClick="{{reserve}}"><span class="en">Reserve my place</span><span class="zh">預約我的名額</span></button>
-                <p class="tiny muted"><span class="en">No payment now. We'll email you when memberships open.</span><span class="zh">現在不需付款。開放時我們會以 Email 通知您。</span></p>
-              </form>
-            </sc-if>
-            <sc-if value="{{isReserved}}" hint-placeholder-val="{{ false }}">
-              <div class="soft stack" style="gap:6px"><b><span class="en">You're on the list.</span><span class="zh">已加入預約名單。</span></b><span class="small"><span class="en">We'll email you when family memberships open. Nothing was charged.</span><span class="zh">家長會員開放時會以 Email 通知您，目前尚未收取任何費用。</span></span></div>
-            </sc-if>
+            <a class="btn btn-a btn-lg btn-block" href="Family-checkout.dc.html"><span class="en">Join for NT$2,000</span><span class="zh">以 NT$2,000 加入</span></a>
+            <p class="tiny muted"><span class="en">You'll confirm that you understand we are only a connection website before you pay.</span><span class="zh">付款前，您需確認了解我們僅為連結平台。</span></p>
           </div>
         </div>
       </div>
@@ -82,7 +70,7 @@ body{margin:0}
       <div class="g3" style="margin-top:32px">
         <div class="stack" style="gap:10px"><span class="num">1</span><h3 class="h3"><span class="en">Join for 12 months</span><span class="zh">加入 12 個月</span></h3><p class="muted"><span class="en">One payment opens every tutor profile and contact detail. It ends after 12 months unless you choose to renew.</span><span class="zh">一次付款即可查看所有家教檔案與聯絡方式。12 個月後到期，是否續約由您決定。</span></p></div>
         <div class="stack" style="gap:10px"><span class="num">2</span><h3 class="h3"><span class="en">Browse and filter</span><span class="zh">瀏覽並篩選</span></h3><p class="muted"><span class="en">Filter by subject, level, area, price and online or in-person. See profiles, self-declared credentials and availability.</span><span class="zh">依科目、年級、地區、價格與實體／線上篩選。查看檔案、自行聲明的資歷與可上課時間。</span></p></div>
-        <div class="stack" style="gap:10px"><span class="num">3</span><h3 class="h3"><span class="en">Contact tutors directly</span><span class="zh">直接聯絡家教</span></h3><p class="muted"><span class="en">Message by LINE or email, agree on price and schedule between you. We never take a cut of lessons.</span><span class="zh">以 LINE 或 Email 聯絡，價格與時間由雙方約定。我們不抽取課程費用。</span></p></div>
+        <div class="stack" style="gap:10px"><span class="num">3</span><h3 class="h3"><span class="en">Contact tutors directly</span><span class="zh">直接聯絡家教</span></h3><p class="muted"><span class="en">Message by LINE or phone, agree on price and schedule between you. We never take a cut of lessons.</span><span class="zh">以 LINE 或電話聯絡，價格與時間由雙方約定。我們不抽取課程費用。</span></p></div>
       </div>
     </div>
   </section>
@@ -103,20 +91,19 @@ body{margin:0}
           <details><summary><span class="en">Do you take a commission on lessons?</span><span class="zh">課程費用會被抽成嗎？</span></summary><p><span class="en">No. You pay the tutor directly. Tutors never pay us anything.</span><span class="zh">不會。您直接付費給家教，家教也不需付任何費用給我們。</span></p></details>
           <details><summary><span class="en">Does it renew automatically?</span><span class="zh">會自動續約嗎？</span></summary><p><span class="en">Never. We'll remind you before it ends, and renewal is always your choice.</span><span class="zh">不會。到期前我們會提醒您，是否續約由您決定。</span></p></details>
           <details><summary><span class="en">Can I look around before paying?</span><span class="zh">付費之前可以先看看嗎？</span></summary><p><span class="en">No. Tutors agreed to share their profiles only with paying members. We show sample profiles on our site so you know what to expect.</span><span class="zh">不行。家教僅同意將檔案提供給付費會員查看。我們在網站上提供範例檔案，讓您了解內容。</span></p></details>
-          <details><summary><span class="en">Do you check the tutors?</span><span class="zh">你們會審查家教嗎？</span></summary><p><span class="en">No. We're a directory, not an agent. Profiles are self-declared, so please use the checklist and verify directly.</span><span class="zh">不會。我們是名錄，不是仲介。檔案內容為自行聲明，請使用檢查清單並親自確認。</span></p></details>
+          <details><summary><span class="en">Do you check the tutors?</span><span class="zh">你們會審查家教嗎？</span></summary><p><span class="en">No. We do not run background checks on tutors, families or schools. We're a connection website, so please use the checklist and verify everything directly.</span><span class="zh">不會。我們不對家教、家長或學校進行背景調查。我們僅為連結平台，請使用檢查清單並親自確認一切。</span></p></details>
         </div>
       </div>
     </div>
   </section>
-<div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
+
+  <div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2100}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2200}}'>
 class Component extends DCLogic {
   renderVals() {
-    const s = this.state || {};
-    const lang = s.lang || 'en';
-    const reserved = !!s.reserved;
+    const lang = (this.state && this.state.lang) || 'en';
     return {
       rootClass: 'lang-' + lang,
       enCls: lang === 'en' ? 'on' : '',
@@ -124,11 +111,7 @@ class Component extends DCLogic {
       enOn: lang === 'en',
       zhOn: lang === 'zh',
       setEn: () => this.setState({ lang: 'en' }),
-      setZh: () => this.setState({ lang: 'zh' }),
-      isReserved: reserved,
-      notReserved: !reserved,
-      reserve: () => this.setState({ reserved: true }),
-      noop: (e) => { if (e && e.preventDefault) e.preventDefault(); }
+      setZh: () => this.setState({ lang: 'zh' })
     };
   }
 }

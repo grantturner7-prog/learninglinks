@@ -5,19 +5,18 @@
   "launch": { "view": "canvas" },
   "pages": [],
   "boards": {
-    "Main.dc.html": { "x": 0, "y": 0, "w": 1280, "h": 2700, "title": "1 · Home", "expand": "fill", "is_interactive": true },
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1280, "h": 2500, "title": "1 · Home", "expand": "fill", "is_interactive": true },
     "Find-educators.dc.html": { "x": 1360, "y": 0, "w": 1280, "h": 2000, "title": "2 · Find educators (visitor, school and family views)", "expand": "fill", "is_interactive": true },
     "Educator-profile.dc.html": { "x": 2720, "y": 0, "w": 1280, "h": 2000, "title": "3 · Educator profile (school view)", "expand": "fill", "is_interactive": true },
-    "Educator-waiver.dc.html": { "x": 0, "y": 2820, "w": 1280, "h": 2000, "title": "4 · Educator sign-up: waiver", "expand": "fill", "is_interactive": true },
-    "Profile-builder.dc.html": { "x": 1360, "y": 2820, "w": 1280, "h": 2800, "title": "5 · Educator profile builder", "expand": "fill", "is_interactive": true },
-    "School-dashboard.dc.html": { "x": 2720, "y": 2820, "w": 1280, "h": 2000, "title": "6 · School dashboard", "expand": "fill", "is_interactive": true },
-    "School-membership.dc.html": { "x": 0, "y": 5740, "w": 1280, "h": 1900, "title": "7 · School membership and checkout", "expand": "fill", "is_interactive": true },
-    "Families.dc.html": { "x": 1360, "y": 5740, "w": 1280, "h": 2300, "title": "8 · Families landing page (Phase 2)", "expand": "fill", "is_interactive": true },
-    "Mobile-home.dc.html": { "x": 2720, "y": 5740, "w": 390, "h": 2500, "title": "9 · Phone: home", "expand": "fill", "is_interactive": true },
-    "Mobile-profile.dc.html": { "x": 3190, "y": 5740, "w": 390, "h": 1300, "title": "10 · Phone: shared profile link (visitor)", "expand": "fill", "is_interactive": true },
-    "School-substitutes.dc.html": { "x": 0, "y": 8360, "w": 1280, "h": 1500, "title": "11 · Live substitute board and chat (schools)", "expand": "fill", "is_interactive": true },
-    "Educator-substitute.dc.html": { "x": 1360, "y": 8360, "w": 1280, "h": 1700, "title": "12 · Educator: go online to substitute", "expand": "fill", "is_interactive": true },
-    "Tutor-profile.dc.html": { "x": 2720, "y": 8360, "w": 1280, "h": 1900, "title": "13 · Tutor profile (family view)", "expand": "fill", "is_interactive": true }
+    "Educator-waiver.dc.html": { "x": 0, "y": 2620, "w": 1280, "h": 2000, "title": "4 · Educator sign-up: waiver", "expand": "fill", "is_interactive": true },
+    "Profile-builder.dc.html": { "x": 1360, "y": 2620, "w": 1280, "h": 2800, "title": "5 · Educator profile builder", "expand": "fill", "is_interactive": true },
+    "School-dashboard.dc.html": { "x": 2720, "y": 2620, "w": 1280, "h": 1900, "title": "6 · School dashboard", "expand": "fill", "is_interactive": true },
+    "School-membership.dc.html": { "x": 0, "y": 5540, "w": 1280, "h": 2000, "title": "7 · School membership and checkout (campus pricing)", "expand": "fill", "is_interactive": true },
+    "Families.dc.html": { "x": 1360, "y": 5540, "w": 1280, "h": 2200, "title": "8 · Families landing page", "expand": "fill", "is_interactive": true },
+    "Mobile-home.dc.html": { "x": 2720, "y": 5540, "w": 390, "h": 2400, "title": "9 · Phone: home", "expand": "fill", "is_interactive": true },
+    "Mobile-profile.dc.html": { "x": 3190, "y": 5540, "w": 390, "h": 1300, "title": "10 · Phone: shared profile link (visitor)", "expand": "fill", "is_interactive": true },
+    "Family-checkout.dc.html": { "x": 0, "y": 8060, "w": 1280, "h": 1800, "title": "11 · Family membership and checkout", "expand": "fill", "is_interactive": true },
+    "Tutor-profile.dc.html": { "x": 1360, "y": 8060, "w": 1280, "h": 1900, "title": "12 · Tutor profile (family view)", "expand": "fill", "is_interactive": true }
   },
   "order": [
     "Main.dc.html",
@@ -30,8 +29,7 @@
     "Families.dc.html",
     "Mobile-home.dc.html",
     "Mobile-profile.dc.html",
-    "School-substitutes.dc.html",
-    "Educator-substitute.dc.html",
+    "Family-checkout.dc.html",
     "Tutor-profile.dc.html"
   ],
   "notes": {

@@ -39,7 +39,6 @@
   "openTo": {
     "full_time": "全職",
     "part_time": "兼職",
-    "substitute": "代課",
     "private_tutoring": "家教／個別指導"
   },
   "workAuth": {

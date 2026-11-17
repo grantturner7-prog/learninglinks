@@ -14,13 +14,15 @@ body{margin:0}
 .plancard{background:#fff;border:2px solid var(--b600);border-radius:16px;padding:24px}
 .plancard ul{margin:12px 0 0;padding-left:20px;font-size:15px}
 .plancard li{margin:6px 0}
-.price{font-size:42px;font-weight:800;color:var(--b800);letter-spacing:-0.02em}
 .pay{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid var(--i200);border-radius:12px;background:#fff}
 .pay.on{border-color:var(--b500);background:var(--b50)}
 .pay.off{opacity:.6}
 .sticky{position:sticky;top:16px}
 .bank{background:#fff;border:1px dashed var(--b500);border-radius:12px;padding:6px 16px}
 .refcode{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;font-weight:800;letter-spacing:.06em;color:var(--b800)}
+.stepper{display:inline-flex;align-items:center;gap:12px}
+.stepper .n{min-width:44px;text-align:center;font-size:26px;font-weight:800;color:var(--b800)}
+.stepper button{width:48px;padding:0}
 </style>
 </helmet>
 <div class="pg {{rootClass}}">
@@ -51,7 +53,7 @@ body{margin:0}
     <div style="max-width:760px">
       <span class="badge"><span class="en">School membership</span><span class="zh">學校會員</span></span>
       <h1 class="h2" style="margin-top:12px"><span class="en">NT$10,000 for 12 months</span><span class="zh">12 個月 NT$10,000</span></h1>
-      <p class="lead" style="font-size:18px;margin-top:8px"><span class="en">One payment. 12 months of access. It never renews on its own, and there are no placement fees or commissions.</span><span class="zh">一次付款，12 個月使用權。不會自動續約，沒有仲介費，也不抽成。</span></p>
+      <p class="lead" style="font-size:18px;margin-top:8px"><span class="en">Covers your first campus. Each additional campus is NT$5,000. One payment, VAT included. It never renews on its own, and there are no placement fees or commissions.</span><span class="zh">涵蓋第一個校區，每增加一個校區加收 NT$5,000。一次付款，含營業稅。不會自動續約，沒有仲介費，也不抽成。</span></p>
     </div>
 
     <div class="split" style="margin-top:28px">
@@ -61,12 +63,23 @@ body{margin:0}
           <div class="plancard">
             <div class="row" style="justify-content:space-between"><span class="h3"><span class="en">What your school gets</span><span class="zh">您的學校可使用的功能</span></span><span class="badge-m"><span class="en">12 months</span><span class="zh">12 個月</span></span></div>
             <ul>
-              <li><span class="en">See educators who are looking for <b>full-time, part-time or substitute</b> work</span><span class="zh">查看正在尋找<b>全職、兼職或代課</b>機會的教師</span></li>
+              <li><span class="en">See educators who are looking for <b>full-time or part-time</b> work</span><span class="zh">查看正在尋找<b>全職或兼職</b>機會的教師</span></li>
               <li><span class="en">Full profiles, and contact details shown on request</span><span class="zh">完整檔案，聯絡方式需點選才顯示</span></li>
-              <li><span class="en"><b>Live substitute board:</b> see who is online right now and chat with them</span><span class="zh"><b>即時代課看板：</b>查看目前在線的教師並直接聊天</span></li>
-              <li><span class="en">Post jobs and substitute needs, keep shortlists</span><span class="zh">刊登職缺與代課需求，建立候選名單</span></li>
-            </ul>
+              <li><span class="en">Post jobs and keep shortlists</span><span class="zh">刊登職缺並建立候選名單</span></li>
+                          </ul>
             <p class="small muted" style="margin-top:12px"><span class="en">Educators who only offer private tutoring are never shown to schools.</span><span class="zh">只提供私人家教的教師不會顯示給學校。</span></p>
+          </div>
+
+          <div class="card stack" style="gap:14px">
+            <h2 class="h3"><span class="en">How many campuses?</span><span class="zh">有幾個校區？</span></h2>
+            <div class="row" style="justify-content:space-between;gap:16px">
+              <div class="stepper" role="group" aria-label="Number of campuses">
+                <button type="button" class="btn btn-s" aria-label="Fewer campuses" disabled="{{atMin}}" onClick="{{dec}}">−</button>
+                <span class="n" aria-live="polite">{{campusCount}}</span>
+                <button type="button" class="btn btn-s" aria-label="More campuses" onClick="{{inc}}">+</button>
+              </div>
+              <span class="small muted" style="max-width:380px"><span class="en">NT$10,000 for the first campus, then NT$5,000 for each additional campus. You'll add each campus's details after payment.</span><span class="zh">第一個校區 NT$10,000，之後每增加一個校區加收 NT$5,000。付款後再填寫各校區資料。</span></span>
+            </div>
           </div>
 
           <div class="card stack" style="gap:16px">
@@ -96,7 +109,8 @@ body{margin:0}
           <div class="card stack" style="gap:16px">
             <div class="row"><span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span><h2 class="h2" style="font-size:24px"><span class="en">Order placed. Please transfer the amount</span><span class="zh">訂單已成立，請完成匯款</span></h2></div>
             <div class="bank">
-              <div class="kv"><span class="muted"><span class="en">Amount</span><span class="zh">金額</span></span><b>NT$10,000</b></div>
+              <div class="kv"><span class="muted"><span class="en">Amount</span><span class="zh">金額</span></span><b>NT${{price}}</b></div>
+              <div class="kv"><span class="muted"><span class="en">Campuses</span><span class="zh">校區數</span></span><b>{{campusCount}}</b></div>
               <div class="kv"><span class="muted"><span class="en">Bank</span><span class="zh">銀行</span></span><b>[YOUR BANK] · [BRANCH]</b></div>
               <div class="kv"><span class="muted"><span class="en">Account name</span><span class="zh">戶名</span></span><b>[ACCOUNT NAME]</b></div>
               <div class="kv"><span class="muted"><span class="en">Account number</span><span class="zh">帳號</span></span><b>[ACCOUNT NUMBER]</b></div>
@@ -107,7 +121,7 @@ body{margin:0}
             <div class="stack" style="gap:10px">
               <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">1</span><span><span class="en">We confirm your transfer (usually within 1 business day).</span><span class="zh">我們確認收款（通常 1 個工作天內）。</span></span></div>
               <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">2</span><span><span class="en">Your 12 months start that day and you get an email.</span><span class="zh">當天起算 12 個月，並以 Email 通知您。</span></span></div>
-              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">3</span><span><span class="en">Your e-invoice is sent to the address above.</span><span class="zh">電子發票將寄至上方 Email。</span></span></div>
+              <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">3</span><span><span class="en">You add the details of each campus, and your e-invoice is sent to the address above.</span><span class="zh">您填寫各校區資料，電子發票將寄至上方 Email。</span></span></div>
             </div>
             <div class="row"><a class="btn btn-p" href="School-dashboard.dc.html"><span class="en">Go to dashboard</span><span class="zh">前往我的後台</span></a><button type="button" class="btn btn-g" onClick="{{backToStart}}"><span class="en">Change order</span><span class="zh">修改訂單</span></button></div>
           </div>
@@ -117,10 +131,13 @@ body{margin:0}
       <aside class="side sticky stack" style="gap:16px" aria-label="Order summary">
         <div class="card stack" style="gap:6px">
           <h2 class="h3"><span class="en">Order summary</span><span class="zh">訂單摘要</span></h2>
-          <div class="kv"><span><span class="en">School membership (12 months)</span><span class="zh">學校會員（12 個月）</span></span><b>NT$10,000</b></div>
-          <div class="kv small"><span class="muted"><span class="en">Net amount</span><span class="zh">未稅金額</span></span><span>NT$9,524</span></div>
-          <div class="kv small"><span class="muted"><span class="en">VAT 5%</span><span class="zh">營業稅 5%</span></span><span>NT$476</span></div>
-          <div class="kv"><b><span class="en">Total</span><span class="zh">總額</span></b><b style="font-size:20px">NT$10,000</b></div>
+          <div class="kv"><span><span class="en">First campus</span><span class="zh">第一個校區</span></span><b>NT$10,000</b></div>
+          <sc-if value="{{hasExtra}}" hint-placeholder-val="{{ false }}">
+            <div class="kv"><span><span class="en">Additional campuses</span><span class="zh">增加校區</span> × {{extraCount}} <span class="muted small">(NT$5,000 each)</span></span><b>NT${{extraTotal}}</b></div>
+          </sc-if>
+          <div class="kv small"><span class="muted"><span class="en">Net amount</span><span class="zh">未稅金額</span></span><span>NT${{net}}</span></div>
+          <div class="kv small"><span class="muted"><span class="en">VAT 5% (included)</span><span class="zh">營業稅 5%（已含）</span></span><span>NT${{tax}}</span></div>
+          <div class="kv"><b><span class="en">Total for 12 months</span><span class="zh">12 個月總額</span></b><b style="font-size:20px">NT${{price}}</b></div>
           <sc-if value="{{canOrder}}" hint-placeholder-val="{{ false }}">
             <button type="button" class="btn btn-p btn-lg btn-block" style="margin-top:8px" onClick="{{placeOrder}}"><span class="en">Place order</span><span class="zh">送出訂單</span></button>
           </sc-if>
@@ -128,7 +145,7 @@ body{margin:0}
             <button type="button" class="btn btn-p btn-lg btn-block" style="margin-top:8px" disabled><span class="en">Place order</span><span class="zh">送出訂單</span></button>
             <p class="tiny muted"><span class="en">Please tick the confirmation box first.</span><span class="zh">請先勾選確認方塊。</span></p>
           </sc-if>
-          <p class="tiny muted" style="margin-top:6px"><span class="en">Prices include 5% VAT (to be confirmed with our accountant). Cancellation and refund rules follow Taiwan consumer law; final wording to be set with a lawyer.</span><span class="zh">價格含 5% 營業稅（待會計師確認）。取消與退款規定依台灣消費者保護法，最終文字將與律師確認。</span></p>
+          <p class="tiny muted" style="margin-top:6px"><span class="en">Cancellation and refund rules follow Taiwan consumer law; final wording to be set with a lawyer.</span><span class="zh">取消與退款規定依台灣消費者保護法，最終文字將與律師確認。</span></p>
         </div>
         <div class="soft small stack" style="gap:6px">
           <b><span class="en">What you're buying</span><span class="zh">您購買的內容</span></b>
@@ -141,13 +158,17 @@ body{margin:0}
   <div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1900}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2000}}'>
 class Component extends DCLogic {
   renderVals() {
     const s = this.state || {};
     const lang = s.lang || 'en';
     const step = s.step || 1;
     const ack = !!s.ack;
+    const n = s.campuses || 1;
+    const price = 10000 + (n - 1) * 5000;
+    const net = Math.round(price / 1.05);
+    const fmt = (v) => v.toLocaleString('en-US');
     return {
       rootClass: 'lang-' + lang,
       enCls: lang === 'en' ? 'on' : '',
@@ -156,6 +177,16 @@ class Component extends DCLogic {
       zhOn: lang === 'zh',
       setEn: () => this.setState({ lang: 'en' }),
       setZh: () => this.setState({ lang: 'zh' }),
+      campusCount: n,
+      atMin: n <= 1,
+      dec: () => this.setState({ campuses: Math.max(1, ((this.state && this.state.campuses) || 1) - 1) }),
+      inc: () => this.setState({ campuses: Math.min(50, ((this.state && this.state.campuses) || 1) + 1) }),
+      hasExtra: n > 1,
+      extraCount: n - 1,
+      extraTotal: fmt((n - 1) * 5000),
+      price: fmt(price),
+      net: fmt(net),
+      tax: fmt(price - net),
       ack: ack,
       ackCls: ack ? 'on' : '',
       togAck: () => this.setState({ ack: !(this.state && this.state.ack) }),

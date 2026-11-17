@@ -1,27 +1,36 @@
 import { describe, expect, it } from "vitest";
-import { PLANS, planFor, priceFor, splitTax } from "@/lib/plans";
+import { PLANS, planFor, priceForCampuses, splitTax } from "@/lib/plans";
 
 describe("plans", () => {
-  it("charges the owner's flat prices", () => {
+  it("charges the owner's prices, VAT included", () => {
     expect(PLANS.school_tw.listPrice).toBe(10_000);
+    expect(PLANS.school_tw.additionalCampusPrice).toBe(5_000);
     expect(PLANS.family_tw.listPrice).toBe(2_000);
   });
-  it("has no discount unless one is configured", () => {
-    expect(priceFor(PLANS.school_tw)).toBe(10_000);
-    expect(priceFor(PLANS.family_tw)).toBe(2_000);
-    expect(priceFor(PLANS.school_tw, 0)).toBe(10_000);
+  it("charges 10,000 for the first campus and 5,000 for each additional campus", () => {
+    expect(priceForCampuses(PLANS.school_tw)).toBe(10_000);
+    expect(priceForCampuses(PLANS.school_tw, 1)).toBe(10_000);
+    expect(priceForCampuses(PLANS.school_tw, 2)).toBe(15_000);
+    expect(priceForCampuses(PLANS.school_tw, 3)).toBe(20_000);
+    expect(priceForCampuses(PLANS.school_tw, 10)).toBe(55_000);
   });
-  it("only applies a configured discount, clamped and rounded to 10", () => {
-    expect(priceFor(PLANS.school_tw, 20)).toBe(8_000);
-    expect(priceFor(PLANS.school_tw, 999)).toBe(1_000);
-    expect(priceFor(PLANS.school_tw, -5)).toBe(10_000);
+  it("rejects an invalid number of campuses", () => {
+    for (const bad of [0, -1, 1.5, Number.NaN]) {
+      expect(() => priceForCampuses(PLANS.school_tw, bad)).toThrow();
+    }
+  });
+  it("charges families a single price and no campuses", () => {
+    expect(priceForCampuses(PLANS.family_tw)).toBe(2_000);
+    expect(() => priceForCampuses(PLANS.family_tw, 2)).toThrow();
   });
   it("splits tax so that net + tax equals the amount paid", () => {
-    for (const gross of [10_000, 2_000, 1, 999, 12_345]) {
+    for (const gross of [10_000, 15_000, 20_000, 2_000, 1, 999, 12_345]) {
       const { net, tax } = splitTax(gross, 5);
       expect(net + tax).toBe(gross);
     }
     expect(splitTax(10_000, 5)).toEqual({ net: 9_524, tax: 476 });
+    expect(splitTax(15_000, 5)).toEqual({ net: 14_286, tax: 714 });
+    expect(splitTax(20_000, 5)).toEqual({ net: 19_048, tax: 952 });
     expect(splitTax(2_000, 5)).toEqual({ net: 1_905, tax: 95 });
   });
   it("looks up the plan for an audience and country", () => {
@@ -29,8 +38,8 @@ describe("plans", () => {
     expect(planFor("family", "TW")?.code).toBe("family_tw");
     expect(planFor("school", "JP")).toBeUndefined();
   });
-  it("keeps family memberships closed until Phase 2", () => {
-    expect(PLANS.family_tw.available).toBe(false);
+  it("opens both Taiwan plans at launch", () => {
     expect(PLANS.school_tw.available).toBe(true);
+    expect(PLANS.family_tw.available).toBe(true);
   });
 });

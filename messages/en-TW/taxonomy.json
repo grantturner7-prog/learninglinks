@@ -39,7 +39,6 @@
   "openTo": {
     "full_time": "Full-time",
     "part_time": "Part-time",
-    "substitute": "Substitute / cover",
     "private_tutoring": "Private tutoring"
   },
   "workAuth": {
