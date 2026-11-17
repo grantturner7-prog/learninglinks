@@ -36,5 +36,10 @@
     "a4": "No. Educators agreed to share their profiles only with paying members. We show a sample profile so you know what to expect.",
     "q5": "Do you check the educators?",
     "a5": "No. We do not run background checks on educators, schools or families. We are a connection website, so please complete all checks yourself."
+  },
+  "say": "Hello! Let's find teachers for your campus.",
+  "sampleNote": "A sample profile as a school sees it: the school-work side only, never tutoring or rates. Real profiles are visible to paying members only.",
+  "final": {
+    "say": "Ready when you are."
   }
 }

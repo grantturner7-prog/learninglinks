@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { WaitlistForm } from "@/components/forms/waitlist-form";
-import { Ban, Building, FileX, Gift, Heart, Lock, Search, Shield, Sliders, User } from "@/components/icons";
+import { DoorArt, type DoorKind } from "@/components/home/door-art";
+import { HonestNotice } from "@/components/home/honest-notice";
+import { LinkSays, SampleTag } from "@/components/home/link-says";
+import { Phrases } from "@/components/home/phrases";
+import { SampleCard } from "@/components/home/sample-card";
+import { SampleMap } from "@/components/home/sample-map";
+import { Icon, type IconName } from "@/components/journey/icons";
+import { LinkGuide } from "@/components/logo";
 import { Link } from "@/i18n/navigation";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -12,167 +19,197 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t("title"), description: t("description") };
 }
 
-const PROMISES = [
-  { key: "free", Icon: Gift, tone: "bg-brand-50 text-brand-700 border-brand-100" },
-  { key: "fees", Icon: Ban, tone: "bg-warn-50 text-accent-600 border-accent-400/40" },
-  { key: "control", Icon: Sliders, tone: "bg-brand-50 text-brand-700 border-brand-100" },
-  { key: "sensitive", Icon: FileX, tone: "bg-brand-50 text-brand-700 border-brand-100" },
-] as const;
+/** Teachers go straight to sign-up (it is free); schools and families first see what they are paying for. */
+const DOORS: ReadonlyArray<{ key: "teach" | "school" | "family"; kind: DoorKind; href: string; tint: string }> = [
+  { key: "teach", kind: "teach", href: "/sign-up?type=educator", tint: "bg-brand-100" },
+  { key: "school", kind: "school", href: "/for-schools", tint: "bg-accent-300" },
+  { key: "family", kind: "family", href: "/for-families", tint: "bg-rose-100" },
+];
 
-const AVATAR_TONES = ["bg-brand-100 text-brand-800", "bg-rose-100 text-[#8a2447]", "bg-accent-300 text-accent-600"] as const;
+const KNOW: ReadonlyArray<{ key: "public" | "hide" | "district" | "one"; icon: IconName }> = [
+  { key: "public", icon: "lock" },
+  { key: "hide", icon: "eyeOff" },
+  { key: "district", icon: "pin" },
+  { key: "one", icon: "key" },
+];
+
+const STEPS: ReadonlyArray<{ key: "s1" | "s2" | "s3"; icon: IconName }> = [
+  { key: "s1", icon: "sparkle" },
+  { key: "s2", icon: "pencil" },
+  { key: "s3", icon: "link" },
+];
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("home");
-  const samples = [
-    { init: "A", name: t("sample.itemA.name"), line: t("sample.itemA.line") },
-    { init: "B", name: t("sample.itemB.name"), line: t("sample.itemB.line") },
-    { init: "C", name: t("sample.itemC.name"), line: t("sample.itemC.line") },
-  ];
-  const columns = [
-    { key: "educator", Icon: User, badge: t("how.free"), steps: t.raw("how.educator.steps") as string[], title: t("how.educator.title") },
-    { key: "school", Icon: Building, badge: t("how.plan"), steps: t.raw("how.school.steps") as string[], title: t("how.school.title") },
-    { key: "family", Icon: Heart, badge: t("how.plan"), steps: t.raw("how.family.steps") as string[], title: t("how.family.title") },
-  ];
 
   return (
     <>
-      <section className="py-14">
-        <div className="container-page grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3.5 py-1 text-sm font-bold text-brand-800">
-              {t("hero.eyebrow")}
+      {/* Link says hello and asks the one question: what brings you here? */}
+      <section className="relative overflow-hidden pb-6 pt-8 sm:pt-12">
+        <svg aria-hidden="true" viewBox="0 0 420 420" className="pointer-events-none absolute -right-24 -top-24 hidden h-[420px] w-[420px] sm:block">
+          <circle cx="250" cy="170" r="150" fill="none" strokeWidth="3" className="stroke-brand-200" />
+          <circle cx="170" cy="250" r="110" fill="none" strokeWidth="3" className="stroke-accent-300" />
+        </svg>
+        <div className="container-page relative">
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end sm:justify-center sm:gap-9">
+            <span className="inline-flex flex-none rounded-full bg-paper p-3 shadow-soft sm:mb-2 sm:p-4">
+              <span className="sm:hidden"><LinkGuide size={84} /></span>
+              <span className="hidden sm:block"><LinkGuide size={120} /></span>
             </span>
-            <h1 className="mt-4 text-4xl font-extrabold sm:text-5xl">{t("hero.title")}</h1>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-600">{t("hero.subtitle")}</p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/sign-up?type=educator" className="btn btn-primary btn-lg">
-                {t("hero.ctaEducator")}
-              </Link>
-              <Link href="/for-schools" className="btn btn-secondary btn-lg">
-                {t("hero.ctaSchool")}
-              </Link>
-              <Link href="/for-families" className="btn btn-secondary btn-lg">
-                {t("hero.ctaFamily")}
-              </Link>
+            <div className="relative rounded-[32px] bg-paper px-6 py-6 shadow-soft sm:rounded-[40px] sm:px-12 sm:py-8">
+              <span aria-hidden className="absolute -top-1.5 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 rounded-[5px] bg-paper sm:-left-2 sm:bottom-12 sm:top-auto sm:translate-x-0" />
+              <h1 className="relative text-[34px] font-extrabold leading-[1.1] tracking-tight text-balance sm:text-6xl">
+                <span className="block"><Phrases text={t("hero.hi")} /></span>
+                <span className="block"><Phrases text={t("hero.question")} /></span>
+              </h1>
             </div>
-            <p className="mt-4 text-sm text-ink-500">{t("hero.fine")}</p>
           </div>
+          <p className="mx-auto mt-7 max-w-2xl text-center text-lg leading-relaxed text-ink-700">{t("hero.sub")}</p>
 
-          <div className="card flex flex-col gap-3" aria-label={t("sample.title")}>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="font-bold">{t("sample.title")}</span>
-              <span className="badge-warn">{t("sample.badge")}</span>
-            </div>
-            <div className="field flex items-center gap-2.5 !text-ink-500">
-              <Search size={18} />
-              {t("sample.search")}
-            </div>
-            {samples.map((s, i) => (
-              <div key={s.init} className="flex items-center gap-3 rounded-xl border border-ink-200 bg-white p-3">
-                <span className={`inline-flex h-12 w-12 flex-none items-center justify-center rounded-full text-lg font-extrabold ${AVATAR_TONES[i] ?? AVATAR_TONES[0]}`}>
-                  {s.init}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="font-bold">{s.name}</div>
-                  <div className="truncate text-sm text-ink-500">{s.line}</div>
+          <ul className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-7" aria-label={t("doors.label")}>
+            {DOORS.map(({ key, kind, href, tint }) => (
+              <li
+                key={key}
+                className={`group relative flex flex-col rounded-t-[190px] rounded-b-[40px] px-6 pb-6 pt-8 shadow-soft transition-transform before:pointer-events-none before:absolute before:inset-3.5 before:rounded-t-[176px] before:rounded-b-[28px] before:border-2 before:border-ink-900/10 hover:-translate-y-1 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent-400 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:px-8 sm:pb-8 sm:pt-10 ${tint}`}
+              >
+                <div className="flex h-[150px] justify-center sm:h-[210px]">
+                  <DoorArt kind={kind} className="h-full w-auto" />
                 </div>
-                <span className="badge-muted gap-1">
-                  <Lock size={13} />
-                  {t("sample.contact")}
-                </span>
-              </div>
+                <div className="relative mt-2 flex flex-1 flex-col px-1">
+                  <h2 className="text-[30px] font-extrabold leading-tight tracking-tight">{t(`doors.${key}.title`)}</h2>
+                  <p className="mt-3 text-pretty text-base leading-relaxed text-ink-900">{t(`doors.${key}.body`)}</p>
+                  <div className="mb-1 mt-6 rounded-[22px] bg-paper/85 px-5 py-3.5">
+                    <b className="block text-3xl font-extrabold leading-tight tracking-tight">{t(`doors.${key}.price`)}</b>
+                    <span className="text-sm font-semibold text-ink-700">{t(`doors.${key}.per`)}</span>
+                  </div>
+                  <Link href={href} className="btn btn-primary btn-lg mt-4 w-full after:absolute after:inset-0 after:rounded-[inherit] after:content-['']">
+                    {t(`doors.${key}.cta`)}
+                    <Icon name="arrowR" size={18} />
+                  </Link>
+                </div>
+              </li>
             ))}
-            <p className="text-xs text-ink-500">{t("sample.note")}</p>
+          </ul>
+          <p className="mx-auto mt-7 max-w-3xl text-center text-[14.5px] leading-relaxed text-ink-700">{t("doors.note")}</p>
+        </div>
+      </section>
+
+      {/* Trust points, in plain words. */}
+      <section aria-label={t("know.label")} className="py-6 sm:py-8">
+        <div className="container-page">
+          <ul className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+            {KNOW.map(({ key, icon }) => (
+              <li key={key} className="flex items-center gap-4 rounded-3xl bg-paper/80 px-5 py-4 inset-ring-[1.5px] inset-ring-ink-100">
+                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-brand-50 text-brand-700">
+                  <Icon name={icon} size={22} />
+                </span>
+                <span className="text-[15px] font-bold leading-snug">{t(`know.items.${key}`)}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 flex items-center justify-center gap-2 text-center text-sm font-medium text-ink-700">
+            <Icon name="lock" size={16} className="flex-none text-brand-700" />
+            {t("know.docs")}
+          </p>
+        </div>
+      </section>
+
+      {/* A calm, clearly labelled SAMPLE of the member map. No real educators, no profile links. */}
+      <section aria-labelledby="near-h" className="py-8 sm:py-12">
+        <div className="container-page">
+          <div className="grid overflow-hidden rounded-[36px] bg-paper shadow-soft sm:rounded-[48px] lg:grid-cols-[minmax(0,1fr)_540px]">
+            <div className="flex flex-col gap-6 p-6 sm:p-10 lg:p-12">
+              <LinkSays>
+                <h2 id="near-h" className="text-balance text-2xl font-extrabold leading-tight tracking-tight sm:text-4xl"><Phrases text={t("near.say")} /></h2>
+              </LinkSays>
+              <p className="max-w-xl text-[17px] leading-relaxed text-ink-900">{t("near.body")}</p>
+              <SampleCard view="family" />
+              <p className="flex items-start gap-2.5 text-sm font-medium text-ink-700">
+                <Icon name="lock" size={16} className="mt-1 flex-none text-brand-700" />
+                {t("near.micro")}
+              </p>
+              <ol className="relative flex flex-col" aria-label={t("markets.title")}>
+                {(
+                  [
+                    ["now", "markets.now", "markets.liveList"],
+                    ["next", "markets.next", "markets.nextList"],
+                    ["later", "markets.later", "markets.laterList"],
+                  ] as const
+                ).map(([k, label, list]) => (
+                  <li key={k} className="relative flex min-h-11 items-center gap-4 text-[15px] text-ink-700 [&:not(:first-child)]:before:absolute [&:not(:first-child)]:before:-top-3 [&:not(:first-child)]:before:left-[8px] [&:not(:first-child)]:before:h-6 [&:not(:first-child)]:before:border-l-[3px] [&:not(:first-child)]:before:border-dotted [&:not(:first-child)]:before:border-brand-300 [&:not(:first-child)]:before:content-['']">
+                    <i aria-hidden className={`relative z-10 h-[18px] w-[18px] flex-none rounded-full ${k === "now" ? "bg-accent-400 shadow-[0_0_0_5px] shadow-accent-300" : "bg-paper inset-ring-[3px] inset-ring-brand-300"}`} />
+                    <span>
+                      <b className="font-bold text-ink-900">{t(label)}: {t(list)}</b>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="relative flex flex-col items-center justify-center overflow-hidden bg-brand-50 px-5 py-8 sm:py-10">
+              <span aria-hidden className="absolute -right-20 -top-14 h-64 w-64 rounded-full inset-ring-[3px] inset-ring-brand-200" />
+              <span aria-hidden className="absolute -bottom-16 -left-10 h-48 w-48 rounded-full inset-ring-[3px] inset-ring-accent-300" />
+              <SampleMap
+                className="relative z-10 h-auto w-full max-w-[420px] lg:max-w-[452px]"
+                labels={{
+                  aria: t("near.map.aria"),
+                  taipei: t("near.map.taipei"),
+                  newTaipei: t("near.map.newTaipei"),
+                  taichung: t("near.map.taichung"),
+                  tainan: t("near.map.tainan"),
+                  kaohsiung: t("near.map.kaohsiung"),
+                }}
+              />
+              <p className="relative z-10 mt-4 flex flex-wrap items-center justify-center gap-2.5 text-[13.5px] font-medium text-ink-700">
+                <SampleTag>{t("near.map.tag")}</SampleTag>
+                {t("near.map.note")}
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="border-y border-ink-100 bg-white py-14">
+      {/* How it works: three small steps. */}
+      <section aria-labelledby="how-h" className="py-8 sm:py-12">
         <div className="container-page">
-          <h2 className="text-center text-3xl font-extrabold">{t("promises.title")}</h2>
-          <div className="mt-9 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {PROMISES.map(({ key, Icon, tone }) => (
-              <div key={key} className="flex flex-col gap-3.5">
-                <span className={`inline-flex h-12 w-12 items-center justify-center rounded-[13px] border ${tone}`}>
-                  <Icon size={24} />
-                </span>
-                <h3 className="text-xl font-bold">{t(`promises.items.${key}.title`)}</h3>
-                <p className="text-ink-600">{t(`promises.items.${key}.body`)}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-14">
-        <div className="container-page">
-          <h2 className="text-center text-3xl font-extrabold">{t("how.title")}</h2>
-          <div className="mt-9 grid grid-cols-1 gap-6 lg:grid-cols-3">
-            {columns.map(({ key, Icon, badge, steps, title }) => (
-              <div key={key} className="card flex flex-col gap-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-[13px] border border-brand-100 bg-brand-50 text-brand-700">
-                    <Icon size={24} />
+          <LinkSays className="max-w-3xl">
+            <h2 id="how-h" className="text-balance text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl"><Phrases text={t("how.title")} /></h2>
+          </LinkSays>
+          <ol className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {STEPS.map(({ key, icon }, i) => (
+              <li key={key} className="flex flex-col gap-3 rounded-[32px] bg-paper p-6 shadow-card sm:p-7">
+                <div className="flex items-center justify-between">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-900 text-xl font-extrabold text-white">{i + 1}</span>
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-300 text-accent-600">
+                    <Icon name={icon} size={24} />
                   </span>
-                  <h3 className="text-xl font-bold">{title}</h3>
-                  <span className="badge">{badge}</span>
                 </div>
-                <ol className="flex flex-col gap-3">
-                  {steps.map((s, i) => (
-                    <li key={s} className="flex items-start gap-3">
-                      <span className="inline-flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full bg-brand-700 text-sm font-extrabold text-white">
-                        {i + 1}
-                      </span>
-                      <span>{s}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+                <h3 className="mt-1 text-xl font-extrabold tracking-tight">{t(`how.${key}.title`)}</h3>
+                <p className="leading-relaxed text-ink-700">{t(`how.${key}.body`)}</p>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      <section className="border-y border-ink-100 bg-white py-11">
-        <div className="container-page">
-          <div className="flex flex-wrap items-start gap-5 rounded-2xl border border-brand-100 bg-brand-50 p-5">
-            <span className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-[13px] border border-brand-100 bg-white text-brand-700">
-              <Shield size={24} />
-            </span>
-            <div className="min-w-0 flex-1 basis-56">
-              <h3 className="text-xl font-bold">{t("trust.title")}</h3>
-              <p className="mt-1.5 max-w-3xl text-ink-600">{t("trust.body")}</p>
-            </div>
-            <Link href="/safety" className="btn btn-secondary">
-              {t("trust.link")}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-14">
-        <div className="container-page grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-3xl font-extrabold">{t("markets.title")}</h2>
-            <p className="flex flex-wrap items-center gap-3">
-              <span className="badge">{t("markets.live")}</span>
-              <strong>{t("markets.liveList")}</strong>
-            </p>
-            <p className="flex flex-wrap items-center gap-3">
-              <span className="badge-warn">{t("markets.next")}</span>
-              <strong>{t("markets.nextList")}</strong>
-            </p>
-            <p className="flex flex-wrap items-center gap-3">
-              <span className="badge-muted">{t("markets.later")}</span>
-              <strong>{t("markets.laterList")}</strong>
-            </p>
-          </div>
-          <div className="card relative flex flex-col gap-3.5">
-            <h3 className="text-xl font-bold">{t("markets.waitlistTitle")}</h3>
+      {/* Other countries: the waitlist (the working form and server action are unchanged). */}
+      <section aria-labelledby="wl-h" className="py-8 sm:py-12">
+        <div className="container-page grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <LinkSays>
+            <h2 id="wl-h" className="text-balance text-xl font-extrabold leading-snug tracking-tight sm:text-2xl"><Phrases text={t("markets.say")} /></h2>
+          </LinkSays>
+          <div className="relative flex flex-col gap-4 rounded-[32px] bg-paper p-6 shadow-card sm:rounded-[40px] sm:p-8">
+            <h3 className="text-xl font-extrabold tracking-tight">{t("markets.waitlistTitle")}</h3>
             <WaitlistForm />
           </div>
+        </div>
+      </section>
+
+      {/* Link's "one honest thing", in the canonical wording. The standing notice below stays as well. */}
+      <section className="py-8 pb-4 sm:py-12">
+        <div className="container-page">
+          <HonestNotice locale={locale} />
         </div>
       </section>
     </>

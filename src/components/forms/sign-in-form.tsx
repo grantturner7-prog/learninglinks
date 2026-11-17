@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
+import { AUTH_FIELD, PasswordField } from "@/components/auth/password-field";
 import { authClient } from "@/lib/auth/client";
 import { mapAuthError, type AuthErrorKey } from "@/lib/auth/errors";
 import { safeNext } from "@/lib/auth/helpers";
@@ -38,12 +39,12 @@ export function SignInForm({ next }: { next?: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+    <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
       {error ? (
         <div role="alert" className="notice-error">
           {t(`errors.${error}`)}
           {error === "notVerified" ? (
-            <button type="button" className="link ml-2" onClick={resend}>
+            <button type="button" className="link ml-2 min-h-11" onClick={resend}>
               {t("signIn.resend")}
             </button>
           ) : null}
@@ -58,33 +59,19 @@ export function SignInForm({ next }: { next?: string }) {
         <label htmlFor="email" className="label">
           {t("signIn.email")}
         </label>
-        <input id="email" name="email" type="email" autoComplete="email" required className="field" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input id="email" name="email" type="email" autoComplete="email" autoFocus required className={AUTH_FIELD} value={email} onChange={(e) => setEmail(e.target.value)} />
       </div>
-      <div>
-        <label htmlFor="password" className="label">
-          {t("signIn.password")}
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          className="field"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <button type="submit" className="btn btn-primary" disabled={busy}>
+      <PasswordField value={password} onChange={setPassword} label={t("signIn.password")} autoComplete="current-password" />
+      <button type="submit" className="btn btn-primary btn-lg w-full" disabled={busy}>
         {t("signIn.submit")}
       </button>
-      <div className="flex flex-wrap justify-between gap-2 text-sm">
-        <Link href="/forgot-password" className="link">
+      <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
+        <Link href="/forgot-password" className="link inline-flex min-h-11 items-center">
           {t("signIn.forgot")}
         </Link>
-        <span className="text-ink-600">
-          {t("signIn.noAccount")}{" "}
-          <Link href="/sign-up" className="link">
+        <span className="flex flex-wrap items-center gap-x-1.5 text-ink-600">
+          {t("signIn.noAccount")}
+          <Link href="/sign-up" className="link inline-flex min-h-11 items-center">
             {t("signIn.join")}
           </Link>
         </span>

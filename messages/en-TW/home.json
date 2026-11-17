@@ -1,100 +1,108 @@
 {
   "meta": {
     "title": "LearningLinks: find educators, directly",
-    "description": "A directory connecting schools, cram schools and families with teachers and tutors. Educators join free. No placement fees, no commissions."
+    "description": "Hi, I'm Link. LearningLinks connects schools, cram schools and families with teachers and tutors. Educators join free. No placement fees, no commissions."
   },
   "hero": {
-    "eyebrow": "Live in Taiwan",
-    "title": "Find great educators. Educators never pay.",
-    "subtitle": "LearningLinks connects schools, cram schools and families with teachers and tutors, directly. One flat 12-month membership. No placement fees. No commissions.",
-    "ctaEducator": "I'm an educator — join free",
-    "ctaSchool": "I'm a school — find educators",
-    "ctaFamily": "I'm a parent — find a tutor",
-    "fine": "No placement fees · No commissions · Educators never pay"
+    "hi": "Hi, I'm Link.",
+    "question": "What brings you here?",
+    "sub": "I ask one small question at a time. Nobody here fills in a form."
   },
-  "promises": {
-    "title": "How we're different",
-    "items": {
-      "free": {
-        "title": "Free for educators, always",
-        "body": "Create a profile, get found, and never pay us anything."
-      },
-      "fees": {
-        "title": "No placement fees",
-        "body": "Schools and families pay one flat membership for 12 months. We never take a cut of a salary or a lesson."
-      },
-      "control": {
-        "title": "You control what's shown",
-        "body": "Only paying members can see your profile. You choose what to share, and can hide or delete it in one click."
-      },
-      "sensitive": {
-        "title": "No sensitive documents",
-        "body": "We never store IDs, criminal records or financial data. Share those directly, and only when you choose."
-      }
-    }
-  },
-  "how": {
-    "title": "How it works",
-    "educator": {
-      "title": "Educators",
-      "steps": [
-        "Create a profile in minutes",
-        "Read and accept the publication waiver",
-        "Get contacted directly by schools and families"
-      ]
+  "doors": {
+    "label": "Choose your door",
+    "teach": {
+      "title": "I teach",
+      "body": "Be seen as a person, not a listing. Build your card in about five minutes, and decide who sees it.",
+      "price": "Free",
+      "per": "always, for every educator",
+      "cta": "Start my card"
     },
     "school": {
-      "title": "Schools",
-      "steps": [
-        "Find and claim your school",
-        "Choose a 12-month membership",
-        "Search educators and contact them directly"
-      ]
+      "title": "I run a school",
+      "body": "See educators open to full-time or part-time work near your campus, and post your own jobs.",
+      "price": "NT$10,000",
+      "per": "per campus · 12 months",
+      "cta": "Open my school door"
     },
     "family": {
-      "title": "Families",
-      "steps": [
-        "Join for 12 months (no auto-renewal)",
-        "Browse and filter tutors",
-        "Contact tutors directly"
-      ]
+      "title": "I'm a parent",
+      "body": "Find a kind, local tutor for your child, with clear hourly rates and no agency fee.",
+      "price": "NT$2,000",
+      "per": "for 12 months",
+      "cta": "Find a tutor"
     },
-    "free": "Free",
-    "plan": "12-month plan"
+    "note": "All prices include VAT. One payment, 12 months, never auto-renews. No agency fee, no commission."
   },
-  "trust": {
-    "title": "A directory, not an agent",
-    "body": "We connect people. We do not screen, employ or guarantee anyone. Always verify credentials, work authorization and background checks directly before you hire or book.",
-    "link": "Read the safety guide"
+  "know": {
+    "label": "Good to know",
+    "items": {
+      "public": "Never listed in public",
+      "hide": "Hide or delete in one click",
+      "district": "Shown by district, never address",
+      "one": "Contact shared one at a time"
+    },
+    "docs": "We never ask for ID numbers, home addresses or documents."
   },
-  "markets": {
-    "title": "Where we are",
-    "live": "Live now",
-    "next": "Coming next",
-    "later": "Later",
-    "liveList": "Taiwan",
-    "nextList": "Thailand, Vietnam",
-    "laterList": "Japan, Korea, China",
-    "waitlistTitle": "Get notified when we open in your country"
+  "near": {
+    "say": "Here is who is near you.",
+    "body": "Educators appear by district, never at an address. Join, pick an area, and the people nearby open up as cards.",
+    "micro": "Real profiles are only visible to paying members. The profile and numbers on this page are made up.",
+    "map": {
+      "aria": "Sample map of Taiwan with made-up educator counts by area. An illustration, not real data.",
+      "tag": "Sample counts",
+      "note": "One bubble is one area.",
+      "taipei": "Taipei",
+      "newTaipei": "New Taipei",
+      "taichung": "Taichung",
+      "tainan": "Tainan",
+      "kaohsiung": "Kaohsiung"
+    }
   },
   "sample": {
-    "title": "What members see",
-    "badge": "Sample, not real educators",
-    "search": "Search by subject, area and level · members only",
-    "contact": "Contact",
-    "note": "Sample cards for illustration, not real educators. Educator profiles and search are visible to paying members only.",
-    "itemA": {
-      "name": "Sample educator A",
-      "line": "Phonics · English conversation · Xitun"
+    "tag": "Sample profile · {view}",
+    "view": {
+      "family": "family view",
+      "school": "school view"
     },
-    "itemB": {
-      "name": "Sample educator B",
-      "line": "English conversation · Nantun"
+    "name": "Emily R.",
+    "line": "Kindergarten English: phonics and storytelling",
+    "areas": "Xitun · Nantun",
+    "language": "English",
+    "rate": "NT$600–900",
+    "ratePer": "per hour",
+    "openFamily": "Offers private tutoring",
+    "openSchool": "Open to full-time or part-time work"
+  },
+  "how": {
+    "title": "Three small steps, and I'm with you for each one.",
+    "s1": {
+      "title": "Pick your door",
+      "body": "Tell me whether you teach, run a school or are a parent. It takes one tap."
     },
-    "itemC": {
-      "name": "Sample educator C",
-      "line": "Phonics · Reading · Beitun"
+    "s2": {
+      "title": "Answer a few questions",
+      "body": "Educators build a free card in about five minutes. Schools and families join for 12 months, with one payment."
+    },
+    "s3": {
+      "title": "Connect directly",
+      "body": "Members find people near them on a map or a list and reach out themselves. Educators choose what to share, and we never take a cut."
     }
+  },
+  "markets": {
+    "title": "Where we are opening",
+    "now": "Now",
+    "next": "Next",
+    "later": "Then",
+    "liveList": "Taiwan",
+    "nextList": "Thailand and Vietnam",
+    "laterList": "Japan, Korea and China",
+    "say": "Not in Taiwan? Tell me where you are, and I will tell you the day we open there.",
+    "waitlistTitle": "Get notified when we open in your country"
+  },
+  "honest": {
+    "title": "Before we begin, one honest thing…",
+    "foot": "When you sign up, I will ask you to tick a box to say you have read this.",
+    "safety": "Read the safety guide"
   },
   "waitlist": {
     "email": "Email",

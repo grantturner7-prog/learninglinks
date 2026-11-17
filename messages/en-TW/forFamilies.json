@@ -50,5 +50,10 @@
     "a4": "No. Tutors agreed to share their profiles only with paying members. We show a sample profile so you know what to expect.",
     "q5": "Do you check the tutors?",
     "a5": "No. We do not run background checks on tutors, families or schools. We're a connection website, so please use the checklist and verify everything directly."
+  },
+  "say": "Hello! Let's find a tutor you can trust.",
+  "sampleNote": "A sample profile as a family sees it: tutoring and the hourly rate, never school-work wishes. Real profiles are visible to paying members only.",
+  "final": {
+    "say": "Ready when you are."
   }
 }

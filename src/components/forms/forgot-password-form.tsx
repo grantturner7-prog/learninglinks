@@ -2,6 +2,8 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
+import { AUTH_FIELD } from "@/components/auth/password-field";
+import { AuthCard } from "@/components/auth-card";
 import { authClient } from "@/lib/auth/client";
 import { Link } from "@/i18n/navigation";
 
@@ -23,31 +25,34 @@ export function ForgotPasswordForm() {
 
   if (sent) {
     return (
-      <div role="status" className="flex flex-col gap-2">
-        <h2 className="text-xl font-bold">{t("sentTitle")}</h2>
-        <p className="text-ink-600">{t("sentBody", { email: email.trim() })}</p>
-        <Link href="/sign-in" className="link mt-2">
-          {t("back")}
-        </Link>
-      </div>
+      <AuthCard title={t("sentTitle")} say={t("sentSay")}>
+        <div role="status" className="flex flex-col gap-4">
+          <p className="text-lg leading-relaxed text-ink-700">{t("sentBody", { email: email.trim() })}</p>
+          <Link href="/sign-in" className="btn btn-secondary btn-lg self-start">
+            {t("back")}
+          </Link>
+        </div>
+      </AuthCard>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
-      <p className="text-ink-600">{t("body")}</p>
-      <div>
-        <label htmlFor="email" className="label">
-          {t("email")}
-        </label>
-        <input id="email" name="email" type="email" autoComplete="email" required className="field" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </div>
-      <button type="submit" className="btn btn-primary" disabled={busy}>
-        {t("submit")}
-      </button>
-      <Link href="/sign-in" className="link text-sm">
-        {t("back")}
-      </Link>
-    </form>
+    <AuthCard title={t("title")} say={t("say")}>
+      <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
+        <p className="text-ink-600">{t("body")}</p>
+        <div>
+          <label htmlFor="email" className="label">
+            {t("email")}
+          </label>
+          <input id="email" name="email" type="email" autoComplete="email" autoFocus required className={AUTH_FIELD} value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <button type="submit" className="btn btn-primary btn-lg w-full" disabled={busy}>
+          {t("submit")}
+        </button>
+        <Link href="/sign-in" className="link inline-flex min-h-11 items-center text-sm">
+          {t("back")}
+        </Link>
+      </form>
+    </AuthCard>
   );
 }

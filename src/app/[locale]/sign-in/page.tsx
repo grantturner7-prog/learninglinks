@@ -20,7 +20,7 @@ export default async function SignInPage({ params, searchParams }: Props) {
   const { next } = await searchParams;
   const t = await getTranslations("auth.signIn");
   return (
-    <AuthCard title={t("title")}>
+    <AuthCard title={t("title")} say={t("say")}>
       <SignInForm next={Array.isArray(next) ? next[0] : next} />
     </AuthCard>
   );

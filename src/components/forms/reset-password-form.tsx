@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
+import { MIN_PASSWORD, PasswordField } from "@/components/auth/password-field";
+import { AuthCard } from "@/components/auth-card";
 import { authClient } from "@/lib/auth/client";
 import { mapAuthError, type AuthErrorKey } from "@/lib/auth/errors";
 import { Link } from "@/i18n/navigation";
@@ -16,7 +18,7 @@ export function ResetPasswordForm({ token }: { token: string | undefined }) {
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!token) return;
-    if (password.length < 10) {
+    if (password.length < MIN_PASSWORD) {
       setError("weak");
       return;
     }
@@ -34,54 +36,43 @@ export function ResetPasswordForm({ token }: { token: string | undefined }) {
 
   if (done) {
     return (
-      <div role="status" className="flex flex-col gap-2">
-        <h2 className="text-xl font-bold">{t("reset.doneTitle")}</h2>
-        <p className="text-ink-600">{t("reset.doneBody")}</p>
-        <Link href="/sign-in" className="btn btn-primary mt-3 self-start">
-          {t("signIn.submit")}
-        </Link>
-      </div>
+      <AuthCard title={t("reset.doneTitle")} say={t("reset.doneSay")}>
+        <div role="status" className="flex flex-col gap-4">
+          <p className="text-lg leading-relaxed text-ink-700">{t("reset.doneBody")}</p>
+          <Link href="/sign-in" className="btn btn-primary btn-lg self-start">
+            {t("signIn.submit")}
+          </Link>
+        </div>
+      </AuthCard>
     );
   }
 
   if (error === "link") {
     return (
-      <div role="alert" className="flex flex-col gap-3">
-        <div className="notice-error">{t("reset.invalidLink")}</div>
-        <Link href="/forgot-password" className="link">
-          {t("reset.requestNew")}
-        </Link>
-      </div>
+      <AuthCard title={t("reset.title")} say={t("reset.invalidSay")}>
+        <div role="alert" className="flex flex-col gap-4">
+          <div className="notice-error">{t("reset.invalidLink")}</div>
+          <Link href="/forgot-password" className="btn btn-primary btn-lg self-start">
+            {t("reset.requestNew")}
+          </Link>
+        </div>
+      </AuthCard>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
-      {error ? (
-        <div role="alert" className="notice-error">
-          {t(`errors.${error}`)}
-        </div>
-      ) : null}
-      <div>
-        <label htmlFor="password" className="label">
-          {t("reset.newPassword")}
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={10}
-          className="field"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <p className="hint">{t("signUp.passwordHint")}</p>
-      </div>
-      <button type="submit" className="btn btn-primary" disabled={busy}>
-        {t("reset.submit")}
-      </button>
-    </form>
+    <AuthCard title={t("reset.title")} say={t("reset.say")}>
+      <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
+        {error ? (
+          <div role="alert" className="notice-error">
+            {t(`errors.${error}`)}
+          </div>
+        ) : null}
+        <PasswordField value={password} onChange={setPassword} label={t("reset.newPassword")} autoComplete="new-password" autoFocus guide />
+        <button type="submit" className="btn btn-primary btn-lg w-full" disabled={busy}>
+          {t("reset.submit")}
+        </button>
+      </form>
+    </AuthCard>
   );
 }
