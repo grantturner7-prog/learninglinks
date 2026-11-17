@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "familyJoin": "Join as a family | LearningLinks",
+    "schoolCheckout": "Choose your campuses | LearningLinks",
+    "order": "Your order | LearningLinks"
+  },
+  "flow": {
+    "stepOf": "Step {n} of {total}",
+    "path": "Your progress",
+    "here": "You are here",
+    "stepAria": "Step {n}",
+    "back": "Back",
+    "continue": "Continue",
+    "leave": "Not now, back to my dashboard"
+  },
+  "invoice": {
+    "personal": "A personal invoice is fine",
+    "company": "I need a company invoice",
+    "taxId": "統一編號 (8 digits)",
+    "title": "Company name on the invoice",
+    "email": "Email for the invoice (optional)",
+    "emailHint": "Leave it empty and we will use your account email.",
+    "hint": "You can skip this. We never need an ID number, only a company 統一編號 if you want one on the invoice."
+  },
+  "errors": {
+    "wrong_account_type": "This action is not available for your account type.",
+    "no_campus": "Choose at least one campus.",
+    "too_many_campuses": "That is too many campuses for one order. Please split it into two orders.",
+    "campus_not_yours": "One of those campuses is not linked to your account.",
+    "campus_not_claimed": "One of those campuses has not been approved yet. We approve claims by hand.",
+    "invalid_tax_id": "That 統一編號 does not look right. It is 8 digits.",
+    "invoice_title_required": "Please add the company name for the invoice.",
+    "invalid_email": "That email address does not look right.",
+    "too_many_pending": "You already have several unpaid orders. Pay or cancel one first.",
+    "ack": "Please tick the box to confirm you have read the notice.",
+    "rate": "That was a lot of tries. Please wait a few minutes.",
+    "server": "Something went wrong on our side. Nothing was charged. Please try again.",
+    "signin": "Please sign in again.",
+    "not_found": "We could not find that.",
+    "not_pending": "That order is no longer waiting for payment."
+  },
+  "receipt": {
+    "title": "Your membership",
+    "familyLine": "Family membership, 12 months",
+    "campusLine": "{n, plural, one {# campus} other {# campuses}} × {price}",
+    "term": "Each campus gets its own full 12 months, starting on the day we confirm your payment.",
+    "familyTerm": "12 months from the day we confirm your payment.",
+    "total": "Total, VAT included",
+    "none": "Choose a campus to see the total.",
+    "noDiscount": "The price is the same for every campus. There is no discount for extra campuses.",
+    "never": "One payment. It never renews by itself."
+  },
+  "family": {
+    "cheer": {
+      "c1": "Almost there. Three short questions.",
+      "c2": "Quick one. You can skip it.",
+      "c3": "Last one, then you are done."
+    },
+    "say": {
+      "s1": "Hi, I am Link. Here is exactly how this works, with no small print.",
+      "s2": "Some families like an invoice with a company 統一編號. Totally optional.",
+      "s3": "Nearly done. I will make your order and show you where to send the transfer."
+    },
+    "q": {
+      "s1": "Here is how it works",
+      "s2": "Do you need an invoice?",
+      "s3": "Ready to place your order?"
+    },
+    "points": {
+      "p1": "NT$2,000 for 12 months, VAT included",
+      "p2": "You pay once by bank transfer. No card is kept on file.",
+      "p3": "We confirm your payment by hand, then your 12 months start.",
+      "p4": "It never renews by itself. We send a reminder before it ends.",
+      "p5": "You can see tutors who offer private tutoring, and ask for one contact at a time."
+    },
+    "reassure": "We never ask for your ID number or your child's details.",
+    "place": "Place my order",
+    "placing": "Placing your order…",
+    "summary": "You are ordering one family membership for NT$2,000, VAT included. You will pay by bank transfer and nothing is charged by us until you do."
+  },
+  "school": {
+    "cheer": {
+      "c1": "Pick the campuses you are paying for.",
+      "c2": "Quick one. You can skip it.",
+      "c3": "Last one, then you are done."
+    },
+    "say": {
+      "s1": "Every campus has its own 12 months, so you can add campuses whenever you like.",
+      "s2": "Schools usually want a company invoice. Add the 統一編號 here if you do.",
+      "s3": "Nearly done. I will make your order and show you where to send the transfer."
+    },
+    "q": {
+      "s1": "Which campuses are you paying for?",
+      "s2": "Do you need a company invoice?",
+      "s3": "Ready to place your order?"
+    },
+    "campusActive": "Active until {date}. Paying again adds 12 months after that.",
+    "campusInactive": "Not active yet",
+    "campusExpired": "Ended {date}",
+    "pick": "Choose as many as you like.",
+    "none": "You have no approved campuses yet. Find your school first, and we will approve it by hand.",
+    "findSchool": "Find my school",
+    "reassure": "We never ask for licences or ID numbers. We are only a connection website.",
+    "place": "Place my order",
+    "placing": "Placing your order…",
+    "summary": "You are ordering {n, plural, one {# campus} other {# campuses}} for {total}, VAT included. You will pay by bank transfer and nothing is charged by us until you do."
+  },
+  "order": {
+    "back": "Back to my dashboard",
+    "title": "Your order",
+    "status": {
+      "pending": "Waiting for your bank transfer",
+      "paid": "Paid. Thank you!",
+      "cancelled": "Cancelled"
+    },
+    "reference": "Your reference code",
+    "referenceHint": "Write this in the transfer note, so we can find your payment.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "amount": "Amount to transfer",
+    "vat": "VAT included",
+    "bankTitle": "Send the transfer to",
+    "bankName": "Bank",
+    "bankBranch": "Branch",
+    "bankAccountName": "Account name",
+    "bankAccountNumber": "Account number",
+    "noBank": "Our bank details are not published yet. We will email them to you shortly, with your reference code.",
+    "stepsTitle": "What happens next",
+    "step1": "You transfer the amount and write your reference in the note.",
+    "step2": "We check our bank account and confirm your payment by hand. This takes a few working days.",
+    "step3": "We email you, and your 12 months begin the day we confirm. It never renews by itself.",
+    "campuses": "Campuses on this order",
+    "invoice": "Invoice details",
+    "invoicePersonal": "Personal invoice",
+    "invoiceCompany": "{title}, 統一編號 {taxId}",
+    "cancel": "Cancel this order",
+    "cancelHint": "Changed your mind? Cancelling is free. Only cancel if you have not transferred yet.",
+    "paidOn": "Confirmed. Your membership runs until {date}.",
+    "browse": "Browse educators",
+    "placed": "Placed on {date}"
+  }
+}

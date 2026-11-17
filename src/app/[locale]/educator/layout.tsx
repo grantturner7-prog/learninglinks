@@ -13,7 +13,7 @@ export default async function EducatorLayout({ children, params }: Props) {
   if (user.accountType !== "educator") return redirect({ href: "/dashboard", locale });
   const all = await getMessages();
   return (
-    <NextIntlClientProvider messages={{ common: all.common, notice: all.notice, educator: all.educator, journey: all.journey, taxonomy: all.taxonomy }}>
+    <NextIntlClientProvider messages={{ common: all.common, notice: all.notice, educator: all.educator, journey: all.journey, taxonomy: all.taxonomy, reveal: all.reveal }}>
       {children}
     </NextIntlClientProvider>
   );

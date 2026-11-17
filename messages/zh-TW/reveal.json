@@ -1,0 +1,38 @@
+{
+  "button": "顯示聯絡方式",
+  "working": "開啟中…",
+  "intro": "請告訴 {name} 您是在 LearningLinks 找到他們的。我們會記錄您索取了聯絡方式，教師也看得到這筆紀錄。",
+  "left": "您今天已開啟 {used} / {cap} 位的聯絡方式。",
+  "resets": "每天（台灣時間）會重新計算。",
+  "again": "您今天已索取過這位的聯絡方式，再次顯示給您。",
+  "channels": {
+    "email": "電子郵件",
+    "line": "LINE ID",
+    "whatsapp": "WhatsApp",
+    "wechat": "WeChat",
+    "phone": "電話"
+  },
+  "denied": {
+    "no_membership": "您的會員資格未啟用。請到儀表板續約即可查看聯絡方式。",
+    "daily_cap": "您已達今日上限，明天（台灣時間）會重新計算。這是為了避免教師資料被大量複製。",
+    "unavailable": "這位教師目前不再開放。",
+    "no_contacts": "這位教師尚未提供聯絡方式。",
+    "not_a_member": "您沒有連結到這間校區。",
+    "rate": "請求太頻繁，請稍候一分鐘。",
+    "signin": "請重新登入。",
+    "server": "系統出了點問題，請再試一次。"
+  },
+  "careSchool": "提醒：我們不做背景查核，請自行完成所有查核並遵守適用的規定。",
+  "contacts": {
+    "meta": "誰索取過我的聯絡方式 | LearningLinks",
+    "title": "誰索取過您的聯絡方式",
+    "intro": "當付費的學校或家庭開啟您的聯絡方式時，會顯示在這裡，您永遠知道誰索取過。",
+    "empty": "目前還沒有人索取。您的檔案只會顯示給付費會員，可能需要一點時間。",
+    "school": "{name}",
+    "schoolPlace": "{place}的{type}",
+    "family": "一個家庭",
+    "familyNote": "我們不會告訴您是哪個家庭，對方準備好時會主動聯絡您。",
+    "saw": "已開啟：{channels}",
+    "back": "回到儀表板"
+  }
+}

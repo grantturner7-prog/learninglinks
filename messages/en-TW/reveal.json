@@ -1,0 +1,38 @@
+{
+  "button": "Show contact details",
+  "working": "Opening…",
+  "intro": "Tell {name} you found them on LearningLinks. We keep a note that you asked, and the educator can see it.",
+  "left": "You have opened {used} of {cap} contacts today.",
+  "resets": "The count starts again each day in Taiwan.",
+  "again": "You already asked for this one today. Here it is again.",
+  "channels": {
+    "email": "Email",
+    "line": "LINE ID",
+    "whatsapp": "WhatsApp",
+    "wechat": "WeChat",
+    "phone": "Phone"
+  },
+  "denied": {
+    "no_membership": "Your membership is not active. Renew from your dashboard to see contact details.",
+    "daily_cap": "You have reached today's limit. It starts again tomorrow (Taiwan time). This protects educators from bulk copying.",
+    "unavailable": "This educator is no longer available.",
+    "no_contacts": "This educator has not added contact details yet.",
+    "not_a_member": "You are not linked to that campus.",
+    "rate": "Too many requests. Please wait a minute.",
+    "signin": "Please sign in again.",
+    "server": "Something went wrong. Please try again."
+  },
+  "careSchool": "Reminder: we do not run background checks. Please complete all checks and follow all rules that apply to you.",
+  "contacts": {
+    "meta": "Who asked for my contact | LearningLinks",
+    "title": "Who asked for your contact details",
+    "intro": "When a paying school or family opens your contact details, it shows here. You always know who asked.",
+    "empty": "Nobody has asked yet. Your profile is only shown to paying members, so it can take a little while.",
+    "school": "{name}",
+    "schoolPlace": "{type} in {place}",
+    "family": "A family",
+    "familyNote": "We never tell you which family. They contact you when they are ready.",
+    "saw": "Opened: {channels}",
+    "back": "Back to my dashboard"
+  }
+}

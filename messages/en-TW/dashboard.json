@@ -24,5 +24,48 @@
     "s3": "Contact tutors directly"
   },
   "soon": "These steps are being built and will appear here soon.",
-  "admin": "You have admin access."
+  "admin": "You have admin access.",
+  "home": {
+    "family": {
+      "title": "Welcome, {name}",
+      "intro": "Your family account",
+      "joinTitle": "Join for 12 months",
+      "joinBody": "NT$2,000, VAT included. Pay once by bank transfer. It never renews by itself.",
+      "joinCta": "Join as a family",
+      "activeTitle": "Your membership is active",
+      "activeBody": "Runs until {date}.",
+      "browse": "Find a tutor",
+      "left": "You have opened {used} of {cap} contacts today.",
+      "endsSoon": "Your membership ends in {days} days. Renew early and you lose no days.",
+      "renew": "Renew for another 12 months",
+      "expired": "Your membership ended on {date}.",
+      "ordersTitle": "Your orders",
+      "noOrders": "No orders yet.",
+      "viewOrder": "View"
+    },
+    "school": {
+      "title": "Welcome, {name}",
+      "intro": "Your school account",
+      "campusesTitle": "Your campuses",
+      "noCampuses": "Start by finding your school. We approve each claim by hand.",
+      "manage": "Manage campuses",
+      "pay": "Pay for campuses",
+      "price": "NT$10,000 per campus for 12 months, VAT included. Each campus has its own 12 months.",
+      "browse": "Find educators",
+      "jobs": "Your job posts",
+      "postJob": "Post a job",
+      "left": "Most contacts opened by one campus today: {used} of {cap}.",
+      "endsSoon": "{name} ends in {days} days. Renew early and you lose no days.",
+      "ordersTitle": "Your orders",
+      "noOrders": "No orders yet.",
+      "viewOrder": "View",
+      "claimsPending": "{n, plural, one {# claim is} other {# claims are}} waiting for our review."
+    },
+    "orderStatus": {
+      "pending": "Waiting for transfer",
+      "paid": "Paid",
+      "cancelled": "Cancelled"
+    },
+    "orderLine": "{ref}, {amount}"
+  }
 }

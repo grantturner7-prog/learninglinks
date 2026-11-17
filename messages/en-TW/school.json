@@ -1,0 +1,217 @@
+{
+  "meta": {
+    "campuses": "My campuses | LearningLinks",
+    "claim": "Claim your school | LearningLinks",
+    "add": "Add a campus | LearningLinks",
+    "jobs": "My job posts | LearningLinks",
+    "newJob": "Post a job | LearningLinks"
+  },
+  "flow": {
+    "stepOf": "Step {n} of {total}",
+    "path": "Your progress",
+    "here": "You are here",
+    "stepAria": "Step {n}",
+    "back": "Back",
+    "continue": "Continue",
+    "leave": "Not now, back to my dashboard"
+  },
+  "errors": {
+    "wrong_account_type": "This action is not available for your account type.",
+    "no_campus": "Choose at least one campus.",
+    "too_many_campuses": "That is too many campuses for one order. Please split it into two orders.",
+    "campus_not_yours": "One of those campuses is not linked to your account.",
+    "campus_not_claimed": "One of those campuses has not been approved yet. We approve claims by hand.",
+    "invalid_tax_id": "That 統一編號 does not look right. It is 8 digits.",
+    "invoice_title_required": "Please add the company name for the invoice.",
+    "invalid_email": "That email address does not look right.",
+    "too_many_pending": "You already have several unpaid orders. Pay or cancel one first.",
+    "ack": "Please tick the box to confirm you have read the notice.",
+    "rate": "That was a lot of tries. Please wait a few minutes.",
+    "server": "Something went wrong on our side. Nothing was charged. Please try again.",
+    "signin": "Please sign in again.",
+    "not_found": "We could not find that.",
+    "not_pending": "That order is no longer waiting for payment.",
+    "already_claimed": "That school has already been claimed. If it is yours, please contact us.",
+    "invalid_name": "Please enter a name (2 to 80 letters).",
+    "invalid_role": "Please tell us your role.",
+    "invalid_phone": "That phone number does not look right.",
+    "invalid_type": "Please choose a type.",
+    "invalid_city": "Please choose a city or county.",
+    "invalid_district": "That district does not belong to that city.",
+    "no_membership": "This campus needs an active membership to post jobs.",
+    "not_a_member": "You are not linked to that campus.",
+    "too_many_open": "This campus already has 20 open posts. Close one first.",
+    "fix": "Please fix the highlighted answers."
+  },
+  "campuses": {
+    "title": "Your campuses",
+    "intro": "Each campus is paid for separately and has its own 12 months. We approve each claim by hand.",
+    "active": "Active until {date}",
+    "inactive": "Not paid yet",
+    "expired": "Ended {date}",
+    "pay": "Pay for these campuses",
+    "renew": "Renew",
+    "empty": "You have no approved campuses yet.",
+    "claimsTitle": "Waiting for our review",
+    "claimPending": "{name}: we are checking this one. It usually takes a few working days.",
+    "claimRejected": "{name}: we could not approve this claim. Please contact us if you think this is a mistake.",
+    "findTitle": "Find your school",
+    "findHint": "Type part of its name, in Chinese or English.",
+    "placeholder": "e.g. Sunshine",
+    "search": "Search",
+    "tooShort": "Type at least 2 letters.",
+    "noResults": "Nothing found for “{q}”.",
+    "claimIt": "This is my school",
+    "taken": "Already claimed",
+    "notListed": "Cannot find it? Add your campus",
+    "addCampus": "Add a campus"
+  },
+  "claim": {
+    "cheer": {
+      "c1": "Almost there.",
+      "c2": "Last one."
+    },
+    "say": {
+      "s1": "Hi, I am Link. A real person here will check your claim before anything changes.",
+      "s2": "Only our team sees your number, to check the claim. We never share it with educators."
+    },
+    "q": {
+      "s1": "Who are we speaking to?",
+      "s2": "What is the best phone number?"
+    },
+    "fields": {
+      "name": "Your name",
+      "role": "Your role",
+      "phone": "Phone number",
+      "note": "Anything we should know? (optional)"
+    },
+    "roles": {
+      "director": "Director or principal",
+      "owner": "Owner",
+      "admin": "Office or admin staff",
+      "teacher": "Teacher"
+    },
+    "claiming": "You are claiming: {name}",
+    "reassure": "We do not verify licences or identity. We just check that the claim looks reasonable.",
+    "submit": "Send my claim",
+    "sending": "Sending…",
+    "doneTitle": "Thank you! We will take a look.",
+    "doneBody": "We will approve it by hand, usually within a few working days. Once it is approved, the campus appears in your dashboard and you can pay for it."
+  },
+  "add": {
+    "cheer": {
+      "c1": "Let us add your campus.",
+      "c2": "Roughly where is it?",
+      "c3": "Almost there.",
+      "c4": "Last one."
+    },
+    "say": {
+      "s1": "Hi, I am Link. I could not find your campus in our list, so let us add it. We will check it by hand.",
+      "s2": "Just the area. Educators never see a street address, only the district.",
+      "s3": "A real person here will check your claim before anything changes.",
+      "s4": "Only our team sees your number, to check the claim."
+    },
+    "q": {
+      "s1": "What is your campus called?",
+      "s2": "Which city and district?",
+      "s3": "Who are we speaking to?",
+      "s4": "What is the best phone number?"
+    },
+    "fields": {
+      "name": "Campus name",
+      "type": "What kind of school is it?",
+      "city": "City or county",
+      "district": "District (optional)"
+    },
+    "reassure": "We never collect your address, only the area."
+  },
+  "jobs": {
+    "title": "Your job posts",
+    "intro": "Only educators who are signed in and have a profile can see these. They are never public and never shown to families or other schools.",
+    "post": "Post a job",
+    "none": "You have not posted any jobs yet.",
+    "open": "Open",
+    "closed": "Closed",
+    "close": "Close this post",
+    "needMembership": "You need a campus with an active membership to post jobs.",
+    "lapse": "Posts stop showing when a campus's membership ends, and come back when you renew.",
+    "types": "Full-time or part-time posts only. We do not offer substitute or cover work.",
+    "posted": "Posted {date}"
+  },
+  "job": {
+    "cheer": {
+      "c1": "Let us write your post.",
+      "c2": "Full-time or part-time?",
+      "c3": "Roughly where?",
+      "c4": "Quick one. You can skip it.",
+      "c5": "Help the right people find it.",
+      "c6": "Last one, then it is live."
+    },
+    "say": {
+      "s1": "Hi, I am Link. Let us start with a clear title. Teachers see it first.",
+      "s2": "Full-time and part-time work only. Substitute or cover work is not allowed on LearningLinks.",
+      "s3": "Teachers see the district, never a street address.",
+      "s4": "Pay and start date help teachers decide. You can skip both.",
+      "s5": "Pick a few subjects and levels, and add a few lines about the job.",
+      "s6": "How should interested teachers reach you? Only signed-in teachers with a profile will see this."
+    },
+    "q": {
+      "s1": "What is the job?",
+      "s2": "Full-time or part-time?",
+      "s3": "Where is it?",
+      "s4": "What does it pay, and when does it start?",
+      "s5": "Tell teachers about it",
+      "s6": "How do teachers apply?"
+    },
+    "fields": {
+      "campus": "Which campus?",
+      "title": "Job title",
+      "titleHint": "e.g. Kindergarten English teacher",
+      "salaryMin": "From",
+      "salaryMax": "To",
+      "unit": "Per",
+      "month": "month",
+      "hour": "hour",
+      "startsOn": "Start date (optional)",
+      "subjects": "Subjects",
+      "levels": "Levels",
+      "city": "City or county",
+      "district": "District (optional)",
+      "description": "About the job (optional)",
+      "descriptionHint": "Please do not include phone numbers, links or street addresses here. Put your contact in the next step.",
+      "apply": "How to apply",
+      "applyHint": "An email, a LINE ID or a phone number. Only signed-in teachers with a profile will see it.",
+      "fullTime": "Full-time",
+      "partTime": "Part-time"
+    },
+    "errors": {
+      "required": "Please fill this in.",
+      "tooShort": "That is a bit short.",
+      "tooLong": "That is too long.",
+      "invalid": "That does not look right.",
+      "substitute": "Substitute or cover work cannot be posted on LearningLinks. Please describe a full-time or part-time job.",
+      "idNumber": "Please remove ID or passport numbers.",
+      "address": "Please remove street addresses. The district is enough.",
+      "salaryOrder": "The first number must not be higher than the second.",
+      "salaryRange": "Enter whole numbers, up to 1,000,000.",
+      "salaryUnit": "Choose month or hour.",
+      "dateRange": "Choose a date from today to two years ahead."
+    },
+    "preview": {
+      "title": "How teachers will see it",
+      "empty": "Your job title appears here.",
+      "salary": "NT${min} to NT${max} per {unit}",
+      "salaryFrom": "From NT${min} per {unit}",
+      "salaryUpTo": "Up to NT${max} per {unit}",
+      "visible": "Seen only by signed-in educators who have a profile."
+    },
+    "reassure": "Nobody else sees this: not the public, not families, not other schools.",
+    "publish": "Post this job",
+    "publishing": "Posting…",
+    "skip": "Skip this one for now",
+    "doneTitle": "Your job is live!",
+    "doneBody": "Signed-in teachers with a profile can see it on the job board and on the map. You can close it any time.",
+    "toJobs": "See my job posts",
+    "another": "Post another"
+  }
+}

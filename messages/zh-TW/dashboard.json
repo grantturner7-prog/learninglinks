@@ -24,5 +24,48 @@
     "s3": "直接聯絡家教"
   },
   "soon": "這些步驟正在開發中，很快會出現在這裡。",
-  "admin": "您擁有管理員權限。"
+  "admin": "您擁有管理員權限。",
+  "home": {
+    "family": {
+      "title": "歡迎，{name}",
+      "intro": "您的家庭帳號",
+      "joinTitle": "加入 12 個月會員",
+      "joinBody": "NT$2,000（含稅），銀行轉帳一次付清，不會自動續約。",
+      "joinCta": "加入家庭會員",
+      "activeTitle": "您的會員資格有效中",
+      "activeBody": "有效至 {date}。",
+      "browse": "尋找家教老師",
+      "left": "您今天已開啟 {used} / {cap} 位的聯絡方式。",
+      "endsSoon": "您的會員資格將在 {days} 天後到期。提早續約不會損失任何天數。",
+      "renew": "再續 12 個月",
+      "expired": "您的會員資格已於 {date} 到期。",
+      "ordersTitle": "您的訂單",
+      "noOrders": "目前沒有訂單。",
+      "viewOrder": "查看"
+    },
+    "school": {
+      "title": "歡迎，{name}",
+      "intro": "您的學校帳號",
+      "campusesTitle": "您的校區",
+      "noCampuses": "請先找到您的學校提出認領，我們會人工審核。",
+      "manage": "管理校區",
+      "pay": "為校區付費",
+      "price": "每間校區 12 個月 NT$10,000（含稅），各校區獨立計算 12 個月。",
+      "browse": "尋找教師",
+      "jobs": "您的職缺",
+      "postJob": "刊登職缺",
+      "left": "單一校區今天最多開啟：{used} / {cap} 位。",
+      "endsSoon": "{name} 將在 {days} 天後到期，提早續約不會損失任何天數。",
+      "ordersTitle": "您的訂單",
+      "noOrders": "目前沒有訂單。",
+      "viewOrder": "查看",
+      "claimsPending": "有 {n} 筆認領申請等待審核。"
+    },
+    "orderStatus": {
+      "pending": "等待匯款",
+      "paid": "已收款",
+      "cancelled": "已取消"
+    },
+    "orderLine": "{ref}，{amount}"
+  }
 }

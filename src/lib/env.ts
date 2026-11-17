@@ -24,6 +24,8 @@ const schema = z.object({
   BANK_ACCOUNT_NAME: optionalString,
   BANK_ACCOUNT_NUMBER: optionalString,
   BANK_BRANCH: optionalString,
+  /** Shared secret for scheduled jobs (renewal reminders). Without it the cron endpoint is disabled. */
+  CRON_SECRET: z.preprocess(emptyToUndefined, z.string().min(24).optional()),
   LEGAL_REVIEWED: bool,
   FOUNDING_DISCOUNT_PERCENT: z.preprocess(emptyToUndefined, z.coerce.number().int().min(0).max(90).default(0)),
   /** Dev/test only: lets checkout run before a country's launch gate is green. Ignored in production. */

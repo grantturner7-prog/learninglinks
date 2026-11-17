@@ -1,4 +1,4 @@
-import { and, eq, gt, gte, inArray, lte, sql } from "drizzle-orm";
+import { and, eq, gt, gte, inArray, lte } from "drizzle-orm";
 import type { Db } from "@/lib/db";
 import { schema } from "@/lib/db";
 import { renewalReminderEmail } from "@/lib/billing/emails";

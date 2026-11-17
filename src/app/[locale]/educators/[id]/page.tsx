@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { RevealPanel, type RevealLabels } from "@/components/directory/reveal-panel";
 import { MembersWall } from "@/components/wall";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { getEducatorForAudience, getMemberAudience } from "@/lib/directory/service";
+import { getEnv } from "@/lib/env";
+import { revealsLeftToday } from "@/lib/reveal/service";
 import { areaLabel } from "@/lib/geo-labels";
 import type { Subject } from "@/lib/taxonomy";
 import { Link } from "@/i18n/navigation";
@@ -32,7 +35,15 @@ export default async function EducatorDetailPage({ params }: Props) {
   const t = await getTranslations("directory.detail");
   const tt = await getTranslations("taxonomy");
   const tc = await getTranslations("common");
+  const tn = await getTranslations("notice");
   const f = await getFormatter();
+  const tr = await getTranslations("reveal");
+  const used = await revealsLeftToday(db, user!, getEnv().REVEAL_DAILY_CAP);
+  const revealLabels: RevealLabels = {
+    button: tr("button"), working: tr("working"), intro: tr("intro", { name: e.displayName }), left: tr("left", { used: used.used, cap: used.cap }), resets: tr("resets"), again: tr("again"), care: tr("careSchool"),
+    channels: Object.fromEntries((["email", "line", "whatsapp", "wechat", "phone"] as const).map((c) => [c, tr(`channels.${c}`)])),
+    denied: Object.fromEntries((["no_membership", "daily_cap", "unavailable", "no_contacts", "not_a_member", "rate", "signin", "server"] as const).map((r) => [r, tr(`denied.${r}`)])),
+  };
   const rate = e.rate ? [e.rate.min, e.rate.max].filter((n): n is number => n !== null).map((n) => `NT$${f.number(n)}`).join(" – ") : null;
   const list = (label: string, items: string[]) => items.length > 0 ? (
     <div><h3 className="label">{label}</h3><div className="flex flex-wrap gap-1.5">{items.map((i) => <span key={i} className="badge">{i}</span>)}</div></div>
@@ -79,7 +90,8 @@ export default async function EducatorDetailPage({ params }: Props) {
             <p className="hint">{t("selfDeclared")}</p>
           </div>
         ) : null}
-        <p className="rounded-xl bg-brand-50 p-4 text-sm">🔒 {t("contactSoon")}</p>
+        <RevealPanel educatorId={e.id} labels={revealLabels} />
+        {audience === "family" ? <p className="notice">{tn("tutoringWork")}</p> : null}
       </article>
     </div>
   );

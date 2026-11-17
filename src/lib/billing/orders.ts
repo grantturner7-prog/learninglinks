@@ -172,7 +172,7 @@ async function toViews(db: Exec, rows: (typeof orders.$inferSelect)[]): Promise<
     createdAt: r.createdAt,
     paidAt: r.paidAt,
     invoice: { taxId: r.invoiceTaxId, title: r.invoiceTitle, email: r.invoiceEmail },
-    campusList: items.filter((i) => i.orderId === r.id).map(({ orderId: _o, ...c }) => c),
+    campusList: items.filter((i) => i.orderId === r.id).map((i) => ({ id: i.id, name: i.name, district: i.district, city: i.city })),
   }));
 }
 
