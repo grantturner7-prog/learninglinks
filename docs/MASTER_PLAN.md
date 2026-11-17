@@ -20,6 +20,7 @@
 | URL and locale pattern | `/{language}-{COUNTRY}/…`, e.g. `/zh-TW/`, `/en-TW/`, later `/th-TH/`, `/vi-VN/`. The locale carries the country, so routing, hreflang and country config share one key. |
 | Phase 1 school data | The old map holds 5,477 mostly public schools with **no contact data**, and only 2 language schools. The main buyers, about 17,700 licensed cram schools, are missing. Phase 1 needs a cram-school import from government open data, with a licence check. |
 | **Visibility (corrected 17 Nov 2026)** | **No one sees any educator without a paid membership. There is no free browsing, no public profiles and no teasers, for schools or for parents.** This replaces the "public teaser + member-only contact" model in the first draft below (§0 call 2, §5.2, §5.3, §7, §9, Appendix A). Educators are free and their profiles are visible to logged-in paying members only; contact details are shown one at a time on request, logged and capped per day. Profile pages are never indexed by search engines. Unauthenticated visitors get a members-only wall, with a clearly labelled **sample** profile so they know what they would be buying. |
+| Public profile link / sample profile | **No public profile link for educators, ever. The labelled sample profile stays** on marketing pages and on the members-only wall. |
 | Build status | Paused for design approval. See `docs/mockups/`. |
 
 ---
@@ -199,7 +200,7 @@ Published estimates of the private-tutoring market range from about US$14.8B to 
 
 A contact reveal is **logged**, capped per day and shown to the educator ("a member viewed your contact details"). A profile link shared by an educator (for example in LINE) leads a non-member to a "members only" wall, never to the profile.
 
-*Open question for you: should an educator be able to switch on an optional public link to their own profile, so they can send it to a school that has not joined? My default is no, because it would let schools skip the membership.*
+*Decided 17 Nov 2026: there is **no** optional public link to an educator's own profile, because it would let schools skip the membership. The labelled **sample profile** on the marketing pages and the members-only wall **stays**.*
 
 ### 5.4 Trust layer, without storing sensitive data
 
