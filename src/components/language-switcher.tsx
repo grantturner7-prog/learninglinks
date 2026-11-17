@@ -20,21 +20,23 @@ export function LanguageSwitcher() {
   const country = current.split("-")[1];
   const options = routing.locales.filter((l) => l.split("-")[1] === country);
 
+  // Phones are short of room: with exactly two languages, show one button for the OTHER language instead of both.
+  const other = options.length === 2 ? options.find((l) => l !== current) : undefined;
+
   return (
-    <div role="group" aria-label={t("language")} className="inline-flex overflow-hidden rounded-[10px] border border-ink-200">
-      {options.map((l) => (
-        <Link
-          key={l}
-          href={pathname}
-          locale={l}
-          lang={l}
-          hrefLang={l}
-          aria-current={l === current ? "true" : undefined}
-          className="seg-link"
-        >
-          {labelFor(l)}
+    <>
+      {other ? (
+        <Link href={pathname} locale={other} lang={other} hrefLang={other} className="seg-link !min-w-11 !px-2.5 rounded-[10px] border border-ink-200 md:hidden">
+          {labelFor(other)}
         </Link>
-      ))}
-    </div>
+      ) : null}
+      <div role="group" aria-label={t("language")} className={`inline-flex overflow-hidden rounded-[10px] border border-ink-200 ${other ? "max-md:hidden" : ""}`}>
+        {options.map((l) => (
+          <Link key={l} href={pathname} locale={l} lang={l} hrefLang={l} aria-current={l === current ? "true" : undefined} className="seg-link">
+            {labelFor(l)}
+          </Link>
+        ))}
+      </div>
+    </>
   );
 }
