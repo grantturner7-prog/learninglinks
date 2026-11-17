@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -7,6 +8,7 @@ import { sanitizeAccountType } from "@/lib/auth/helpers";
 import { sendEmail } from "@/lib/email";
 import { getEnv } from "@/lib/env";
 import { NOTICE_VERSION } from "@/lib/notice";
+import { deletePhoto } from "@/lib/uploads/photos";
 
 function createAuth() {
   const env = getEnv();
@@ -49,6 +51,14 @@ function createAuth() {
       },
     },
     user: {
+      // "Delete my account" in educator settings. The password is required; rows go via ON DELETE CASCADE.
+      deleteUser: {
+        enabled: true,
+        beforeDelete: async (u) => {
+          const [p] = await getDb().select({ photoKey: schema.educatorProfiles.photoKey }).from(schema.educatorProfiles).where(eq(schema.educatorProfiles.userId, u.id)).limit(1);
+          await deletePhoto(p?.photoKey);
+        },
+      },
       additionalFields: {
         accountType: { type: "string", required: false, defaultValue: "educator", input: true },
         /** Sent by the sign-up form and checked by the hook below. */

@@ -37,7 +37,7 @@ export async function SiteHeader() {
           )}
         </div>
         <div aria-hidden className="order-2 h-0 basis-full md:hidden" />
-        <NavLinks />
+        <NavLinks showJobs={user?.accountType === "educator"} />
         <div className="order-4 flex-none md:order-3">
           <LanguageSwitcher />
         </div>

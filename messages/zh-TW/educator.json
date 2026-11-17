@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "waiver": "教師同意書",
+    "profile": "您的個人檔案",
+    "settings": "檔案設定"
+  },
+  "steps": {
+    "aria": "進度",
+    "waiver": "同意書",
+    "profile": "個人檔案",
+    "publish": "發布"
+  },
+  "waiver": {
+    "badge": "教師永遠免費",
+    "title": "發布之前：您同意的內容",
+    "lead": "30 秒白話摘要。內容不會公開：只有付費的學校與家長能看到您的檔案，且隨時可一鍵隱藏或刪除。",
+    "cols": {
+      "profile": {
+        "badge": "僅限會員",
+        "title": "您的個人檔案",
+        "i1": "顯示名稱、可選照片",
+        "i2": "標題與簡短自我介紹",
+        "i3": "科目、年級、語言",
+        "i4": "縣市與行政區（不含地址）",
+        "i5": "工作許可類別",
+        "i6": "自行聲明的資歷"
+      },
+      "contact": {
+        "badge": "需點選才顯示",
+        "title": "聯絡方式，逐一顯示",
+        "i1": "電子郵件",
+        "i2": "LINE、WhatsApp、WeChat、電話",
+        "i3": "僅限您自行新增的項目",
+        "i4": "您可看到誰查看過",
+        "i5": "會員每日查看次數有上限"
+      },
+      "never": {
+        "badge": "絕不",
+        "title": "我們絕不索取或保存",
+        "i1": "身分證、護照或居留證號碼",
+        "i2": "良民證或無犯罪紀錄證明",
+        "i3": "健康、銀行或財務資料",
+        "i4": "住家地址、兒童資料"
+      }
+    },
+    "who": {
+      "title": "誰能看到您，取決於您接受的工作型態",
+      "schoolsTitle": "學校",
+      "schoolsBody": "只有在您接受全職或兼職時才看得到您，看不到您是否提供家教或收費。",
+      "familiesTitle": "家長",
+      "familiesBody": "只有在您提供私人家教或輔導時才看得到您，看不到您對學校工作的意願。",
+      "between": "學校與家長只會透過您同意分享的聯絡方式直接與您聯絡。任何安排（例如臨時代課）由您與學校自行討論約定。"
+    },
+    "confirm": {
+      "title": "請逐項確認",
+      "required": "必填",
+      "optional": "選填",
+      "termsPrivacy": "我已閱讀<terms>使用條款</terms>與<privacy>隱私權政策</privacy>。",
+      "publishToMembers": "我同意：若我接受學校工作，將我的個人檔案提供給<b>付費學校</b>查看；若我提供私人家教，則提供給<b>付費家長</b>查看。",
+      "contactOnRequest": "我同意會員在點選查看時，可看到我所填寫的聯絡方式。",
+      "truthful": "我提供的資料屬實，且我有權以所述方式工作或授課。",
+      "marketing": "寄送 LearningLinks 的資訊與最新消息給我。"
+    },
+    "progress": "已確認 {done}／{total} 個必填項目",
+    "submit": "同意並繼續",
+    "submitting": "儲存中…",
+    "side": {
+      "controlTitle": "主控權在您手上",
+      "controlBody": "您可在設定中隱藏檔案、調整公開內容或刪除全部資料。隱藏只需一鍵，立即生效。",
+      "recordTitle": "我們會記錄什麼",
+      "recordBody": "您同意的時間、版本、語言與當時顯示的完整文字，以便日後有明確依據。您可隨時撤回同意。"
+    },
+    "alreadyAgreed": "您已同意目前版本的同意書，可在設定中查看或撤回。",
+    "errors": {
+      "incomplete": "請勾選所有必填項目才能繼續。",
+      "server": "發生錯誤，請再試一次。"
+    }
+  },
+  "profile": {
+    "title": "建立您的個人檔案",
+    "lead": "約需 5 分鐘。可隨時儲存草稿，按下「發布」前不會顯示給任何人。",
+    "membersOnly": "僅限會員",
+    "sections": {
+      "about": "關於您",
+      "teach": "您教什麼",
+      "where": "地區與工作型態",
+      "credentials": "資歷",
+      "contact": "聯絡方式",
+      "visibility": "能見度"
+    },
+    "fields": {
+      "displayName": "顯示名稱",
+      "displayNameHint": "名字加姓氏縮寫即可。請勿填寫數字、連結或聯絡方式。",
+      "headline": "標題",
+      "headlineHint": "一行簡短說明，例如：幼兒園英語老師：自然發音與故事教學",
+      "bio": "自我介紹",
+      "bioHint": "請勿在此填寫電話、電子郵件、連結或地址。請於「聯絡方式」欄位填寫，會員需點選才會看到。",
+      "bioBoth": "學校與家長都會看到這段文字，請只寫您願意讓雙方看到的內容。",
+      "subjects": "科目",
+      "subjectsHint": "最多可選 12 項。",
+      "levels": "年級",
+      "languages": "授課語言",
+      "modes": "授課方式",
+      "experience": "教學年資",
+      "choose": "請選擇…",
+      "city": "縣市",
+      "districts": "可前往的行政區",
+      "districtsHint": "會員會在地圖上看到這些區域，不會看到地址。",
+      "districtsNone": "此縣市的行政區選項即將推出，會員會以縣市範圍找到您。",
+      "openTo": "希望的工作型態（決定誰能看到您）",
+      "schoolWork": "學校工作",
+      "schoolWorkHint": "付費學校可看到。",
+      "tutoring": "私人家教與輔導",
+      "tutoringHint": "僅付費家長可看到，每小時費用也只顯示給家長。",
+      "openToHint": "學校看不到您是否提供家教，家長也看不到您對學校工作的意願。某一組都不勾選，該族群就看不到您。",
+      "betweenHint": "學校與家長會直接與您聯絡。臨時代課等安排由您與學校自行討論約定。",
+      "rate": "每小時費用（新台幣）",
+      "rateMin": "最低",
+      "rateMax": "最高",
+      "rateHint": "僅顯示給家長，選填。",
+      "workAuth": "工作許可",
+      "workAuthHint": "請選擇類別，切勿填寫證件號碼。各國規定不同，雇主聘僱的許可可能不允許私人家教。",
+      "credential": "資歷名稱",
+      "year": "年份",
+      "proof": "證明連結（選填）",
+      "credentialsHint": "請提供核發單位的證明連結（https:// 開頭）。請勿在此上傳證書：我們只保存連結，不保存文件。",
+      "addAnother": "+ 新增一項",
+      "contactIntro": "僅付費學校與家長可見，且需由對方點選才會顯示。請只新增您實際會查看的管道。發布前至少需要填寫一項。",
+      "email": "電子郵件",
+      "line": "LINE ID",
+      "whatsapp": "WhatsApp 號碼",
+      "wechat": "WeChat ID",
+      "phone": "電話",
+      "visibilityBody": "您的檔案僅供已登入的付費會員查看，不會公開，也不會被搜尋引擎索引。您可隨時隱藏。"
+    },
+    "photo": {
+      "label": "照片（選填）",
+      "hint": "JPG、PNG 或 WebP，最大 5 MB。我們會縮圖並移除位置資訊。",
+      "upload": "上傳照片",
+      "change": "更換照片",
+      "remove": "移除照片",
+      "uploading": "上傳中…",
+      "saveFirst": "請先儲存草稿，才能新增照片。",
+      "done": "照片已儲存。",
+      "errors": {
+        "tooLarge": "檔案超過 5 MB。",
+        "notAnImage": "此檔案不是可讀取的圖片。",
+        "unsupportedType": "請使用 JPG、PNG 或 WebP 圖片。",
+        "tooSmall": "圖片太小，寬高至少需 160 像素。",
+        "tooManyPixels": "圖片尺寸過大，請使用較小的圖片。",
+        "needsProfile": "請先儲存草稿，再新增照片。",
+        "rateLimited": "上傳次數過多，請稍後再試。",
+        "forbidden": "請重新登入。",
+        "server": "發生錯誤，請再試一次。"
+      }
+    },
+    "preview": {
+      "title": "會員將看到的樣子",
+      "contactLocked": "會員點選查看時才會顯示聯絡方式",
+      "empty": "您的名稱"
+    },
+    "strength": {
+      "title": "檔案完整度",
+      "tips": {
+        "headline": "新增標題",
+        "bio": "撰寫簡短自我介紹（至少 40 字）",
+        "photo": "加上照片可提高回覆率",
+        "subjects": "選擇您教授的科目",
+        "levels": "選擇您教授的年級",
+        "languages": "選擇授課語言",
+        "teachingModes": "選擇實體、線上或兩者",
+        "location": "選擇您的縣市",
+        "openTo": "選擇您希望的工作型態",
+        "experience": "新增教學年資",
+        "credentials": "新增一項資歷"
+      }
+    },
+    "status": {
+      "label": "狀態",
+      "draft": "草稿：不會顯示給任何人",
+      "published": "已發布：對應的付費會員可看到",
+      "hidden": "已隱藏：不會顯示給任何人",
+      "suspended": "已被 LearningLinks 停權"
+    },
+    "actions": {
+      "publish": "發布我的檔案",
+      "republish": "重新顯示我的檔案",
+      "saveDraft": "儲存草稿",
+      "save": "儲存變更",
+      "saving": "儲存中…",
+      "hide": "隱藏我的檔案",
+      "saved": "已儲存。",
+      "publishedNow": "您的檔案已發布。",
+      "unpublishedNow": "已儲存。因為缺少必要資料，您的檔案已改回草稿。補齊後請重新發布。",
+      "hideNote": "可隨時於設定中隱藏或刪除。",
+      "settings": "設定"
+    },
+    "blockers": {
+      "title": "發布之前還需要：",
+      "displayName": "填寫顯示名稱",
+      "subjects": "至少選擇一項科目",
+      "levels": "至少選擇一個年級",
+      "languages": "至少選擇一種授課語言",
+      "teachingModes": "選擇實體、線上或兩者",
+      "city": "選擇您的縣市",
+      "openTo": "選擇您希望的工作型態",
+      "contact": "至少新增一種聯絡方式",
+      "waiver": "同意教師同意書",
+      "suspended": "此檔案已被 LearningLinks 停權，無法發布。"
+    },
+    "errors": {
+      "fix": "請修正標示的欄位。",
+      "required": "此欄位為必填。",
+      "tooLong": "內容過長。",
+      "nameChars": "請只使用文字，不含數字、連結或符號。",
+      "contactInfo": "請移除此處的電話、電子郵件、連結與通訊軟體帳號，並改填在「聯絡方式」。",
+      "idNumber": "此處看起來像身分證、護照或居留證號碼。我們絕不收集這些資料，請移除。",
+      "address": "此處看起來像街道地址。我們不收集住家地址，請移除。",
+      "rateOrder": "最低費用不能高於最高費用。",
+      "rateRange": "請輸入 1 到 20,000 之間的整數。",
+      "invalidEmail": "請輸入有效的電子郵件。",
+      "invalidPhone": "請輸入 8 到 15 位數字，開頭可加 +。",
+      "invalidLine": "LINE ID 只能包含英文字母、數字、點、減號與底線。",
+      "invalidWechat": "WeChat ID 以英文字母開頭，長度 6 到 20 字元。",
+      "invalidUrl": "請使用以 https:// 開頭的完整連結。",
+      "invalidYear": "請輸入四位數年份。",
+      "server": "發生錯誤，請再試一次。"
+    }
+  },
+  "settings": {
+    "title": "檔案設定",
+    "lead": "主控權在您手上。這裡的操作都會立即生效。",
+    "visibility": {
+      "title": "誰能看到您",
+      "published": "您的檔案已發布。付費學校與家長可以看到，且各自只看到屬於自己的那一部分。",
+      "notPublished": "您的檔案目前不會顯示給任何人。",
+      "hide": "隱藏我的檔案",
+      "edit": "編輯我的檔案"
+    },
+    "waiver": {
+      "title": "您的同意書",
+      "agreed": "您已同意目前版本的同意書，我們保存了您當時看到的完整文字。",
+      "none": "您尚未同意目前版本的同意書。",
+      "withdraw": "撤回我的同意",
+      "withdrawNote": "撤回後您的檔案會立即隱藏，之後可再次同意。",
+      "review": "查看同意書"
+    },
+    "delete": {
+      "title": "刪除我的檔案",
+      "body": "刪除您的檔案、聯絡方式與照片。帳號會保留，我們也會保留您曾同意同意書的紀錄。",
+      "button": "刪除我的檔案",
+      "confirm": "要刪除您的檔案、聯絡方式與照片嗎？此操作無法復原。"
+    },
+    "account": {
+      "title": "刪除我的帳號",
+      "body": "刪除您的帳號及所有相關資料，包括檔案、聯絡方式、照片與同意紀錄。此操作無法復原。",
+      "password": "您的密碼",
+      "button": "刪除我的帳號",
+      "confirm": "要刪除您的帳號及所有相關資料嗎？此操作無法復原。",
+      "wrongPassword": "密碼不正確。"
+    },
+    "done": {
+      "hidden": "您的檔案已隱藏。",
+      "withdrawn": "已撤回同意，您的檔案已隱藏。",
+      "deleted": "您的檔案已刪除。"
+    }
+  },
+  "home": {
+    "title": "{name}，您好",
+    "intro": "教師永遠免費。以下是您目前的進度。",
+    "stepWaiver": "同意教師同意書",
+    "stepProfile": "建立個人檔案",
+    "stepPublish": "發布給付費會員",
+    "done": "完成",
+    "todo": "待辦",
+    "profileStrength": "檔案完整度：{percent}%",
+    "goWaiver": "閱讀並同意",
+    "goProfile": "開啟我的檔案",
+    "jobsTitle": "學校的職缺",
+    "jobsBody": "學校會發布全職與兼職職缺，只有已建立檔案的教師可以看到。",
+    "jobsCta": "查看職缺",
+    "jobsLocked": "建立檔案後即可查看職缺。",
+    "settings": "檔案設定"
+  }
+}

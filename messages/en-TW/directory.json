@@ -1,0 +1,65 @@
+{
+  "meta": "Find educators",
+  "title": "Find educators",
+  "audience": {
+    "school": "Showing educators open to full-time or part-time work.",
+    "family": "Showing educators who offer private tutoring or coaching."
+  },
+  "filters": {
+    "title": "Filters",
+    "subject": "Subject",
+    "level": "Level",
+    "city": "City",
+    "district": "District",
+    "language": "Teaching language",
+    "mode": "Mode",
+    "any": "Any",
+    "apply": "Show educators",
+    "clear": "Clear filters"
+  },
+  "view": {
+    "list": "List",
+    "map": "Map"
+  },
+  "map": {
+    "area": "Showing educators in {area}",
+    "areaHint": "Educators appear by area, never by address. Tap an area to see them.",
+    "clearArea": "Show all areas",
+    "listTitle": "Educators in this area",
+    "allAreas": "All of Taiwan",
+    "attributionBoundary": "Boundaries: Ministry of the Interior open data",
+    "mapSummary": "{count, plural, one {# educator} other {# educators}} on the map"
+  },
+  "empty": {
+    "title": "No educators match these filters",
+    "body": "Try removing a filter or choosing a wider area."
+  },
+  "card": {
+    "view": "View profile",
+    "ratePerHour": "NT${min} to NT${max} per hour",
+    "rateFrom": "From NT${min} per hour",
+    "rateUpTo": "Up to NT${max} per hour",
+    "experience": "{years} years' experience"
+  },
+  "detail": {
+    "back": "Back to results",
+    "about": "About",
+    "subjects": "Subjects",
+    "levels": "Levels",
+    "languages": "Teaching language",
+    "modes": "Mode",
+    "where": "Where",
+    "credentials": "Credentials",
+    "selfDeclared": "Self-declared. LearningLinks does not verify credentials.",
+    "workAuth": "Work authorization",
+    "workAuthNote": "Self-declared. LearningLinks does not verify work permits.",
+    "rate": "Hourly rate",
+    "openTo": "Open to",
+    "proof": "Proof link",
+    "contactSoon": "Contact details are shown here when you ask for them."
+  },
+  "locked": {
+    "title": "This page is for members",
+    "body": "Educators share their profiles only with paying schools and families."
+  }
+}

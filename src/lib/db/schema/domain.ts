@@ -88,6 +88,8 @@ export const educatorConsents = pgTable(
     locale: text("locale").notNull(),
     /** SHA-256 of the exact text shown, so the wording can be proven later. */
     textHash: text("text_hash").notNull(),
+    /** The exact words shown (flattened), kept so the agreement can be proven even if the copy changes later. */
+    textSnapshot: text("text_snapshot").notNull(),
     items: jsonb("items").$type<Record<string, boolean>>().notNull(),
     ipHash: text("ip_hash"),
     createdAt: createdAt(),
@@ -261,6 +263,8 @@ export const jobs = pgTable(
     salaryMax: integer("salary_max"),
     salaryUnit: text("salary_unit").$type<"month" | "hour">(),
     startsOn: date("starts_on"),
+    /** How an educator should respond (email, phone, LINE...). Shown only to signed-in educators with a profile. */
+    applyContact: text("apply_contact"),
     status: text("status").$type<JobStatus>().notNull().default("open"),
     createdAt: createdAt(),
     updatedAt: updatedAt(),

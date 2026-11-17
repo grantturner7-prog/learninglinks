@@ -1,0 +1,55 @@
+{
+  "meta": "Job posts",
+  "title": "Job posts from schools",
+  "lead": "Full-time and part-time jobs posted by schools. Only signed-in educators with a profile can see this page.",
+  "notice": "Job posts are written by schools. LearningLinks does not check them or the schools. Check every detail yourself, and follow the laws and procedures that apply to you.",
+  "needsProfile": {
+    "title": "Create your profile to see job posts",
+    "body": "Job posts are shown only to educators who have a profile. Creating one is free.",
+    "cta": "Create my profile"
+  },
+  "forbidden": {
+    "title": "Job posts are for educators",
+    "body": "Only signed-in educators with a profile can see job posts."
+  },
+  "empty": {
+    "title": "No job posts match right now",
+    "body": "New posts appear here as schools add them. Try clearing the filters."
+  },
+  "filters": {
+    "type": "Type",
+    "allTypes": "Full-time or part-time",
+    "fullTime": "Full-time",
+    "partTime": "Part-time",
+    "city": "City",
+    "anyCity": "All of Taiwan",
+    "apply": "Show jobs"
+  },
+  "card": {
+    "posted": "Posted {date}",
+    "startsOn": "Starts {date}",
+    "salaryMonth": "NT${min} to NT${max} per month",
+    "salaryMonthFrom": "From NT${min} per month",
+    "salaryHour": "NT${min} to NT${max} per hour",
+    "salaryHourFrom": "From NT${min} per hour",
+    "howToApply": "How to apply",
+    "noContact": "The school has not added contact details yet.",
+    "applyNote": "Contact the school directly. Arrangements are between you and the school."
+  },
+  "map": {
+    "viewList": "List",
+    "viewMap": "Map",
+    "openJobs": "{count, plural, one {# open job} other {# open jobs}}",
+    "noJobs": "No open job posts",
+    "schoolCount": "{count, plural, one {# school} other {# schools}}",
+    "onlyJobs": "Only schools with open jobs",
+    "selected": "Selected school",
+    "noJobsAtSchool": "This school has no open job posts right now.",
+    "schoolOpen": "Open job posts at this school",
+    "clearSchool": "Close",
+    "attribution": "Boundaries: Ministry of the Interior open data · School locations © OpenStreetMap contributors",
+    "mapHint": "Schools are shown at their location. Pins with an amber badge have open job posts.",
+    "loadError": "The school map could not be loaded. The list below shows the same jobs.",
+    "schoolsOnMap": "{count, plural, one {# school on the map} other {# schools on the map}}"
+  }
+}

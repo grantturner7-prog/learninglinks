@@ -27,7 +27,10 @@
 | **Compliance notice: always (set 17 Nov 2026)** | **Every page and flow, for every party, carries a notice that LearningLinks is only a connection website, does not run background checks on teachers, schools or families, and that everyone must complete all checks and follow all government laws, policies and procedures that apply to them.** Sign-up, checkout and consent flows also require an acknowledgement checkbox. Canonical wording: `messages/*/notice.json`, guarded by a test. A standing rule is also recorded in `CLAUDE.md`. |
 | **Families launch in Phase 1 (17 Nov 2026)** | Families launch together with schools. Phase 2 is Thailand and Vietnam. Phase 3 is Japan, Korea and China. |
 | **Competitor licence check: Tealit (17 Nov 2026)** | Tealit shows **no licence number** on its site or advertiser contract. It sells advertising and VIP access to teacher profiles (up to NT$25,000 a year), through a marketing company, and describes its service as online recruitment, not placement. Whether it holds any permit is **unverified**. Details, and three ways to check, in `docs/research-tealit.md`. The employment-service permit question in §4 #2 is still open: ask the Taichung City Labor Bureau in writing. |
-| Build status | Paused for design approval. See `docs/mockups/`. |
+| **Job posts (owner decision, 17 Nov 2026)** | Schools with an active membership can post full-time or part-time jobs. **Job posts are visible only to signed-in educators who have an account and a profile** (not public, not indexed, not shown to families or other schools). No substitute or cover work. Counsel's view on job advertising (§4 #2) is still pending; the owner has decided to proceed. |
+| **Payments (owner decision, 17 Nov 2026)** | **Bank transfer is fine while operating in Taiwan alone.** Credit card payments are to be added later. Keep the payment layer provider-agnostic. |
+| **Map view: required (owner, 17 Nov 2026)** | Map-first discovery is a core, non-negotiable feature: Taiwan first, then each new country in Phase 2 and 3. Paying schools/families get an educator map (district-level, audience-filtered); signed-in educators get a school + jobs map. It was in the original plan (§5.6) but missing from the first mock-ups and Step 1; it is now part of Step 2. |
+| Build status | Steps 1 and 2 built (17 Nov 2026). Step 3 (schools, families, payments) is next and needs the owner's go-ahead. See `docs/mockups/`. |
 
 ---
 
@@ -346,7 +349,7 @@ A contact reveal is **logged**, capped per day and shown to the educator ("a mem
 
 ## 10. Roadmap
 
-**Build status (17 Nov 2026):** Phase 1 Step 1 is built and tested: home, schools, families, safety and members-only wall pages in Traditional Chinese and English, sign-up with a server-enforced acknowledgement of the compliance notice, sign-in, email verification and password reset. Not built yet: educator profiles and waiver (Step 2); school and family memberships, payments and contact reveal (Step 3); reports, final legal text and deployment (Step 4).
+**Build status (17 Nov 2026):** Phase 1 Steps 1 and 2 are built and tested. Step 1: public pages, sign-up/sign-in with the compliance acknowledgement, email verification. Step 2: educator waiver and consent log, profile builder, photo upload, audience-filtered member directory, job posts for signed-in educators with a profile, and the map views (educator map for members, school and jobs map for educators). Not built yet: school and family memberships and bank-transfer payments, contact reveal, school-side job posting, reports, final legal text and deployment (Steps 3 and 4). Open licence flag: the school locations come from OpenStreetMap-derived data (ODbL); the school map shows the attribution and counsel should confirm the obligations before launch.
 
 *Estimates assume one full-time builder plus roughly 10–15 hours a week of your time on legal, sales and community work. I can build most of the engineering.*
 

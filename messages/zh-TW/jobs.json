@@ -1,0 +1,55 @@
+{
+  "meta": "職缺",
+  "title": "學校的職缺",
+  "lead": "學校發布的全職與兼職職缺。只有已登入且已建立檔案的教師可以看到此頁。",
+  "notice": "職缺內容由學校自行撰寫，LearningLinks 不查核職缺或學校。請自行確認所有細節，並遵守適用於您的法令與程序。",
+  "needsProfile": {
+    "title": "建立檔案後即可查看職缺",
+    "body": "職缺只提供給已建立檔案的教師，建立檔案完全免費。",
+    "cta": "建立我的檔案"
+  },
+  "forbidden": {
+    "title": "職缺僅供教師查看",
+    "body": "只有已登入且已建立檔案的教師可以查看職缺。"
+  },
+  "empty": {
+    "title": "目前沒有符合的職缺",
+    "body": "學校新增職缺後會顯示在這裡，可嘗試清除篩選條件。"
+  },
+  "filters": {
+    "type": "類型",
+    "allTypes": "全職或兼職",
+    "fullTime": "全職",
+    "partTime": "兼職",
+    "city": "縣市",
+    "anyCity": "全台灣",
+    "apply": "顯示職缺"
+  },
+  "card": {
+    "posted": "發布於 {date}",
+    "startsOn": "開始日期：{date}",
+    "salaryMonth": "每月 NT${min} 至 NT${max}",
+    "salaryMonthFrom": "每月 NT${min} 起",
+    "salaryHour": "每小時 NT${min} 至 NT${max}",
+    "salaryHourFrom": "每小時 NT${min} 起",
+    "howToApply": "如何應徵",
+    "noContact": "學校尚未提供聯絡方式。",
+    "applyNote": "請直接與學校聯絡，相關安排由您與學校自行約定。"
+  },
+  "map": {
+    "viewList": "列表",
+    "viewMap": "地圖",
+    "openJobs": "{count} 個職缺",
+    "noJobs": "目前沒有職缺",
+    "schoolCount": "{count} 所學校",
+    "onlyJobs": "只顯示有職缺的學校",
+    "selected": "已選擇的學校",
+    "noJobsAtSchool": "這所學校目前沒有職缺。",
+    "schoolOpen": "這所學校的職缺",
+    "clearSchool": "關閉",
+    "attribution": "行政區界線：內政部開放資料 · 學校位置 © OpenStreetMap 貢獻者",
+    "mapHint": "學校顯示在實際位置。有琥珀色標記的圖釘表示有職缺。",
+    "loadError": "無法載入學校地圖，下方列表顯示相同的職缺。",
+    "schoolsOnMap": "地圖上共 {count} 所學校"
+  }
+}

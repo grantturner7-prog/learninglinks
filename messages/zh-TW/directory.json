@@ -1,0 +1,65 @@
+{
+  "meta": "尋找教師",
+  "title": "尋找教師",
+  "audience": {
+    "school": "顯示接受全職或兼職工作的教師。",
+    "family": "顯示提供私人家教或輔導的教師。"
+  },
+  "filters": {
+    "title": "篩選",
+    "subject": "科目",
+    "level": "年級",
+    "city": "縣市",
+    "district": "行政區",
+    "language": "授課語言",
+    "mode": "授課方式",
+    "any": "不限",
+    "apply": "顯示教師",
+    "clear": "清除篩選"
+  },
+  "view": {
+    "list": "列表",
+    "map": "地圖"
+  },
+  "map": {
+    "area": "顯示 {area} 的教師",
+    "areaHint": "教師以區域呈現，不會顯示地址。點選區域即可查看。",
+    "clearArea": "顯示全部區域",
+    "listTitle": "此區域的教師",
+    "allAreas": "全台灣",
+    "attributionBoundary": "行政區界線：內政部開放資料",
+    "mapSummary": "地圖上共 {count} 位教師"
+  },
+  "empty": {
+    "title": "沒有符合條件的教師",
+    "body": "請嘗試移除部分條件，或選擇較大的區域。"
+  },
+  "card": {
+    "view": "查看檔案",
+    "ratePerHour": "每小時 NT${min} 至 NT${max}",
+    "rateFrom": "每小時 NT${min} 起",
+    "rateUpTo": "每小時最高 NT${max}",
+    "experience": "{years} 年教學經驗"
+  },
+  "detail": {
+    "back": "返回結果",
+    "about": "自我介紹",
+    "subjects": "科目",
+    "levels": "年級",
+    "languages": "授課語言",
+    "modes": "授課方式",
+    "where": "地區",
+    "credentials": "資歷",
+    "selfDeclared": "由教師自行聲明，LearningLinks 不查驗資歷。",
+    "workAuth": "工作許可",
+    "workAuthNote": "由教師自行聲明，LearningLinks 不查驗工作許可。",
+    "rate": "每小時費用",
+    "openTo": "接受的工作型態",
+    "proof": "證明連結",
+    "contactSoon": "點選查看後，聯絡方式會顯示在這裡。"
+  },
+  "locked": {
+    "title": "此頁僅限會員",
+    "body": "教師僅將檔案提供給付費的學校與家長。"
+  }
+}

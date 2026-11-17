@@ -5,5 +5,10 @@ import nextTs from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "drizzle/**", ".data/**", "coverage/**"]),
+  {
+    // These are browser globals (window.status, window.event, ...). A forgotten local variable with one of these
+    // names type-checks and even works in a browser, then throws ReferenceError during server rendering.
+    rules: { "no-restricted-globals": ["error", "status", "event", "name", "length", "location"] },
+  },
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "drizzle/**", ".data/**", "coverage/**", "public/vendor/**"]),
 ]);

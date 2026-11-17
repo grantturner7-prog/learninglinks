@@ -11,6 +11,10 @@ import safety from "./safety.json";
 import legal from "./legal.json";
 import auth from "./auth.json";
 import dashboard from "./dashboard.json";
+import educator from "./educator.json";
+import jobs from "./jobs.json";
+import directory from "./directory.json";
+import map from "./map.json";
 
-const messages = { common, nav, footer, taxonomy, home, notice, wall, forSchools, forFamilies, safety, legal, auth, dashboard };
+const messages = { map, common, nav, footer, taxonomy, home, notice, wall, forSchools, forFamilies, safety, legal, auth, dashboard, educator, jobs, directory };
 export default messages;

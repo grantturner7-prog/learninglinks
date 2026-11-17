@@ -38,3 +38,58 @@ describe("who can see which educator", () => {
     expect(isVisibleToAudience(["substitute"], "school")).toBe(false);
   });
 });
+
+import { canSeeJobs, projectEducatorForAudience, type ProfileForProjection } from "@/lib/visibility";
+
+const profile = (over: Partial<ProfileForProjection> = {}): ProfileForProjection => ({
+  id: "e1", status: "published", displayName: "Emily R.", headline: "Phonics", bio: "Hello",
+  photoKey: "abc.webp", city: "taichung", districts: ["taichung:xitun"], subjects: ["phonics"], levels: ["kindergarten"],
+  languages: ["en"], teachingModes: ["in_person"], openTo: ["part_time", "private_tutoring"], workAuthorization: "open_work_rights",
+  experienceBand: "5-9", rateMin: 600, rateMax: 900, credentials: [{ label: "TEFL 120h", year: 2021 }], ...over,
+});
+
+describe("projecting an educator for an audience", () => {
+  it("never shows an unpublished profile to anyone", () => {
+    for (const status of ["draft", "hidden", "suspended"]) {
+      expect(projectEducatorForAudience(profile({ status }), "school")).toBeNull();
+      expect(projectEducatorForAudience(profile({ status }), "family")).toBeNull();
+    }
+  });
+  it("gives schools only the school side, no rate and no tutoring", () => {
+    const dto = projectEducatorForAudience(profile(), "school")!;
+    expect(dto.openTo).toEqual(["part_time"]);
+    expect(dto.rate).toBeNull();
+    expect(dto.workAuthorization).toBe("open_work_rights");
+    expect(JSON.stringify(dto)).not.toContain("private_tutoring");
+    expect(JSON.stringify(dto)).not.toContain("600");
+  });
+  it("gives families only the tutoring side, the rate, and no work authorization", () => {
+    const dto = projectEducatorForAudience(profile(), "family")!;
+    expect(dto.openTo).toEqual(["private_tutoring"]);
+    expect(dto.rate).toEqual({ min: 600, max: 900 });
+    expect(dto.workAuthorization).toBeNull();
+    expect(JSON.stringify(dto)).not.toContain("part_time");
+  });
+  it("returns nothing for an audience that is not allowed to see the educator", () => {
+    expect(projectEducatorForAudience(profile({ openTo: ["private_tutoring"] }), "school")).toBeNull();
+    expect(projectEducatorForAudience(profile({ openTo: ["full_time"] }), "family")).toBeNull();
+  });
+  it("exposes a photo flag, never the storage key", () => {
+    const dto = projectEducatorForAudience(profile(), "school")!;
+    expect(dto.hasPhoto).toBe(true);
+    expect(JSON.stringify(dto)).not.toContain("abc.webp");
+  });
+});
+
+describe("who may see job posts", () => {
+  it("allows only signed-in educators who have a profile", () => {
+    expect(canSeeJobs({ accountType: "educator", hasProfile: true })).toBe(true);
+  });
+  it("refuses the public, educators without a profile, suspended profiles, families and schools", () => {
+    expect(canSeeJobs(null)).toBe(false);
+    expect(canSeeJobs({ accountType: "educator", hasProfile: false })).toBe(false);
+    expect(canSeeJobs({ accountType: "educator", hasProfile: true, profileSuspended: true })).toBe(false);
+    expect(canSeeJobs({ accountType: "family", hasProfile: true })).toBe(false);
+    expect(canSeeJobs({ accountType: "school", hasProfile: true })).toBe(false);
+  });
+});

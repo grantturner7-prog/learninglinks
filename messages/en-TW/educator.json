@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "waiver": "Educator waiver",
+    "profile": "Your profile",
+    "settings": "Profile settings"
+  },
+  "steps": {
+    "aria": "Progress",
+    "waiver": "Waiver",
+    "profile": "Profile",
+    "publish": "Publish"
+  },
+  "waiver": {
+    "badge": "Free forever for educators",
+    "title": "Before you publish: what you're agreeing to",
+    "lead": "A 30-second summary in plain language. Nothing is public: only paying schools and families can see your profile, and you can hide or delete it in one click, any time.",
+    "cols": {
+      "profile": {
+        "badge": "Members only",
+        "title": "Your profile",
+        "i1": "Display name, optional photo",
+        "i2": "Headline and short bio",
+        "i3": "Subjects, levels, languages",
+        "i4": "City and districts (no address)",
+        "i5": "Work authorization category",
+        "i6": "Self-declared credentials"
+      },
+      "contact": {
+        "badge": "On request",
+        "title": "Contact details, one at a time",
+        "i1": "Email",
+        "i2": "LINE, WhatsApp, WeChat, phone",
+        "i3": "Only the ones you choose to add",
+        "i4": "You can see who viewed them",
+        "i5": "Members have a daily viewing limit"
+      },
+      "never": {
+        "badge": "Never",
+        "title": "We never ask for or store",
+        "i1": "ID, passport or ARC numbers",
+        "i2": "Criminal record certificates",
+        "i3": "Health, bank or financial data",
+        "i4": "Home address, children's data"
+      }
+    },
+    "who": {
+      "title": "Who sees you depends on what you're open to",
+      "schoolsTitle": "Schools",
+      "schoolsBody": "See you only if you're open to full-time or part-time work. They never see that you tutor, or your rates.",
+      "familiesTitle": "Families",
+      "familiesBody": "See you only if you offer private tutoring or coaching. They never see your school-work wishes.",
+      "between": "Schools and families contact you directly, using only the contact details you chose to share. Any arrangement, such as cover for an absent teacher, is for you and the school to agree between yourselves."
+    },
+    "confirm": {
+      "title": "Please confirm each item",
+      "required": "Required",
+      "optional": "Optional",
+      "termsPrivacy": "I have read the <terms>Terms of use</terms> and <privacy>Privacy policy</privacy>.",
+      "publishToMembers": "I agree to show my profile to <b>paying schools</b> if I'm open to school work, and to <b>paying families</b> if I offer private tutoring.",
+      "contactOnRequest": "I agree that members can see the contact details I add when they ask to view them.",
+      "truthful": "My information is true, and I have the right to work or teach in the ways I describe.",
+      "marketing": "Send me tips and news about LearningLinks."
+    },
+    "progress": "{done} of {total} required items confirmed",
+    "submit": "Agree and continue",
+    "submitting": "Saving…",
+    "side": {
+      "controlTitle": "You stay in control",
+      "controlBody": "Hide your profile, change what's shown, or delete everything from Settings. Hiding takes one click and takes effect immediately.",
+      "recordTitle": "What we record",
+      "recordBody": "When you agreed, which version, in which language, and the exact wording you saw, so there is clear proof of what you accepted. You can withdraw at any time."
+    },
+    "alreadyAgreed": "You agreed to the current waiver. You can review or withdraw it in Settings.",
+    "errors": {
+      "incomplete": "Please tick every required item to continue.",
+      "server": "Something went wrong. Please try again."
+    }
+  },
+  "profile": {
+    "title": "Build your profile",
+    "lead": "Takes about 5 minutes. Save a draft at any time. Nothing is shown to anyone until you press Publish.",
+    "membersOnly": "Members only",
+    "sections": {
+      "about": "About you",
+      "teach": "What you teach",
+      "where": "Where and what kind of work",
+      "credentials": "Credentials",
+      "contact": "Contact",
+      "visibility": "Visibility"
+    },
+    "fields": {
+      "displayName": "Display name",
+      "displayNameHint": "First name and initial is enough. No numbers, links or contact details.",
+      "headline": "Headline",
+      "headlineHint": "One line, for example: Kindergarten English teacher: phonics and storytelling",
+      "bio": "About",
+      "bioHint": "Please don't put phone numbers, emails, links or addresses here. Add contact details under Contact, where members see them only when they ask.",
+      "bioBoth": "Schools and families both read this text. Write only what you are happy for both to see.",
+      "subjects": "Subjects",
+      "subjectsHint": "Choose up to 12.",
+      "levels": "Levels",
+      "languages": "Teaching language",
+      "modes": "Mode",
+      "experience": "Years of experience",
+      "choose": "Choose…",
+      "city": "City",
+      "districts": "Districts you can reach",
+      "districtsHint": "Members see these as areas on the map, never an address.",
+      "districtsNone": "District choices for this city are coming. Members will find you at city level.",
+      "openTo": "Open to (this decides who can see you)",
+      "schoolWork": "Work at schools",
+      "schoolWorkHint": "Visible to paying schools.",
+      "tutoring": "Private tutoring and coaching",
+      "tutoringHint": "Visible to paying families only. Your hourly rate is shown to families only.",
+      "openToHint": "Schools never see that you tutor, and families never see that you want school work. Tick nothing in a group and that audience can't see you.",
+      "betweenHint": "Schools and families contact you directly. Arrangements such as cover for an absent teacher are for you and the school to agree between yourselves.",
+      "rate": "Hourly rate (NT$)",
+      "rateMin": "From",
+      "rateMax": "To",
+      "rateHint": "Shown to families only. Optional.",
+      "workAuth": "Work authorization",
+      "workAuthHint": "Pick a category. Never enter permit or ID numbers. Rules differ by country, and private tutoring may not be allowed on an employer-sponsored permit.",
+      "credential": "Credential",
+      "year": "Year",
+      "proof": "Proof link (optional)",
+      "credentialsHint": "Link to proof hosted by the issuer, starting with https://. Please don't upload certificates here: we store links, not documents.",
+      "addAnother": "+ Add another",
+      "contactIntro": "Only paying schools and families can see these, and only when they ask. Add the ones you actually check. At least one is needed to publish.",
+      "email": "Email",
+      "line": "LINE ID",
+      "whatsapp": "WhatsApp number",
+      "wechat": "WeChat ID",
+      "phone": "Phone",
+      "visibilityBody": "Your profile is visible only to logged-in paying members. It is never public and never indexed by search engines. You can hide it any time."
+    },
+    "photo": {
+      "label": "Photo (optional)",
+      "hint": "JPG, PNG or WebP, up to 5 MB. We resize it and remove location data.",
+      "upload": "Upload photo",
+      "change": "Change photo",
+      "remove": "Remove photo",
+      "uploading": "Uploading…",
+      "saveFirst": "Save your draft first, then you can add a photo.",
+      "done": "Photo saved.",
+      "errors": {
+        "tooLarge": "That file is larger than 5 MB.",
+        "notAnImage": "That file is not a readable image.",
+        "unsupportedType": "Please use a JPG, PNG or WebP image.",
+        "tooSmall": "The image is too small. Use one at least 160 pixels wide and tall.",
+        "tooManyPixels": "The image is too large to process. Please use a smaller one.",
+        "needsProfile": "Save your draft first, then add a photo.",
+        "rateLimited": "Too many uploads. Please try again later.",
+        "forbidden": "Please sign in again.",
+        "server": "Something went wrong. Please try again."
+      }
+    },
+    "preview": {
+      "title": "How members will see you",
+      "contactLocked": "Contact details are shown only when a member asks to see them",
+      "empty": "Your name"
+    },
+    "strength": {
+      "title": "Profile strength",
+      "tips": {
+        "headline": "Add a headline",
+        "bio": "Write a short introduction (at least 40 characters)",
+        "photo": "Add a photo to get more replies",
+        "subjects": "Choose the subjects you teach",
+        "levels": "Choose the levels you teach",
+        "languages": "Choose your teaching languages",
+        "teachingModes": "Choose in person, online or both",
+        "location": "Choose your city",
+        "openTo": "Choose what kind of work you are open to",
+        "experience": "Add your years of experience",
+        "credentials": "Add a credential"
+      }
+    },
+    "status": {
+      "label": "Status",
+      "draft": "Draft: not shown to anyone",
+      "published": "Published: visible to the right paying members",
+      "hidden": "Hidden: not shown to anyone",
+      "suspended": "Suspended by LearningLinks"
+    },
+    "actions": {
+      "publish": "Publish my profile",
+      "republish": "Show my profile again",
+      "saveDraft": "Save draft",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "hide": "Hide my profile",
+      "saved": "Saved.",
+      "publishedNow": "Your profile is published.",
+      "unpublishedNow": "Saved. Your profile was taken down to draft because something required is now missing. Fix it and publish again.",
+      "hideNote": "Hide or delete anytime from Settings.",
+      "settings": "Settings"
+    },
+    "blockers": {
+      "title": "Before you can publish:",
+      "displayName": "Add a display name",
+      "subjects": "Choose at least one subject",
+      "levels": "Choose at least one level",
+      "languages": "Choose at least one teaching language",
+      "teachingModes": "Choose in person, online or both",
+      "city": "Choose your city",
+      "openTo": "Choose what kind of work you are open to",
+      "contact": "Add at least one way to contact you",
+      "waiver": "Agree to the waiver",
+      "suspended": "This profile was suspended by LearningLinks and cannot be published."
+    },
+    "errors": {
+      "fix": "Please fix the highlighted fields.",
+      "required": "This field is required.",
+      "tooLong": "This is too long.",
+      "nameChars": "Use letters only: no numbers, links or symbols.",
+      "contactInfo": "Please remove phone numbers, emails, links and messenger IDs from this text. Add them under Contact instead.",
+      "idNumber": "This looks like an ID, passport or permit number. We never collect these: please remove it.",
+      "address": "This looks like a street address. We never collect home addresses: please remove it.",
+      "rateOrder": "The lowest rate must not be above the highest.",
+      "rateRange": "Enter a whole number between 1 and 20,000.",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidPhone": "Enter 8 to 15 digits, with an optional + at the start.",
+      "invalidLine": "A LINE ID uses letters, numbers, dots, dashes and underscores.",
+      "invalidWechat": "A WeChat ID starts with a letter and is 6 to 20 characters.",
+      "invalidUrl": "Use a full link starting with https://",
+      "invalidYear": "Enter a four-digit year.",
+      "server": "Something went wrong. Please try again."
+    }
+  },
+  "settings": {
+    "title": "Profile settings",
+    "lead": "You are in control. Everything here takes effect immediately.",
+    "visibility": {
+      "title": "Who can see you",
+      "published": "Your profile is published. Paying schools and families can see it, each seeing only their side.",
+      "notPublished": "Your profile is not shown to anyone right now.",
+      "hide": "Hide my profile",
+      "edit": "Edit my profile"
+    },
+    "waiver": {
+      "title": "Your agreement",
+      "agreed": "You agreed to the current waiver. We keep the exact wording you saw.",
+      "none": "You have not agreed to the current waiver.",
+      "withdraw": "Withdraw my agreement",
+      "withdrawNote": "Withdrawing hides your profile at once. You can agree again later.",
+      "review": "Review the waiver"
+    },
+    "delete": {
+      "title": "Delete my profile",
+      "body": "Removes your profile, contact details and photo. Your account stays, and we keep a record that you agreed to the waiver.",
+      "button": "Delete my profile",
+      "confirm": "Delete my profile, contact details and photo? This cannot be undone."
+    },
+    "account": {
+      "title": "Delete my account",
+      "body": "Deletes your account and everything linked to it, including your profile, contact details, photo and the record of your agreement. This cannot be undone.",
+      "password": "Your password",
+      "button": "Delete my account",
+      "confirm": "Delete your account and everything linked to it? This cannot be undone.",
+      "wrongPassword": "That password is not correct."
+    },
+    "done": {
+      "hidden": "Your profile is now hidden.",
+      "withdrawn": "Your agreement is withdrawn and your profile is hidden.",
+      "deleted": "Your profile has been deleted."
+    }
+  },
+  "home": {
+    "title": "Hello, {name}",
+    "intro": "Educators are free, always. Here is where you are.",
+    "stepWaiver": "Agree to the waiver",
+    "stepProfile": "Build your profile",
+    "stepPublish": "Publish it to paying members",
+    "done": "Done",
+    "todo": "To do",
+    "profileStrength": "Profile strength: {percent}%",
+    "goWaiver": "Read and agree",
+    "goProfile": "Open my profile",
+    "jobsTitle": "Job posts from schools",
+    "jobsBody": "Schools post full-time and part-time jobs. Only educators with a profile can see them.",
+    "jobsCta": "See job posts",
+    "jobsLocked": "Create your profile to see job posts.",
+    "settings": "Profile settings"
+  }
+}
