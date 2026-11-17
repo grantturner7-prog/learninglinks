@@ -12,7 +12,7 @@ export function SignOutButton() {
   return (
     <button
       type="button"
-      className="btn btn-secondary"
+      className="btn btn-secondary max-md:min-h-10 max-md:px-2.5 max-md:text-sm"
       disabled={busy}
       onClick={async () => {
         setBusy(true);
