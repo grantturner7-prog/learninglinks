@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { FamilyJoin } from "@/components/billing/checkout-flows";
-import { PLANS, priceForCampuses } from "@/lib/plans";
+import { formatMoney, PLANS, priceForCampuses } from "@/lib/plans";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -14,7 +14,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function FamilyJoinPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const f = await getFormatter();
-  const price = f.number(priceForCampuses(PLANS.family_tw, 1), { style: "currency", currency: "TWD", maximumFractionDigits: 0 });
+  const price = formatMoney(priceForCampuses(PLANS.family_tw, 1), "TWD", locale);
   return <FamilyJoin priceLabel={price} />;
 }

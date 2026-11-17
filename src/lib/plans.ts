@@ -57,6 +57,11 @@ export function currencyOf(plan: Plan): string {
   return COUNTRIES[plan.countryCode].currency;
 }
 
+/**
+ * "NT$2,000" in every language. Chinese locales would otherwise print TWD as a bare "$", which is ambiguous and not
+ * how the owner's prices are written. Other currencies (later phases) use the locale's own currency format.
+ */
 export function formatMoney(amount: number, currency: string, locale: string): string {
+  if (currency === "TWD") return `NT$${new Intl.NumberFormat("en-US").format(amount)}`;
   return new Intl.NumberFormat(locale, { style: "currency", currency, maximumFractionDigits: 0 }).format(amount);
 }

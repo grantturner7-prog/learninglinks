@@ -1,11 +1,12 @@
 "use client";
 
-import { useTranslations, useFormatter } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { FlowFrame, type FrameLabels } from "@/components/guided/frame";
 import { Pill, Tile, CARD } from "@/components/guided/ui";
 import { Icon } from "@/components/journey/icons";
 import { isValidTaxId } from "@/lib/billing/tax-id";
+import { formatMoney } from "@/lib/plans";
 import { useRouter } from "@/i18n/navigation";
 import { createFamilyOrderAction, type CheckoutResult } from "@/app/[locale]/family/actions";
 import { createSchoolOrderAction } from "@/app/[locale]/school/actions";
@@ -171,6 +172,7 @@ export function SchoolCheckout({ campuses, preselect, unitPrice }: { campuses: C
   const tr = useTranslations("billing.receipt");
   const tf = useTranslations("billing.flow");
   const f = useFormatter();
+  const locale = useLocale();
   const top = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(1);
   const [picked, setPicked] = useState<string[]>(() => preselect.filter((id) => campuses.some((c) => c.id === id)));
@@ -178,7 +180,7 @@ export function SchoolCheckout({ campuses, preselect, unitPrice }: { campuses: C
   const [ack, setAck] = useState(false);
   const { busy, error, submit } = useCheckout(() => createSchoolOrderAction({ campusIds: picked, invoice: invoicePayload(inv), acknowledged: ack }));
   const labels = { ...useFrameLabels(step, 3), reassure: t("reassure") };
-  const money = (n: number) => f.number(n, { style: "currency", currency: "TWD", maximumFractionDigits: 0 });
+  const money = (n: number) => formatMoney(n, "TWD", locale);
   const total = picked.length * unitPrice;
   const go = (n: number) => { setStep(n); top.current?.scrollIntoView({ behavior: "smooth", block: "start" }); };
   const taxBad = inv.company && (!isValidTaxId(inv.taxId.replace(/\s+/g, "")) || inv.title.trim() === "");
@@ -217,6 +219,11 @@ export function SchoolCheckout({ campuses, preselect, unitPrice }: { campuses: C
               </Tile>
             );
           })}
+          {/* On a phone the receipt sits below the form, so keep the running total next to the Continue button. */}
+          <p className="flex items-baseline justify-between rounded-[22px] bg-brand-50 px-4 py-3 sm:col-span-2 lg:hidden" aria-live="polite">
+            <span className="text-sm font-bold text-ink-700">{tr("total")}</span>
+            <span className="text-xl font-extrabold tabular-nums">{picked.length > 0 ? money(total) : "—"}</span>
+          </p>
         </div>
       ) : step === 2 ? (
         <InvoiceStep value={inv} onChange={setInv} />

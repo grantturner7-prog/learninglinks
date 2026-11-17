@@ -6,6 +6,7 @@ import { requireUser } from "@/lib/auth/session";
 import { getBankDetails } from "@/lib/billing/bank";
 import { getHolderMembership, getOrderForUser } from "@/lib/billing/orders";
 import { getDb } from "@/lib/db";
+import { formatMoney } from "@/lib/plans";
 import { Link } from "@/i18n/navigation";
 import { cancelOrderAction } from "./actions";
 
@@ -28,7 +29,7 @@ export default async function OrderPage({ params }: Props) {
   const t = await getTranslations("billing.order");
   const f = await getFormatter();
   const bank = getBankDetails();
-  const money = f.number(order.amount, { style: "currency", currency: order.currency, maximumFractionDigits: 0 });
+  const money = formatMoney(order.amount, order.currency, locale);
   const isSchool = order.planCode === "school_tw";
   const holder = isSchool ? null : await getHolderMembership(db, "user", user.id);
   const day = (d: Date) => f.dateTime(d, { dateStyle: "medium" });

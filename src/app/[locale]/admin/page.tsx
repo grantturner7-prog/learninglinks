@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/auth/session";
 import { findOrderByReference, listPendingOrdersForAdmin } from "@/lib/billing/orders";
 import { getDb } from "@/lib/db";
 import { listPendingClaims } from "@/lib/orgs/service";
+import { formatMoney } from "@/lib/plans";
 import { cancelOrderAsAdminAction, reviewClaimAction } from "./actions";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ ref?: string | string[]; confirmed?: string | string[]; again?: string }> };
@@ -28,7 +29,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
   const [orders, claims, found] = await Promise.all([listPendingOrdersForAdmin(db), listPendingClaims(db), ref ? findOrderByReference(db, ref) : Promise.resolve(null)]);
   // Today's date in Taipei as YYYY-MM-DD: the default for "received on".
   const today = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Taipei" }).format(new Date());
-  const money = (n: number, c: string) => f.number(n, { style: "currency", currency: c, maximumFractionDigits: 0 });
+  const money = (n: number, c: string) => formatMoney(n, c, locale);
   const shown = found && found.status === "pending" && !orders.some((o) => o.id === found.id) ? [found, ...orders] : orders;
 
   return (

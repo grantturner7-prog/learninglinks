@@ -7,6 +7,7 @@ import { profileStrength } from "@/lib/educators/completeness";
 import { getEducatorState } from "@/lib/educators/service";
 import { getEnv } from "@/lib/env";
 import { daysUntil } from "@/lib/membership/engine";
+import { formatMoney } from "@/lib/plans";
 import { listMyCampuses, listMyOpenClaims } from "@/lib/orgs/service";
 import { revealsLeftToday } from "@/lib/reveal/service";
 import { Link } from "@/i18n/navigation";
@@ -24,8 +25,8 @@ export default async function DashboardPage({ params }: Props) {
   setRequestLocale(locale);
   const user = await requireUser(locale, "/dashboard");
   if (user.accountType === "educator") return <EducatorHome locale={locale} user={user} />;
-  if (user.accountType === "family") return <FamilyHome user={user} />;
-  return <SchoolHome user={user} />;
+  if (user.accountType === "family") return <FamilyHome user={user} locale={locale} />;
+  return <SchoolHome user={user} locale={locale} />;
 }
 
 type HomeUser = { id: string; name: string; accountType: "educator" | "school" | "family"; isAdmin: boolean };
@@ -41,9 +42,8 @@ async function AdminCard() {
   );
 }
 
-async function OrdersList({ userId }: { userId: string }) {
+async function OrdersList({ userId, locale }: { userId: string; locale: string }) {
   const t = await getTranslations("dashboard.home");
-  const f = await getFormatter();
   const orders = (await listOrdersForUser(getDb(), userId)).slice(0, 5);
   return (
     <section className="card mt-5">
@@ -52,7 +52,7 @@ async function OrdersList({ userId }: { userId: string }) {
         <ul className="mt-3 flex flex-col gap-2">
           {orders.map((o) => (
             <li key={o.id} className="flex flex-wrap items-center gap-3">
-              <span className="flex-1"><span className="font-mono font-bold">{o.referenceCode}</span> · {f.number(o.amount, { style: "currency", currency: o.currency, maximumFractionDigits: 0 })}</span>
+              <span className="flex-1"><span className="font-mono font-bold">{o.referenceCode}</span> · {formatMoney(o.amount, o.currency, locale)}</span>
               <span className={o.status === "paid" ? "badge" : o.status === "pending" ? "badge-warn" : "badge-muted"}>{t(`orderStatus.${o.status}`)}</span>
               <Link href={`/orders/${o.id}` as "/orders/[id]"} className="link font-bold">{t("family.viewOrder")}</Link>
             </li>
@@ -63,7 +63,7 @@ async function OrdersList({ userId }: { userId: string }) {
   );
 }
 
-async function FamilyHome({ user }: { user: HomeUser }) {
+async function FamilyHome({ user, locale }: { user: HomeUser; locale: string }) {
   const t = await getTranslations("dashboard.home.family");
   const f = await getFormatter();
   const db = getDb();
@@ -94,13 +94,13 @@ async function FamilyHome({ user }: { user: HomeUser }) {
           <Link href="/family/join" className="btn btn-primary btn-lg mt-4">{t("joinCta")}</Link>
         </section>
       )}
-      <OrdersList userId={user.id} />
+      <OrdersList userId={user.id} locale={locale} />
       {user.isAdmin ? <AdminCard /> : null}
     </div>
   );
 }
 
-async function SchoolHome({ user }: { user: HomeUser }) {
+async function SchoolHome({ user, locale }: { user: HomeUser; locale: string }) {
   const t = await getTranslations("dashboard.home.school");
   const tc = await getTranslations("school.campuses");
   const f = await getFormatter();
@@ -146,7 +146,7 @@ async function SchoolHome({ user }: { user: HomeUser }) {
           {used ? <p className="hint mt-3">{t("left", { used: used.used, cap: used.cap })}</p> : null}
         </section>
       ) : null}
-      <OrdersList userId={user.id} />
+      <OrdersList userId={user.id} locale={locale} />
       {user.isAdmin ? <AdminCard /> : null}
     </div>
   );
