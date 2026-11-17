@@ -90,15 +90,25 @@ body{margin:0}
         </div>
 
         <div class="card stack" style="gap:12px">
+          <h2 class="h3"><span class="en">Who sees you depends on what you're open to</span><span class="zh">誰能看到您，取決於您接受的工作型態</span></h2>
+          <div class="g2" style="gap:12px">
+            <div class="soft stack" style="gap:4px"><b><span class="en">Schools</span><span class="zh">學校</span></b><span class="small"><span class="en">See you only if you're open to full-time, part-time or substitute work. They never see that you tutor, or your rates.</span><span class="zh">只有在您接受全職、兼職或代課時才看得到您，看不到您是否提供家教或收費。</span></span></div>
+            <div class="soft stack" style="gap:4px"><b><span class="en">Families</span><span class="zh">家長</span></b><span class="small"><span class="en">See you only if you offer private tutoring or coaching. They never see your school-work wishes.</span><span class="zh">只有在您提供私人家教或輔導時才看得到您，看不到您對學校工作的意願。</span></span></div>
+          </div>
+          <p class="small muted"><span class="en">The live substitute board is separate: you choose when to go online, and only schools can see you there.</span><span class="zh">即時代課看板另外計算：由您決定何時上線，且只有學校看得到。</span></p>
+        </div>
+
+        <div class="card stack" style="gap:12px">
           <h2 class="h3"><span class="en">Please confirm each item</span><span class="zh">請逐項確認</span></h2>
           <label class="chk {{c1Cls}}"><input type="checkbox" checked="{{c1}}" onChange="{{tog1}}"><span><span class="en">I have read the <a href="#">Terms of use</a> and <a href="#">Privacy policy</a>.</span><span class="zh">我已閱讀<a href="#">使用條款</a>與<a href="#">隱私權政策</a>。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
-          <label class="chk {{c2Cls}}"><input type="checkbox" checked="{{c2}}" onChange="{{tog2}}"><span><span class="en">I agree to show my profile (the items under "Your profile") to <b>paying school and family members</b> of LearningLinks.</span><span class="zh">我同意將我的個人檔案（「您的個人檔案」所列項目）提供給 LearningLinks 的<b>付費學校與家長會員</b>查看。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
+          <label class="chk {{c2Cls}}"><input type="checkbox" checked="{{c2}}" onChange="{{tog2}}"><span><span class="en">I agree to show my profile to <b>paying schools</b> if I'm open to school work, and to <b>paying families</b> if I offer private tutoring.</span><span class="zh">我同意：若我接受學校工作，將我的個人檔案提供給<b>付費學校</b>查看；若我提供私人家教，則提供給<b>付費家長</b>查看。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
           <label class="chk {{c3Cls}}"><input type="checkbox" checked="{{c3}}" onChange="{{tog3}}"><span><span class="en">I agree that members can see the contact details I add when they ask to view them.</span><span class="zh">我同意會員在點選查看時，可看到我所填寫的聯絡方式。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
           <label class="chk {{c4Cls}}"><input type="checkbox" checked="{{c4}}" onChange="{{tog4}}"><span><span class="en">My information is true, and I have the right to work or teach in the ways I describe.</span><span class="zh">我提供的資料屬實，且我有權以所述方式工作或授課。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
-                    <label class="chk {{c6Cls}}"><input type="checkbox" checked="{{c6}}" onChange="{{tog6}}"><span><span class="en">Send me tips and news about LearningLinks.</span><span class="zh">寄送 LearningLinks 的資訊與最新消息給我。</span> <span class="badge-m"><span class="en">Optional</span><span class="zh">選填</span></span></span></label>
+                    <label class="chk {{c5Cls}}"><input type="checkbox" checked="{{c5}}" onChange="{{tog5}}"><span><span class="en">I understand that LearningLinks is only a connection website, that it does not perform background checks on teachers, schools or families, and that I am responsible for all checks and for following all government laws, policies and procedures that apply to me.</span><span class="zh">我了解 LearningLinks 僅為連結平台，不對教師、學校或家長進行背景調查，且我須自行負責所有查核，並遵守適用於我的所有政府法令、政策與程序。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
+          <label class="chk {{c6Cls}}"><input type="checkbox" checked="{{c6}}" onChange="{{tog6}}"><span><span class="en">Send me tips and news about LearningLinks.</span><span class="zh">寄送 LearningLinks 的資訊與最新消息給我。</span> <span class="badge-m"><span class="en">Optional</span><span class="zh">選填</span></span></span></label>
 
           <div class="row" style="margin-top:8px;justify-content:space-between">
-            <span class="small muted"><span class="en">{{doneCount}} of 4 required items confirmed</span><span class="zh">已確認 {{doneCount}}／4 個必填項目</span></span>
+            <span class="small muted"><span class="en">{{doneCount}} of 5 required items confirmed</span><span class="zh">已確認 {{doneCount}}／5 個必填項目</span></span>
             <div class="row">
               <sc-if value="{{canContinue}}" hint-placeholder-val="{{ false }}">
                 <a class="btn btn-p btn-lg" href="Profile-builder.dc.html"><span class="en">Agree and continue</span><span class="zh">同意並繼續</span></a>
@@ -120,12 +130,14 @@ body{margin:0}
           <h2 class="h3"><span class="en">What we record</span><span class="zh">我們會記錄什麼</span></h2>
           <p class="small muted"><span class="en">When you agreed, which version, in which language, and the exact wording you saw, so there is clear proof of what you accepted. You can withdraw at any time.</span><span class="zh">您同意的時間、版本、語言與當時顯示的完整文字，以便日後有明確依據。您可隨時撤回同意。</span></p>
         </div>
+        <div class="compliance tight"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">Please read:</span><span class="zh">請注意：</span></b> <span class="en">We only connect people. We do not run background checks on anyone. Please complete all checks and follow all government policies and procedures yourself.</span><span class="zh">我們僅提供連結服務，不對任何人進行背景調查。請自行完成所有查核，並遵守所有政府政策與程序。</span></div></div>
         <div class="notice-warn">
           <b class="en">Draft legal text.</b><b class="zh">法律文字為草稿。</b> <span class="en">Pending review by a Taiwanese lawyer before launch.</span><span class="zh">上線前須經台灣律師審閱。</span>
         </div>
       </aside>
     </div>
   </main>
+<div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1800}}'>
@@ -134,7 +146,7 @@ class Component extends DCLogic {
     const s = this.state || {};
     const lang = s.lang || 'en';
     const c1 = !!s.c1, c2 = !!s.c2, c3 = !!s.c3, c4 = !!s.c4, c5 = !!s.c5, c6 = !!s.c6;
-    const done = [c1, c2, c3, c4].filter(Boolean).length;
+    const done = [c1, c2, c3, c4, c5].filter(Boolean).length;
     const flip = (k) => () => this.setState({ [k]: !(this.state && this.state[k]) });
     const cls = (v) => (v ? 'on' : '');
     return {
@@ -149,8 +161,8 @@ class Component extends DCLogic {
       c1Cls: cls(c1), c2Cls: cls(c2), c3Cls: cls(c3), c4Cls: cls(c4), c5Cls: cls(c5), c6Cls: cls(c6),
       tog1: flip('c1'), tog2: flip('c2'), tog3: flip('c3'), tog4: flip('c4'), tog5: flip('c5'), tog6: flip('c6'),
       doneCount: done,
-      canContinue: done === 4,
-      cannotContinue: done !== 4
+      canContinue: done === 5,
+      cannotContinue: done !== 5
     };
   }
 }

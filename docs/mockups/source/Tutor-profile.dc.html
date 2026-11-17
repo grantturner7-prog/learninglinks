@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tutor profile, family view</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.contact-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--i100)}
+.contact-row:last-child{border-bottom:0}
+.contact-row .k{width:78px;font-size:13px;font-weight:700;color:var(--i500)}
+.contact-row .v{flex:1;font-weight:700;word-break:break-all}
+.check li{margin:8px 0}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a class="on" href="Find-educators.dc.html"><span class="en">Find a tutor</span><span class="zh">尋找家教</span></a>
+        <a href="Families.dc.html"><span class="en">For families</span><span class="zh">家長專區</span></a>
+      </nav>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+        <span class="row" style="gap:8px"><span class="avatar t3" style="width:40px;height:40px;font-size:15px">LF</span><span class="small strong"><span class="en">Lin family</span><span class="zh">林家</span></span></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:24px;padding-bottom:24px">
+    <a class="small" href="Find-educators.dc.html" style="text-decoration:none"><span class="en">← Back to tutors</span><span class="zh">← 回到家教列表</span></a>
+    <div class="split" style="margin-top:18px">
+      <section class="main stack" style="gap:24px" aria-label="Profile">
+        <div class="soft small"><span class="en">You can see Michael because he offers <b>private tutoring</b>. Families only see the tutoring side of a profile.</span><span class="zh">您能看到 Michael，是因為他提供<b>私人家教</b>。家長只會看到檔案中與家教相關的部分。</span></div>
+
+        <div class="card">
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:22px">
+            <span class="avatar lg t2">MC</span>
+            <div style="flex:1;min-width:0">
+              <h1 class="h2">Michael Chen 陳老師</h1>
+              <p class="lead" style="font-size:18px;margin-top:4px"><span class="en">Junior high maths and CAP exam prep</span><span class="zh">國中數學與會考準備</span></p>
+              <div class="tags" style="margin-top:12px">
+                <span class="badge"><span class="en">Private tutoring</span><span class="zh">私人家教</span></span>
+                <span class="badge-m"><span class="en">In person and online</span><span class="zh">實體與線上</span></span>
+                <span class="badge-m"><span class="en">10+ years experience</span><span class="zh">10 年以上經驗</span></span>
+              </div>
+            </div>
+          </div>
+          <hr class="hr">
+          <div class="row" style="justify-content:space-between"><div><div class="muted small"><span class="en">Hourly rate</span><span class="zh">每小時費用</span></div><div style="font-size:28px;font-weight:800;color:var(--b800)">NT$800–1,200</div></div><span class="small muted" style="max-width:300px"><span class="en">Agreed directly with the tutor. LearningLinks takes no share of lessons.</span><span class="zh">費用由您與家教直接約定，LearningLinks 不抽取課程費用。</span></span></div>
+          <hr class="hr">
+          <h2 class="h3"><span class="en">About</span><span class="zh">關於我</span></h2>
+          <p style="margin-top:8px;max-width:720px"><span class="en">I help junior high students build confidence in maths and prepare for the CAP exam with weekly practice plans and short progress reports for parents. First lesson can be a short trial.</span><span class="zh">我協助國中生建立數學自信並準備會考，提供每週練習計畫與給家長的簡短進度報告。第一堂可先安排短暫試教。</span></p>
+        </div>
+
+        <div class="card">
+          <h2 class="h3"><span class="en">What I teach</span><span class="zh">我教什麼</span></h2>
+          <div class="kv" style="margin-top:6px"><span class="muted"><span class="en">Subjects</span><span class="zh">科目</span></span><span class="tags" style="justify-content:flex-end"><span class="chip"><span class="en">Mathematics</span><span class="zh">數學</span></span><span class="chip"><span class="en">Taiwan exam prep (CAP)</span><span class="zh">升學考試準備（會考）</span></span></span></div>
+          <div class="kv"><span class="muted"><span class="en">Levels</span><span class="zh">年級</span></span><span class="tags" style="justify-content:flex-end"><span class="chip"><span class="en">Junior high</span><span class="zh">國中</span></span><span class="chip"><span class="en">Senior high</span><span class="zh">高中職</span></span></span></div>
+          <div class="kv"><span class="muted"><span class="en">Teaching language</span><span class="zh">授課語言</span></span><span><span class="en">Mandarin, English</span><span class="zh">華語、英語</span></span></div>
+          <div class="kv"><span class="muted"><span class="en">Where</span><span class="zh">地區</span></span><span><span class="en">Taipei · Da'an, Xinyi · also online</span><span class="zh">臺北市 · 大安區、信義區 · 亦可線上</span></span></div>
+        </div>
+
+        <div class="card">
+          <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Credentials</span><span class="zh">資歷</span></h2><span class="badge-w"><span class="en">All self-declared</span><span class="zh">皆為自行聲明</span></span></div>
+          <div class="kv" style="margin-top:6px"><span><b>B.Sc. Mathematics</b> · 2012</span><span class="small muted"><span class="en">No proof link</span><span class="zh">未提供證明連結</span></span></div>
+          <div class="kv"><span><b>Tutor training course</b> · 2019</span><a href="#" class="small"><span class="en">Proof link (hosted by issuer)</span><span class="zh">證明連結（由核發單位提供）</span></a></div>
+          <p class="hint"><span class="en">LearningLinks does not check or store credentials. Ask the tutor for proof and verify it yourself.</span><span class="zh">LearningLinks 不查驗也不保存資歷文件，請向家教索取證明並自行確認。</span></p>
+        </div>
+
+        <div class="card">
+          <h2 class="h3"><span class="en">Work authorization</span><span class="zh">工作許可</span> <span class="badge-m" style="margin-left:6px"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span></h2>
+          <p style="margin-top:8px"><span class="en">Citizen or permanent resident</span><span class="zh">本國籍或永久居留</span></p>
+          <div class="notice-warn" style="margin-top:10px"><span class="en"><b>Private tutoring may not be allowed on some work permits.</b> Check the rules that apply before you book lessons.</span><span class="zh"><b>部分工作許可可能不允許私人家教。</b>預約課程前請先確認適用的規定。</span></div>
+        </div>
+      </section>
+
+      <aside class="side stack" style="gap:20px" aria-label="Contact">
+        <div class="card stack" style="gap:6px">
+          <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Contact Michael</span><span class="zh">聯絡 Michael</span></h2><span class="badge"><span class="en">Family member</span><span class="zh">家長會員</span></span></div>
+          <sc-if value="{{notRevealed}}" hint-placeholder-val="{{ true }}">
+            <div class="stack" style="gap:10px"><p class="small muted"><span class="en">Michael chose to share LINE and phone with members who ask to see them.</span><span class="zh">Michael 同意讓會員在點選後查看他的 LINE 與電話。</span></p>
+            <button type="button" class="btn btn-p btn-lg btn-block" onClick="{{reveal}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Show contact details</span><span class="zh">顯示聯絡方式</span></button></div>
+          </sc-if>
+          <sc-if value="{{isRevealed}}" hint-placeholder-val="{{ false }}">
+            <div class="contact-row"><span class="k">LINE</span><span class="v">mchen_math</span><button type="button" class="btn btn-s" style="min-height:40px;padding:6px 12px"><span class="en">Copy</span><span class="zh">複製</span></button></div>
+            <div class="contact-row"><span class="k"><span class="en">Phone</span><span class="zh">電話</span></span><span class="v">0912-000-000</span><button type="button" class="btn btn-s" style="min-height:40px;padding:6px 12px"><span class="en">Copy</span><span class="zh">複製</span></button></div>
+          </sc-if>
+          <p class="tiny muted" style="margin-top:8px"><span class="en">You can view up to 100 tutors' contact details a day. Michael can see that a member viewed his details.</span><span class="zh">您每天最多可查看 100 位家教的聯絡方式。Michael 可看到有會員查看了他的聯絡方式。</span></p>
+        </div>
+
+        <div class="card stack" style="gap:10px">
+          <h2 class="h3"><span class="en">Before you book a first lesson</span><span class="zh">預約第一堂課之前</span></h2>
+          <div class="compliance tight"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">Please read:</span><span class="zh">請注意：</span></b> <span class="en">We only connect people. We do not run background checks on anyone. Please complete all checks and follow all government policies and procedures yourself.</span><span class="zh">我們僅提供連結服務，不對任何人進行背景調查。請自行完成所有查核，並遵守所有政府政策與程序。</span></div></div>
+          <ul class="check small" style="margin:0;padding-left:20px">
+            <li><span class="en">Confirm identity and ask for ID.</span><span class="zh">確認身分並請對方出示證件。</span></li>
+            <li><span class="en">Ask for a police record certificate yourself. We never see it.</span><span class="zh">自行索取良民證，我們不會取得。</span></li>
+            <li><span class="en">Start in a public place, or online with a parent present.</span><span class="zh">先在公共場所，或由家長在場的線上開始。</span></li>
+            <li><span class="en">Check the tutor may legally tutor.</span><span class="zh">確認對方可合法從事家教。</span></li>
+          </ul>
+        </div>
+        <a class="small" href="#"><span class="en">Report this profile</span><span class="zh">檢舉此檔案</span></a>
+      </aside>
+    </div>
+  </main>
+
+  <div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const lang = s.lang || 'en';
+    const revealed = !!s.revealed;
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' }),
+      isRevealed: revealed,
+      notRevealed: !revealed,
+      reveal: () => this.setState({ revealed: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

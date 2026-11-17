@@ -47,7 +47,7 @@ body{margin:0}
     <div class="wrap">
       <div class="split" style="align-items:center;gap:48px">
         <div class="main" style="flex:1 1 520px">
-          <span class="badge-w"><span class="en">Opening in Taiwan soon. Reserve your founding price.</span><span class="zh">即將在台灣開放，預約創始會員價。</span></span>
+          <span class="badge-w"><span class="en">Opening in Taiwan soon. Reserve your place.</span><span class="zh">即將在台灣開放，預約您的名額。</span></span>
           <h1 class="h1" style="margin-top:16px"><span class="en">Find a tutor you trust.<br>Pay once for the year.</span><span class="zh">找到信任的家教，<br>一年只需付一次。</span></h1>
           <p class="lead" style="margin-top:16px;max-width:560px"><span class="en">A family membership lets you search every tutor and contact as many as you need for 12 months, for your whole family. No commission on lessons. It never renews on its own.</span><span class="zh">家長會員可在 12 個月內搜尋所有家教並聯絡所需的人選，全家共用。不抽課程費用，也不會自動續約。</span></p>
           <p class="small muted" style="margin-top:20px"><span class="en">Tutor profiles are visible to members only. Tutors never pay us anything.</span><span class="zh">家教檔案僅限會員查看。家教不需付任何費用給我們。</span></p>
@@ -55,15 +55,15 @@ body{margin:0}
         <div class="side" style="flex:1 1 400px;max-width:480px">
           <div class="card stack" style="gap:14px">
             <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Family membership</span><span class="zh">家長會員</span></h2><span class="badge-m"><span class="en">12 months</span><span class="zh">12 個月</span></span></div>
-            <div class="row" style="align-items:baseline;gap:12px"><span class="price">NT$470</span><span class="was">NT$790</span></div>
-            <span class="small muted"><span class="en">founding price, incl. 5% VAT · draft pricing, to be validated</span><span class="zh">創始會員價，含 5% 營業稅 · 價格為草案，待驗證</span></span>
-            <ul class="small" style="margin:0;padding-left:20px"><li><span class="en">Search every tutor and contact any of them, for all your children</span><span class="zh">搜尋所有家教並可聯絡任何一位，全家小孩共用</span></li><li><span class="en">Re-hire or switch tutors any time in the year</span><span class="zh">一年內可隨時更換或再次聘請</span></li><li><span class="en">Safety checklist for every first lesson</span><span class="zh">每次首次上課的安全檢查清單</span></li></ul>
+            <div class="row" style="align-items:baseline;gap:12px"><span class="price">NT$2,000</span></div>
+            <span class="small muted"><span class="en">one payment for 12 months, incl. 5% VAT · no auto-renewal</span><span class="zh">一次付款 12 個月，含 5% 營業稅 · 不會自動續約</span></span>
+            <ul class="small" style="margin:0;padding-left:20px"><li><span class="en">Search every tutor and contact any of them, for all your children</span><span class="zh">搜尋所有家教並可聯絡任何一位，全家小孩共用</span></li><li><span class="en">You see educators who offer private tutoring and coaching, with their hourly rates</span><span class="zh">您會看到提供私人家教與輔導的教師，以及他們的每小時費用</span></li><li><span class="en">Re-hire or switch tutors any time in the year</span><span class="zh">一年內可隨時更換或再次聘請</span></li><li><span class="en">Safety checklist for every first lesson</span><span class="zh">每次首次上課的安全檢查清單</span></li></ul>
             <hr class="hr" style="margin:6px 0">
             <sc-if value="{{notReserved}}" hint-placeholder-val="{{ true }}">
               <form class="stack" style="gap:12px" onSubmit="{{noop}}">
                 <div><label class="lbl" for="fe"><span class="en">Email</span><span class="zh">Email</span></label><input id="fe" class="field" type="email" value="parent@example.com"></div>
                 <div><label class="lbl" for="fc"><span class="en">City</span><span class="zh">縣市</span></label><select id="fc" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option><option>New Taipei City 新北市</option><option>Kaohsiung City 高雄市</option></select></div>
-                <button type="button" class="btn btn-a btn-lg btn-block" onClick="{{reserve}}"><span class="en">Reserve my founding price</span><span class="zh">預約創始會員價</span></button>
+                <button type="button" class="btn btn-a btn-lg btn-block" onClick="{{reserve}}"><span class="en">Reserve my place</span><span class="zh">預約我的名額</span></button>
                 <p class="tiny muted"><span class="en">No payment now. We'll email you when memberships open.</span><span class="zh">現在不需付款。開放時我們會以 Email 通知您。</span></p>
               </form>
             </sc-if>
@@ -108,6 +108,7 @@ body{margin:0}
       </div>
     </div>
   </section>
+<div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2100}}'>

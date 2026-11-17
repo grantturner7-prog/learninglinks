@@ -127,6 +127,19 @@ textarea.field { min-height: 110px; resize: vertical; }
 .ftr a { color: #e9f6f0; }
 .ftr .logo { color: #fff; }
 
+/* standing compliance notice: shown on every page and flow, for every party */
+.compliance { display: flex; gap: 12px; align-items: flex-start; background: var(--warnbg); border: 1px solid #f1d49a; border-radius: 12px; padding: 14px 16px; color: var(--warn); font-size: 14px; line-height: 1.55; }
+.compliance svg { margin-top: 2px; }
+.compliance b { color: #5c3b00; }
+.compliance.tight { font-size: 13px; padding: 10px 12px; gap: 10px; }
+
+/* chat */
+.msgrow { display: flex; }
+.msgrow.mine { justify-content: flex-end; }
+.bubble { max-width: 80%; padding: 10px 14px; border-radius: 16px; background: var(--i100); color: var(--i900); font-size: 15px; line-height: 1.5; }
+.bubble.mine { background: var(--b700); color: #fff; }
+.dot { width: 10px; height: 10px; border-radius: 999px; background: var(--b500); display: inline-block; flex: none; }
+
 @media (max-width: 860px) {
   .g2, .g3, .g4 { grid-template-columns: minmax(0, 1fr); }
   .h1 { font-size: 34px; }

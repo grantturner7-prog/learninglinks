@@ -73,6 +73,17 @@ CREATE TABLE "contact_reveals" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "conversations" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"organization_id" uuid NOT NULL,
+	"educator_id" uuid NOT NULL,
+	"started_by_user_id" text NOT NULL,
+	"status" text DEFAULT 'open' NOT NULL,
+	"last_message_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "conversation_status_check" CHECK ("conversations"."status" in ('open','blocked','closed'))
+);
+--> statement-breakpoint
 CREATE TABLE "educator_consents" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
@@ -159,6 +170,16 @@ CREATE TABLE "memberships" (
 	CONSTRAINT "membership_term_check" CHECK ("memberships"."ends_at" > "memberships"."starts_at")
 );
 --> statement-breakpoint
+CREATE TABLE "messages" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"conversation_id" uuid NOT NULL,
+	"sender_user_id" text NOT NULL,
+	"body" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"read_at" timestamp with time zone,
+	CONSTRAINT "message_body_check" CHECK (char_length("messages"."body") between 1 and 2000)
+);
+--> statement-breakpoint
 CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"holder_type" text NOT NULL,
@@ -243,6 +264,21 @@ CREATE TABLE "reports" (
 	CONSTRAINT "report_status_check" CHECK ("reports"."status" in ('open','actioned','dismissed'))
 );
 --> statement-breakpoint
+CREATE TABLE "substitute_availability" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"educator_id" uuid NOT NULL,
+	"available_from" timestamp with time zone DEFAULT now() NOT NULL,
+	"available_until" timestamp with time zone NOT NULL,
+	"districts" text[] DEFAULT '{}'::text[] NOT NULL,
+	"subjects" text[] DEFAULT '{}'::text[] NOT NULL,
+	"levels" text[] DEFAULT '{}'::text[] NOT NULL,
+	"note" text,
+	"last_heartbeat_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "substitute_availability_educator_id_unique" UNIQUE("educator_id")
+);
+--> statement-breakpoint
 CREATE TABLE "waitlist_signups" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" text NOT NULL,
@@ -257,23 +293,32 @@ ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("
 ALTER TABLE "contact_reveals" ADD CONSTRAINT "contact_reveals_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "contact_reveals" ADD CONSTRAINT "contact_reveals_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "contact_reveals" ADD CONSTRAINT "contact_reveals_educator_id_educator_profiles_id_fk" FOREIGN KEY ("educator_id") REFERENCES "public"."educator_profiles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "conversations" ADD CONSTRAINT "conversations_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "conversations" ADD CONSTRAINT "conversations_educator_id_educator_profiles_id_fk" FOREIGN KEY ("educator_id") REFERENCES "public"."educator_profiles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "conversations" ADD CONSTRAINT "conversations_started_by_user_id_user_id_fk" FOREIGN KEY ("started_by_user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "educator_consents" ADD CONSTRAINT "educator_consents_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "educator_contacts" ADD CONSTRAINT "educator_contacts_educator_id_educator_profiles_id_fk" FOREIGN KEY ("educator_id") REFERENCES "public"."educator_profiles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "educator_profiles" ADD CONSTRAINT "educator_profiles_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "memberships" ADD CONSTRAINT "memberships_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "messages" ADD CONSTRAINT "messages_conversation_id_conversations_id_fk" FOREIGN KEY ("conversation_id") REFERENCES "public"."conversations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "messages" ADD CONSTRAINT "messages_sender_user_id_user_id_fk" FOREIGN KEY ("sender_user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_created_by_user_id_user_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "org_claims" ADD CONSTRAINT "org_claims_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "org_claims" ADD CONSTRAINT "org_claims_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "org_members" ADD CONSTRAINT "org_members_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "org_members" ADD CONSTRAINT "org_members_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reports" ADD CONSTRAINT "reports_reporter_user_id_user_id_fk" FOREIGN KEY ("reporter_user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "substitute_availability" ADD CONSTRAINT "substitute_availability_educator_id_educator_profiles_id_fk" FOREIGN KEY ("educator_id") REFERENCES "public"."educator_profiles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_user_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_user_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");--> statement-breakpoint
 CREATE INDEX "audit_entity_idx" ON "audit_log" USING btree ("entity_type","entity_id","created_at");--> statement-breakpoint
 CREATE INDEX "reveal_org_day_idx" ON "contact_reveals" USING btree ("organization_id","created_at");--> statement-breakpoint
 CREATE INDEX "reveal_educator_idx" ON "contact_reveals" USING btree ("educator_id","created_at");--> statement-breakpoint
+CREATE UNIQUE INDEX "conversation_pair_uq" ON "conversations" USING btree ("organization_id","educator_id");--> statement-breakpoint
+CREATE INDEX "conversation_educator_idx" ON "conversations" USING btree ("educator_id","last_message_at");--> statement-breakpoint
+CREATE INDEX "conversation_org_idx" ON "conversations" USING btree ("organization_id","last_message_at");--> statement-breakpoint
 CREATE INDEX "consent_user_idx" ON "educator_consents" USING btree ("user_id","created_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "educator_contact_channel_uq" ON "educator_contacts" USING btree ("educator_id","channel");--> statement-breakpoint
 CREATE INDEX "educator_status_country_idx" ON "educator_profiles" USING btree ("status","country_code");--> statement-breakpoint
@@ -284,6 +329,7 @@ CREATE INDEX "educator_districts_gin" ON "educator_profiles" USING gin ("distric
 CREATE INDEX "job_open_idx" ON "jobs" USING btree ("status","city","created_at");--> statement-breakpoint
 CREATE INDEX "job_org_idx" ON "jobs" USING btree ("organization_id");--> statement-breakpoint
 CREATE INDEX "membership_holder_idx" ON "memberships" USING btree ("holder_type","holder_id","ends_at");--> statement-breakpoint
+CREATE INDEX "message_conversation_idx" ON "messages" USING btree ("conversation_id","created_at");--> statement-breakpoint
 CREATE INDEX "order_holder_idx" ON "orders" USING btree ("holder_type","holder_id");--> statement-breakpoint
 CREATE INDEX "order_status_idx" ON "orders" USING btree ("status","created_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "claim_pending_uq" ON "org_claims" USING btree ("organization_id","user_id") WHERE "org_claims"."status" = 'pending';--> statement-breakpoint
@@ -293,4 +339,5 @@ CREATE UNIQUE INDEX "org_source_uq" ON "organizations" USING btree ("source","so
 CREATE INDEX "org_city_type_idx" ON "organizations" USING btree ("city","type");--> statement-breakpoint
 CREATE INDEX "org_status_idx" ON "organizations" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "report_status_idx" ON "reports" USING btree ("status","created_at");--> statement-breakpoint
+CREATE INDEX "substitute_until_idx" ON "substitute_availability" USING btree ("available_until");--> statement-breakpoint
 CREATE UNIQUE INDEX "waitlist_uq" ON "waitlist_signups" USING btree ("email","country_code","audience");

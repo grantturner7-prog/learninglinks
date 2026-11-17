@@ -1,0 +1,35 @@
+# LearningLinks: standing project rules
+
+These come from the owner (Taichung, Taiwan). Treat them as requirements, not suggestions. Full context: `docs/MASTER_PLAN.md`.
+
+## What the product is
+A **connection website** between educators and the people who need them. Educators are free. Schools and families pay a flat membership. We are **not** an employer, agent or guarantor.
+
+## Money
+- Schools: **NT$10,000 for 12 months**. Families: **NT$2,000 for 12 months** (families open in Phase 2).
+- One-time payment, 12-month term, **never auto-renews**. Prices are flat (no discounts unless the owner configures one). Assumed tax-inclusive (5% VAT): confirm with the accountant.
+- Launch order: Phase 1 Taiwan, Phase 2 Thailand and Vietnam, Phase 3 Japan, Korea and China.
+
+## Who can see whom (non-negotiable)
+1. **Nobody sees any educator without a paid membership.** No free browsing, no public profile pages, no public profile links, no search-engine indexing of profiles. A clearly labelled **sample** profile on marketing pages is allowed.
+2. **Families** see only educators who offer **private tutoring / coaching**.
+3. **Schools** see only educators open to **full-time, part-time or substitute** work. Schools never see tutoring-only educators.
+4. An educator visible to both is shown to each audience with **only that audience's side** (schools do not see tutoring or rates; families do not see school-work wishes). Rates are for families only.
+5. The rules live in `src/lib/visibility.ts`. Every query, DTO and page must use them.
+
+## Live substitute board
+Educators can go **online** for a limited time to offer substitute cover. **Only schools with an active membership** can see who is online and chat with them in real time. Chats are started by schools.
+
+## Compliance notice: ALWAYS include it
+Every page and every flow, for every party (educators, schools, families), must carry the notice that:
+- LearningLinks is **only a connection website**;
+- we do **not** carry out background checks on teachers, schools or families, and do not verify identity, credentials, licences or work permits;
+- everyone must complete all checks and follow all government laws, policies and procedures that apply to them.
+
+The canonical wording is `messages/*/notice.json` (English and Traditional Chinese). Use it; do not re-word it ad hoc. Sign-up, checkout and consent flows also need the **acknowledgement checkbox** (`notice.acknowledge`). Substitute and tutoring screens add `substituteWork` / `tutoringWork`; chat adds `chat`. `tests/messages.test.ts` fails if the notice is weakened or missing in either language.
+
+## Data we never collect or store
+ID, passport or ARC numbers, criminal records, health or financial data, home addresses, children's data. Credentials are self-declared (links only, never documents).
+
+## Working agreement
+Show **mock-ups and get approval before any expensive build**. The build is paused until the owner says to resume. Never claim something is verified unless it was run.

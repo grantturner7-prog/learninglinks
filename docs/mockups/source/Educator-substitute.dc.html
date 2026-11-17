@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Educator go online to substitute</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.status{display:flex;align-items:center;gap:14px;padding:18px;border-radius:14px;border:1px solid var(--b200);background:var(--b50)}
+.status.off{background:var(--i50);border-color:var(--i200)}
+.convo{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--i100);flex-wrap:wrap}
+.convo:last-child{border-bottom:0}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="Profile-builder.dc.html"><span class="en">My profile</span><span class="zh">我的檔案</span></a>
+        <a class="on" href="Educator-substitute.dc.html"><span class="en">Substitute availability</span><span class="zh">代課時段</span></a>
+        <a href="#"><span class="en">Messages</span><span class="zh">訊息</span></a>
+        <a href="#"><span class="en">Settings</span><span class="zh">設定</span></a>
+      </nav>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+        <span class="row" style="gap:8px"><span class="avatar" style="width:40px;height:40px;font-size:15px">ER</span><span class="small strong">Emily R.</span></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:32px;padding-bottom:24px">
+    <div class="row" style="justify-content:space-between;align-items:flex-end">
+      <div>
+        <h1 class="h2"><span class="en">Substitute availability</span><span class="zh">代課時段</span></h1>
+        <p class="muted" style="margin-top:4px"><span class="en">Go online when you are free to cover a class. Schools with a membership can see that you're available and message you here.</span><span class="zh">有空代課時請上線。已加入會員的學校可看到您可代課，並在此傳訊息給您。</span></p>
+      </div>
+      <span class="badge"><span class="en">Free for educators</span><span class="zh">教師免費</span></span>
+    </div>
+
+    <div class="notice-warn" style="margin-top:16px"><span class="en"><b>Check you are allowed to do this work.</b> Substitute work must follow work-permit and licensing rules. Foreign teachers may need permission to work for each school. Check before you accept.</span><span class="zh"><b>請確認您可從事此工作。</b>代課工作須符合工作許可與資格規定。外籍教師可能需要取得每一所學校的工作許可。接受前請先確認。</span></div>
+
+    <div class="split" style="margin-top:24px">
+      <section class="main stack" style="gap:20px" aria-label="Availability">
+        <div class="card stack" style="gap:16px">
+          <sc-if value="{{isOnline}}" hint-placeholder-val="{{ true }}">
+            <div class="status">
+              <span class="dot" style="width:14px;height:14px"></span>
+              <div style="flex:1"><div class="strong" style="font-size:18px"><span class="en">You're online until 3:30 PM</span><span class="zh">您將在線上至下午 3:30</span></div>
+                <div class="small muted"><span class="en">Schools with a membership can see you right now. You'll go offline automatically.</span><span class="zh">已加入會員的學校目前可看到您。時間到會自動離線。</span></div></div>
+              <button type="button" class="btn btn-d" onClick="{{goOffline}}"><span class="en">Go offline</span><span class="zh">離線</span></button>
+            </div>
+          </sc-if>
+          <sc-if value="{{isOffline}}" hint-placeholder-val="{{ false }}">
+            <div class="status off">
+              <span class="dot" style="width:14px;height:14px;background:var(--i300)"></span>
+              <div style="flex:1"><div class="strong" style="font-size:18px"><span class="en">You're offline</span><span class="zh">您目前離線</span></div>
+                <div class="small muted"><span class="en">Schools can't see you on the live board.</span><span class="zh">學校無法在即時代課看板看到您。</span></div></div>
+            </div>
+          </sc-if>
+
+          <div class="g2" style="gap:16px">
+            <div><label class="lbl" for="dur"><span class="en">Stay online for</span><span class="zh">上線時間長度</span></label>
+              <select id="dur" class="field"><option>2 hours 2 小時</option><option>1 hour 1 小時</option><option>4 hours 4 小時</option><option>Until end of day 到今天結束</option></select>
+              <p class="hint"><span class="en">Maximum 12 hours. You can go offline any time.</span><span class="zh">最長 12 小時，隨時可離線。</span></p></div>
+            <div><label class="lbl" for="note"><span class="en">Short note for schools</span><span class="zh">給學校的簡短備註</span></label>
+              <input id="note" class="field" value="Can be there in 30 minutes.">
+              <p class="hint"><span class="en">No phone numbers, emails or links. Use chat for details.</span><span class="zh">請勿填寫電話、Email 或連結，細節請在聊天中說明。</span></p></div>
+          </div>
+          <div><span class="lbl"><span class="en">Districts I can reach</span><span class="zh">可前往的行政區</span></span>
+            <div class="tags"><span class="chip on">Xitun 西屯區</span><span class="chip on">Nantun 南屯區</span><span class="chip">Beitun 北屯區</span><span class="chip">Dali 大里區</span><span class="chip">+25</span></div></div>
+          <div><span class="lbl"><span class="en">Subjects and levels</span><span class="zh">科目與年級</span></span>
+            <div class="tags"><span class="chip on"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip on"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip on"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span><span class="chip on"><span class="en">Grades 1–3</span><span class="zh">國小低年級</span></span></div></div>
+
+          <sc-if value="{{isOffline}}" hint-placeholder-val="{{ false }}">
+            <label class="chk {{ackCls}}"><input type="checkbox" checked="{{ack}}" onChange="{{togAck}}"><span><span class="en">I understand that substitute work must follow work-permit and licensing rules, that LearningLinks does not perform background checks or verify my permit, and that I am responsible for following all government laws, policies and procedures that apply to me.</span><span class="zh">我了解代課工作須符合工作許可與資格規定，LearningLinks 不進行背景調查，也不查驗我的許可，且我須自行負責遵守適用於我的所有政府法令、政策與程序。</span> <span class="badge-m"><span class="en">Required</span><span class="zh">必填</span></span></span></label>
+            <div class="row">
+              <sc-if value="{{canGoOnline}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn btn-p btn-lg" onClick="{{goOnline}}"><span class="dot" style="background:#fff"></span><span class="en">Go online</span><span class="zh">上線</span></button></sc-if>
+              <sc-if value="{{cannotGoOnline}}" hint-placeholder-val="{{ true }}"><button type="button" class="btn btn-p btn-lg" disabled><span class="en">Go online</span><span class="zh">上線</span></button><span class="small muted"><span class="en">Tick the box to continue.</span><span class="zh">請先勾選方塊。</span></span></sc-if>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="card">
+          <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Messages from schools</span><span class="zh">學校的訊息</span></h2><span class="badge-w"><span class="en">1 unread</span><span class="zh">1 則未讀</span></span></div>
+          <div class="convo" style="margin-top:8px"><span class="avatar t2" style="width:44px;height:44px;font-size:16px">SE</span>
+            <div style="flex:1 1 260px;min-width:0"><div class="strong">Sunrise English Academy 陽光英語補習班</div><div class="small muted"><span class="en">Hi Emily, we need cover for grades 1–3 from 1:00 to 4:00 PM today…</span><span class="zh">Emily 您好，今天下午 1:00 到 4:00 需要代課（國小一至三年級）…</span></div></div>
+            <span class="small muted"><span class="en">1:02 PM</span><span class="zh">下午 1:02</span></span><a class="btn btn-p" style="min-height:40px" href="School-substitutes.dc.html"><span class="en">Open chat</span><span class="zh">開啟聊天</span></a></div>
+          <div class="convo"><span class="avatar t3" style="width:44px;height:44px;font-size:16px">GH</span>
+            <div style="flex:1 1 260px;min-width:0"><div class="strong">Green Hill Kindergarten 青丘幼兒園</div><div class="small muted"><span class="en">Are you free tomorrow morning?</span><span class="zh">請問您明天早上有空嗎？</span></div></div>
+            <span class="small muted"><span class="en">Yesterday</span><span class="zh">昨天</span></span><button type="button" class="btn btn-s" style="min-height:40px"><span class="en">Open chat</span><span class="zh">開啟聊天</span></button></div>
+          <p class="hint"><span class="en">Only schools can start a chat with you. You can block or report any school at any time.</span><span class="zh">只有學校能向您發起聊天。您可隨時封鎖或檢舉任何學校。</span></p>
+        </div>
+      </section>
+
+      <aside class="side stack" style="gap:16px" aria-label="Privacy">
+        <div class="soft stack" style="gap:8px">
+          <h2 class="h3"><span class="en">Who can see you right now</span><span class="zh">目前誰能看到您</span></h2>
+          <ul class="small" style="margin:0;padding-left:20px">
+            <li><span class="en">Only schools with an active membership.</span><span class="zh">只有已加入會員的學校。</span></li>
+            <li><span class="en">Not families. Not the public.</span><span class="zh">家長與一般大眾都看不到。</span></li>
+            <li><span class="en">Your phone and email are <b>not</b> shown. Schools chat with you here.</span><span class="zh">您的電話與 Email <b>不會</b>顯示，學校在此與您聊天。</span></li>
+          </ul>
+        </div>
+        <div class="card-flat stack" style="gap:6px">
+          <b><span class="en">Your chats</span><span class="zh">您的聊天紀錄</span></b>
+          <span class="small muted"><span class="en">Messages are kept for a limited time and are visible only to you and the school. Please don't share ID numbers or sensitive documents in chat. We don't review or store documents.</span><span class="zh">訊息僅保存一段時間，只有您與該學校可見。請勿在聊天中分享證件號碼或敏感文件，我們不會審閱或保存文件。</span></span>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const lang = s.lang || 'en';
+    const online = s.online === undefined ? true : !!s.online;
+    const ack = !!s.ack;
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' }),
+      isOnline: online,
+      isOffline: !online,
+      goOffline: () => this.setState({ online: false, ack: false }),
+      goOnline: () => this.setState({ online: true }),
+      ack: ack,
+      ackCls: ack ? 'on' : '',
+      togAck: () => this.setState({ ack: !(this.state && this.state.ack) }),
+      canGoOnline: ack,
+      cannotGoOnline: !ack
+    };
+  }
+}
+</script>
+</body>
+</html>

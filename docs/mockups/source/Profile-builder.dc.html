@@ -89,8 +89,19 @@ body{margin:0}
             <div><label class="lbl" for="c"><span class="en">City</span><span class="zh">縣市</span></label><select id="c" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option></select></div>
             <div><span class="lbl"><span class="en">Districts you can reach</span><span class="zh">可前往的行政區</span></span><div class="tags"><span class="chip on">Xitun 西屯區</span><span class="chip on">Nantun 南屯區</span><span class="chip">Beitun 北屯區</span><span class="chip">+26</span></div></div>
           </div>
-          <div><span class="lbl"><span class="en">Open to</span><span class="zh">希望的工作型態</span></span>
-            <div class="tags"><span class="chip on"><span class="en">Full-time</span><span class="zh">全職</span></span><span class="chip on"><span class="en">Part-time</span><span class="zh">兼職</span></span><span class="chip"><span class="en">Substitute</span><span class="zh">代課</span></span><span class="chip"><span class="en">Private tutoring</span><span class="zh">家教</span></span></div></div>
+          <div><span class="lbl"><span class="en">Open to (this decides who can see you)</span><span class="zh">希望的工作型態（決定誰能看到您）</span></span>
+            <div class="g2" style="gap:12px;margin-top:6px">
+              <div class="card-flat stack" style="gap:8px"><b><span class="en">Work at schools</span><span class="zh">學校工作</span></b>
+                <div class="tags"><span class="chip on"><span class="en">Full-time</span><span class="zh">全職</span></span><span class="chip on"><span class="en">Part-time</span><span class="zh">兼職</span></span><span class="chip"><span class="en">Substitute</span><span class="zh">代課</span></span></div>
+                <span class="small muted"><span class="en">Visible to paying schools.</span><span class="zh">付費學校可看到。</span></span></div>
+              <div class="card-flat stack" style="gap:8px"><b><span class="en">Private tutoring and coaching</span><span class="zh">私人家教與輔導</span></b>
+                <div class="tags"><span class="chip"><span class="en">Private tutoring</span><span class="zh">家教</span></span></div>
+                <span class="small muted"><span class="en">Visible to paying families only. Your hourly rate is shown to families only.</span><span class="zh">僅付費家長可看到，每小時費用也只顯示給家長。</span></span></div>
+            </div>
+            <p class="hint"><span class="en">Schools never see that you tutor, and families never see that you want school work. Tick nothing in a group and that audience can't see you.</span><span class="zh">學校看不到您是否提供家教，家長也看不到您對學校工作的意願。某一組都不勾選，該族群就看不到您。</span></p>
+            <div class="notice-warn" style="margin-top:10px"><span class="en"><b>Private tutoring may not be allowed on some work permits.</b> Check the rules that apply to you before you offer lessons.</span><span class="zh"><b>部分工作許可可能不允許私人家教。</b>提供課程前請先確認適用於您的規定。</span></div>
+            <p class="hint"><span class="en">Want to cover classes at short notice? Go online from <a href="Educator-substitute.dc.html">Substitute availability</a>.</span><span class="zh">想接臨時代課？請到<a href="Educator-substitute.dc.html">代課時段</a>上線。</span></p>
+          </div>
           <div><label class="lbl" for="wa"><span class="en">Work authorization</span><span class="zh">工作許可</span> <span class="badge-m" style="margin-left:6px"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span></label>
             <select id="wa" class="field"><option>Open work rights 擁有開放工作權</option><option>Citizen or permanent resident 本國籍或永久居留</option><option>Employer-sponsored 由雇主聘僱</option><option>Overseas, needs sponsorship 人在海外，需要雇主申請聘僱</option><option>Online only, from abroad 僅限從海外線上授課</option></select>
             <p class="hint"><span class="en">Pick a category. Never enter permit or ID numbers. Rules differ by country, and private tutoring may not be allowed on an employer-sponsored permit.</span><span class="zh">請選擇類別，切勿填寫證件號碼。各國規定不同，雇主聘僱的許可可能不允許私人家教。</span></p></div>
@@ -146,6 +157,7 @@ body{margin:0}
       </aside>
     </div>
   </main>
+<div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2500}}'>

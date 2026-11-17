@@ -29,7 +29,7 @@ body{margin:0}
       <span class="small"><span class="en">Prototype control: preview this page as</span><span class="zh">原型控制：切換檢視身分</span></span>
       <div class="seg" role="group" aria-label="Preview as">
         <button type="button" class="{{visitorCls}}" aria-pressed="{{visitorOn}}" onClick="{{setVisitor}}"><span class="en">Visitor</span><span class="zh">訪客</span></button>
-        <button type="button" class="{{memberCls}}" aria-pressed="{{memberOn}}" onClick="{{setMember}}"><span class="en">Paying member</span><span class="zh">付費會員</span></button>
+        <button type="button" class="{{memberCls}}" aria-pressed="{{memberOn}}" onClick="{{setMember}}"><span class="en">School member</span><span class="zh">學校會員</span></button>
       </div>
     </div>
   </div>
@@ -64,7 +64,7 @@ body{margin:0}
         <span class="icon-tile" style="width:64px;height:64px;border-radius:18px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
         <h1 class="h2"><span class="en">This profile is for members</span><span class="zh">此檔案僅限會員查看</span></h1>
         <p class="lead" style="font-size:17px"><span class="en">Educators on LearningLinks share their profiles only with paying schools and families. Join for 12 months to view this profile and search every educator.</span><span class="zh">LearningLinks 的教師僅將檔案提供給付費的學校與家長。加入 12 個月會員即可查看此檔案並搜尋所有教師。</span></p>
-        <div class="soft stack small" style="gap:4px;width:100%;text-align:left"><b><span class="en">Founding price, incl. VAT</span><span class="zh">創始會員價，含稅</span></b><span><span class="en">School from NT$5,940 · Family NT$470</span><span class="zh">學校 NT$5,940 起 · 家長 NT$470</span></span><span class="tiny muted"><span class="en">Draft pricing, to be validated. No auto-renewal.</span><span class="zh">價格為草案，待驗證。不會自動續約。</span></span></div>
+        <div class="soft stack small" style="gap:4px;width:100%;text-align:left"><b><span class="en">12-month membership</span><span class="zh">12 個月會員</span></b><span><span class="en">School NT$10,000 · Family NT$2,000 (12 months, incl. VAT)</span><span class="zh">學校 NT$10,000 · 家長 NT$2,000（12 個月，含稅）</span></span><span class="tiny muted"><span class="en">One payment. No auto-renewal.</span><span class="zh">一次付款，不會自動續約。</span></span></div>
         <div class="row" style="justify-content:center"><a class="btn btn-p btn-lg" href="School-membership.dc.html"><span class="en">Join as a school</span><span class="zh">以學校身分加入</span></a><a class="btn btn-s btn-lg" href="Families.dc.html"><span class="en">Join as a family</span><span class="zh">以家長身分加入</span></a></div>
         <a class="small" href="School-dashboard.dc.html"><span class="en">Already a member? Sign in</span><span class="zh">已是會員？登入</span></a>
         <hr class="hr" style="width:100%;margin:6px 0">
@@ -74,6 +74,7 @@ body{margin:0}
     <sc-if value="{{isMember}}" hint-placeholder-val="{{ false }}">
     <div class="split" style="margin-top:18px">
       <section class="main stack" style="gap:24px" aria-label="Profile">
+        <div class="soft small"><span class="en">You can see Emily because she is open to <b>full-time and part-time</b> school work. Families don't see this profile, and educators who only tutor are never shown to schools.</span><span class="zh">您能看到 Emily，是因為她接受<b>全職與兼職</b>學校工作。家長看不到這份檔案，只提供家教的教師也不會顯示給學校。</span></div>
         <div class="card">
           <div class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:22px">
             <span class="avatar lg">ER</span>
@@ -139,6 +140,7 @@ body{margin:0}
 
         <div class="card stack" style="gap:10px">
           <h2 class="h3"><span class="en">Before you hire or book</span><span class="zh">聘僱或預約之前</span></h2>
+          <div class="compliance tight"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">Please read:</span><span class="zh">請注意：</span></b> <span class="en">We only connect people. We do not run background checks on anyone. Please complete all checks and follow all government policies and procedures yourself.</span><span class="zh">我們僅提供連結服務，不對任何人進行背景調查。請自行完成所有查核，並遵守所有政府政策與程序。</span></div></div>
           <ul class="check small" style="margin:0;padding-left:20px">
             <li><span class="en">Confirm identity and right to work directly.</span><span class="zh">親自確認身分與工作許可。</span></li>
             <li><span class="en">Ask for a police record certificate yourself. We never see it.</span><span class="zh">自行向教師索取良民證，我們不會取得。</span></li>
@@ -155,6 +157,7 @@ body{margin:0}
     </div>
     </sc-if>
   </main>
+<div class="wrap" style="padding-top:8px;padding-bottom:40px"><div class="compliance"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg><div><b><span class="en">LearningLinks is only a connection website.</span><span class="zh">LearningLinks 僅為連結平台。</span></b> <span class="en">We do not carry out background checks on teachers, schools or families, and we do not verify identity, credentials, licences or work permits. Everyone is responsible for completing all checks and for following all government laws, policies and procedures that apply to them.</span><span class="zh">我們不對教師、學校或家長進行任何背景調查，也不查驗身分、資歷、執照或工作許可。所有使用者須自行完成必要的查核，並遵守適用於自己的所有政府法令、政策與程序。</span></div></div></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1900}}'>
