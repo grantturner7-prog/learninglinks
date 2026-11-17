@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Educator profile</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.proto{background:var(--i900);color:#fff;padding:10px 0}
+.proto .seg{border-color:#445}
+.contact-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--i100)}
+.contact-row:last-child{border-bottom:0}
+.contact-row .k{width:78px;font-size:13px;font-weight:700;color:var(--i500)}
+.contact-row .v{flex:1;font-weight:700;word-break:break-all}
+.check li{margin:8px 0}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <div class="proto">
+    <div class="wrap row" style="justify-content:space-between">
+      <span class="small"><span class="en">Prototype control: preview this page as</span><span class="zh">原型控制：切換檢視身分</span></span>
+      <div class="seg" role="group" aria-label="Preview as">
+        <button type="button" class="{{visitorCls}}" aria-pressed="{{visitorOn}}" onClick="{{setVisitor}}"><span class="en">Visitor</span><span class="zh">訪客</span></button>
+        <button type="button" class="{{memberCls}}" aria-pressed="{{memberOn}}" onClick="{{setMember}}"><span class="en">Paying member</span><span class="zh">付費會員</span></button>
+      </div>
+    </div>
+  </div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a class="on" href="Find-educators.dc.html"><span class="en">Find educators</span><span class="zh">尋找教師</span></a>
+        <a href="School-membership.dc.html"><span class="en">For schools</span><span class="zh">學校專區</span></a>
+        <a href="Families.dc.html"><span class="en">For families</span><span class="zh">家長專區</span></a>
+      </nav>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+        <a class="btn btn-s" href="School-dashboard.dc.html"><span class="en">Sign in</span><span class="zh">登入</span></a>
+        <a class="btn btn-p" href="Educator-waiver.dc.html"><span class="en">Join free</span><span class="zh">免費加入</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:24px;padding-bottom:64px">
+    <a class="small" href="Find-educators.dc.html" style="text-decoration:none"><span class="en">← Back to results</span><span class="zh">← 回到搜尋結果</span></a>
+
+    <div class="split" style="margin-top:18px">
+      <section class="main stack" style="gap:24px" aria-label="Profile">
+        <div class="card">
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:22px">
+            <span class="avatar lg">ER</span>
+            <div style="flex:1;min-width:0">
+              <h1 class="h2">Emily R.</h1>
+              <p class="lead" style="font-size:18px;margin-top:4px"><span class="en">Kindergarten English teacher: phonics and storytelling</span><span class="zh">幼兒園英語老師：自然發音與繪本故事</span></p>
+              <div class="tags" style="margin-top:12px">
+                <span class="badge"><span class="en">Open to full-time</span><span class="zh">接受全職</span></span>
+                <span class="badge"><span class="en">Open to part-time</span><span class="zh">接受兼職</span></span>
+                <span class="badge-m"><span class="en">5–9 years experience</span><span class="zh">5–9 年經驗</span></span>
+              </div>
+            </div>
+          </div>
+          <hr class="hr">
+          <h2 class="h3"><span class="en">About</span><span class="zh">關於我</span></h2>
+          <p style="margin-top:8px;max-width:720px"><span class="en">I teach kindergarten and lower-elementary classes using phonics, songs and picture books. I like small groups, clear routines and keeping parents in the loop. Happy to cover short-notice substitute classes in the Taichung area.</span><span class="zh">我以自然發音、歌曲與繪本教導幼兒園與國小低年級。偏好小班制、清楚的課堂流程，並與家長保持溝通。歡迎臺中地區的臨時代課邀約。</span></p>
+        </div>
+
+        <div class="card">
+          <h2 class="h3"><span class="en">What I teach</span><span class="zh">我教什麼</span></h2>
+          <div class="kv" style="margin-top:6px"><span class="muted"><span class="en">Subjects</span><span class="zh">科目</span></span><span class="tags" style="justify-content:flex-end"><span class="chip"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip"><span class="en">Reading comprehension</span><span class="zh">閱讀理解</span></span></span></div>
+          <div class="kv"><span class="muted"><span class="en">Levels</span><span class="zh">年級</span></span><span class="tags" style="justify-content:flex-end"><span class="chip"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span><span class="chip"><span class="en">Elementary (grades 1–3)</span><span class="zh">國小低年級</span></span></span></div>
+          <div class="kv"><span class="muted"><span class="en">Teaching language</span><span class="zh">授課語言</span></span><span><span class="en">English</span><span class="zh">英語</span></span></div>
+          <div class="kv"><span class="muted"><span class="en">Mode</span><span class="zh">授課方式</span></span><span><span class="en">In person</span><span class="zh">實體授課</span></span></div>
+        </div>
+
+        <div class="card">
+          <h2 class="h3"><span class="en">Where I can teach</span><span class="zh">教學地區</span></h2>
+          <div class="kv" style="margin-top:6px"><span class="muted"><span class="en">City</span><span class="zh">縣市</span></span><span><span class="en">Taichung City</span><span class="zh">臺中市</span></span></div>
+          <div class="kv"><span class="muted"><span class="en">Districts</span><span class="zh">行政區</span></span><span class="tags" style="justify-content:flex-end"><span class="chip">Xitun 西屯區</span><span class="chip">Nantun 南屯區</span></span></div>
+          <p class="hint"><span class="en">Areas only. Educators never publish a home address.</span><span class="zh">僅顯示地區，教師不會公開住家地址。</span></p>
+        </div>
+
+        <div class="card">
+          <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Credentials</span><span class="zh">資歷</span></h2><span class="badge-w"><span class="en">All self-declared</span><span class="zh">皆為自行聲明</span></span></div>
+          <div class="kv" style="margin-top:6px"><span><b>TEFL 120h</b> · 2021</span><a href="#" class="small"><span class="en">Proof link (hosted by issuer)</span><span class="zh">證明連結（由核發單位提供）</span></a></div>
+          <div class="kv"><span><b>B.Ed. Early Childhood</b> · 2018</span><span class="small muted"><span class="en">No proof link</span><span class="zh">未提供證明連結</span></span></div>
+          <p class="hint"><span class="en">LearningLinks does not check or store credentials. Verify them directly with the educator.</span><span class="zh">LearningLinks 不查驗也不保存資歷文件，請直接向教師確認。</span></p>
+        </div>
+
+        <div class="card">
+          <h2 class="h3"><span class="en">Work authorization</span><span class="zh">工作許可</span> <span class="badge-m" style="margin-left:6px"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span></h2>
+          <p style="margin-top:8px"><span class="en">Open work rights</span><span class="zh">擁有開放工作權</span></p>
+          <p class="hint"><span class="en">A category only. No permit numbers are collected. Always verify directly before hiring.</span><span class="zh">僅為類別，不收集證件號碼。聘僱前請務必親自確認。</span></p>
+        </div>
+      </section>
+
+      <aside class="side stack" style="gap:20px" aria-label="Contact">
+        <sc-if value="{{isVisitor}}" hint-placeholder-val="{{ true }}">
+          <div class="card stack" style="gap:14px">
+            <div class="row"><span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+              <h2 class="h3" style="flex:1"><span class="en">Contact details are for members</span><span class="zh">聯絡方式僅限會員</span></h2></div>
+            <p class="muted small"><span class="en">Emily chose to share Email and LINE with paying schools and families.</span><span class="zh">Emily 同意將 Email 與 LINE 提供給付費的學校與家長查看。</span></p>
+            <div class="soft stack" style="gap:6px">
+              <span class="strong"><span class="en">12-month membership</span><span class="zh">12 個月會員</span></span>
+              <span class="small"><span class="en">School from <b>NT$5,940</b> · founding price, incl. VAT</span><span class="zh">學校方案 <b>NT$5,940</b> 起 · 創始會員價，含稅</span></span>
+              <span class="tiny muted"><span class="en">Draft pricing, to be validated. No auto-renewal.</span><span class="zh">價格為草案，待驗證。不會自動續約。</span></span>
+            </div>
+            <a class="btn btn-p" href="School-membership.dc.html"><span class="en">Join as a school</span><span class="zh">以學校身分加入</span></a>
+            <a class="btn btn-s" href="Families.dc.html"><span class="en">Join as a family</span><span class="zh">以家長身分加入</span></a>
+            <a class="small center" href="School-dashboard.dc.html"><span class="en">Already a member? Sign in</span><span class="zh">已是會員？登入</span></a>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isMember}}" hint-placeholder-val="{{ false }}">
+          <div class="card stack" style="gap:6px">
+            <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Contact Emily</span><span class="zh">聯絡 Emily</span></h2><span class="badge"><span class="en">Member view</span><span class="zh">會員檢視</span></span></div>
+            <div class="contact-row"><span class="k">Email</span><span class="v">emily.r@example.com</span><button type="button" class="btn btn-s" style="min-height:40px;padding:6px 12px"><span class="en">Copy</span><span class="zh">複製</span></button></div>
+            <div class="contact-row"><span class="k">LINE</span><span class="v">emily_teaches</span><button type="button" class="btn btn-s" style="min-height:40px;padding:6px 12px"><span class="en">Copy</span><span class="zh">複製</span></button></div>
+            <p class="tiny muted" style="margin-top:8px"><span class="en">Today you have viewed 13 of 100 educators' contact details. This protects educators from bulk copying. Emily can see that a member viewed her details.</span><span class="zh">今日已查看 13／100 位教師的聯絡方式。此限制可避免教師資料被大量複製。Emily 可看到有會員查看了她的聯絡方式。</span></p>
+          </div>
+        </sc-if>
+
+        <div class="card stack" style="gap:10px">
+          <h2 class="h3"><span class="en">Before you hire or book</span><span class="zh">聘僱或預約之前</span></h2>
+          <ul class="check small" style="margin:0;padding-left:20px">
+            <li><span class="en">Confirm identity and right to work directly.</span><span class="zh">親自確認身分與工作許可。</span></li>
+            <li><span class="en">Ask for a police record certificate yourself. We never see it.</span><span class="zh">自行向教師索取良民證，我們不會取得。</span></li>
+            <li><span class="en">Check references and try a short trial class.</span><span class="zh">確認推薦人，並安排短暫試教。</span></li>
+            <li><span class="en">For children, meet in a public place or online with a parent present.</span><span class="zh">涉及兒童時，請在公共場所或由家長在場的線上進行。</span></li>
+          </ul>
+          <a class="small" href="#"><span class="en">Read the full safety guide</span><span class="zh">閱讀完整安全指南</span></a>
+        </div>
+
+        <div class="row" style="justify-content:space-between">
+          <a class="small" href="#"><span class="en">Report this profile</span><span class="zh">檢舉此檔案</span></a>
+          <a class="small" href="#"><span class="en">Share profile (link + QR)</span><span class="zh">分享檔案（連結＋QR）</span></a>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const lang = (this.state && this.state.lang) || 'en';
+    const member = !!(this.state && this.state.member);
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' }),
+      isMember: member,
+      isVisitor: !member,
+      visitorCls: member ? '' : 'on',
+      memberCls: member ? 'on' : '',
+      visitorOn: !member,
+      memberOn: member,
+      setVisitor: () => this.setState({ member: false }),
+      setMember: () => this.setState({ member: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Educator profile builder</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.steps{display:flex;gap:10px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--i500)}
+.step.cur{color:var(--b800)}
+.step.done{color:var(--b700)}
+.step .n{width:28px;height:28px;border-radius:999px;border:2px solid var(--i300);display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.step.cur .n,.step.done .n{background:var(--b700);border-color:var(--b700);color:#fff}
+.sec h2{font-size:20px}
+.lockrow{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--warn);font-weight:700}
+.sticky{position:sticky;top:16px}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <div class="steps" style="flex:1;justify-content:center" aria-label="Progress">
+        <span class="step done"><span class="n">✓</span><span class="en">Waiver</span><span class="zh">同意書</span></span>
+        <span class="step cur"><span class="n">2</span><span class="en">Profile</span><span class="zh">個人檔案</span></span>
+        <span class="step"><span class="n">3</span><span class="en">Publish</span><span class="zh">發布</span></span>
+      </div>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:32px;padding-bottom:64px">
+    <h1 class="h2"><span class="en">Build your profile</span><span class="zh">建立您的個人檔案</span></h1>
+    <p class="muted" style="margin-top:4px"><span class="en">Takes about 5 minutes. Save a draft at any time. Nothing is public until you press Publish.</span><span class="zh">約需 5 分鐘。可隨時儲存草稿，按下「發布」前不會公開。</span></p>
+
+    <div class="split" style="margin-top:24px">
+      <form class="main stack" style="gap:20px" onSubmit="{{noop}}">
+
+        <section class="card sec stack" style="gap:16px">
+          <div class="row" style="justify-content:space-between"><h2><span class="en">About you</span><span class="zh">關於您</span></h2><span class="badge"><span class="en">Public</span><span class="zh">公開</span></span></div>
+          <div class="row" style="gap:18px;flex-wrap:nowrap;align-items:center">
+            <span class="avatar lg">ER</span>
+            <div><button type="button" class="btn btn-s"><span class="en">Upload photo (optional)</span><span class="zh">上傳照片（選填）</span></button>
+              <p class="hint"><span class="en">JPG or PNG. We resize it and remove location data.</span><span class="zh">JPG 或 PNG。我們會縮圖並移除位置資訊。</span></p></div>
+          </div>
+          <div class="g2" style="gap:16px">
+            <div><label class="lbl" for="dn"><span class="en">Display name</span><span class="zh">顯示名稱</span></label><input id="dn" class="field" value="Emily R."><p class="hint"><span class="en">First name and initial is enough.</span><span class="zh">名字加姓氏縮寫即可。</span></p></div>
+            <div><label class="lbl" for="hl"><span class="en">Headline</span><span class="zh">標題</span></label><input id="hl" class="field" value="Kindergarten English teacher: phonics and storytelling"></div>
+          </div>
+          <div><label class="lbl" for="bio"><span class="en">About</span><span class="zh">自我介紹</span></label>
+            <textarea id="bio" class="field">I teach kindergarten and lower-elementary classes using phonics, songs and picture books. I like small groups, clear routines and keeping parents in the loop.</textarea>
+            <div class="row" style="justify-content:space-between"><p class="hint"><span class="en">Please don't put phone numbers, emails or links here. Add them under Contact so only members see them.</span><span class="zh">請勿在此填寫電話、Email 或連結，請於「聯絡方式」欄位填寫，僅會員可見。</span></p><span class="hint">161 / 600</span></div></div>
+        </section>
+
+        <section class="card sec stack" style="gap:16px">
+          <div class="row" style="justify-content:space-between"><h2><span class="en">What you teach</span><span class="zh">您教什麼</span></h2><span class="badge"><span class="en">Public</span><span class="zh">公開</span></span></div>
+          <div><span class="lbl"><span class="en">Subjects</span><span class="zh">科目</span></span>
+            <div class="tags"><span class="chip on"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip on"><span class="en">English conversation</span><span class="zh">英語會話</span></span><span class="chip on"><span class="en">Reading comprehension</span><span class="zh">閱讀理解</span></span><span class="chip"><span class="en">Grammar</span><span class="zh">文法</span></span><span class="chip"><span class="en">Creative writing</span><span class="zh">創意寫作</span></span><span class="chip"><span class="en">Mathematics</span><span class="zh">數學</span></span><span class="chip"><span class="en">Science</span><span class="zh">自然科學</span></span><span class="chip"><span class="en">Music</span><span class="zh">音樂</span></span><span class="chip">+14</span></div></div>
+          <div><span class="lbl"><span class="en">Levels</span><span class="zh">年級</span></span>
+            <div class="tags"><span class="chip on"><span class="en">Kindergarten</span><span class="zh">幼兒園</span></span><span class="chip on"><span class="en">Elementary (grades 1–3)</span><span class="zh">國小低年級</span></span><span class="chip"><span class="en">Elementary (grades 4–6)</span><span class="zh">國小中高年級</span></span><span class="chip"><span class="en">Junior high</span><span class="zh">國中</span></span><span class="chip"><span class="en">Senior high</span><span class="zh">高中職</span></span><span class="chip"><span class="en">Adult</span><span class="zh">成人</span></span></div></div>
+          <div class="g2" style="gap:16px">
+            <div><span class="lbl"><span class="en">Teaching language</span><span class="zh">授課語言</span></span><div class="tags"><span class="chip on"><span class="en">English</span><span class="zh">英語</span></span><span class="chip"><span class="en">Mandarin</span><span class="zh">華語</span></span></div></div>
+            <div><span class="lbl"><span class="en">Mode</span><span class="zh">授課方式</span></span><div class="tags"><span class="chip on"><span class="en">In person</span><span class="zh">實體</span></span><span class="chip"><span class="en">Online</span><span class="zh">線上</span></span></div></div>
+          </div>
+          <div><label class="lbl" for="exp"><span class="en">Years of experience</span><span class="zh">教學年資</span></label>
+            <select id="exp" class="field" style="max-width:260px"><option>5–9 years 5–9 年</option><option>Under 2 years 2 年以下</option><option>2–4 years 2–4 年</option><option>10+ years 10 年以上</option></select></div>
+        </section>
+
+        <section class="card sec stack" style="gap:16px">
+          <div class="row" style="justify-content:space-between"><h2><span class="en">Where and what kind of work</span><span class="zh">地區與工作型態</span></h2><span class="badge"><span class="en">Public</span><span class="zh">公開</span></span></div>
+          <div class="g2" style="gap:16px">
+            <div><label class="lbl" for="c"><span class="en">City</span><span class="zh">縣市</span></label><select id="c" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option></select></div>
+            <div><span class="lbl"><span class="en">Districts you can reach</span><span class="zh">可前往的行政區</span></span><div class="tags"><span class="chip on">Xitun 西屯區</span><span class="chip on">Nantun 南屯區</span><span class="chip">Beitun 北屯區</span><span class="chip">+26</span></div></div>
+          </div>
+          <div><span class="lbl"><span class="en">Open to</span><span class="zh">希望的工作型態</span></span>
+            <div class="tags"><span class="chip on"><span class="en">Full-time</span><span class="zh">全職</span></span><span class="chip on"><span class="en">Part-time</span><span class="zh">兼職</span></span><span class="chip"><span class="en">Substitute</span><span class="zh">代課</span></span><span class="chip"><span class="en">Private tutoring</span><span class="zh">家教</span></span></div></div>
+          <div><label class="lbl" for="wa"><span class="en">Work authorization</span><span class="zh">工作許可</span> <span class="badge-m" style="margin-left:6px"><span class="en">Self-declared</span><span class="zh">自行聲明</span></span></label>
+            <select id="wa" class="field"><option>Open work rights 擁有開放工作權</option><option>Citizen or permanent resident 本國籍或永久居留</option><option>Employer-sponsored 由雇主聘僱</option><option>Overseas, needs sponsorship 人在海外，需要雇主申請聘僱</option><option>Online only, from abroad 僅限從海外線上授課</option></select>
+            <p class="hint"><span class="en">Pick a category. Never enter permit or ID numbers. Rules differ by country, and private tutoring may not be allowed on an employer-sponsored permit.</span><span class="zh">請選擇類別，切勿填寫證件號碼。各國規定不同，雇主聘僱的許可可能不允許私人家教。</span></p></div>
+          <div class="notice-warn"><span class="en"><b>Tutoring privately?</b> Check that your work permit allows it. LearningLinks doesn't verify permits and isn't responsible for them.</span><span class="zh"><b>想接家教？</b>請先確認您的工作許可是否允許。LearningLinks 不查驗許可，也不負責相關責任。</span></div>
+        </section>
+
+        <section class="card sec stack" style="gap:16px">
+          <div class="row" style="justify-content:space-between"><h2><span class="en">Credentials</span><span class="zh">資歷</span></h2><span class="badge-w"><span class="en">Shown as self-declared</span><span class="zh">顯示為自行聲明</span></span></div>
+          <div class="g3" style="gap:12px;align-items:end">
+            <div><label class="lbl" for="cl1"><span class="en">Credential</span><span class="zh">資歷名稱</span></label><input id="cl1" class="field" value="TEFL 120h"></div>
+            <div><label class="lbl" for="cy1"><span class="en">Year</span><span class="zh">年份</span></label><input id="cy1" class="field" value="2021"></div>
+            <div><label class="lbl" for="cp1"><span class="en">Proof link (optional)</span><span class="zh">證明連結（選填）</span></label><input id="cp1" class="field" value="https://issuer.example/verify/123"></div>
+          </div>
+          <p class="hint"><span class="en">Link to proof hosted by the issuer. Please don't upload certificates here: we store links, not documents.</span><span class="zh">請提供核發單位的證明連結。請勿在此上傳證書：我們只保存連結，不保存文件。</span></p>
+          <button type="button" class="btn btn-g" style="align-self:flex-start"><span class="en">+ Add another</span><span class="zh">+ 新增一項</span></button>
+        </section>
+
+        <section class="card sec stack" style="gap:16px">
+          <div class="row" style="justify-content:space-between"><h2><span class="en">Contact</span><span class="zh">聯絡方式</span></h2>
+            <span class="lockrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Members only</span><span class="zh">僅限會員</span></span></div>
+          <p class="small muted"><span class="en">Only paying schools and families can see these. Add the ones you actually check.</span><span class="zh">僅付費學校與家長可見。請只新增您實際會查看的管道。</span></p>
+          <div class="g2" style="gap:16px">
+            <div><label class="lbl" for="ce">Email</label><input id="ce" class="field" value="emily.r@example.com"></div>
+            <div><label class="lbl" for="cl">LINE ID</label><input id="cl" class="field" value="emily_teaches"></div>
+            <div><label class="lbl" for="cw">WhatsApp</label><input id="cw" class="field" value=""></div>
+            <div><label class="lbl" for="cp"><span class="en">Phone</span><span class="zh">電話</span></label><input id="cp" class="field" value=""></div>
+          </div>
+        </section>
+
+        <section class="card sec stack" style="gap:12px">
+          <h2><span class="en">Visibility</span><span class="zh">能見度</span></h2>
+          <label class="chk"><input type="checkbox" checked="{{seo}}" onChange="{{togSeo}}"><span><span class="en">Let search engines index my public profile page</span><span class="zh">允許搜尋引擎索引我的公開檔案頁面</span><span class="hint" style="display:block"><span class="en">You chose "off" on the waiver. Change it any time.</span><span class="zh">您在同意書中選擇了「不允許」，可隨時變更。</span></span></span></label>
+        </section>
+      </form>
+
+      <aside class="side stack sticky" style="gap:16px" aria-label="Preview and publish">
+        <div class="card stack" style="gap:12px">
+          <h2 class="h3"><span class="en">How members will see you</span><span class="zh">會員將看到的樣子</span></h2>
+          <div class="card-flat stack" style="gap:10px">
+            <div class="row" style="flex-wrap:nowrap"><span class="avatar">ER</span><div><div class="strong">Emily R.</div><div class="small muted"><span class="en">Kindergarten English teacher</span><span class="zh">幼兒園英語老師</span></div></div></div>
+            <div class="tags"><span class="chip"><span class="en">Phonics</span><span class="zh">自然發音</span></span><span class="chip"><span class="en">English conversation</span><span class="zh">英語會話</span></span></div>
+            <div class="locked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Email · LINE · members only</span><span class="zh">Email · LINE · 僅限會員</span></div>
+          </div>
+        </div>
+        <div class="card stack" style="gap:10px">
+          <div class="row" style="justify-content:space-between"><span class="strong"><span class="en">Profile strength</span><span class="zh">檔案完整度</span></span><span class="strong">80%</span></div>
+          <div class="progress" role="img" aria-label="80 percent complete"><i style="width:80%"></i></div>
+          <ul class="small muted" style="margin:6px 0 0;padding-left:18px"><li><span class="en">Add a photo to get more replies</span><span class="zh">加上照片可提高回覆率</span></li><li><span class="en">Add one more credential</span><span class="zh">再新增一項資歷</span></li></ul>
+          <a class="btn btn-p btn-lg btn-block" href="Educator-profile.dc.html" style="margin-top:6px"><span class="en">Publish my profile</span><span class="zh">發布我的檔案</span></a>
+          <button type="button" class="btn btn-s btn-block"><span class="en">Save draft</span><span class="zh">儲存草稿</span></button>
+          <p class="tiny muted center"><span class="en">Hide or delete anytime from Settings.</span><span class="zh">可隨時於設定中隱藏或刪除。</span></p>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const lang = s.lang || 'en';
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' }),
+      seo: !!s.seo,
+      togSeo: () => this.setState({ seo: !(this.state && this.state.seo) }),
+      noop: (e) => { if (e && e.preventDefault) e.preventDefault(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

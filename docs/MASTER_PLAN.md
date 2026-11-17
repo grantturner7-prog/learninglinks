@@ -10,6 +10,19 @@
 
 ---
 
+## Decisions update: 17 Nov 2026 (supersedes anything below that conflicts)
+
+| Item | Decision |
+|---|---|
+| Company | Based in **Taichung, Taiwan**. Payments therefore start with **bank transfer + local gateways (ECPay / NewebPay)**, with Stripe as a later option once its Taiwan availability is confirmed. Invoices need Taiwan e-invoice and 統一編號 support. |
+| Name | **LearningLinks** (trademark, domain and Chinese-name checks still to do). |
+| Launch order | **Phase 1: Taiwan. Phase 2: Thailand and Vietnam. Phase 3: Japan, Korea and China.** Hong Kong and the Philippines are not launch markets. The Philippines remains useful as an *educator supply source* (educators can list "open to work in" other countries). |
+| URL and locale pattern | `/{language}-{COUNTRY}/…`, e.g. `/zh-TW/`, `/en-TW/`, later `/th-TH/`, `/vi-VN/`. The locale carries the country, so routing, hreflang and country config share one key. |
+| Phase 1 school data | The old map holds 5,477 mostly public schools with **no contact data**, and only 2 language schools. The main buyers, about 17,700 licensed cram schools, are missing. Phase 1 needs a cram-school import from government open data, with a licence check. |
+| Build status | Paused for design approval. See `docs/mockups/`. |
+
+---
+
 ## 0. The plan on one page
 
 **What we are building.** A pan-Asian, education-only directory that connects educators with the people who need them.

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LearningLinks home</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="Find-educators.dc.html"><span class="en">Find educators</span><span class="zh">尋找教師</span></a>
+        <a href="School-membership.dc.html"><span class="en">For schools</span><span class="zh">學校專區</span></a>
+        <a href="Families.dc.html"><span class="en">For families</span><span class="zh">家長專區</span></a>
+      </nav>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+        <a class="btn btn-s" href="School-dashboard.dc.html"><span class="en">Sign in</span><span class="zh">登入</span></a>
+        <a class="btn btn-p" href="Educator-waiver.dc.html"><span class="en">Join free</span><span class="zh">免費加入</span></a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top:56px">
+    <div class="wrap">
+      <div class="split" style="align-items:center;gap:48px">
+        <div class="main" style="flex:1 1 520px">
+          <span class="eyebrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="en">Live in Taiwan</span><span class="zh">台灣已上線</span></span>
+          <h1 class="h1" style="margin-top:18px">
+            <span class="en">Find great educators.<br>Educators never pay.</span>
+            <span class="zh">找到優秀的教育工作者，<br>教師永遠免費。</span>
+          </h1>
+          <p class="lead" style="margin-top:18px;max-width:560px">
+            <span class="en">LearningLinks connects schools, cram schools and families with teachers and tutors, directly. One flat 12-month membership. No placement fees. No commissions.</span>
+            <span class="zh">LearningLinks 讓學校、補習班與家長直接聯絡老師與家教。一次 12 個月的固定會員費，沒有仲介費，也不抽成。</span>
+          </p>
+          <div class="row" style="margin-top:28px">
+            <a class="btn btn-p btn-lg" href="Educator-waiver.dc.html"><span class="en">I'm an educator: join free</span><span class="zh">我是教師，免費加入</span></a>
+            <a class="btn btn-s btn-lg" href="School-membership.dc.html"><span class="en">I'm a school</span><span class="zh">我是學校</span></a>
+            <a class="btn btn-s btn-lg" href="Families.dc.html"><span class="en">I'm a parent</span><span class="zh">我是家長</span></a>
+          </div>
+          <p class="small muted" style="margin-top:16px">
+            <span class="en">No placement fees · No commissions · Educators never pay</span>
+            <span class="zh">沒有仲介費 · 不抽成 · 教師永遠免費</span>
+          </p>
+        </div>
+
+        <div class="side" style="flex:1 1 440px;max-width:520px">
+          <div class="card" aria-label="Sample search">
+            <div class="row" style="gap:10px;margin-bottom:14px">
+              <div class="field" style="display:flex;align-items:center;gap:10px;color:var(--i500)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                <span class="en">English conversation · Taichung · Kindergarten</span><span class="zh">英語會話 · 臺中市 · 幼兒園</span>
+              </div>
+            </div>
+            <div class="stack" style="gap:10px">
+              <div class="card-flat row" style="flex-wrap:nowrap">
+                <span class="avatar">ER</span>
+                <div style="flex:1;min-width:0">
+                  <div class="strong">Emily R.</div>
+                  <div class="small muted"><span class="en">Phonics · English conversation · Xitun</span><span class="zh">自然發音 · 英語會話 · 西屯區</span></div>
+                </div>
+                <span class="badge-m"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Contact</span><span class="zh">聯絡</span></span>
+              </div>
+              <div class="card-flat row" style="flex-wrap:nowrap">
+                <span class="avatar t3">KL</span>
+                <div style="flex:1;min-width:0">
+                  <div class="strong">Kevin L. 林老師</div>
+                  <div class="small muted"><span class="en">English conversation · Nantun</span><span class="zh">英語會話 · 南屯區</span></div>
+                </div>
+                <span class="badge-m"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Contact</span><span class="zh">聯絡</span></span>
+              </div>
+              <div class="card-flat row" style="flex-wrap:nowrap">
+                <span class="avatar t2">SA</span>
+                <div style="flex:1;min-width:0">
+                  <div class="strong">Sarah A.</div>
+                  <div class="small muted"><span class="en">Phonics · Reading · Beitun</span><span class="zh">自然發音 · 閱讀 · 北屯區</span></div>
+                </div>
+                <span class="badge-m"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="en">Contact</span><span class="zh">聯絡</span></span>
+              </div>
+            </div>
+            <p class="tiny muted" style="margin-top:14px">
+              <span class="en">Anyone can browse. Contact details unlock with a 12-month school or family membership.</span>
+              <span class="zh">任何人都可瀏覽。聯絡方式需加入 12 個月的學校或家長會員才能查看。</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="wrap">
+      <h2 class="h2 center"><span class="en">How we're different</span><span class="zh">我們的不同</span></h2>
+      <div class="g4" style="margin-top:36px">
+        <div class="stack" style="gap:14px">
+          <span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7S10 2 7.5 3.5 7 7 12 7zm0 0s2-5 4.5-3.5S17 7 12 7z"/></svg></span>
+          <h3 class="h3"><span class="en">Free for educators, always</span><span class="zh">教師永遠免費</span></h3>
+          <p class="muted"><span class="en">Create a profile, get found, and never pay us anything.</span><span class="zh">建立個人檔案、被看見，完全不需要付費給我們。</span></p>
+        </div>
+        <div class="stack" style="gap:14px">
+          <span class="icon-tile amber"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>
+          <h3 class="h3"><span class="en">No placement fees</span><span class="zh">沒有仲介費</span></h3>
+          <p class="muted"><span class="en">Schools and families pay one flat membership for 12 months. We never take a cut of a salary or a lesson.</span><span class="zh">學校與家長只需支付一次 12 個月的固定會員費。我們不抽取薪資或課程費用。</span></p>
+        </div>
+        <div class="stack" style="gap:14px">
+          <span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span>
+          <h3 class="h3"><span class="en">You control what's shown</span><span class="zh">公開內容由您決定</span></h3>
+          <p class="muted"><span class="en">Choose what is public and what only paying members see. Hide or delete your profile in one click.</span><span class="zh">自行選擇哪些資料公開、哪些僅限付費會員查看，並可一鍵隱藏或刪除。</span></p>
+        </div>
+        <div class="stack" style="gap:14px">
+          <span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9.5 12.5l5 5M14.5 12.5l-5 5"/></svg></span>
+          <h3 class="h3"><span class="en">No sensitive documents</span><span class="zh">不保存敏感文件</span></h3>
+          <p class="muted"><span class="en">We never store IDs, criminal records or financial data. Share those directly, only when you choose.</span><span class="zh">我們不儲存身分證件、良民證或財務資料，由您自行決定是否、何時直接提供。</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="h2 center"><span class="en">How it works</span><span class="zh">運作方式</span></h2>
+      <div class="g3" style="margin-top:36px">
+        <div class="card stack" style="gap:16px">
+          <div class="row"><span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><h3 class="h3"><span class="en">Educators</span><span class="zh">教師</span></h3><span class="badge"><span class="en">Free</span><span class="zh">免費</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">1</span><span><span class="en">Create a profile in minutes</span><span class="zh">幾分鐘內建立個人檔案</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">2</span><span><span class="en">Read and accept the publication waiver</span><span class="zh">閱讀並同意公開資料同意書</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">3</span><span><span class="en">Get contacted directly by schools and families</span><span class="zh">由學校與家長直接與您聯絡</span></span></div>
+        </div>
+        <div class="card stack" style="gap:16px">
+          <div class="row"><span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/></svg></span><h3 class="h3"><span class="en">Schools</span><span class="zh">學校</span></h3><span class="badge-m"><span class="en">12-month plan</span><span class="zh">12 個月方案</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">1</span><span><span class="en">Find and claim your school</span><span class="zh">找到並認領您的學校</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">2</span><span><span class="en">Choose a 12-month membership</span><span class="zh">選擇 12 個月會員方案</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">3</span><span><span class="en">Search educators and contact them directly</span><span class="zh">搜尋教師並直接聯絡</span></span></div>
+        </div>
+        <div class="card stack" style="gap:16px">
+          <div class="row"><span class="icon-tile amber"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.5A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg></span><h3 class="h3"><span class="en">Families</span><span class="zh">家長</span></h3><span class="badge-w"><span class="en">Phase 2</span><span class="zh">第二階段</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">1</span><span><span class="en">Browse tutors for free</span><span class="zh">免費瀏覽家教</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">2</span><span><span class="en">Join for 12 months (no auto-renewal)</span><span class="zh">加入 12 個月會員（不會自動續約）</span></span></div>
+          <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">3</span><span><span class="en">Contact tutors directly</span><span class="zh">直接聯絡家教</span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-white" style="padding:44px 0">
+    <div class="wrap">
+      <div class="soft row" style="gap:20px;flex-wrap:nowrap;align-items:flex-start">
+        <span class="icon-tile" style="background:#fff"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/></svg></span>
+        <div style="flex:1;min-width:0">
+          <h3 class="h3"><span class="en">A directory, not an agent</span><span class="zh">我們是名錄，不是仲介</span></h3>
+          <p class="muted" style="margin-top:6px;max-width:760px"><span class="en">We connect people. We do not screen, employ or guarantee anyone. Always verify credentials, work authorization and background checks directly before you hire or book.</span><span class="zh">我們只負責連結雙方，不審查、不聘僱，也不擔保任何人。聘僱或預約前，請務必親自確認資歷、工作許可與良民證等資料。</span></p>
+        </div>
+        <a class="btn btn-s" href="#"><span class="en">Read the safety guide</span><span class="zh">閱讀安全指南</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="g2" style="align-items:center;gap:48px">
+        <div class="stack" style="gap:18px">
+          <h2 class="h2"><span class="en">Where we are</span><span class="zh">服務據點</span></h2>
+          <div class="row"><span class="badge"><span class="en">Live now</span><span class="zh">已上線</span></span><span class="strong"><span class="en">Taiwan</span><span class="zh">台灣</span></span></div>
+          <div class="row"><span class="badge-w"><span class="en">Coming next</span><span class="zh">即將推出</span></span><span class="strong"><span class="en">Thailand, Vietnam</span><span class="zh">泰國、越南</span></span></div>
+          <div class="row"><span class="badge-m"><span class="en">Later</span><span class="zh">之後</span></span><span class="strong"><span class="en">Japan, Korea, China</span><span class="zh">日本、韓國、中國</span></span></div>
+        </div>
+        <form class="card stack" style="gap:14px" onSubmit="{{noop}}">
+          <h3 class="h3"><span class="en">Get notified when we open in your country</span><span class="zh">所在國家開通時通知我</span></h3>
+          <div><label class="lbl" for="wl-email">Email</label><input id="wl-email" class="field" type="email" value="you@example.com"></div>
+          <div><label class="lbl" for="wl-country"><span class="en">Country</span><span class="zh">國家</span></label>
+            <select id="wl-country" class="field"><option>Thailand 泰國</option><option>Vietnam 越南</option><option>Japan 日本</option><option>Korea 韓國</option><option>China 中國</option></select></div>
+          <button type="button" class="btn btn-p"><span class="en">Notify me</span><span class="zh">通知我</span></button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ftr">
+    <div class="wrap row" style="justify-content:space-between;align-items:flex-start;gap:32px">
+      <div style="max-width:420px" class="stack">
+        <span class="logo">
+          <svg width="32" height="32" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+          LearningLinks
+        </span>
+        <span><span class="en">A directory connecting educators with schools and families. We are not an employer, agent or guarantor.</span><span class="zh">連結教育工作者與學校、家長的名錄平台。我們不是雇主、仲介或擔保人。</span></span>
+        <span><span class="en">Based in Taichung, Taiwan</span><span class="zh">總部位於台灣台中</span></span>
+      </div>
+      <div class="row" style="gap:28px">
+        <a href="#"><span class="en">Terms of use</span><span class="zh">使用條款</span></a>
+        <a href="#"><span class="en">Privacy policy</span><span class="zh">隱私權政策</span></a>
+        <a href="#"><span class="en">Educator publication waiver</span><span class="zh">教師公開資料同意書</span></a>
+        <a href="#"><span class="en">Safety guide</span><span class="zh">安全指南</span></a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const lang = (this.state && this.state.lang) || 'en';
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' }),
+      noop: (e) => { if (e && e.preventDefault) e.preventDefault(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

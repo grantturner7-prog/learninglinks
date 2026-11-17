@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Families landing page</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.price{font-size:44px;font-weight:800;color:var(--b800);letter-spacing:-0.02em}
+.was{text-decoration:line-through;color:var(--i500);font-weight:600;font-size:20px}
+.faq details{border-bottom:1px solid var(--i100);padding:14px 0}
+.faq summary{font-weight:700;cursor:pointer;font-size:17px}
+.faq p{margin-top:8px;color:var(--i600)}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="Find-educators.dc.html"><span class="en">Find educators</span><span class="zh">尋找教師</span></a>
+        <a href="School-membership.dc.html"><span class="en">For schools</span><span class="zh">學校專區</span></a>
+        <a class="on" href="Families.dc.html"><span class="en">For families</span><span class="zh">家長專區</span></a>
+      </nav>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+        <a class="btn btn-s" href="School-dashboard.dc.html"><span class="en">Sign in</span><span class="zh">登入</span></a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top:56px">
+    <div class="wrap">
+      <div class="split" style="align-items:center;gap:48px">
+        <div class="main" style="flex:1 1 520px">
+          <span class="badge-w"><span class="en">Opening in Taiwan soon. Reserve your founding price.</span><span class="zh">即將在台灣開放，預約創始會員價。</span></span>
+          <h1 class="h1" style="margin-top:16px"><span class="en">Find a tutor you trust.<br>Pay once for the year.</span><span class="zh">找到信任的家教，<br>一年只需付一次。</span></h1>
+          <p class="lead" style="margin-top:16px;max-width:560px"><span class="en">Browse tutors for free. A family membership lets you contact as many tutors as you need for 12 months, for your whole family. No commission on lessons. It never renews on its own.</span><span class="zh">免費瀏覽家教。家長會員可在 12 個月內聯絡所需的家教，全家共用。不抽課程費用，也不會自動續約。</span></p>
+          <div class="row" style="margin-top:24px"><a class="btn btn-p btn-lg" href="Find-educators.dc.html"><span class="en">Browse tutors</span><span class="zh">瀏覽家教</span></a></div>
+        </div>
+        <div class="side" style="flex:1 1 400px;max-width:480px">
+          <div class="card stack" style="gap:14px">
+            <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Family membership</span><span class="zh">家長會員</span></h2><span class="badge-m"><span class="en">12 months</span><span class="zh">12 個月</span></span></div>
+            <div class="row" style="align-items:baseline;gap:12px"><span class="price">NT$470</span><span class="was">NT$790</span></div>
+            <span class="small muted"><span class="en">founding price, incl. 5% VAT · draft pricing, to be validated</span><span class="zh">創始會員價，含 5% 營業稅 · 價格為草案，待驗證</span></span>
+            <ul class="small" style="margin:0;padding-left:20px"><li><span class="en">Contact any tutor, for all your children</span><span class="zh">可聯絡任何家教，全家小孩共用</span></li><li><span class="en">Re-hire or switch tutors any time in the year</span><span class="zh">一年內可隨時更換或再次聘請</span></li><li><span class="en">Safety checklist for every first lesson</span><span class="zh">每次首次上課的安全檢查清單</span></li></ul>
+            <hr class="hr" style="margin:6px 0">
+            <sc-if value="{{notReserved}}" hint-placeholder-val="{{ true }}">
+              <form class="stack" style="gap:12px" onSubmit="{{noop}}">
+                <div><label class="lbl" for="fe"><span class="en">Email</span><span class="zh">Email</span></label><input id="fe" class="field" type="email" value="parent@example.com"></div>
+                <div><label class="lbl" for="fc"><span class="en">City</span><span class="zh">縣市</span></label><select id="fc" class="field"><option>Taichung City 臺中市</option><option>Taipei City 臺北市</option><option>New Taipei City 新北市</option><option>Kaohsiung City 高雄市</option></select></div>
+                <button type="button" class="btn btn-a btn-lg btn-block" onClick="{{reserve}}"><span class="en">Reserve my founding price</span><span class="zh">預約創始會員價</span></button>
+                <p class="tiny muted"><span class="en">No payment now. We'll email you when memberships open.</span><span class="zh">現在不需付款。開放時我們會以 Email 通知您。</span></p>
+              </form>
+            </sc-if>
+            <sc-if value="{{isReserved}}" hint-placeholder-val="{{ false }}">
+              <div class="soft stack" style="gap:6px"><b><span class="en">You're on the list.</span><span class="zh">已加入預約名單。</span></b><span class="small"><span class="en">We'll email you when family memberships open. Nothing was charged.</span><span class="zh">家長會員開放時會以 Email 通知您，目前尚未收取任何費用。</span></span></div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="wrap">
+      <h2 class="h2 center"><span class="en">How it works for families</span><span class="zh">家長如何使用</span></h2>
+      <div class="g3" style="margin-top:32px">
+        <div class="stack" style="gap:10px"><span class="num">1</span><h3 class="h3"><span class="en">Browse for free</span><span class="zh">免費瀏覽</span></h3><p class="muted"><span class="en">Filter by subject, level, area, price and online or in-person. See profiles, credentials (self-declared) and availability.</span><span class="zh">依科目、年級、地區、價格與實體／線上篩選。查看檔案、自行聲明的資歷與可上課時間。</span></p></div>
+        <div class="stack" style="gap:10px"><span class="num">2</span><h3 class="h3"><span class="en">Join for 12 months</span><span class="zh">加入 12 個月</span></h3><p class="muted"><span class="en">One payment unlocks every tutor's contact details. It ends after 12 months unless you choose to renew.</span><span class="zh">一次付款即可查看所有家教的聯絡方式。12 個月後到期，是否續約由您決定。</span></p></div>
+        <div class="stack" style="gap:10px"><span class="num">3</span><h3 class="h3"><span class="en">Contact tutors directly</span><span class="zh">直接聯絡家教</span></h3><p class="muted"><span class="en">Message by LINE or email, agree on price and schedule between you. We never take a cut of lessons.</span><span class="zh">以 LINE 或 Email 聯絡，價格與時間由雙方約定。我們不抽取課程費用。</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="g2" style="gap:40px;align-items:start">
+        <div class="stack" style="gap:14px">
+          <h2 class="h2"><span class="en">Before you book a first lesson</span><span class="zh">預約第一堂課之前</span></h2>
+          <div class="card-flat row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">1</span><span><b><span class="en">Verify who they are.</span><span class="zh">確認對方身分。</span></b> <span class="en">Ask for ID and check it matches the profile.</span><span class="zh">請對方出示證件並核對是否與檔案相符。</span></span></div>
+          <div class="card-flat row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">2</span><span><b><span class="en">Ask for a police record certificate.</span><span class="zh">索取良民證。</span></b> <span class="en">Request it from the tutor directly. We never see it.</span><span class="zh">直接向家教索取，我們不會取得。</span></span></div>
+          <div class="card-flat row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">3</span><span><b><span class="en">Start in public or online.</span><span class="zh">先在公共場所或線上開始。</span></b> <span class="en">A parent stays present for early lessons.</span><span class="zh">前幾堂課請家長在場。</span></span></div>
+          <div class="card-flat row" style="flex-wrap:nowrap;align-items:flex-start"><span class="num">4</span><span><b><span class="en">Check the tutor may legally tutor.</span><span class="zh">確認對方可合法家教。</span></b> <span class="en">Some work permits don't allow private lessons.</span><span class="zh">部分工作許可不允許私人授課。</span></span></div>
+        </div>
+        <div class="faq" aria-label="FAQ">
+          <h2 class="h2" style="margin-bottom:8px"><span class="en">Questions</span><span class="zh">常見問題</span></h2>
+          <details open><summary><span class="en">What if I find a tutor in two weeks?</span><span class="zh">如果兩週就找到家教怎麼辦？</span></summary><p><span class="en">Your membership still covers re-hires, new subjects and siblings for the rest of the 12 months.</span><span class="zh">會員資格在剩餘的 12 個月內仍可用於更換家教、新增科目與兄弟姊妹。</span></p></details>
+          <details><summary><span class="en">Do you take a commission on lessons?</span><span class="zh">課程費用會被抽成嗎？</span></summary><p><span class="en">No. You pay the tutor directly. Tutors never pay us anything.</span><span class="zh">不會。您直接付費給家教，家教也不需付任何費用給我們。</span></p></details>
+          <details><summary><span class="en">Does it renew automatically?</span><span class="zh">會自動續約嗎？</span></summary><p><span class="en">Never. We'll remind you before it ends, and renewal is always your choice.</span><span class="zh">不會。到期前我們會提醒您，是否續約由您決定。</span></p></details>
+          <details><summary><span class="en">Do you check the tutors?</span><span class="zh">你們會審查家教嗎？</span></summary><p><span class="en">No. We're a directory, not an agent. Profiles are self-declared, so please use the checklist and verify directly.</span><span class="zh">不會。我們是名錄，不是仲介。檔案內容為自行聲明，請使用檢查清單並親自確認。</span></p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const lang = s.lang || 'en';
+    const reserved = !!s.reserved;
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' }),
+      isReserved: reserved,
+      notReserved: !reserved,
+      reserve: () => this.setState({ reserved: true }),
+      noop: (e) => { if (e && e.preventDefault) e.preventDefault(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

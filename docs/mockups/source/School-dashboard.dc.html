@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>School dashboard</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ll.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.side-nav{display:flex;flex-direction:column;gap:2px}
+.side-nav a{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;color:var(--i700);text-decoration:none;font-weight:600;font-size:15px}
+.side-nav a:hover,.side-nav a.on{background:var(--b50);color:var(--b800)}
+.job{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--i100);flex-wrap:wrap}
+.job:last-child{border-bottom:0}
+</style>
+</helmet>
+<div class="pg {{rootClass}}">
+  <div class="mock"><b>Design mock-up</b> · sample data, not a live product <span class="zh">· 設計稿，範例資料</span></div>
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="Main.dc.html">
+        <svg width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="LearningLinks logo"><rect width="36" height="36" rx="10" fill="#1c5643"/><circle cx="14.5" cy="18" r="6.5" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="21.5" cy="18" r="6.5" fill="none" stroke="#f5b544" stroke-width="3"/></svg>
+        LearningLinks
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="Find-educators.dc.html"><span class="en">Find educators</span><span class="zh">尋找教師</span></a>
+        <a class="on" href="School-dashboard.dc.html"><span class="en">Dashboard</span><span class="zh">我的後台</span></a>
+      </nav>
+      <div class="hdr-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" class="{{enCls}}" aria-pressed="{{enOn}}" onClick="{{setEn}}">EN</button>
+          <button type="button" class="{{zhCls}}" aria-pressed="{{zhOn}}" onClick="{{setZh}}">繁中</button>
+        </div>
+        <span class="row" style="gap:8px"><span class="avatar t2" style="width:40px;height:40px;font-size:15px">SE</span><span class="small strong">Sunrise English</span></span>
+        <a class="btn btn-s" href="Main.dc.html"><span class="en">Sign out</span><span class="zh">登出</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:28px;padding-bottom:64px">
+    <div class="split">
+      <aside class="side">
+        <div class="card" style="padding:12px">
+          <nav class="side-nav" aria-label="Dashboard">
+            <a class="on" href="School-dashboard.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span class="en">Overview</span><span class="zh">總覽</span></a>
+            <a href="Find-educators.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span class="en">Find educators</span><span class="zh">尋找教師</span></a>
+            <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="en">Shortlist</span><span class="zh">候選名單</span></a>
+            <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg><span class="en">Jobs</span><span class="zh">職缺</span></a>
+            <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M17 11a3 3 0 1 0 0-6M22 20c0-2.5-1.5-4.2-4-5"/></svg><span class="en">Team</span><span class="zh">成員</span></a>
+            <a href="School-membership.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="en">Membership &amp; invoices</span><span class="zh">會員與發票</span></a>
+          </nav>
+        </div>
+      </aside>
+
+      <section class="main stack" style="gap:20px" aria-label="Overview">
+        <div class="row" style="justify-content:space-between;align-items:flex-start">
+          <div>
+            <h1 class="h2">Sunrise English Academy <span style="font-weight:600">陽光英語補習班</span></h1>
+            <p class="muted" style="margin-top:4px"><span class="en">Cram school · Xitun, Taichung</span><span class="zh">補習班 · 臺中市西屯區</span> <span class="badge" style="margin-left:6px"><span class="en">Claimed</span><span class="zh">已認領</span></span></p>
+          </div>
+          <a class="btn btn-p" href="Find-educators.dc.html"><span class="en">Find educators</span><span class="zh">尋找教師</span></a>
+        </div>
+
+        <div class="card stack" style="gap:14px">
+          <div class="row" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <div class="row" style="gap:10px"><h2 class="h3"><span class="en">Membership</span><span class="zh">會員資格</span></h2><span class="badge"><span class="en">Active</span><span class="zh">有效</span></span></div>
+              <p class="muted small" style="margin-top:4px"><span class="en">Campus plan · 12-month term · 2 of 3 seats used</span><span class="zh">單校方案 · 12 個月 · 已使用 2／3 個席位</span></p>
+            </div>
+            <div class="row"><a class="btn btn-s" href="School-membership.dc.html"><span class="en">Renew early</span><span class="zh">提前續約</span></a></div>
+          </div>
+          <div class="progress" role="img" aria-label="About one third of the term used"><i style="width:34%"></i></div>
+          <div class="row" style="justify-content:space-between"><span class="small"><span class="en">Active until <b>1 Feb 2028</b></span><span class="zh">有效期限至 <b>2028 年 2 月 1 日</b></span></span><span class="small muted"><span class="en">Does not renew automatically</span><span class="zh">不會自動續約</span></span></div>
+          <div class="soft small"><span class="en"><b>How renewal works:</b> we email you 60, 30 and 7 days before it ends. Renewing early adds 12 months after your current end date, so you never lose days.</span><span class="zh"><b>續約方式：</b>到期前 60、30、7 天寄信提醒。提前續約會從目前到期日起再加 12 個月，不會損失天數。</span></div>
+        </div>
+
+        <div class="g2" style="gap:20px">
+          <div class="card stack" style="gap:12px">
+            <h2 class="h3"><span class="en">Contact views today</span><span class="zh">今日聯絡方式查看次數</span></h2>
+            <div class="row" style="align-items:baseline;gap:8px"><span style="font-size:40px;font-weight:800;color:var(--b800)">13</span><span class="muted"><span class="en">of 100 educators</span><span class="zh">／100 位教師</span></span></div>
+            <div class="progress" role="img" aria-label="13 percent of daily limit"><i style="width:13%"></i></div>
+            <p class="small muted"><span class="en">Viewing the same educator again doesn't use more. The daily limit protects educators from bulk copying and resets at midnight Taipei time.</span><span class="zh">重複查看同一位教師不會再計次。每日上限可避免教師資料被大量複製，於台北時間午夜重置。</span></p>
+          </div>
+          <div class="card stack" style="gap:12px">
+            <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Shortlist</span><span class="zh">候選名單</span></h2><a class="small" href="#"><span class="en">View all</span><span class="zh">查看全部</span></a></div>
+            <div class="row" style="flex-wrap:nowrap"><span class="avatar" style="width:44px;height:44px;font-size:16px">ER</span><div style="flex:1;min-width:0"><div class="strong">Emily R.</div><div class="small muted"><span class="en">Phonics · Xitun</span><span class="zh">自然發音 · 西屯區</span></div></div><a class="btn btn-s" style="min-height:40px;padding:6px 14px" href="Educator-profile.dc.html"><span class="en">Contact</span><span class="zh">聯絡</span></a></div>
+            <div class="row" style="flex-wrap:nowrap"><span class="avatar t3" style="width:44px;height:44px;font-size:16px">KL</span><div style="flex:1;min-width:0"><div class="strong">Kevin L. 林老師</div><div class="small muted"><span class="en">English conversation · Nantun</span><span class="zh">英語會話 · 南屯區</span></div></div><a class="btn btn-s" style="min-height:40px;padding:6px 14px" href="Educator-profile.dc.html"><span class="en">Contact</span><span class="zh">聯絡</span></a></div>
+            <div class="row" style="flex-wrap:nowrap"><span class="avatar t4" style="width:44px;height:44px;font-size:16px">AT</span><div style="flex:1;min-width:0"><div class="strong">Aroha T.</div><div class="small muted"><span class="en">Science · Banqiao</span><span class="zh">自然科學 · 板橋區</span></div></div><a class="btn btn-s" style="min-height:40px;padding:6px 14px" href="Educator-profile.dc.html"><span class="en">Contact</span><span class="zh">聯絡</span></a></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row" style="justify-content:space-between"><h2 class="h3"><span class="en">Open jobs</span><span class="zh">進行中的職缺</span></h2><button type="button" class="btn btn-p"><span class="en">Post a job</span><span class="zh">刊登職缺</span></button></div>
+          <div class="job" style="margin-top:8px"><div style="flex:1 1 280px"><div class="strong"><span class="en">Part-time English teacher, kindergarten</span><span class="zh">兼職英語老師（幼兒園）</span></div><div class="small muted"><span class="en">Xitun, Taichung · NT$600–700 / hr · starts March</span><span class="zh">臺中市西屯區 · NT$600–700／小時 · 3 月開始</span></div></div><span class="badge"><span class="en">Open</span><span class="zh">徵才中</span></span><button type="button" class="btn btn-s" style="min-height:40px"><span class="en">Close</span><span class="zh">關閉</span></button></div>
+          <div class="job"><div style="flex:1 1 280px"><div class="strong"><span class="en">Substitute cover, grades 1–3</span><span class="zh">代課老師（國小低年級）</span></div><div class="small muted"><span class="en">Xitun, Taichung · this month</span><span class="zh">臺中市西屯區 · 本月</span></div></div><span class="badge-w"><span class="en">Urgent</span><span class="zh">急徵</span></span><button type="button" class="btn btn-s" style="min-height:40px"><span class="en">Close</span><span class="zh">關閉</span></button></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const lang = (this.state && this.state.lang) || 'en';
+    return {
+      rootClass: 'lang-' + lang,
+      enCls: lang === 'en' ? 'on' : '',
+      zhCls: lang === 'zh' ? 'on' : '',
+      enOn: lang === 'en',
+      zhOn: lang === 'zh',
+      setEn: () => this.setState({ lang: 'en' }),
+      setZh: () => this.setState({ lang: 'zh' })
+    };
+  }
+}
+</script>
+</body>
+</html>
