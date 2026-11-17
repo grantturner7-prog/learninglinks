@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "title": "For schools: find educators for your campus | LearningLinks",
+    "description": "NT$10,000 per campus for 12 months. No placement fees, no commissions, no auto-renewal."
+  },
+  "eyebrow": "For schools",
+  "title": "Find teachers for your campus. Pay once a year.",
+  "lead": "See educators who are looking for full-time or part-time work and contact them directly. No placement fees. No commissions. It never renews on its own.",
+  "price": {
+    "label": "School membership",
+    "amount": "NT$10,000",
+    "per": "per campus",
+    "note": "for 12 months · VAT included · no auto-renewal",
+    "b1": "See educators looking for full-time or part-time work",
+    "b2": "Full profiles, with contact details shown on request",
+    "b3": "Each campus is NT$10,000 for its own 12 months, with no discount and no extra fees",
+    "b4": "No placement fees and no commissions"
+  },
+  "cta": "Create a school account",
+  "ctaNote": "You'll confirm that you understand we are only a connection website before you pay.",
+  "how": {
+    "title": "How it works",
+    "s1": "Create an account and add your school",
+    "s2": "Choose how many campuses, and pay once by bank transfer",
+    "s3": "Browse educators and contact them directly"
+  },
+  "faq": {
+    "title": "Questions",
+    "q1": "Do you take a fee when I hire someone?",
+    "a1": "No. You pay the membership and nothing else. We never take a share of a salary or a placement fee.",
+    "q2": "Does it renew automatically?",
+    "a2": "Never. We remind you before it ends, and renewal is always your choice.",
+    "q3": "I have several campuses. How does it work?",
+    "a3": "Each campus is NT$10,000 for its own 12 months. A campus you add later costs the same and gets its own full 12 months.",
+    "q4": "Can I look around before paying?",
+    "a4": "No. Educators agreed to share their profiles only with paying members. We show a sample profile so you know what to expect.",
+    "q5": "Do you check the educators?",
+    "a5": "No. We do not run background checks on educators, schools or families. We are a connection website, so please complete all checks yourself."
+  }
+}

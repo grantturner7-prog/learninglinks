@@ -9,7 +9,8 @@
     "subtitle": "LearningLinks connects schools, cram schools and families with teachers and tutors, directly. One flat 12-month membership. No placement fees. No commissions.",
     "ctaEducator": "I'm an educator — join free",
     "ctaSchool": "I'm a school — find educators",
-    "ctaFamily": "I'm a parent — find a tutor"
+    "ctaFamily": "I'm a parent — find a tutor",
+    "fine": "No placement fees · No commissions · Educators never pay"
   },
   "promises": {
     "title": "How we're different",
@@ -57,7 +58,9 @@
         "Browse and filter tutors",
         "Contact tutors directly"
       ]
-    }
+    },
+    "free": "Free",
+    "plan": "12-month plan"
   },
   "trust": {
     "title": "A directory, not an agent",
@@ -73,5 +76,37 @@
     "nextList": "Thailand, Vietnam",
     "laterList": "Japan, Korea, China",
     "waitlistTitle": "Get notified when we open in your country"
+  },
+  "sample": {
+    "title": "What members see",
+    "badge": "Sample, not real educators",
+    "search": "Search by subject, area and level · members only",
+    "contact": "Contact",
+    "note": "Sample cards for illustration, not real educators. Educator profiles and search are visible to paying members only.",
+    "itemA": {
+      "name": "Sample educator A",
+      "line": "Phonics · English conversation · Xitun"
+    },
+    "itemB": {
+      "name": "Sample educator B",
+      "line": "English conversation · Nantun"
+    },
+    "itemC": {
+      "name": "Sample educator C",
+      "line": "Phonics · Reading · Beitun"
+    }
+  },
+  "waitlist": {
+    "email": "Email",
+    "country": "Country",
+    "audience": "I am",
+    "audiences": {
+      "educator": "An educator",
+      "school": "A school",
+      "family": "A parent"
+    },
+    "submit": "Notify me",
+    "success": "Thanks. We'll email you when we open in your country.",
+    "errorEmail": "Please enter a valid email address."
   }
 }

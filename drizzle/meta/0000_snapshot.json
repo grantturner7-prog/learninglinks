@@ -1,5 +1,5 @@
 {
-  "id": "1f9c0b0d-f2eb-4e85-bae0-83fc139fa76e",
+  "id": "e1bd4837-5cd5-42d2-8809-8bd3a05b905c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -306,6 +306,25 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'educator'"
+        },
+        "notice_acknowledged": {
+          "name": "notice_acknowledged",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "notice_acknowledged_at": {
+          "name": "notice_acknowledged_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notice_version": {
+          "name": "notice_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",

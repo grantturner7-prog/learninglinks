@@ -52,8 +52,8 @@ body{margin:0}
   <main class="wrap" style="padding-top:36px;padding-bottom:24px">
     <div style="max-width:760px">
       <span class="badge"><span class="en">School membership</span><span class="zh">學校會員</span></span>
-      <h1 class="h2" style="margin-top:12px"><span class="en">NT$10,000 for 12 months</span><span class="zh">12 個月 NT$10,000</span></h1>
-      <p class="lead" style="font-size:18px;margin-top:8px"><span class="en">Covers your first campus. Each additional campus is NT$5,000. One payment, VAT included. It never renews on its own, and there are no placement fees or commissions.</span><span class="zh">涵蓋第一個校區，每增加一個校區加收 NT$5,000。一次付款，含營業稅。不會自動續約，沒有仲介費，也不抽成。</span></p>
+      <h1 class="h2" style="margin-top:12px"><span class="en">NT$10,000 per campus for 12 months</span><span class="zh">每個校區 12 個月 NT$10,000</span></h1>
+      <p class="lead" style="font-size:18px;margin-top:8px"><span class="en">Each campus is NT$10,000 for its own 12 months. One payment, VAT included. It never renews on its own, and there are no placement fees or commissions.</span><span class="zh">每個校區各 NT$10,000，各自享有 12 個月。一次付款，含營業稅。不會自動續約，沒有仲介費，也不抽成。</span></p>
     </div>
 
     <div class="split" style="margin-top:28px">
@@ -78,7 +78,7 @@ body{margin:0}
                 <span class="n" aria-live="polite">{{campusCount}}</span>
                 <button type="button" class="btn btn-s" aria-label="More campuses" onClick="{{inc}}">+</button>
               </div>
-              <span class="small muted" style="max-width:380px"><span class="en">NT$10,000 for the first campus, then NT$5,000 for each additional campus. You'll add each campus's details after payment.</span><span class="zh">第一個校區 NT$10,000，之後每增加一個校區加收 NT$5,000。付款後再填寫各校區資料。</span></span>
+              <span class="small muted" style="max-width:380px"><span class="en">NT$10,000 per campus. You'll add each campus's details after payment. A campus added later costs the same NT$10,000 and gets its own 12 months.</span><span class="zh">每個校區 NT$10,000。付款後再填寫各校區資料。日後新增校區同樣是 NT$10,000，並各自享有 12 個月。</span></span>
             </div>
           </div>
 
@@ -131,10 +131,7 @@ body{margin:0}
       <aside class="side sticky stack" style="gap:16px" aria-label="Order summary">
         <div class="card stack" style="gap:6px">
           <h2 class="h3"><span class="en">Order summary</span><span class="zh">訂單摘要</span></h2>
-          <div class="kv"><span><span class="en">First campus</span><span class="zh">第一個校區</span></span><b>NT$10,000</b></div>
-          <sc-if value="{{hasExtra}}" hint-placeholder-val="{{ false }}">
-            <div class="kv"><span><span class="en">Additional campuses</span><span class="zh">增加校區</span> × {{extraCount}} <span class="muted small">(NT$5,000 each)</span></span><b>NT${{extraTotal}}</b></div>
-          </sc-if>
+          <div class="kv"><span><span class="en">Campuses</span><span class="zh">校區</span> × {{campusCount}} <span class="muted small">(NT$10,000 each)</span></span><b>NT${{price}}</b></div>
           <div class="kv small"><span class="muted"><span class="en">Net amount</span><span class="zh">未稅金額</span></span><span>NT${{net}}</span></div>
           <div class="kv small"><span class="muted"><span class="en">VAT 5% (included)</span><span class="zh">營業稅 5%（已含）</span></span><span>NT${{tax}}</span></div>
           <div class="kv"><b><span class="en">Total for 12 months</span><span class="zh">12 個月總額</span></b><b style="font-size:20px">NT${{price}}</b></div>
@@ -166,7 +163,7 @@ class Component extends DCLogic {
     const step = s.step || 1;
     const ack = !!s.ack;
     const n = s.campuses || 1;
-    const price = 10000 + (n - 1) * 5000;
+    const price = 10000 * n;
     const net = Math.round(price / 1.05);
     const fmt = (v) => v.toLocaleString('en-US');
     return {
@@ -181,9 +178,6 @@ class Component extends DCLogic {
       atMin: n <= 1,
       dec: () => this.setState({ campuses: Math.max(1, ((this.state && this.state.campuses) || 1) - 1) }),
       inc: () => this.setState({ campuses: Math.min(50, ((this.state && this.state.campuses) || 1) + 1) }),
-      hasExtra: n > 1,
-      extraCount: n - 1,
-      extraTotal: fmt((n - 1) * 5000),
       price: fmt(price),
       net: fmt(net),
       tax: fmt(price - net),

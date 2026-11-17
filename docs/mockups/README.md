@@ -10,7 +10,7 @@ Twelve boards, each with an EN / 繁中 switch. Sample data only.
 4. Educator sign-up: waiver (with the required acknowledgement)
 5. Educator profile builder ("open to" decides who can see you)
 6. School dashboard
-7. School membership and checkout (NT$10,000 first campus + NT$5,000 per extra campus, VAT included)
+7. School membership and checkout (NT$10,000 per campus, VAT included)
 8. Families landing page
 9. Phone: home
 10. Phone: shared profile link (visitor wall)

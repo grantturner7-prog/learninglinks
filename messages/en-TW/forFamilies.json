@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "title": "For families: find a tutor you trust | LearningLinks",
+    "description": "NT$2,000 for 12 months. Search every tutor and contact any of them. No commission on lessons, no auto-renewal."
+  },
+  "eyebrow": "For families",
+  "title": "Find a tutor you trust. Pay once for the year.",
+  "lead": "A family membership lets you search every tutor and contact as many as you need for 12 months, for your whole family. No commission on lessons. It never renews on its own.",
+  "fine": "Tutor profiles are visible to members only. Tutors never pay us anything.",
+  "price": {
+    "label": "Family membership",
+    "amount": "NT$2,000",
+    "note": "one payment for 12 months, VAT included · no auto-renewal",
+    "b1": "Search every tutor and contact any of them, for all your children",
+    "b2": "You see educators who offer private tutoring and coaching, with their hourly rates",
+    "b3": "Re-hire or switch tutors any time in the year",
+    "b4": "Safety checklist for every first lesson"
+  },
+  "cta": "Create a family account",
+  "ctaNote": "You'll confirm that you understand we are only a connection website before you pay.",
+  "how": {
+    "title": "How it works for families",
+    "s1t": "Join for 12 months",
+    "s1b": "One payment opens every tutor profile and contact detail. It ends after 12 months unless you choose to renew.",
+    "s2t": "Browse and filter",
+    "s2b": "Filter by subject, level, area, price and online or in-person. See profiles, self-declared credentials and availability.",
+    "s3t": "Contact tutors directly",
+    "s3b": "Message by LINE or phone, agree on price and schedule between you. We never take a cut of lessons."
+  },
+  "before": {
+    "title": "Before you book a first lesson",
+    "i1t": "Verify who they are.",
+    "i1b": "Ask for ID and check it matches the profile.",
+    "i2t": "Ask for a police record certificate.",
+    "i2b": "Request it from the tutor directly. We never see it.",
+    "i3t": "Start in public or online.",
+    "i3b": "A parent stays present for early lessons.",
+    "i4t": "Check the tutor may legally tutor.",
+    "i4b": "Some work permits don't allow private lessons."
+  },
+  "faq": {
+    "title": "Questions",
+    "q1": "What if I find a tutor in two weeks?",
+    "a1": "Your membership still covers re-hires, new subjects and siblings for the rest of the 12 months.",
+    "q2": "Do you take a commission on lessons?",
+    "a2": "No. You pay the tutor directly. Tutors never pay us anything.",
+    "q3": "Does it renew automatically?",
+    "a3": "Never. We'll remind you before it ends, and renewal is always your choice.",
+    "q4": "Can I look around before paying?",
+    "a4": "No. Tutors agreed to share their profiles only with paying members. We show a sample profile so you know what to expect.",
+    "q5": "Do you check the tutors?",
+    "a5": "No. We do not run background checks on tutors, families or schools. We're a connection website, so please use the checklist and verify everything directly."
+  }
+}

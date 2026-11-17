@@ -2,14 +2,11 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { getDb, schema } from "@/lib/db";
-import { ACCOUNT_TYPES, type AccountType } from "@/lib/db/schema/auth";
+import { APIError } from "better-auth/api";
+import { sanitizeAccountType } from "@/lib/auth/helpers";
 import { sendEmail } from "@/lib/email";
 import { getEnv } from "@/lib/env";
-
-/** Anything a client sends for accountType other than these falls back to "educator". Never "admin". */
-export function sanitizeAccountType(value: unknown): AccountType {
-  return (ACCOUNT_TYPES as readonly unknown[]).includes(value) ? (value as AccountType) : "educator";
-}
+import { NOTICE_VERSION } from "@/lib/notice";
 
 function createAuth() {
   const env = getEnv();
@@ -54,14 +51,30 @@ function createAuth() {
     user: {
       additionalFields: {
         accountType: { type: "string", required: false, defaultValue: "educator", input: true },
+        /** Sent by the sign-up form and checked by the hook below. */
+        noticeAcknowledged: { type: "boolean", required: false, input: true },
+        noticeAcknowledgedAt: { type: "date", required: false, input: false },
+        noticeVersion: { type: "string", required: false, input: false },
       },
     },
     databaseHooks: {
       user: {
         create: {
-          before: async (u) => ({
-            data: { ...u, accountType: sanitizeAccountType((u as { accountType?: unknown }).accountType) },
-          }),
+          before: async (u, ctx) => {
+            const { noticeAcknowledged, ...rest } = u as typeof u & { noticeAcknowledged?: unknown; accountType?: unknown };
+            // Enforced on the SERVER: a direct API call cannot skip the acknowledgement.
+            if (ctx?.path === "/sign-up/email" && noticeAcknowledged !== true) {
+              throw new APIError("BAD_REQUEST", { message: "NOTICE_NOT_ACKNOWLEDGED", code: "NOTICE_NOT_ACKNOWLEDGED" });
+            }
+            return {
+              data: {
+                ...rest,
+                accountType: sanitizeAccountType(rest.accountType),
+                noticeAcknowledged: noticeAcknowledged === true,
+                ...(noticeAcknowledged === true ? { noticeAcknowledgedAt: new Date(), noticeVersion: NOTICE_VERSION } : {}),
+              },
+            };
+          },
         },
       },
     },

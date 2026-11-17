@@ -6,7 +6,7 @@ These come from the owner (Taichung, Taiwan). Treat them as requirements, not su
 A **connection website** between educators and the people who need them. Educators are free. Schools and families pay a flat membership. We are **not** an employer, agent or guarantor.
 
 ## Money
-- Schools: **NT$10,000 for 12 months** covers the first campus. Each **additional campus is NT$5,000** for the same term (3 campuses = NT$20,000). Families: **NT$2,000 for 12 months**.
+- Schools: **NT$10,000 per campus for 12 months** (3 campuses = NT$30,000). **No discount for extra campuses and no proration.** A campus added mid-year pays the full NT$10,000 and gets its own full 12 months from the day it starts. Families: **NT$2,000 for 12 months**. The owner is firm on these prices: do not suggest changing them.
 - **VAT is included** in these prices (confirmed). One-time payment, 12-month term, **never auto-renews**. Prices are flat (no discounts unless the owner configures one).
 - **Families launch with schools in Phase 1.** Launch order: Phase 1 Taiwan (educators, schools, families), Phase 2 Thailand and Vietnam, Phase 3 Japan, Korea and China.
 
@@ -32,4 +32,4 @@ The canonical wording is `messages/*/notice.json` (English and Traditional Chine
 ID, passport or ARC numbers, criminal records, health or financial data, home addresses, children's data. Credentials are self-declared (links only, never documents).
 
 ## Working agreement
-Show **mock-ups and get approval before any expensive build**. The build is paused until the owner says to resume. Never claim something is verified unless it was run.
+Show **mock-ups and get approval before any expensive build**. The owner approved the mock-ups and said "go" for **Step 1** (running site: home, marketing pages, sign-up, sign-in), which is built. **Steps 2 to 4 (educator side, schools and families with payments, reports and launch readiness) each need the owner's go-ahead first.** Never claim something is verified unless it was run.

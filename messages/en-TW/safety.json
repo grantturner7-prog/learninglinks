@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "title": "Safety guide | LearningLinks",
+    "description": "Checklists for schools, families and educators. LearningLinks does not run background checks."
+  },
+  "title": "Safety guide",
+  "intro": "LearningLinks is only a connection website. These checklists help you stay safe, but they do not replace your own checks or the law.",
+  "hirers": {
+    "title": "Before you hire or book",
+    "h1": "Confirm who they are. Ask for ID and check it matches the profile.",
+    "h2": "Ask for a police record certificate yourself. We never see it.",
+    "h3": "Check that they have the right to work and to tutor. Some work permits do not allow private lessons.",
+    "h4": "Check references and try a short trial class.",
+    "h5": "For children, start in a public place, or online with a parent present."
+  },
+  "educators": {
+    "title": "Before you accept an offer",
+    "e1": "Check that the school or family is real. Ask for a registered name, address and tax ID.",
+    "e2": "Never pay to apply or to be hired. LearningLinks never charges educators.",
+    "e3": "Do not share ID numbers or documents until you have agreed to work together.",
+    "e4": "Check that your work permit allows the work you are offered.",
+    "e5": "Get the terms in writing: pay, hours and contract length."
+  }
+}

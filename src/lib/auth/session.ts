@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { cache } from "react";
 import { getAuth } from "@/lib/auth";
+import { isAdminEmail, safeNext } from "@/lib/auth/helpers";
 import type { AccountType } from "@/lib/db/schema/auth";
 import { getEnv } from "@/lib/env";
 import { redirect } from "@/i18n/navigation";
@@ -14,14 +15,18 @@ export interface CurrentUser {
   isAdmin: boolean;
 }
 
-/** Admin = verified email that appears in ADMIN_EMAILS. Nothing about admin is stored in the database. */
-export function isAdminEmail(email: string, emailVerified: boolean, adminEmails = getEnv().ADMIN_EMAILS): boolean {
-  return emailVerified && adminEmails.includes(email.trim().toLowerCase());
-}
-
 /** The signed-in user for this request, or null. Cached per request. */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
-  const session = await getAuth().api.getSession({ headers: await headers() });
+  let session;
+  try {
+    session = await getAuth().api.getSession({ headers: await headers() });
+  } catch (err) {
+    // Next.js control-flow errors (dynamic rendering, redirects) carry a digest and must pass through.
+    if (typeof err === "object" && err !== null && "digest" in err) throw err;
+    // If the database is briefly unavailable, public pages must still render (signed out).
+    console.error("getSession failed", err);
+    return null;
+  }
   if (!session) return null;
   const u = session.user as typeof session.user & { accountType?: AccountType };
   return {
@@ -30,15 +35,9 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
     email: u.email,
     emailVerified: u.emailVerified,
     accountType: u.accountType ?? "educator",
-    isAdmin: isAdminEmail(u.email, u.emailVerified),
+    isAdmin: isAdminEmail(u.email, u.emailVerified, getEnv().ADMIN_EMAILS),
   };
 });
-
-/** Only same-site relative paths are allowed as post-login destinations (prevents open redirects). */
-export function safeNext(next: string | null | undefined, fallback = "/dashboard"): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//") || next.includes("\\")) return fallback;
-  return next;
-}
 
 export async function requireUser(locale: string, next?: string): Promise<CurrentUser> {
   const user = await getCurrentUser();

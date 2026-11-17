@@ -21,7 +21,7 @@
 | Phase 1 school data | The old map holds 5,477 mostly public schools with **no contact data**, and only 2 language schools. The main buyers, about 17,700 licensed cram schools, are missing. Phase 1 needs a cram-school import from government open data, with a licence check. |
 | **Visibility (corrected 17 Nov 2026)** | **No one sees any educator without a paid membership. There is no free browsing, no public profiles and no teasers, for schools or for parents.** This replaces the "public teaser + member-only contact" model in the first draft below (§0 call 2, §5.2, §5.3, §7, §9, Appendix A). Educators are free and their profiles are visible to logged-in paying members only; contact details are shown one at a time on request, logged and capped per day. Profile pages are never indexed by search engines. Unauthenticated visitors get a members-only wall, with a clearly labelled **sample** profile so they know what they would be buying. |
 | Public profile link / sample profile | **No public profile link for educators, ever. The labelled sample profile stays** on marketing pages and on the members-only wall. |
-| **Pricing (set 17 Nov 2026)** | **Schools: NT$10,000 for 12 months covers the first campus; each additional campus is NT$5,000** (3 campuses = NT$20,000). **Families: NT$2,000 for 12 months.** **VAT is included** in these prices (confirmed). Flat, one payment, no auto-renewal. This replaces every earlier price and the founding discount in §6 and §9–§10. *Assumption to confirm: a campus added mid-year pays NT$5,000 for the same term, with no proration.* |
+| **Pricing (set 17 Nov 2026, final)** | **Schools: NT$10,000 per campus for 12 months** (3 campuses = NT$30,000). **No discount for extra campuses and no proration:** a campus added mid-year pays the full NT$10,000 and gets its own full 12 months from the day it starts, so there is no way to game the rules. **Families: NT$2,000 for 12 months.** **VAT is included.** Flat, one payment, no auto-renewal. That is under NT$834 a month for a school, and less than half what competitors charge. You are firm on these prices. |
 | **Audience-specific visibility (set 17 Nov 2026)** | **Families see only educators who offer private tutoring or coaching. Schools see only educators open to full-time or part-time work (these two work together), and never tutoring-only educators.** An educator in both groups is shown to each audience with only that audience's side: schools do not see tutoring or rates, families do not see school-work wishes. Hourly rates are for families only. *Confirmed 17 Nov 2026: part-time and full-time work together.* Rules live in `src/lib/visibility.ts` and are unit-tested. |
 | **Live matching and substitute work: REMOVED (17 Nov 2026)** | To stay above board legally there is **no live substitute board, no in-app chat and no "substitute" option**. Schools and educators discuss substitute cover **between themselves**, using the contact details an educator chose to share. This removes the largest legal risk of the earlier draft. It must not come back without your explicit approval and a lawyer's opinion. |
 | **Compliance notice: always (set 17 Nov 2026)** | **Every page and flow, for every party, carries a notice that LearningLinks is only a connection website, does not run background checks on teachers, schools or families, and that everyone must complete all checks and follow all government laws, policies and procedures that apply to them.** Sign-up, checkout and consent flows also require an acknowledgement checkbox. Canonical wording: `messages/*/notice.json`, guarded by a test. A standing rule is also recorded in `CLAUDE.md`. |
@@ -188,7 +188,7 @@ Published estimates of the private-tutoring market range from about US$14.8B to 
 | Contact reveal with audit log + "who contacted me" for educators | ✓ | ✓ | ✓ |
 | Family membership + tutor search (rates, subjects, exam prep) | ✓ | ✓ | ✓ |
 | Optional request board (families post a need, tutors respond free) | | ✓ | ✓ |
-| Multi-campus pricing (NT$10,000 + NT$5,000 per extra campus), invoice + 統一編號 | ✓ | ✓ | local equivalents |
+| Multi-campus purchase (NT$10,000 per campus, no discount), invoice + 統一編號 | ✓ | ✓ | local equivalents |
 | Renewal engine (60/30/7-day reminders, one-click renew, stacking) | basic | ✓ | ✓ |
 | LINE integration (login + notifications) | login | ✓ | KakaoTalk, Zalo, WeChat |
 | SEO landing pages for the service and guides (never educator profiles) | ✓ | ✓ | ✓ |
@@ -256,11 +256,10 @@ A contact reveal is **logged**, capped per day and shown to the educator ("a mem
 | Plan | Price | Notes |
 |---|---|---|
 | **Educator** | **Free** | Permanent promise. |
-| **School** | **NT$10,000 for 12 months** (first campus) | VAT included: net NT$9,524 + VAT NT$476. Replaces today's $99/month (about NT$37,000 a year). |
-| **Additional campus** | **NT$5,000** each, same term | 3 campuses = NT$20,000 (net NT$19,048 + VAT NT$952). |
+| **School** | **NT$10,000 per campus for 12 months** | VAT included: net NT$9,524 + VAT NT$476 per campus. Replaces today's $99/month (about NT$37,000 a year). Every campus costs the same: 3 campuses = NT$30,000. |
 | **Family** | **NT$2,000 for 12 months** | VAT included: net NT$1,905 + VAT NT$95. One pass covers all children and re-hires. Opens at launch. |
 
-*Still open: whether a campus added mid-year pays NT$5,000 for the remaining term or a full year, and whether campuses may be added after the first payment at all.*
+*Decided: no discount for added campuses and no proration. A campus added later pays NT$10,000 for its own full 12 months.*
 
 - Charge in local currency with round numbers and tax-inclusive prices for consumers.
 - Competitors collect from **tutors** (HK TutorCircle's admin fee; Kim Gwaoe's reported ~25% of first-month tuition [unverified: from an app-store reply]). Our flat fee is on the other side, so the story to **tutors** is "keep 100%, pay nothing". It isn't a price anchor for parents.
@@ -346,6 +345,8 @@ A contact reveal is **logged**, capped per day and shown to the educator ("a mem
 ---
 
 ## 10. Roadmap
+
+**Build status (17 Nov 2026):** Phase 1 Step 1 is built and tested: home, schools, families, safety and members-only wall pages in Traditional Chinese and English, sign-up with a server-enforced acknowledgement of the compliance notice, sign-in, email verification and password reset. Not built yet: educator profiles and waiver (Step 2); school and family memberships, payments and contact reveal (Step 3); reports, final legal text and deployment (Step 4).
 
 *Estimates assume one full-time builder plus roughly 10–15 hours a week of your time on legal, sales and community work. I can build most of the engineering.*
 

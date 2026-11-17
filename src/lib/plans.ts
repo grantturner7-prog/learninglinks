@@ -9,11 +9,11 @@ export interface Plan {
   countryCode: CountryCode;
   /**
    * Price for one 12-month term, in the currency's major unit, VAT INCLUDED (confirmed by the owner,
-   * 17 Nov 2026). Schools: NT$10,000 covers the first campus. Families: NT$2,000.
+   * 17 Nov 2026). Schools: NT$10,000 PER CAMPUS, for that campus's own full 12 months. Families: NT$2,000.
    */
   listPrice: number;
-  /** Extra price per additional campus for the same term. Null where campuses do not apply. */
-  additionalCampusPrice: number | null;
+  /** true = the price is charged once per campus (schools). There is no discount for extra campuses. */
+  perCampus: boolean;
   /** false = cannot be bought yet. Both Taiwan plans are open at launch. */
   available: boolean;
 }
@@ -21,8 +21,8 @@ export interface Plan {
 export const TERM_MONTHS = 12;
 
 export const PLANS: Record<PlanCode, Plan> = {
-  school_tw: { code: "school_tw", audience: "school", countryCode: "TW", listPrice: 10_000, additionalCampusPrice: 5_000, available: true },
-  family_tw: { code: "family_tw", audience: "family", countryCode: "TW", listPrice: 2_000, additionalCampusPrice: null, available: true },
+  school_tw: { code: "school_tw", audience: "school", countryCode: "TW", listPrice: 10_000, perCampus: true, available: true },
+  family_tw: { code: "family_tw", audience: "family", countryCode: "TW", listPrice: 2_000, perCampus: false, available: true },
 };
 
 export function isPlanCode(v: unknown): v is PlanCode {
@@ -34,16 +34,17 @@ export function planFor(audience: Plan["audience"], country: CountryCode): Plan 
 }
 
 /**
- * Total for a term. Schools pay the list price for the first campus plus the additional-campus price for
- * each campus after that (so 3 campuses = 10,000 + 2 x 5,000 = 20,000). Families always pay the list price.
+ * Total for the campuses bought, each for its own 12 months. Every campus costs the full list price
+ * (3 campuses = 30,000). No discount and no proration: a campus added mid-year pays the full price
+ * and gets its own full 12 months from the day it starts. Families always pay the list price once.
  */
 export function priceForCampuses(plan: Plan, campuses = 1): number {
   if (!Number.isInteger(campuses) || campuses < 1) throw new Error("campuses must be a whole number of at least 1");
-  if (plan.additionalCampusPrice === null) {
+  if (!plan.perCampus) {
     if (campuses !== 1) throw new Error("This plan does not have campuses");
     return plan.listPrice;
   }
-  return plan.listPrice + (campuses - 1) * plan.additionalCampusPrice;
+  return plan.listPrice * campuses;
 }
 
 /** Split a tax-inclusive amount into net + tax (for invoices). net + tax always equals gross. */

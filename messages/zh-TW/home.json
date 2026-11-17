@@ -9,7 +9,8 @@
     "subtitle": "LearningLinks 讓學校、補習班與家長直接聯絡老師與家教。一次 12 個月的固定會員費，沒有仲介費，也不抽成。",
     "ctaEducator": "我是教師，免費加入",
     "ctaSchool": "我是學校，尋找教師",
-    "ctaFamily": "我是家長，尋找家教"
+    "ctaFamily": "我是家長，尋找家教",
+    "fine": "沒有仲介費 · 不抽成 · 教師永遠免費"
   },
   "promises": {
     "title": "我們的不同",
@@ -57,7 +58,9 @@
         "瀏覽並篩選家教",
         "直接聯絡家教"
       ]
-    }
+    },
+    "free": "免費",
+    "plan": "12 個月方案"
   },
   "trust": {
     "title": "我們是名錄，不是仲介",
@@ -73,5 +76,37 @@
     "nextList": "泰國、越南",
     "laterList": "日本、韓國、中國",
     "waitlistTitle": "所在國家開通時通知我"
+  },
+  "sample": {
+    "title": "會員看到的內容",
+    "badge": "範例，非真實教師",
+    "search": "依科目、地區與年級搜尋 · 僅限會員",
+    "contact": "聯絡",
+    "note": "範例卡片僅供說明，並非真實教師。教師檔案與搜尋功能僅限付費會員使用。",
+    "itemA": {
+      "name": "範例教師 A",
+      "line": "自然發音 · 英語會話 · 西屯區"
+    },
+    "itemB": {
+      "name": "範例教師 B",
+      "line": "英語會話 · 南屯區"
+    },
+    "itemC": {
+      "name": "範例教師 C",
+      "line": "自然發音 · 閱讀 · 北屯區"
+    }
+  },
+  "waitlist": {
+    "email": "電子郵件",
+    "country": "國家",
+    "audience": "我是",
+    "audiences": {
+      "educator": "教師",
+      "school": "學校",
+      "family": "家長"
+    },
+    "submit": "通知我",
+    "success": "感謝您，我們開通您的國家時會以 Email 通知。",
+    "errorEmail": "請輸入有效的 Email。"
   }
 }

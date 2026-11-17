@@ -40,6 +40,9 @@ CREATE TABLE "user" (
 	"email_verified" boolean DEFAULT false NOT NULL,
 	"image" text,
 	"account_type" text DEFAULT 'educator' NOT NULL,
+	"notice_acknowledged" boolean DEFAULT false NOT NULL,
+	"notice_acknowledged_at" timestamp with time zone,
+	"notice_version" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email")

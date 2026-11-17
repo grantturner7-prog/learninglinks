@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
-  boolean, check, date, doublePrecision, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid,
+  check, date, doublePrecision, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
@@ -178,7 +178,7 @@ export const orders = pgTable(
     planCode: text("plan_code").notNull(),
     /** Amount in the currency's major unit (TWD has no minor unit). Tax-inclusive. */
     amount: integer("amount").notNull(),
-    /** Number of campuses covered (schools). Total = first campus + extra campuses. Families: 1. */
+    /** Number of campuses bought (schools): total = NT$10,000 x campuses, each for its own 12 months. Families: 1. */
     campuses: integer("campuses").notNull().default(1),
     currency: text("currency").notNull(),
     countryCode: text("country_code").notNull(),

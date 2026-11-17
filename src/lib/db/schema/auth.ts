@@ -14,6 +14,12 @@ export const user = pgTable("user", {
   image: text("image"),
   /** Chosen at sign-up. Admin rights are NOT stored here; they come from ADMIN_EMAILS + verified email. */
   accountType: text("account_type").$type<AccountType>().notNull().default("educator"),
+  /** True once the user ticked the compliance acknowledgement at sign-up. */
+  noticeAcknowledged: boolean("notice_acknowledged").notNull().default(false),
+  /** When the user acknowledged the compliance notice (we are only a connection website, no background checks). */
+  noticeAcknowledgedAt: ts("notice_acknowledged_at"),
+  /** Which version of the notice they acknowledged (see src/lib/notice.ts). */
+  noticeVersion: text("notice_version"),
   createdAt: ts("created_at").notNull().defaultNow(),
   updatedAt: ts("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),
 });

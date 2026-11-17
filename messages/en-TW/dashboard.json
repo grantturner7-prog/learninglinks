@@ -1,0 +1,28 @@
+{
+  "meta": "Dashboard | LearningLinks",
+  "title": "Welcome, {name}",
+  "intro": "Your account is ready.",
+  "type": {
+    "educator": "Educator account",
+    "school": "School account",
+    "family": "Family account"
+  },
+  "next": "What comes next",
+  "educator": {
+    "s1": "Read and accept the publication waiver",
+    "s2": "Build your profile",
+    "s3": "Get found by paying schools and families"
+  },
+  "school": {
+    "s1": "Add your school and choose the number of campuses",
+    "s2": "Pay once by bank transfer",
+    "s3": "Browse educators and contact them directly"
+  },
+  "family": {
+    "s1": "Pay once for 12 months",
+    "s2": "Browse tutors",
+    "s3": "Contact tutors directly"
+  },
+  "soon": "These steps are being built and will appear here soon.",
+  "admin": "You have admin access."
+}
