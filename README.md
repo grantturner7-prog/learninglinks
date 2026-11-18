@@ -48,7 +48,7 @@ npm run db:demo-accounts      # fictional logins, all with the password demo-pas
 
 It prints the logins: a paid family (family@demo.test), a family that has not paid (newfamily@demo.test, to try checkout), a school with two campuses of which one is paid (school@demo.test), an educator (educator@demo.test) and the admin desk (the first address in `ADMIN_EMAILS`). Both scripts refuse to run in production, and `db:demo-accounts` only runs against a local server.
 
-To try **online payment** without real money, put ECPay's public test account in `.env.local` (the three values and `ECPAY_MODE=stage` are written in a comment in `.env.example`). the payment buttons then open ECPay's real test page. See `docs/PAYMENTS.md`.
+To try **online payment** without real money, put ECPay's public test account in `.env.local` (the three values and `ECPAY_MODE=stage` are written in a comment in `.env.example`). The payment buttons then open ECPay's real test page. See `docs/PAYMENTS.md`.
 
 In development, emails (verification, password reset) are printed to the server log. In production `RESEND_API_KEY` is required and email verification is always enforced.
 
