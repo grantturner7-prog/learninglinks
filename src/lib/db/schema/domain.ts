@@ -294,6 +294,8 @@ export const jobs = pgTable(
     salaryMax: integer("salary_max"),
     salaryUnit: text("salary_unit").$type<"month" | "hour">(),
     startsOn: date("starts_on"),
+    /** Set when an admin removed the post after a report. A school cannot reopen a removed post. */
+    removedAt: ts("removed_at"),
     /** How an educator should respond (email, phone, LINE...). Shown only to signed-in educators with a profile. */
     applyContact: text("apply_contact"),
     status: text("status").$type<JobStatus>().notNull().default("open"),
@@ -327,6 +329,9 @@ export const reports = pgTable(
   (t) => [
     check("report_status_check", sql`${t.status} in ('open','actioned','dismissed')`),
     index("report_status_idx").on(t.status, t.createdAt),
+    index("report_target_idx").on(t.targetType, t.targetId),
+    // One open report per person and target: pressing the button twice does not queue two.
+    uniqueIndex("report_open_uq").on(t.reporterUserId, t.targetType, t.targetId).where(sql`${t.status} = 'open'`),
   ],
 );
 

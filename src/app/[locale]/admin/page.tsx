@@ -4,9 +4,10 @@ import { ConfirmForm } from "@/components/admin/confirm-form";
 import { requireAdmin } from "@/lib/auth/session";
 import { findOrderByReference, listPendingOrdersForAdmin } from "@/lib/billing/orders";
 import { getDb } from "@/lib/db";
+import { listOpenReports, listSuspended } from "@/lib/moderation/service";
 import { listPendingClaims } from "@/lib/orgs/service";
 import { formatMoney } from "@/lib/plans";
-import { cancelOrderAsAdminAction, reviewClaimAction } from "./actions";
+import { cancelOrderAsAdminAction, reinstateAction, reviewClaimAction, reviewReportAction } from "./actions";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ ref?: string | string[]; confirmed?: string | string[]; again?: string }> };
 
@@ -26,7 +27,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
   const ref = (Array.isArray(sp.ref) ? sp.ref[0] : sp.ref)?.trim().slice(0, 40) ?? "";
   const confirmedRef = (Array.isArray(sp.confirmed) ? sp.confirmed[0] : sp.confirmed)?.trim().slice(0, 40) ?? "";
   const confirmedOrder = confirmedRef ? await findOrderByReference(db, confirmedRef) : null;
-  const [orders, claims, found] = await Promise.all([listPendingOrdersForAdmin(db), listPendingClaims(db), ref ? findOrderByReference(db, ref) : Promise.resolve(null)]);
+  const [orders, claims, found, reports, suspended] = await Promise.all([listPendingOrdersForAdmin(db), listPendingClaims(db), ref ? findOrderByReference(db, ref) : Promise.resolve(null), listOpenReports(db), listSuspended(db)]);
   // Today's date in Taipei as YYYY-MM-DD: the default for "received on".
   const today = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Taipei" }).format(new Date());
   const money = (n: number, c: string) => formatMoney(n, c, locale);
@@ -55,6 +56,42 @@ export default async function AdminPage({ params, searchParams }: Props) {
       </section>
 
       <section className="mt-8">
+        <h2 className="text-2xl font-extrabold">Reports to review ({reports.length})</h2>
+        <ul className="mt-3 flex flex-col gap-4">
+          {reports.length === 0 ? <li className="card">No reports waiting.</li> : reports.map((r) => (
+            <li key={r.id} className="card" data-testid="open-report">
+              <p className="text-sm text-ink-600">{r.targetType} · reported {f.dateTime(r.createdAt, { dateStyle: "medium", timeStyle: "short" })} · reason: <b>{r.reason}</b></p>
+              <p className="text-xl font-extrabold">{r.target.label}</p>
+              <p className="text-sm text-ink-600">{r.target.sub ? `${r.target.sub} · ` : ""}now: {r.target.state}</p>
+              {r.details ? <p className="mt-2 whitespace-pre-line">{r.details}</p> : null}
+              <p className="mt-1 text-sm text-ink-600">Reported by {r.reporterEmail}. The reported person is never told who.</p>
+              {r.alsoReported > 0 ? <p className="notice mt-2">{r.alsoReported} other open report(s) about the same {r.targetType}. Acting closes them all.</p> : null}
+              <form action={reviewReportAction} className="mt-3 flex flex-wrap gap-3">
+                <input type="hidden" name="reportId" value={r.id} />
+                <button type="submit" name="decision" value="action" className="btn btn-primary" disabled={!r.target.exists}>{r.targetType === "educator" ? "Hide the profile (suspend)" : r.targetType === "organization" ? "Suspend the school" : "Remove the job post"}</button>
+                <button type="submit" name="decision" value="dismiss" className="btn btn-secondary">Dismiss</button>
+              </form>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {suspended.length > 0 ? (
+        <section className="mt-10">
+          <h2 className="text-2xl font-extrabold">Suspended right now ({suspended.length})</h2>
+          <ul className="mt-3 flex flex-col gap-3">
+            {suspended.map((s) => (
+              <li key={s.id} className="card flex flex-wrap items-center gap-3" data-testid="suspended-item">
+                <span className="flex-1"><b>{s.label}</b> <span className="text-sm text-ink-600">{s.type === "educator" ? "educator profile" : "school"}{s.sub ? ` · ${s.sub}` : ""}</span></span>
+                <form action={reinstateAction}><input type="hidden" name="type" value={s.type} /><input type="hidden" name="id" value={s.id} /><button type="submit" className="btn btn-secondary">Reinstate</button></form>
+              </li>
+            ))}
+          </ul>
+          <p className="hint mt-2">A reinstated profile comes back hidden. The educator decides when to publish it again.</p>
+        </section>
+      ) : null}
+
+      <section className="mt-10">
         <h2 className="text-2xl font-extrabold">Waiting for payment ({shown.length})</h2>
         <ul className="mt-3 flex flex-col gap-4">
           {shown.length === 0 ? <li className="card">Nothing is waiting.</li> : shown.map((o) => (

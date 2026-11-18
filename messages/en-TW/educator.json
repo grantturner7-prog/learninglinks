@@ -280,6 +280,7 @@
     "jobsBody": "Schools post full-time and part-time jobs. Only educators with a profile can see them.",
     "jobsCta": "See job posts",
     "jobsLocked": "Create your profile to see job posts.",
-    "settings": "Profile settings"
+    "settings": "Profile settings",
+    "suspended": "LearningLinks has hidden your profile after a report. It is not visible to anyone. If you think this is a mistake, write to us and we will look again."
   }
 }

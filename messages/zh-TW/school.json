@@ -41,7 +41,9 @@
     "no_membership": "此校區需要有效會員資格才能刊登職缺。",
     "not_a_member": "您沒有連結到這間校區。",
     "too_many_open": "這間校區已有 20 則開放職缺，請先關閉其中一則。",
-    "fix": "請修正標示的答案。"
+    "fix": "請修正標示的答案。",
+    "campus_suspended": "這間校區目前停權，無法付費或使用，請與我們聯絡。",
+    "suspended": "這間校區目前停權，無法刊登職缺，請與我們聯絡。"
   },
   "campuses": {
     "title": "您的校區",
@@ -64,7 +66,9 @@
     "claimIt": "這是我的學校",
     "taken": "已被認領",
     "notListed": "找不到嗎？新增您的校區",
-    "addCampus": "新增校區"
+    "addCampus": "新增校區",
+    "suspended": "已停權",
+    "suspendedNote": "這間校區在收到回報後已停權。若您認為有誤，請來信告知。"
   },
   "claim": {
     "cheer": {

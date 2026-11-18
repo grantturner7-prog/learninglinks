@@ -19,7 +19,7 @@ export default async function NewJobPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const user = (await getCurrentUser())!;
-  const campuses = (await listMyCampuses(getDb(), user.id)).filter((c) => c.membership.active);
+  const campuses = (await listMyCampuses(getDb(), user.id)).filter((c) => c.membership.active && !c.suspended);
   // Only a campus with an active membership can post; anyone else is sent to the jobs page, which explains why.
   if (campuses.length === 0) return redirect({ href: "/school/jobs", locale });
   return <JobFlow campuses={campuses.map((c) => ({ id: c.id, name: c.name, city: c.city ?? "", district: c.district ?? "" }))} {...geoOptions(locale)} />;

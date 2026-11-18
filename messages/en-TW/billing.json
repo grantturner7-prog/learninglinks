@@ -37,7 +37,8 @@
     "server": "Something went wrong on our side. Nothing was charged. Please try again.",
     "signin": "Please sign in again.",
     "not_found": "We could not find that.",
-    "not_pending": "That order is no longer waiting for payment."
+    "not_pending": "That order is no longer waiting for payment.",
+    "campus_suspended": "One of those campuses is suspended, so it cannot be paid for. Please contact us."
   },
   "receipt": {
     "title": "Your membership",

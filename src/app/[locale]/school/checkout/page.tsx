@@ -21,7 +21,7 @@ export default async function SchoolCheckoutPage({ params, searchParams }: Props
   const { campus } = await searchParams;
   setRequestLocale(locale);
   const user = (await getCurrentUser())!;
-  const campuses = await listMyCampuses(getDb(), user.id);
+  const campuses = (await listMyCampuses(getDb(), user.id)).filter((c) => !c.suspended);
   if (campuses.length === 0) {
     const t = await getTranslations("billing.school");
     return (

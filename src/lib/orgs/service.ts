@@ -227,18 +227,20 @@ export interface MyCampus {
   city: string | null;
   district: string | null;
   role: "owner" | "member";
+  /** True while an admin has suspended the campus after a report. It cannot post, browse or be paid for. */
+  suspended: boolean;
   membership: HolderMembership;
 }
 
 /** The campuses this school user belongs to, each with where its own 12 months stand. */
 export async function listMyCampuses(db: Db, userId: string, now: Date = new Date()): Promise<MyCampus[]> {
   const rows = await db
-    .select({ id: organizations.id, name: organizations.name, type: organizations.type, city: organizations.city, district: organizations.district, role: orgMembers.role })
+    .select({ id: organizations.id, name: organizations.name, type: organizations.type, city: organizations.city, district: organizations.district, role: orgMembers.role, status: organizations.status })
     .from(orgMembers)
     .innerJoin(organizations, eq(orgMembers.organizationId, organizations.id))
-    .where(and(eq(orgMembers.userId, userId), eq(organizations.status, "claimed")))
+    .where(and(eq(orgMembers.userId, userId), inArray(organizations.status, ["claimed", "suspended"])))
     .orderBy(asc(organizations.name));
-  return Promise.all(rows.map(async (r) => ({ ...r, membership: await getHolderMembership(db, "org", r.id, now) })));
+  return Promise.all(rows.map(async ({ status, ...r }) => ({ ...r, suspended: status === "suspended", membership: await getHolderMembership(db, "org", r.id, now) })));
 }
 
 export interface MyClaim {

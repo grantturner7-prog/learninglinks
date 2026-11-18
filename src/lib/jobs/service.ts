@@ -1,4 +1,4 @@
-import { and, desc, eq, isNotNull, sql, type SQL } from "drizzle-orm";
+import { and, desc, eq, isNotNull, ne, sql, type SQL } from "drizzle-orm";
 import type { Db } from "@/lib/db";
 import { schema } from "@/lib/db";
 import type { AccountType } from "@/lib/db/schema/auth";
@@ -11,7 +11,7 @@ const { jobs, organizations, educatorProfiles, memberships } = schema;
  * (they are not deleted: renewing brings them back). Every educator-facing job query includes this.
  */
 export function jobIsLive(now: Date = new Date()): SQL {
-  return sql`exists (select 1 from ${memberships} where ${memberships.holderType} = 'org' and ${memberships.holderId} = ${jobs.organizationId}::text and ${memberships.startsAt} <= ${now} and ${memberships.endsAt} > ${now})`;
+  return sql`exists (select 1 from ${memberships} where ${memberships.holderType} = 'org' and ${memberships.holderId} = ${jobs.organizationId}::text and ${memberships.startsAt} <= ${now} and ${memberships.endsAt} > ${now}) and not exists (select 1 from ${organizations} where ${organizations.id} = ${jobs.organizationId} and ${organizations.status} = 'suspended')`;
 }
 
 /** Build the viewer description the visibility rule needs from a signed-in user. */
@@ -87,7 +87,7 @@ export interface SchoolPoint {
 /** Schools for the educator map. Same gate as job posts: signed-in educators with a profile only. */
 export async function listSchoolPoints(db: Db, viewer: JobViewer | null, f: { city?: string; type?: string } = {}, now: Date = new Date()): Promise<SchoolPoint[]> {
   if (!canSeeJobs(viewer)) return [];
-  const conds = [isNotNull(organizations.latitude), isNotNull(organizations.longitude)];
+  const conds = [isNotNull(organizations.latitude), isNotNull(organizations.longitude), ne(organizations.status, "suspended")];
   if (f.city) conds.push(eq(organizations.city, f.city));
   if (f.type) conds.push(eq(organizations.type, f.type));
   const openJobs = db
@@ -125,7 +125,7 @@ export async function getSchoolWithJobs(db: Db, viewer: JobViewer | null, id: st
   const [org] = await db
     .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, city: organizations.city, district: organizations.district, website: organizations.website })
     .from(organizations)
-    .where(eq(organizations.id, id))
+    .where(and(eq(organizations.id, id), ne(organizations.status, "suspended")))
     .limit(1);
   if (!org) return null;
   const rows = await db.select().from(jobs).where(and(eq(jobs.organizationId, id), eq(jobs.status, "open"), jobIsLive(now))).orderBy(desc(jobs.createdAt));

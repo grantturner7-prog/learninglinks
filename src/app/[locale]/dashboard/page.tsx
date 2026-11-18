@@ -106,7 +106,7 @@ async function SchoolHome({ user, locale }: { user: HomeUser; locale: string }) 
   const f = await getFormatter();
   const db = getDb();
   const [campuses, claims] = await Promise.all([listMyCampuses(db, user.id), listMyOpenClaims(db, user.id)]);
-  const anyActive = campuses.some((c) => c.membership.active);
+  const anyActive = campuses.some((c) => c.membership.active && !c.suspended);
   const used = anyActive ? await revealsLeftToday(db, user, getEnv().REVEAL_DAILY_CAP) : null;
   const now = new Date();
   const soon = campuses.filter((c) => c.membership.active && c.membership.endsAt && daysUntil(c.membership.endsAt, now) <= 60);
@@ -123,7 +123,7 @@ async function SchoolHome({ user, locale }: { user: HomeUser; locale: string }) 
             {campuses.map((c) => (
               <li key={c.id} className="flex flex-wrap items-center gap-3">
                 <span className="flex-1 font-semibold">{c.name}</span>
-                {c.membership.active ? <span className="badge">{tc("active", { date: day(c.membership.endsAt!) })}</span> : c.membership.endsAt ? <span className="badge-warn">{tc("expired", { date: day(c.membership.endsAt) })}</span> : <span className="badge-muted">{tc("inactive")}</span>}
+                {c.suspended ? <span className="badge-warn">{tc("suspended")}</span> : c.membership.active ? <span className="badge">{tc("active", { date: day(c.membership.endsAt!) })}</span> : c.membership.endsAt ? <span className="badge-warn">{tc("expired", { date: day(c.membership.endsAt) })}</span> : <span className="badge-muted">{tc("inactive")}</span>}
               </li>
             ))}
           </ul>
@@ -170,6 +170,7 @@ async function EducatorHome({ user }: { locale: string; user: { id: string; name
       <span className="badge">Educator · 教師</span>
       <h1 className="mt-3 text-4xl font-extrabold">{t("title", { name: user.name })}</h1>
       <p className="mt-2 text-lg text-ink-600">{t("intro")}</p>
+      {p?.status === "suspended" ? <p role="alert" className="notice-error mt-6">{t("suspended")}</p> : null}
       <section className="card mt-8">
         <ol className="flex flex-col gap-4">
           {steps.map((s, i) => (

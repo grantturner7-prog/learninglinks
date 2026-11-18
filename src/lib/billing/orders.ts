@@ -18,6 +18,7 @@ export type OrderError =
   | "too_many_campuses"
   | "campus_not_yours"
   | "campus_not_claimed"
+  | "campus_suspended"
   | "invalid_tax_id"
   | "invoice_title_required"
   | "invalid_email"
@@ -119,6 +120,7 @@ export async function createSchoolOrder(db: Db, user: { id: string; accountType:
       .innerJoin(orgMembers, and(eq(orgMembers.organizationId, organizations.id), eq(orgMembers.userId, user.id)))
       .where(inArray(organizations.id, ids));
     if (mine.length !== ids.length) throw new OrderFailure("campus_not_yours");
+    if (mine.some((o) => o.status === "suspended")) throw new OrderFailure("campus_suspended");
     if (mine.some((o) => o.status !== "claimed")) throw new OrderFailure("campus_not_claimed");
     await assertPendingRoom(tx, user.id);
     const order = await insertOrder(tx, {

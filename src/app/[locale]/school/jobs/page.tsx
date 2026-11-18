@@ -25,7 +25,7 @@ export default async function SchoolJobsPage({ params }: Props) {
   const tt = await getTranslations("taxonomy.openTo");
   const f = await getFormatter();
   const [jobs, campuses] = await Promise.all([listJobsForUser(db, user.id), listMyCampuses(db, user.id)]);
-  const canPost = campuses.some((c) => c.membership.active);
+  const canPost = campuses.some((c) => c.membership.active && !c.suspended);
   return (
     <div className="container-page max-w-3xl py-10">
       <h1 className="text-4xl font-extrabold tracking-tight">{t("title")}</h1>

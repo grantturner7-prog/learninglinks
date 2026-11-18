@@ -37,7 +37,8 @@
     "server": "系統出了點問題，尚未扣款，請再試一次。",
     "signin": "請重新登入。",
     "not_found": "找不到這筆資料。",
-    "not_pending": "這筆訂單已不在待付款狀態。"
+    "not_pending": "這筆訂單已不在待付款狀態。",
+    "campus_suspended": "其中一間校區目前停權，無法付費，請與我們聯絡。"
   },
   "receipt": {
     "title": "您的會員資格",

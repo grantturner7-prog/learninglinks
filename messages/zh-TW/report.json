@@ -1,0 +1,35 @@
+{
+  "open": "回報問題",
+  "close": "取消",
+  "titleEducator": "回報這位教師",
+  "titleOrganization": "回報這所學校",
+  "titleJob": "回報這則職缺",
+  "intro": "請告訴我們哪裡有問題。每一則回報都由我們人工查看，被回報的對象不會知道是誰回報的。",
+  "reasonLabel": "是哪一種問題？",
+  "reasons": {
+    "misleading": "資訊不實或有誤導",
+    "abusive": "言語無禮、威脅或不當",
+    "payment_or_documents": "要求付款、收費或個人證件",
+    "discriminatory": "有歧視內容",
+    "substitute_work": "提供代課或臨時代班",
+    "other": "其他"
+  },
+  "detailsLabel": "發生了什麼事？（選填，最多 500 字）",
+  "detailsRequired": "發生了什麼事？（請簡單說明）",
+  "detailsHint": "請不要寫入身分證件號碼或密碼。",
+  "send": "送出回報",
+  "sending": "傳送中…",
+  "thanks": "謝謝您，我們會查看。",
+  "already": "您已回報過這一項，我們會查看。",
+  "reported": "已回報",
+  "errors": {
+    "not_allowed": "您無法回報這一項。",
+    "not_found": "這一項目前已不存在。",
+    "invalid_reason": "請選擇問題類型。",
+    "details_required": "請簡單說明發生了什麼事。",
+    "too_many": "您今天已送出許多回報，請明天再試。",
+    "rate": "操作太頻繁，請稍候一分鐘。",
+    "signin": "請重新登入。",
+    "server": "系統出了點問題，請再試一次。"
+  }
+}

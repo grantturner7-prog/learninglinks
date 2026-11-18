@@ -1,0 +1,35 @@
+{
+  "open": "Report a problem",
+  "close": "Cancel",
+  "titleEducator": "Report this educator",
+  "titleOrganization": "Report this school",
+  "titleJob": "Report this job post",
+  "intro": "Tell us what is wrong. We read every report by hand. The person you report is not told who reported them.",
+  "reasonLabel": "What is the problem?",
+  "reasons": {
+    "misleading": "False or misleading information",
+    "abusive": "Rude, threatening or inappropriate",
+    "payment_or_documents": "Asks for money, a fee or personal documents",
+    "discriminatory": "Discriminatory",
+    "substitute_work": "Offers substitute or cover work",
+    "other": "Something else"
+  },
+  "detailsLabel": "What happened? (optional, up to 500 characters)",
+  "detailsRequired": "What happened? (please add a few words)",
+  "detailsHint": "Please do not include ID numbers or passwords.",
+  "send": "Send report",
+  "sending": "Sending…",
+  "thanks": "Thank you. We will look at it.",
+  "already": "You have already reported this. We will look at it.",
+  "reported": "Reported",
+  "errors": {
+    "not_allowed": "You cannot report this.",
+    "not_found": "This is no longer available.",
+    "invalid_reason": "Please choose what the problem is.",
+    "details_required": "Please add a few words about what happened.",
+    "too_many": "You have sent many reports today. Please try again tomorrow.",
+    "rate": "Too many tries. Please wait a minute.",
+    "signin": "Please sign in again.",
+    "server": "Something went wrong. Please try again."
+  }
+}

@@ -8,7 +8,7 @@ import { MAX_OPEN_JOBS_PER_ORG, type JobInput } from "./input";
 
 const { jobs, organizations, auditLog } = schema;
 
-export type JobManageError = "wrong_account_type" | "not_a_member" | "no_membership" | "too_many_open" | "not_found";
+export type JobManageError = "wrong_account_type" | "not_a_member" | "no_membership" | "too_many_open" | "not_found" | "suspended";
 
 export class JobFailure extends Error {
   constructor(public code: JobManageError) {
@@ -30,8 +30,9 @@ export async function createJob(db: Db, user: { id: string; accountType: Account
   if (!(await getHolderMembership(db, "org", organizationId, now)).active) throw new JobFailure("no_membership");
   return db.transaction(async (tx) => {
     // Lock the campus row so two simultaneous posts cannot both slip under the cap.
-    const [org] = await tx.select({ id: organizations.id }).from(organizations).where(eq(organizations.id, organizationId)).for("update").limit(1);
+    const [org] = await tx.select({ id: organizations.id, status: organizations.status }).from(organizations).where(eq(organizations.id, organizationId)).for("update").limit(1);
     if (!org) throw new JobFailure("not_found");
+    if (org.status === "suspended") throw new JobFailure("suspended");
     const [{ n } = { n: 0 }] = await tx.select({ n: sql<number>`count(*)::int` }).from(jobs).where(and(eq(jobs.organizationId, organizationId), eq(jobs.status, "open")));
     if (n >= MAX_OPEN_JOBS_PER_ORG) throw new JobFailure("too_many_open");
     const [job] = await tx

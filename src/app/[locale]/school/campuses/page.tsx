@@ -38,9 +38,10 @@ export default async function CampusesPage({ params, searchParams }: Props) {
             <div className="flex-1">
               <h2 className="text-lg font-extrabold">{c.name}</h2>
               <p className="text-sm text-ink-600">{tt(c.type as "other")} · {areaLabel(c.city, c.district ? [c.district] : [], locale)}</p>
-              <p className="mt-1 text-sm font-semibold">{c.membership.active ? <span className="badge">{t("active", { date: day(c.membership.endsAt!) })}</span> : c.membership.endsAt ? <span className="badge-warn">{t("expired", { date: day(c.membership.endsAt) })}</span> : <span className="badge-muted">{t("inactive")}</span>}</p>
+              {c.suspended ? <p className="notice-error mt-2 text-sm">{t("suspendedNote")}</p> : null}
+              <p className="mt-1 text-sm font-semibold">{c.suspended ? <span className="badge-warn">{t("suspended")}</span> : c.membership.active ? <span className="badge">{t("active", { date: day(c.membership.endsAt!) })}</span> : c.membership.endsAt ? <span className="badge-warn">{t("expired", { date: day(c.membership.endsAt) })}</span> : <span className="badge-muted">{t("inactive")}</span>}</p>
             </div>
-            <Link href={`/school/checkout?campus=${c.id}` as "/school/checkout"} className="btn btn-secondary">{c.membership.endsAt ? t("renew") : t("pay")}</Link>
+            {c.suspended ? null : <Link href={`/school/checkout?campus=${c.id}` as "/school/checkout"} className="btn btn-secondary">{c.membership.endsAt ? t("renew") : t("pay")}</Link>}
           </div>
         ))}
         {campuses.length > 0 ? <Link href="/school/checkout" className="btn btn-primary self-start">{t("pay")}</Link> : null}

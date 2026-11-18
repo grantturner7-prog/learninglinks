@@ -4,7 +4,7 @@ import { schema } from "@/lib/db";
 import type { AccountType } from "@/lib/db/schema/auth";
 import { AUDIENCE_OPEN_TO, projectEducatorForAudience, type Audience, type EducatorCardDto } from "@/lib/visibility";
 
-const { educatorProfiles, memberships, orgMembers } = schema;
+const { educatorProfiles, memberships, orgMembers, organizations } = schema;
 
 /**
  * Which audience a signed-in user is allowed to browse as: "school" or "family", and only while they hold an
@@ -17,7 +17,11 @@ export async function getMemberAudience(db: Db, user: { id: string; accountType:
     return m ? "family" : null;
   }
   if (user.accountType === "school") {
-    const orgs = await db.select({ id: orgMembers.organizationId }).from(orgMembers).where(eq(orgMembers.userId, user.id));
+    const orgs = await db
+      .select({ id: orgMembers.organizationId })
+      .from(orgMembers)
+      .innerJoin(organizations, and(eq(organizations.id, orgMembers.organizationId), eq(organizations.status, "claimed")))
+      .where(eq(orgMembers.userId, user.id));
     if (orgs.length === 0) return null;
     const [m] = await db
       .select({ id: memberships.id })

@@ -40,6 +40,7 @@ export async function revealContact(
     const campuses = await db
       .select({ id: orgMembers.organizationId })
       .from(orgMembers)
+      .innerJoin(organizations, and(eq(organizations.id, orgMembers.organizationId), eq(organizations.status, "claimed")))
       .innerJoin(memberships, and(eq(memberships.holderType, "org"), eq(memberships.holderId, sql`${orgMembers.organizationId}::text`)))
       .where(and(eq(orgMembers.userId, user.id), sql`${memberships.startsAt} <= ${now}`, sql`${memberships.endsAt} > ${now}`));
     const ids = campuses.map((c) => c.id);

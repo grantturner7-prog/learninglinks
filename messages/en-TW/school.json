@@ -41,7 +41,9 @@
     "no_membership": "This campus needs an active membership to post jobs.",
     "not_a_member": "You are not linked to that campus.",
     "too_many_open": "This campus already has 20 open posts. Close one first.",
-    "fix": "Please fix the highlighted answers."
+    "fix": "Please fix the highlighted answers.",
+    "campus_suspended": "This campus is suspended, so it cannot be paid for or used. Please contact us.",
+    "suspended": "This campus is suspended, so it cannot post jobs. Please contact us."
   },
   "campuses": {
     "title": "Your campuses",
@@ -64,7 +66,9 @@
     "claimIt": "This is my school",
     "taken": "Already claimed",
     "notListed": "Cannot find it? Add your campus",
-    "addCampus": "Add a campus"
+    "addCampus": "Add a campus",
+    "suspended": "Suspended",
+    "suspendedNote": "This campus is suspended after a report. Write to us if you think this is a mistake."
   },
   "claim": {
     "cheer": {

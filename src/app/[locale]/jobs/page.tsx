@@ -9,6 +9,8 @@ import { CITIES } from "@/lib/geo/taiwan";
 import { areaLabel, cityLabel } from "@/lib/geo-labels";
 import { SUBJECTS, isOneOf, type Subject } from "@/lib/taxonomy";
 import { canSeeJobs } from "@/lib/visibility";
+import { ReportButton } from "@/components/report/report-button";
+import { getReportLabels, type ReportLabels } from "@/lib/report-labels";
 import { Link } from "@/i18n/navigation";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
@@ -51,6 +53,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
   const withJobs = first(sp.withJobs) === "1";
   const schoolId = first(sp.school);
   const school = schoolId ? await getSchoolWithJobs(db, viewer, schoolId) : null;
+  const reportJobLabels = await getReportLabels("job");
   const mapLabels = view === "map" ? await getMapLabels({ attribution: (await getTranslations("jobs.map"))("attribution") }) : null;
   const tm = await getTranslations("jobs.map");
   const baseParams: Record<string, string> = {};
@@ -113,10 +116,11 @@ export default async function JobsPage({ params, searchParams }: Props) {
                 </div>
                 <Link href={viewHref("map")} className="btn btn-ghost">{tm("clearSchool")}</Link>
               </div>
+              <ReportButton targetType="organization" targetId={school.id} labels={await getReportLabels("organization")} />
               {school.jobs.length === 0 ? <p className="text-ink-600">{tm("noJobsAtSchool")}</p> : (
                 <>
                   <h3 className="font-bold">{tm("schoolOpen")}</h3>
-                  <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">{school.jobs.map((j) => <li key={j.id}><JobCard j={j} locale={locale} /></li>)}</ul>
+                  <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">{school.jobs.map((j) => <li key={j.id}><JobCard j={j} locale={locale} reportLabels={reportJobLabels} /></li>)}</ul>
                 </>
               )}
             </div>
@@ -151,7 +155,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
         <div className="card mt-3 text-center"><h2 className="text-xl font-bold">{t("empty.title")}</h2><p className="mt-1 text-ink-600">{t("empty.body")}</p></div>
       ) : (
         <ul className="mt-3 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {result.items.map((j) => <li key={j.id}><JobCard j={j} locale={locale} /></li>)}
+          {result.items.map((j) => <li key={j.id}><JobCard j={j} locale={locale} reportLabels={reportJobLabels} /></li>)}
         </ul>
       )}
       {pages > 1 ? (
@@ -175,7 +179,7 @@ function Panel({ title, body, cta }: { title: string; body: string; cta?: { href
   );
 }
 
-async function JobCard({ j, locale }: { j: JobDto; locale: string }) {
+async function JobCard({ j, locale, reportLabels }: { j: JobDto; locale: string; reportLabels: ReportLabels }) {
   const t = await getTranslations("jobs.card");
   const tt = await getTranslations("taxonomy");
   const to = await getTranslations("jobs.filters");
@@ -205,6 +209,7 @@ async function JobCard({ j, locale }: { j: JobDto; locale: string }) {
         <p className="mt-0.5 break-words">{j.applyContact ?? t("noContact")}</p>
         <p className="mt-1 text-xs text-ink-500">{t("applyNote")}</p>
       </div>
+      <ReportButton targetType="job" targetId={j.id} labels={reportLabels} />
     </article>
   );
 }

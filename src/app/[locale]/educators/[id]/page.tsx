@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { RevealPanel, type RevealLabels } from "@/components/directory/reveal-panel";
+import { ReportButton } from "@/components/report/report-button";
 import { MembersWall } from "@/components/wall";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { getEducatorForAudience, getMemberAudience } from "@/lib/directory/service";
 import { getEnv } from "@/lib/env";
+import { getReportLabels } from "@/lib/report-labels";
 import { revealsLeftToday } from "@/lib/reveal/service";
 import { areaLabel } from "@/lib/geo-labels";
 import type { Subject } from "@/lib/taxonomy";
@@ -91,6 +93,7 @@ export default async function EducatorDetailPage({ params }: Props) {
           </div>
         ) : null}
         <RevealPanel educatorId={e.id} labels={revealLabels} />
+        <div className="border-t border-ink-100 pt-4"><ReportButton targetType="educator" targetId={e.id} labels={await getReportLabels("educator")} /></div>
         {audience === "family" ? <p className="notice">{tn("tutoringWork")}</p> : null}
       </article>
     </div>

@@ -19,6 +19,7 @@ import journey from "./journey.json";
 import billing from "./billing.json";
 import school from "./school.json";
 import reveal from "./reveal.json";
+import report from "./report.json";
 
-const messages = { map, common, nav, footer, taxonomy, home, notice, wall, forSchools, forFamilies, safety, legal, auth, dashboard, educator, jobs, directory, journey, billing, school, reveal };
+const messages = { map, common, nav, footer, taxonomy, home, notice, wall, forSchools, forFamilies, safety, legal, auth, dashboard, educator, jobs, directory, journey, billing, school, reveal, report };
 export default messages;

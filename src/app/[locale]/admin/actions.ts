@@ -7,6 +7,8 @@ import { orderPaidEmail } from "@/lib/billing/emails";
 import { getDb, schema } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { approveClaim, OrgFailure, rejectClaim } from "@/lib/orgs/service";
+import { moderationNoticeEmail } from "@/lib/moderation/emails";
+import { ModerationFailure, reinstate, resolveReport } from "@/lib/moderation/service";
 import { eq } from "drizzle-orm";
 import { redirect } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -76,6 +78,35 @@ export async function reviewClaimAction(fd: FormData): Promise<void> {
     else if (decision === "reject") await rejectClaim(getDb(), id, a.id);
   } catch (err) {
     if (!(err instanceof OrgFailure)) console.error("claim review failed", err);
+  }
+  revalidatePath("/", "layout");
+}
+
+export async function reviewReportAction(fd: FormData): Promise<void> {
+  const a = await admin();
+  const id = fd.get("reportId");
+  const decision = fd.get("decision");
+  if (!a || typeof id !== "string" || (decision !== "action" && decision !== "dismiss")) return;
+  try {
+    const res = await resolveReport(getDb(), id, a.id, decision);
+    if (res.notify) {
+      for (const to of res.notify.emails) await sendEmail(moderationNoticeEmail(to, { what: res.notify.what, name: res.notify.name })).catch((e) => console.error("moderation email failed", e));
+    }
+  } catch (err) {
+    if (!(err instanceof ModerationFailure)) console.error("report review failed", err);
+  }
+  revalidatePath("/", "layout");
+}
+
+export async function reinstateAction(fd: FormData): Promise<void> {
+  const a = await admin();
+  const id = fd.get("id");
+  const type = fd.get("type");
+  if (!a || typeof id !== "string" || (type !== "educator" && type !== "organization")) return;
+  try {
+    await reinstate(getDb(), type, id, a.id);
+  } catch (err) {
+    if (!(err instanceof ModerationFailure)) console.error("reinstate failed", err);
   }
   revalidatePath("/", "layout");
 }
