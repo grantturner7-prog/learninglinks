@@ -1,0 +1,2 @@
+ALTER TABLE "organizations" ADD COLUMN "ownership" text;--> statement-breakpoint
+ALTER TABLE "organizations" ADD CONSTRAINT "org_ownership_check" CHECK ("organizations"."ownership" is null or "organizations"."ownership" in ('public','private'));

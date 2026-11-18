@@ -8,7 +8,7 @@ function navItems() {
   if (m.type === "educator") return [["dashboard", T("Dashboard", "儀表板")], ["profile", T("My profile", "我的檔案")], ["jobs", T("Job posts", "職缺")]];
   return [["admin", "Admin desk"]];
 }
-const GROUP = { join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
+const GROUP = { addschool: "campuses", join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
 function shell(inner) {
   const cur = GROUP[st.view] || st.view;
   return `<div class="demo"><div class="wrap"><b>${T("DEMO", "示範")}</b><span>${T("Pretend people and data. Nothing is saved on a server and no money moves.", "虛構的人物與資料。沒有任何資料存到伺服器，也沒有任何款項移動。")}</span>
@@ -96,6 +96,12 @@ const A = {
   simulateNotice: (el) => { const o = st.orders.find((x) => x.id === el.dataset.v); settle(o, "system:ecpay"); toast(T("Pretend notice received: membership started.", "已收到模擬通知：會員資格已開始。")); go("order", { id: o.id }); },
   adminAsk: () => { st.people.admin = st.people.admin || { id: "p-admin", type: "admin", name: DEFAULT_NAME.admin }; st.role = "admin"; go("admin"); },
 
+  addNext: () => { st.form.step = (st.form.step || 1) + 1; render(true); },
+  addBack: () => { st.form.step = (st.form.step || 2) - 1; render(true); },
+  addSchool: () => {
+    const f = st.form; const s = { id: uid("c"), name: f.name.trim(), kind: f.kind, ownership: null, city: f.city, district: f.district || null, custom: true };
+    st.custom.push(s); st.owners[s.id] = pid(); save(); toast(T("School added and claimed. (The real site asks an administrator to approve it first.)", "已新增並認領學校。（真實網站會先由管理員審核。）")); go("campuses");
+  },
   claim: (el) => { st.owners[el.dataset.v] = pid(); save(); toast(T("Campus claimed. (The real site asks an administrator to approve this.)", "已認領校區。（真實網站會由管理員審核。）")); render(false); },
   jobPublish: () => {
     const f = st.form; const paid = ownedCampuses(pid()).filter((s) => campusActive(pid(), s.id));

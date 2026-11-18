@@ -112,7 +112,9 @@ export const organizations = pgTable(
     latitude: doublePrecision("latitude"),
     longitude: doublePrecision("longitude"),
     website: text("website"),
-    /** Where the listing came from: 'osm_import', 'gov_open_data', 'manual'. */
+    /** Government (public) or private school, from the Ministry of Education lists. Null when we do not know (for example a campus a school added itself). */
+    ownership: text("ownership").$type<"public" | "private">(),
+    /** Where the listing came from: 'osm_import', 'gov_open_data' (licensed cram schools), 'moe_open_data' (Ministry of Education school lists), 'manual'. */
     source: text("source").notNull().default("manual"),
     sourceId: text("source_id"),
     status: text("status").$type<OrgStatus>().notNull().default("unclaimed"),
@@ -125,6 +127,7 @@ export const organizations = pgTable(
   },
   (t) => [
     check("org_status_check", sql`${t.status} in ('unclaimed','claimed','suspended')`),
+    check("org_ownership_check", sql`${t.ownership} is null or ${t.ownership} in ('public','private')`),
     uniqueIndex("org_source_uq").on(t.source, t.sourceId).where(sql`${t.sourceId} is not null`),
     index("org_city_type_idx").on(t.city, t.type),
     index("org_status_idx").on(t.status),

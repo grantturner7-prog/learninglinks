@@ -37,6 +37,7 @@ Optional data for the maps (development):
 
 ```bash
 npm run db:import-schools -- --file schools.json   # ~5,500 school locations (see the licence note in the script)
+npm run db:import-moe -- --prune                    # Ministry of Education school lists: government and private schools, universities, international schools
 npm run db:seed-demo                               # fictional educators and jobs; never runs in production
 npm run geo:build                                  # regenerate the Taiwan boundary files in public/geo
 ```

@@ -58,7 +58,7 @@
     "claimPending": "{name}：審核中，通常需要數個工作天。",
     "claimRejected": "{name}：我們無法通過這筆認領。若您認為有誤，請與我們聯絡。",
     "findTitle": "尋找您的學校",
-    "findHint": "輸入學校名稱的一部分，中文或英文都可以。",
+    "findHint": "輸入校名的一部分（中文或英文），或依類型與縣市瀏覽。",
     "placeholder": "例如：陽光",
     "search": "搜尋",
     "tooShort": "請至少輸入 2 個字。",
@@ -68,7 +68,24 @@
     "notListed": "找不到嗎？新增您的校區",
     "addCampus": "新增校區",
     "suspended": "已停權",
-    "suspendedNote": "這間校區在收到回報後已停權。若您認為有誤，請來信告知。"
+    "suspendedNote": "這間校區在收到回報後已停權。若您認為有誤，請來信告知。",
+    "kindTitle": "依類型瀏覽",
+    "kind": {
+      "all": "全部",
+      "public": "公立學校",
+      "private": "私立學校",
+      "university": "大專校院",
+      "international": "國際與雙語學校",
+      "kindergarten": "幼兒園",
+      "cram": "補習班與語言學校"
+    },
+    "cityLabel": "縣市",
+    "cityAny": "不限縣市",
+    "browseHint": "選擇類型或縣市瀏覽，或輸入校名的一部分。找不到您的學校嗎？可以在下方新增。",
+    "noneInList": "清單中沒有符合的學校。您可以在下方新增您的學校。",
+    "more": "僅顯示前 {n} 筆。請選擇縣市或輸入校名的一部分縮小範圍。",
+    "ownershipPublic": "公立",
+    "ownershipPrivate": "私立"
   },
   "claim": {
     "cheer": {

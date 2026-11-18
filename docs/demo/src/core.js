@@ -13,7 +13,7 @@ const fresh = () => ({
   lang: "en", role: "visitor", view: "home", args: {}, form: {}, people: {}, orders: [], memberships: [], owners: {},
   jobs: JSON.parse(JSON.stringify(SEED_JOBS)), reveals: [], reports: [], suspended: {}, removedJobs: {}, myProfile: null,
   payReview: [{ id: "r1", ref: "LL-7K3Q-9FXD", note: "ECPay reported NT$1,000 for an order of NT$2,000. The site did not start a membership.", done: false }],
-  seq: 1, toast: "",
+  seq: 1, toast: "", custom: [],
 });
 let st = fresh();
 try { const raw = localStorage.getItem(KEY); if (raw) st = Object.assign(fresh(), JSON.parse(raw)); } catch (e) { /* storage may be blocked: the demo still works, it just forgets on reload */ }
@@ -30,7 +30,9 @@ const noticeFull = () => NOTICE[st.lang];
 const me = () => st.people[st.role] || null;
 const pid = () => (me() ? me().id : null);
 const familyActive = (p) => st.memberships.some((m) => m.holder === p && m.kind === "family" && m.end > TODAY);
-const ownedCampuses = (p) => SCHOOLS.filter((s) => st.owners[s.id] === p);
+/** Any school in the demo: the pretend ones, the Ministry's lists, or one the visitor added. */
+const schoolById = (id) => SCHOOLS.find((s) => s.id === id) || REAL_BY_ID.get(id) || st.custom.find((s) => s.id === id) || null;
+const ownedCampuses = (p) => Object.keys(st.owners).filter((id) => st.owners[id] === p).map(schoolById).filter(Boolean);
 const campusActive = (p, sid) => st.memberships.some((m) => m.holder === p && m.kind === "campus" && m.schoolId === sid && m.end > TODAY);
 const paidCampusIds = (p) => ownedCampuses(p).filter((s) => campusActive(p, s.id)).map((s) => s.id);
 const hasMembership = () => { const m = me(); if (!m) return false; return m.type === "family" ? familyActive(m.id) : m.type === "school" ? paidCampusIds(m.id).length > 0 : false; };
@@ -87,7 +89,7 @@ const FILLS = ["#fffaf6", "#ebe3f8", "#dccff3", "#b7a0e3", "#9a80d1"];
 const fillFor = (n) => FILLS[n <= 0 ? 0 : n <= 2 ? 1 : n <= 4 ? 2 : n <= 7 ? 3 : 4];
 /** Schools of one city sit on a small ring around the city's middle, so pins never cover each other. */
 function mapPins(s) {
-  const c = MAP.c[s.city]; const mates = SCHOOLS.filter((x) => x.city === s.city); const n = mates.length; const i = mates.indexOf(s);
+  const c = MAP.c[s.city]; const mates = (mapPins.set || SCHOOLS).filter((x) => x.city === s.city); const n = mates.length; const i = mates.indexOf(s);
   if (n === 1) return { x: c.x, y: c.y };
   const ang = (2 * Math.PI * i) / n + 0.6, r = Math.min(12, 5 + n * 1.6);
   return { x: Math.round((c.x + Math.cos(ang) * r) * 10) / 10, y: Math.round((c.y + Math.sin(ang) * r) * 10) / 10 };
@@ -106,6 +108,7 @@ function educatorMap(counts, selected, note) {
 
 /** Taiwan with a pin per school; schools with open job posts carry an apricot dot. */
 function jobMap(schools, jobCount, selectedSchool, selectedCity) {
+  mapPins.set = schools;
   const counts = {}; schools.forEach((s) => { counts[s.city] = (counts[s.city] || 0) + 1; });
   const paths = Object.entries(MAP.c).map(([k, c]) => `<path class="city${selectedCity === k ? " sel" : ""}" d="${c.d}" fill="${fillFor(counts[k] || 0)}" data-act="city" data-v="${k}"><title>${h(lab(CITY[k]))}</title></path>`).join("");
   const pins = schools.map((s) => { const p = mapPins(s); const j = jobCount[s.id] || 0; return `<g class="pin" data-act="pin" data-v="${s.id}" role="button" tabindex="0" aria-label="${h(s.name)}"><circle class="s" cx="${p.x}" cy="${p.y}" r="${selectedSchool === s.id ? 6 : 4.4}"/>${j ? `<circle class="j" cx="${p.x + 3.8}" cy="${p.y - 3.8}" r="2.7"/>` : ""}<title>${h(s.name)}</title></g>`; }).join("");

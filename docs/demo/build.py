@@ -30,7 +30,8 @@ NOTICE = {"en": json.loads((ROOT / "messages/en-TW/notice.json").read_text(encod
 font = base64.b64encode((ROOT / "node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2").read_bytes()).decode()
 css = (SRC / "style.css").read_text(encoding="utf8")
 js = "\n".join((SRC / f).read_text(encoding="utf8") for f in ["data.js", "core.js", "views1.js", "views2.js", "app.js"])
-head_js = f"const NOTICE = {json.dumps(NOTICE, ensure_ascii=False)};\nconst MAP = {json.dumps(MAP, separators=(',', ':'))};\n"
+REAL = (Path(__file__).resolve().parent / "schools-moe.json").read_text(encoding="utf8")
+head_js = f"const NOTICE = {json.dumps(NOTICE, ensure_ascii=False)};\nconst MAP = {json.dumps(MAP, separators=(',', ':'))};\nconst REAL = {REAL};\n"
 fontface = f"@font-face {{ font-family: 'Plus Jakarta Sans'; font-style: normal; font-weight: 200 800; font-display: swap; src: url(data:font/woff2;base64,{font}) format('woff2'); }}\n"
 TITLE = "LearningLinks Demo"
 body = f'<div id="app"></div>\n<script>\n{head_js}{js}\n</script>'

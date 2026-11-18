@@ -34,8 +34,8 @@ export interface FetchOptions {
   log?: (line: string) => void;
 }
 
-const realSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
-const HEADERS = { "User-Agent": "LearningLinks-data-import/1.0", Accept: "application/json" };
+export const realSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+const HEADERS = { "User-Agent": "LearningLinks-data-import/1.0", Accept: "*/*" };
 
 /** Only government hosts over https: the file list comes from a web page, so do not follow it anywhere else. */
 export const isTrustedSource = (u: string) => {
@@ -47,7 +47,7 @@ export const isTrustedSource = (u: string) => {
   }
 };
 
-async function getText(url: string, o: Required<Pick<FetchOptions, "fetchFn" | "sleep" | "attempts" | "timeoutMs">>): Promise<string> {
+export async function getText(url: string, o: Required<Pick<FetchOptions, "fetchFn" | "sleep" | "attempts" | "timeoutMs">>): Promise<string> {
   let last: unknown;
   for (let i = 1; i <= o.attempts; i++) {
     const ctl = new AbortController();
@@ -82,7 +82,7 @@ export async function listSourceFiles(opts: FetchOptions = {}): Promise<{ files:
   return { files: FALLBACK_CITY_CODES.map((c) => ({ url: fileUrl(c), label: `city ${c}`, expected: null })), fromDataset: false };
 }
 
-const stripBom = (s: string) => s.replace(/^﻿/, "");
+export const stripBom = (s: string) => s.replace(/^﻿/, "");
 
 /** Rows out of a JSON document: an array of objects, or an object that wraps one (at most two levels down). */
 export function extractObjects(json: unknown): Record<string, unknown>[] {

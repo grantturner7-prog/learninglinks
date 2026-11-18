@@ -2,9 +2,44 @@
 
 Educators are never imported: they create their own profile. What the site needs before launch is a list of **schools and cram schools**, so a school can find and claim its campus and educators can see where jobs are.
 
+## Government and private schools, universities, international schools (Ministry of Education)
+
+The Ministry of Education publishes its school directories as open data (data.gov.tw datasets 6087, 6088, 6089, 6090, 24393, 6091, 28589 and 32958; Government Open Data License v1). One command fetches and loads them:
+
+```bash
+npm run db:import-moe -- --dry-run     # fetch and report, write nothing
+npm run db:import-moe -- --prune       # fetch and load, and tidy the map data (see below)
+```
+
+What it loads (school year 115 / 2026):
+
+| Kind | Schools | Government / private |
+|---|---|---|
+| Elementary schools | 2,607 | 2,575 / 32 |
+| Junior high schools | 739 | 725 / 14 |
+| Senior high and vocational schools (including evening schools) | 496 | 308 / 188 |
+| Universities, colleges, technical colleges, military and police academies | 148 | 56 / 92 |
+| Schools for international residents (American, Japanese, European, Korean and others) | 22 | private |
+| Bilingual and international schools recognised by name (雙語, 國際) | 7 | |
+
+Every school says whether it is **government (公立) or private (私立)**, as the Ministry lists it. The site keeps only the name, kind, government/private, city, district and the school's public website. Street addresses and phone numbers are read to find the district and thrown away, and pins sit inside the district, never at an address.
+
+Schools already loaded from the map data (OpenStreetMap) are **recognised by name and city and updated** (they keep their exact position and any claim), so nobody appears twice. `--prune` also removes map-data entries that are not schools at all (a department such as "土木工程學系", a branch campus, a building). Re-running is safe.
+
+Limits, honestly:
+
+- **Kindergartens:** the Ministry has no national kindergarten list on open data (only some cities publish their own). Kindergartens come from the map data (about 1,100, far fewer than exist). A kindergarten that is not listed adds itself (below).
+- **Private bilingual schools:** Taiwan publishes no national list of them. They are recognised only when the name says so (雙語, 國際) or when they are on the Ministry's list of schools for international residents. Others add themselves, or can be tagged later.
+- **Cram schools** (about 17,800) are a separate file: see the next section.
+- A few map-data entries whose names differ a lot from the Ministry's can still appear twice.
+
+**A school that is not on any list** can always be added: on "Find your school" there is a "Cannot find it? Add your campus" link (always visible, and again when a search finds nothing). The school gives its kind (kindergarten, elementary, junior high, senior high, university, cram school, language school, international school, bilingual school or other), its name and its area. We never ask for a street address. An administrator checks every new school before it appears to anyone.
+
+Browsing: "Find your school" can list every government school, private school, university, international or bilingual school, kindergarten or cram school, filtered by city, without typing a name.
+
 ## What is already loaded
 
-About 5,480 schools (kindergartens, elementary to senior high, universities, language and international schools) came from the old site's dataset, which was originally built from OpenStreetMap. They have exact coordinates and no contact details. `npm run db:import-schools` loads them.
+About 5,480 schools (kindergartens, elementary to senior high, universities, language and international schools) came from the old site's dataset (run this first, then the Ministry import above), which was originally built from OpenStreetMap. They have exact coordinates and no contact details. `npm run db:import-schools` loads them.
 
 Open licence point: OpenStreetMap data carries the ODbL licence. The school map already shows "School locations © OpenStreetMap contributors". Ask your lawyer to confirm the share-alike obligations before launch.
 

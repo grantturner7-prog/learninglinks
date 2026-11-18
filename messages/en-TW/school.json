@@ -58,7 +58,7 @@
     "claimPending": "{name}: we are checking this one. It usually takes a few working days.",
     "claimRejected": "{name}: we could not approve this claim. Please contact us if you think this is a mistake.",
     "findTitle": "Find your school",
-    "findHint": "Type part of its name, in Chinese or English.",
+    "findHint": "Type part of its name, in Chinese or English, or browse by kind and city.",
     "placeholder": "e.g. Sunshine",
     "search": "Search",
     "tooShort": "Type at least 2 letters.",
@@ -68,7 +68,24 @@
     "notListed": "Cannot find it? Add your campus",
     "addCampus": "Add a campus",
     "suspended": "Suspended",
-    "suspendedNote": "This campus is suspended after a report. Write to us if you think this is a mistake."
+    "suspendedNote": "This campus is suspended after a report. Write to us if you think this is a mistake.",
+    "kindTitle": "Browse by kind",
+    "kind": {
+      "all": "All",
+      "public": "Government schools",
+      "private": "Private schools",
+      "university": "Universities and colleges",
+      "international": "International and bilingual schools",
+      "kindergarten": "Kindergartens",
+      "cram": "Cram and language schools"
+    },
+    "cityLabel": "City or county",
+    "cityAny": "Any city or county",
+    "browseHint": "Pick a kind or a city to browse, or type part of the name. Cannot find your school? You can add it below.",
+    "noneInList": "Nothing in the list matches. You can add your school below.",
+    "more": "Showing the first {n}. Pick a city or type part of the name to narrow it down.",
+    "ownershipPublic": "Government",
+    "ownershipPrivate": "Private"
   },
   "claim": {
     "cheer": {

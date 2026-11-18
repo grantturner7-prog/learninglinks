@@ -39,10 +39,25 @@ export interface OrgSearchHit {
   name: string;
   nameEn: string | null;
   type: string;
+  /** Government or private, from the Ministry of Education lists. Null when unknown. */
+  ownership: "public" | "private" | null;
   city: string | null;
   district: string | null;
   status: "unclaimed" | "claimed" | "suspended";
 }
+
+/** Ways to browse the school list without typing a name. */
+export const SCHOOL_GROUPS = ["public", "private", "university", "international", "kindergarten", "cram"] as const;
+export type SchoolGroup = (typeof SCHOOL_GROUPS)[number];
+export const isSchoolGroup = (v: unknown): v is SchoolGroup => typeof v === "string" && (SCHOOL_GROUPS as readonly string[]).includes(v);
+
+const groupWhere = (g: SchoolGroup) =>
+  g === "public" ? eq(organizations.ownership, "public")
+  : g === "private" ? eq(organizations.ownership, "private")
+  : g === "university" ? eq(organizations.type, "university")
+  : g === "international" ? inArray(organizations.type, ["international_school", "bilingual_school"])
+  : g === "kindergarten" ? eq(organizations.type, "kindergarten")
+  : inArray(organizations.type, ["cram_school", "language_school"]);
 
 /** `%` and `_` are wildcards in LIKE; a school name search must treat them as plain characters. */
 const likeEscape = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
@@ -51,16 +66,21 @@ const likeEscape = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
  * School and cram-school names, so a school can find its own listing and claim it. Names, types and places are
  * public facts from open data: no contact details are returned. Needs at least 2 characters.
  */
-export async function searchOrganizations(db: Db, q: string, f: { city?: string } = {}, limit = 20): Promise<OrgSearchHit[]> {
+export async function searchOrganizations(db: Db, q: string, f: { city?: string; group?: SchoolGroup } = {}, limit = 20): Promise<OrgSearchHit[]> {
   const term = q.trim();
-  if (term.length < 2) return [];
-  const where = [sql`(${ilike(organizations.name, `%${likeEscape(term)}%`)} or ${ilike(organizations.nameEn, `%${likeEscape(term)}%`)})`];
+  const browsing = !!f.city || !!f.group;
+  // A name needs 2 letters. With a kind or a city picked the list can be browsed with no name at all.
+  if (term.length < 2 && !(term.length === 0 && browsing)) return [];
+  const where = [];
+  if (term.length >= 2) where.push(sql`(${ilike(organizations.name, `%${likeEscape(term)}%`)} or ${ilike(organizations.nameEn, `%${likeEscape(term)}%`)})`);
   if (f.city) where.push(eq(organizations.city, f.city));
+  if (f.group) where.push(groupWhere(f.group));
   return db
-    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, city: organizations.city, district: organizations.district, status: organizations.status })
+    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, ownership: organizations.ownership, city: organizations.city, district: organizations.district, status: organizations.status })
     .from(organizations)
     .where(and(...where))
-    .orderBy(asc(sql`${organizations.status} = 'unclaimed'`), asc(organizations.name))
+    // Free listings first, then those the Ministry's lists confirmed (they say government or private), then by name.
+    .orderBy(asc(sql`${organizations.status} = 'unclaimed'`), asc(sql`${organizations.ownership} is null`), asc(organizations.name))
     .limit(limit);
 }
 

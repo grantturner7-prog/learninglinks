@@ -30,7 +30,10 @@ const SUBJECT = {
 };
 const LEVEL = { kindergarten: ["Kindergarten", "幼兒園"], elementary: ["Elementary", "國小"], "junior-high": ["Junior high", "國中"], "senior-high": ["Senior high", "高中"], adult: ["Adults", "成人"] };
 const OPEN = { full_time: ["Full-time work", "全職工作"], part_time: ["Part-time work", "兼職工作"], private_tutoring: ["Private tutoring", "私人家教"] };
-const KIND = { kindergarten: ["Kindergarten", "幼兒園"], cram_school: ["Cram school", "補習班"], language_school: ["Language school", "語言學校"], elementary: ["Elementary school", "國小"], international_school: ["International school", "國際學校"] };
+const KIND = { kindergarten: ["Kindergarten", "幼兒園"], elementary: ["Elementary school", "國小"], junior_high: ["Junior high school", "國中"], senior_high: ["Senior high school", "高中職"], university: ["University or college", "大專校院"], cram_school: ["Cram school", "補習班"], language_school: ["Language school", "語言學校"], international_school: ["International school", "國際學校"], bilingual_school: ["Bilingual school", "雙語學校"], other: ["Other", "其他"] };
+/** Ways to browse the school list (the same groups the real site uses). */
+const GROUPS = { public: ["Government schools", "公立學校"], private: ["Private schools", "私立學校"], university: ["Universities and colleges", "大專校院"], international: ["International and bilingual", "國際與雙語學校"], kindergarten: ["Kindergartens", "幼兒園"], cram: ["Cram and language schools", "補習班與語言學校"] };
+const inGroup = (s, g) => g === "public" ? s.ownership === "public" : g === "private" ? s.ownership === "private" : g === "university" ? s.kind === "university" : g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" : g === "kindergarten" ? s.kind === "kindergarten" : g === "cram" ? s.kind === "cram_school" || s.kind === "language_school" : true;
 
 /* ---------- fictional educators (made up for this demo; nobody real) ---------- */
 let _seed = 7;
@@ -74,7 +77,13 @@ const SCHOOL_ROWS = [
   ["Anping Kids Academy", "kindergarten", "tainan", "tainan:anping"], ["Old Town Cram School", "cram_school", "tainan", "tainan:east"],
   ["Science Park Bilingual School", "international_school", "hsinchu-city", "hsinchu-city:east"], ["Riverside Kindergarten", "kindergarten", "changhua", "changhua:city"],
 ];
-const SCHOOLS = SCHOOL_ROWS.map((r, i) => ({ id: "s" + (i + 1), name: r[0], kind: r[1], city: r[2], district: r[3], owner: null, seed: i * 37 + 11 }));
+const SCHOOLS = SCHOOL_ROWS.map((r, i) => ({ id: "s" + (i + 1), name: r[0], kind: r[1], ownership: "private", city: r[2], district: r[3], owner: null, seed: i * 37 + 11 }));
+
+/* ---------- the Ministry of Education's school lists (government and private schools, universities, schools for international residents) ---------- */
+REAL.cities.forEach(([k, en, zh]) => { if (!CITY[k]) CITY[k] = [en, zh]; });
+REAL.dists.forEach(([k, en, zh]) => { if (!DIST[k]) DIST[k] = [en, zh]; });
+const REAL_SCHOOLS = REAL.rows.map((r, i) => ({ id: "r" + i, name: r[0], kind: REAL.types[r[1]], ownership: r[2] === 1 ? "public" : r[2] === 2 ? "private" : null, city: REAL.cities[r[3]][0], district: r[4] >= 0 ? REAL.dists[r[4]][0] : null, real: true }));
+const REAL_BY_ID = new Map(REAL_SCHOOLS.map((s) => ({ s })).map(({ s }) => [s.id, s]));
 const SEED_JOBS = [
   { id: "j1", schoolId: "s1", title: "English teacher, afternoons", type: "part_time", subject: "english-conversation", desc: "Teach small groups of elementary students, Monday to Thursday, 3 to 7 pm. Materials provided.", contact: "hr@sunshine.example.invalid", status: "open" },
   { id: "j2", schoolId: "s2", title: "Kindergarten homeroom teacher", type: "full_time", subject: "phonics", desc: "Lead a bilingual class of 18. Start next term. Training provided.", contact: "jobs@rainbow.example.invalid", status: "open" },

@@ -43,6 +43,13 @@
       "when": 1794974487491,
       "tag": "0005_step5_ecpay",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794987400021,
+      "tag": "0006_step6_school_ownership",
+      "breakpoints": true
     }
   ]
 }
