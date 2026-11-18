@@ -1,0 +1,6 @@
+# HTTPS is automatic: Caddy gets and renews a free certificate for $DOMAIN.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:3000
+	# Real client addresses reach the app in X-Forwarded-For (used for the hashed-IP consent log).
+}

@@ -265,14 +265,14 @@ export function ProfileJourney(p: JourneyProps) {
             <p className="text-sm font-semibold text-ink-600">{t("fields.workOpen")}</p>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className={CARD}>
-                <h3 className="flex items-center gap-2 text-lg font-extrabold"><Icon name="landmark" size={22} className="text-brand-700" />{t("fields.schoolWorkTitle")}</h3>
+                <h2 className="flex items-center gap-2 text-lg font-extrabold"><Icon name="landmark" size={22} className="text-brand-700" />{t("fields.schoolWorkTitle")}</h2>
                 <div className="mt-4 flex flex-wrap gap-2.5">
                   {(["full_time", "part_time"] as const).map((k) => <Pill key={k} on={d.openTo.includes(k)} onClick={() => patch({ openTo: toggle(d.openTo, k) })}>{tt(`openTo.${k}`)}</Pill>)}
                 </div>
                 <p className="mt-3 text-sm text-ink-600">{tp("fields.schoolWorkHint")}</p>
               </div>
               <div className={CARD}>
-                <h3 className="flex items-center gap-2 text-lg font-extrabold"><Icon name="book" size={22} className="text-brand-700" />{t("fields.tutoringTitle")}</h3>
+                <h2 className="flex items-center gap-2 text-lg font-extrabold"><Icon name="book" size={22} className="text-brand-700" />{t("fields.tutoringTitle")}</h2>
                 <div className="mt-4 flex flex-wrap gap-2.5">
                   <Pill on={tutors} onClick={() => patch({ openTo: toggle(d.openTo, "private_tutoring") })}>{tt("openTo.private_tutoring")}</Pill>
                 </div>
@@ -342,7 +342,7 @@ export function ProfileJourney(p: JourneyProps) {
                   {(["profile", "contact", "never"] as const).map((c) => (
                     <div key={c} className={CARD}>
                       <span className="badge">{tw(`cols.${c}.badge`)}</span>
-                      <h3 className="mt-2.5 text-base font-extrabold">{tw(`cols.${c}.title`)}</h3>
+                      <h2 className="mt-2.5 text-base font-extrabold">{tw(`cols.${c}.title`)}</h2>
                       <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm">
                         {Array.from({ length: { profile: 6, contact: 5, never: 4 }[c] }, (_, i) => <li key={i}>{tw(`cols.${c}.i${i + 1}` as `cols.profile.i1`)}</li>)}
                       </ul>
@@ -350,7 +350,7 @@ export function ProfileJourney(p: JourneyProps) {
                   ))}
                 </div>
                 <div className="rounded-[26px] bg-brand-50 p-5 ring-1 ring-brand-200">
-                  <h3 className="text-lg font-extrabold">{tw("who.title")}</h3>
+                  <h2 className="text-lg font-extrabold">{tw("who.title")}</h2>
                   <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
                     <p className="rounded-2xl bg-paper p-4 text-sm"><b>{tw("who.schoolsTitle")}</b><br />{tw("who.schoolsBody")}</p>
                     <p className="rounded-2xl bg-paper p-4 text-sm"><b>{tw("who.familiesTitle")}</b><br />{tw("who.familiesBody")}</p>
@@ -358,7 +358,7 @@ export function ProfileJourney(p: JourneyProps) {
                   <p className="mt-3 text-sm text-ink-600">{tw("who.between")}</p>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <h3 className="text-lg font-extrabold">{tw("confirm.title")}</h3>
+                  <h2 className="text-lg font-extrabold">{tw("confirm.title")}</h2>
                   {([
                     ["terms_privacy", tw.rich("confirm.termsPrivacy", { terms: (c) => <Link href="/legal/terms" target="_blank" className="link">{c}</Link>, privacy: (c) => <Link href="/legal/privacy" target="_blank" className="link">{c}</Link> }), true],
                     ["publish_to_members", tw.rich("confirm.publishToMembers", { b: (c) => <b>{c}</b> }), true],

@@ -32,6 +32,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations("common");
+  const tn = await getTranslations("notice");
   // Client components only get the strings they use (not every page's copy).
   const all = await getMessages();
   const clientMessages = {
@@ -57,9 +58,9 @@ export default async function LocaleLayout({ children, params }: Props) {
           <main id="main" className="flex-1">
             {children}
           </main>
-          <div className="container-page py-8">
+          <section aria-label={tn("title")} className="container-page py-8">
             <ComplianceNotice />
-          </div>
+          </section>
           <SiteFooter />
         </NextIntlClientProvider>
       </body>

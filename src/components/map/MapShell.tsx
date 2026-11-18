@@ -94,6 +94,7 @@ export function MapShell({ country, labels, className = "", gestures = "auto", l
       const m = map;
       m.touchZoomRotate.disableRotation();
       m.keyboard.disableRotation();
+      m.getCanvas().setAttribute("role", "application");
       m.getCanvas().setAttribute("aria-label", l.mapAria);
       m.on("load", () => {
         if (cancelled) return;

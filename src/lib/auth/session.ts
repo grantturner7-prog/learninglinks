@@ -17,9 +17,13 @@ export interface CurrentUser {
 
 /** The signed-in user for this request, or null. Cached per request. */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
+  // headers() first, outside the try: reading request headers is what makes Next.js render this page per request.
+  // It must happen even when the settings are missing (as in `next build` inside a Docker build), otherwise a page
+  // that needs a signed-in user would be prerendered once at build time.
+  const requestHeaders = await headers();
   let session;
   try {
-    session = await getAuth().api.getSession({ headers: await headers() });
+    session = await getAuth().api.getSession({ headers: requestHeaders });
   } catch (err) {
     // Next.js control-flow errors (dynamic rendering, redirects) carry a digest and must pass through.
     if (typeof err === "object" && err !== null && "digest" in err) throw err;

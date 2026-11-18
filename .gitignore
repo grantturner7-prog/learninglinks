@@ -11,3 +11,6 @@ coverage/
 next-env.d.ts
 .DS_Store
 npm-debug.log*
+
+# Local backups made by the Docker setup (never commit them)
+/backups/

@@ -12,6 +12,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // A self-contained server (node .next/standalone/server.js) so the Docker image stays small.
+  output: "standalone",
   poweredByHeader: false,
   reactStrictMode: true,
   serverExternalPackages: ["sharp", "pg"],

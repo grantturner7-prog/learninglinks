@@ -1,0 +1,108 @@
+# LearningLinks on one Linux server: app + Postgres + HTTPS proxy + daily jobs.
+# Usage (from the repository root):
+#   cp deploy/env.production.example .env      # then fill it in
+#   docker compose -f deploy/docker-compose.yml --env-file .env up -d --build
+# Full guide: docs/DEPLOY.md
+
+name: learninglinks
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: learninglinks
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: learninglinks
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U learninglinks -d learninglinks"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # Never published to the internet: only the other containers can reach it.
+
+  migrate:
+    build: { context: .., target: tools }
+    restart: "no"
+    command: ["npm", "run", "db:migrate"]
+    env_file: ../.env
+    environment:
+      DATABASE_URL: postgres://learninglinks:${POSTGRES_PASSWORD}@db:5432/learninglinks
+    depends_on:
+      db: { condition: service_healthy }
+
+  app:
+    build: { context: .., target: app }
+    restart: unless-stopped
+    env_file: ../.env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://learninglinks:${POSTGRES_PASSWORD}@db:5432/learninglinks
+      UPLOAD_DIR: /data/uploads
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      db: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+    expose: ["3000"]
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on: [app]
+
+  # Calls the renewal-reminder endpoint once a day. Safe to repeat: each reminder is sent once.
+  reminders:
+    image: curlimages/curl:8.10.1
+    restart: unless-stopped
+    environment:
+      CRON_SECRET: ${CRON_SECRET:?set CRON_SECRET in .env}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        sleep 120
+        while true; do
+          curl -fsS -m 60 -X POST -H "Authorization: Bearer $$CRON_SECRET" http://app:3000/api/cron/reminders || echo "reminder run failed"
+          sleep 86400
+        done
+    depends_on: [app]
+
+  # Nightly database dump and a copy of the profile photos into ./backups, keeping 14 days.
+  backup:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      PGHOST: db
+      PGUSER: learninglinks
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: learninglinks
+      KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}
+    volumes:
+      - ./backup.sh:/backup.sh:ro
+      - uploads:/data/uploads:ro
+      - ../backups:/backups
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        sleep 300
+        while true; do
+          BACKUP_DIR=/backups UPLOAD_DIR=/data/uploads /backup.sh || echo "backup failed"
+          sleep 86400
+        done
+    depends_on:
+      db: { condition: service_healthy }
+
+volumes:
+  dbdata:
+  uploads:
+  caddydata:
+  caddyconfig:

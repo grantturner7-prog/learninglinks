@@ -48,7 +48,7 @@ export function PhotoUpload({ photoUrl, initials, hasProfile }: { photoUrl: stri
       )}
       <div>
         <span className="label">{t("label")}</span>
-        <input ref={input} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" id="photo-input" disabled={!hasProfile || busy}
+        <input ref={input} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" id="photo-input" aria-label={t("label")} disabled={!hasProfile || busy}
           onChange={(e) => { const f = e.target.files?.[0]; if (f) void send("POST", f); }} />
         <div className="flex flex-wrap gap-2">
           <button type="button" className="btn btn-secondary" disabled={!hasProfile || busy} onClick={() => input.current?.click()}>
