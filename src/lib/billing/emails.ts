@@ -11,10 +11,23 @@ import type { EmailMessage } from "@/lib/email";
  */
 const footer = `\n\n${noticeZh.short}\n${noticeEn.short}`;
 
-export function orderPlacedEmail(to: string, o: { referenceCode: string; amount: number; currency: string; campuses: number; orderUrl?: string }): EmailMessage {
-  const bank = getBankDetails();
+export function orderPlacedEmail(to: string, o: { referenceCode: string; amount: number; currency: string; campuses: number; orderUrl?: string; provider?: string }): EmailMessage {
   const amountZh = formatMoney(o.amount, o.currency, "zh-TW");
   const amountEn = formatMoney(o.amount, o.currency, "en-TW");
+  const link = o.orderUrl ?? `${siteUrl()}/dashboard`;
+  if (o.provider === "ecpay") {
+    return {
+      to,
+      subject: `LearningLinks order ${o.referenceCode} / 訂單 ${o.referenceCode}`,
+      text: [
+        `您的訂單已建立，金額 ${amountZh}（含稅）。請至訂單頁面按「立即付款」，在綠界的安全頁面以信用卡、ATM 虛擬帳號或超商代碼付款。我們不會看到您的卡號。`,
+        `Your order is placed for ${amountEn} (VAT included). Open the order page and press "Pay now" to pay on ECPay's secure page by card, ATM virtual account or convenience store. We never see your card number.`,
+        link,
+        `款項確認後，會員資格立即開始，期限 12 個月，不會自動續約。/ Your 12 months begin as soon as the payment is confirmed. It never renews automatically.`,
+      ].join("\n\n") + footer,
+    };
+  }
+  const bank = getBankDetails();
   const where = bank
     ? `${bank.bankName}${bank.branch ? ` ${bank.branch}` : ""} / ${bank.accountName} / ${bank.accountNumber}`
     : "(see the order page / 請見訂單頁面)";
@@ -25,7 +38,7 @@ export function orderPlacedEmail(to: string, o: { referenceCode: string; amount:
       `您的訂單已建立。請以銀行轉帳 ${amountZh}（含稅），並在匯款備註填寫參考碼：${o.referenceCode}`,
       `Your order is placed. Please transfer ${amountEn} (VAT included) and put this reference in the transfer note: ${o.referenceCode}`,
       `${where}`,
-      o.orderUrl ? `${o.orderUrl}` : `${siteUrl()}/dashboard`,
+      link,
       `我們確認收款後，會員資格即刻開始，期限 12 個月，不會自動續約。/ Once we confirm the payment your 12 months begin. It never renews automatically.`,
     ].join("\n\n") + footer,
   };

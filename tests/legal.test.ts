@@ -177,7 +177,8 @@ describe("legal documents: the facts the product guarantees", () => {
     expect(en).toMatch(/no proration/i);
     expect(en).toMatch(/bank transfer/i);
     expect(en).toMatch(/administrator[^.]*confirm/i);
-    expect(en).toMatch(/credit-card payment will be added later/i);
+    expect(en).toMatch(/ECPay/);
+    expect(en).toMatch(/never see or keep your card number/i);
     const zh = terms("zh-TW");
     expect(zh).toContain("自動續約");
     expect(zh).toContain("營業稅");
@@ -187,6 +188,8 @@ describe("legal documents: the facts the product guarantees", () => {
     expect(zh).toContain("銀行轉帳");
     expect(zh).toContain("管理員");
     expect(zh).toContain("信用卡");
+    expect(zh).toContain("綠界");
+    expect(zh).toContain("不會看到也不會保存您的卡號");
   });
 
   it("Terms never promise a refund or discount that the owner has not decided", () => {

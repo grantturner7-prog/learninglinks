@@ -10,21 +10,39 @@ Open licence point: OpenStreetMap data carries the ODbL licence. The school map 
 
 ## Licensed cram schools (補習班)
 
-Phase 1 needs the licensed cram schools too (about 17,700 in Taiwan). The Ministry of Education publishes the registered short-term tutoring schools as open data. Find the current table by searching for 補習班 on data.gov.tw or on the Ministry's cram-school information site, and download it as CSV or JSON.
+Phase 1 needs the licensed cram schools too (about 17,800 in Taiwan). The Ministry of Education publishes them as open data: **全國立案短期補習班基本資料**, data.gov.tw dataset 16461 (https://data.gov.tw/dataset/16461), updated daily, 22 JSON files (one per city or county), licence **Government Open Data License v1**.
 
-**Not yet tried on the real file.** The importer was built and tested on a small made-up table with the column names these tables usually use (補習班名稱, 立案字號, 班別, 縣市, 地址). The government sites could not be reached from where it was built, so run a **dry run** first and read the summary before writing anything.
+**You do not download or paste anything.** The importer fetches the files itself:
 
 ```bash
-npm run db:import-cram -- --file cram-schools.csv --dry-run
+npm run db:import-cram -- --national --dry-run     # fetch and report, write nothing
+npm run db:import-cram -- --national               # fetch and load
 ```
 
-It prints how many rows it read, which columns it recognised, how many it would import, why others were skipped (no name, no recognisable city and district, duplicate) and a few addresses it could not place. If the file is Big5 (common for older government files) add `--encoding big5`. If a column is not recognised, tell a developer the header name; adding it is a one-line change in `src/lib/import/cram.ts`. When the summary looks right, run it again without `--dry-run`.
+**Run it from a network in Taiwan** (your own computer on home or office internet, or the live server once it is in Taiwan or Japan). The Ministry's server (`bsb.kh.edu.tw`) refuses connections from the cloud environment this code was written in, so it could not be tried on the real files there. That is a limit of that environment, not of your data.
+
+What it does:
+
+1. Reads the list of files and their published row counts from data.gov.tw (and falls back to the known list of 22 files if that page cannot be reached). It only follows `https://` addresses on government (`.gov.tw` / `.edu.tw`) hosts.
+2. Fetches each file politely (one at a time, retries with a pause). If **any** file fails it imports **nothing** and says which; run it again, or add `--allow-partial` to load what arrived.
+3. Compares each file's row count with the published count and shows any that are far apart.
+4. Prints how many it would import, why others were skipped (no name, no recognisable city and district, duplicate) and a few addresses it could not place. Read this before the real run.
+
+Other ways in, if the Ministry's server is unreachable from where you are:
+
+```bash
+npm run db:import-cram -- --national --save-dir ./cram-raw --dry-run   # also keeps the raw files
+npm run db:import-cram -- --dir ./cram-raw --dry-run                   # load from a folder of .json / .csv files
+npm run db:import-cram -- --file cram-schools.csv [--encoding big5]    # a single file
+```
+
+**Not yet tried on the real files.** The column names used (地區縣市, 短期補習班名稱, 短期補習班類別, 地址) come from the dataset's published field list on data.gov.tw. If the real files use different key names, the importer stops and prints the column names it found; adding a name is a one-line change in `src/lib/import/cram.ts`. The published field list has no column that is clearly a registration number (the "主管機關文件單位代碼" column is not described, so it is deliberately **not** used as an id), so each school is identified by its name and district.
 
 ### What is kept and what is thrown away
 
 | Kept | Read to find the district, then thrown away |
 |---|---|
-| Name, kind (cram school or language school), city, district, registration number (as an id) | Street address, phone number, owner's name |
+| Name, kind (cram school or language school), city, district | Street address, email address, phone number, owner's name, registration date |
 
 We never store a street address (project rule), so the table's addresses are used only to work out the district.
 
@@ -34,11 +52,11 @@ These tables have no coordinates. Each school is placed **inside its district**,
 
 ### Re-running
 
-Running the import again updates the same schools (matched by registration number) and adds new ones. A school that has already been **claimed stays claimed**: the import never touches claim, membership or contact details. To take everything from this source back out, ask a developer to delete the organizations whose source is `gov_open_data` and that are still unclaimed.
+Running the import again updates the same schools (matched by name and district) and adds new ones. A school that has already been **claimed stays claimed**: the import never touches claim, membership or contact details. To take everything from this source back out, ask a developer to delete the organizations whose source is `gov_open_data` and that are still unclaimed.
 
 ### Licence
 
-Government open data in Taiwan is usually published under the Government Open Data License, which asks you to credit the source. Check the licence shown on the dataset you download, add the credit it asks for (for example next to the map attribution), and mention it to your lawyer.
+The dataset is published under the Government Open Data License v1 (http://data.gov.tw/license), which asks you to credit the source. Add a credit such as "Short-term tutoring school data: Ministry of Education open data (data.gov.tw)" next to the map attribution, and mention it to your lawyer.
 
 ## Demo data
 

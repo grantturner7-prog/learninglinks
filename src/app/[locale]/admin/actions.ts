@@ -3,13 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth/session";
 import { adminCancelOrder, confirmOrderPaid, OrderFailure } from "@/lib/billing/orders";
-import { orderPaidEmail } from "@/lib/billing/emails";
-import { getDb, schema } from "@/lib/db";
+import { sendPaidEmail } from "@/lib/billing/paid-email";
+import { getDb } from "@/lib/db";
+import { markPaymentReviewed } from "@/lib/payments/service";
 import { sendEmail } from "@/lib/email";
 import { approveClaim, OrgFailure, rejectClaim } from "@/lib/orgs/service";
 import { moderationNoticeEmail } from "@/lib/moderation/emails";
 import { ModerationFailure, reinstate, resolveReport } from "@/lib/moderation/service";
-import { eq } from "drizzle-orm";
 import { redirect } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { hasLocale } from "next-intl";
@@ -32,10 +32,7 @@ export async function confirmOrderAction(_prev: AdminResult | null, fd: FormData
   try {
     const db = getDb();
     const res = await confirmOrderPaid(db, orderId, a.id, { receivedAmount: amount, receivedOn, note });
-    if (res.created) {
-      const [buyer] = res.order.createdByUserId ? await db.select({ email: schema.user.email }).from(schema.user).where(eq(schema.user.id, res.order.createdByUserId)).limit(1) : [];
-      if (buyer && res.terms.length > 0) await sendEmail(orderPaidEmail(buyer.email, { referenceCode: res.order.referenceCode, terms: res.terms })).catch((e) => console.error("paid email failed", e));
-    }
+    if (res.created) await sendPaidEmail(db, res.order.id);
     revalidatePath("/", "layout");
     // The confirmed order leaves the queue, so the form would vanish with its message: show the result as a banner.
     const loc = fd.get("locale");
@@ -64,6 +61,18 @@ export async function cancelOrderAsAdminAction(fd: FormData): Promise<void> {
     await adminCancelOrder(getDb(), id, a.id);
   } catch (err) {
     if (!(err instanceof OrderFailure)) console.error("admin cancel failed", err);
+  }
+  revalidatePath("/", "layout");
+}
+
+export async function markPaymentReviewedAction(fd: FormData): Promise<void> {
+  const a = await admin();
+  const id = fd.get("eventId");
+  if (!a || typeof id !== "string") return;
+  try {
+    await markPaymentReviewed(getDb(), id, a.id);
+  } catch (err) {
+    console.error("mark reviewed failed", err);
   }
   revalidatePath("/", "layout");
 }

@@ -14,7 +14,9 @@ Built so far (Phase 1, Taiwan):
 
 - **Step 4:** reporting and moderation (report buttons, an admin queue to suspend or remove, fair-process emails), drafts of the Terms, Privacy policy and Educator waiver for a lawyer to review, account deletion for schools and families, a Content-Security-Policy, an accessibility pass, a deployment kit (Docker, HTTPS, backups, health check, `npm run preflight`) and a cram-school importer.
 
-Not built: credit-card payments (later). Before launch: lawyer review, hosting and a domain, bank details, loading the cram-school table. Guides: `docs/DEPLOY.md` (go live), `docs/RUNBOOK.md` (daily running), `docs/LAUNCH_DATA.md` (school data).
+- **Step 5:** online payment through **ECPay** (綠界): card, ATM virtual account and convenience-store code, with signed server notices, an audit trail and an admin check list. Off until the three `ECPAY_*` keys are set. See `docs/PAYMENTS.md`.
+
+Before launch: lawyer review, hosting and a domain, ECPay merchant keys, bank details (optional), loading the cram-school table. Guides: `docs/DEPLOY.md` (go live), `docs/RUNBOOK.md` (daily running), `docs/LAUNCH_DATA.md` (school data).
 
 ## Run it locally
 

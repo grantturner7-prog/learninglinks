@@ -42,12 +42,12 @@ export function parseCsv(text: string): string[][] {
 
 /** Header names different publishers use for the same thing (matched after trimming and removing spaces). */
 const ALIASES = {
-  name: ["補習班名稱", "補習班名", "班名", "機構名稱", "名稱", "name"],
+  name: ["補習班名稱", "短期補習班名稱", "補習班名", "班名", "機構名稱", "名稱", "name"],
   address: ["地址", "補習班地址", "班址", "立案地址", "address"],
-  city: ["縣市", "縣市別", "縣市名稱", "所在縣市", "city"],
+  city: ["縣市", "縣市別", "縣市名稱", "所在縣市", "地區縣市", "city"],
   district: ["鄉鎮市區", "鄉鎮區", "行政區", "鄉鎮市區名稱", "district"],
   regNo: ["立案字號", "立案證書字號", "立案證號", "許可證號", "證號", "登記字號", "regno"],
-  category: ["班別", "班別名稱", "補習班類別", "類別", "科別", "category"],
+  category: ["班別", "班別名稱", "補習班類別", "短期補習班類別", "類別", "科別", "category"],
 } as const;
 export type Field = keyof typeof ALIASES;
 
@@ -192,4 +192,9 @@ export function rowsFromObjects(objs: Record<string, unknown>[]): { rows: RawRow
   const idx = mapHeaders(header);
   const cell = (o: Record<string, unknown>, f: Field) => (idx[f] === undefined ? undefined : String(o[header[idx[f]!]!] ?? "").trim() || undefined);
   return { rows: objs.map((o) => ({ name: cell(o, "name"), address: cell(o, "address"), city: cell(o, "city"), district: cell(o, "district"), regNo: cell(o, "regNo"), category: cell(o, "category") })), mapped: Object.keys(idx) as Field[] };
+}
+
+/** Column names present in a set of JSON rows (to tell the owner what was found when a column is not recognised). */
+export function columnsOf(objs: Record<string, unknown>[]): string[] {
+  return [...new Set(objs.slice(0, 200).flatMap((o) => Object.keys(o)))];
 }

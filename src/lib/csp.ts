@@ -3,7 +3,7 @@
  * its own scripts), so an injected <script> cannot execute. The map needs same-origin workers (and blob: workers);
  * nothing is loaded from any other host.
  */
-export function buildCsp(nonce: string, production: boolean): string {
+export function buildCsp(nonce: string, production: boolean, extraFormTargets: readonly string[] = []): string {
   const directives = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${production ? "" : " 'unsafe-eval'"}`,
@@ -15,7 +15,8 @@ export function buildCsp(nonce: string, production: boolean): string {
     "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
+    // The online-payment button posts a signed form to the payment provider's page, so that one address is allowed.
+    `form-action 'self'${extraFormTargets.length > 0 ? ` ${extraFormTargets.join(" ")}` : ""}`,
     "frame-ancestors 'none'",
   ];
   if (production) directives.push("upgrade-insecure-requests");

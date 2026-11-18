@@ -10,6 +10,8 @@ export interface CheckoutPayload {
   invoice: { company: boolean; taxId: string; title: string; email: string };
   /** The compliance acknowledgement checkbox. Checkout is refused without it. */
   acknowledged: boolean;
+  /** "ecpay" is honoured only while online payment is switched on. */
+  method?: "bank_transfer" | "ecpay";
 }
 
 export function invoiceFrom(p: CheckoutPayload["invoice"]): InvoiceInput {
@@ -17,7 +19,7 @@ export function invoiceFrom(p: CheckoutPayload["invoice"]): InvoiceInput {
 }
 
 /** Record that the buyer acknowledged the notice at checkout, and email the order details. Neither may fail the order. */
-export async function afterOrderPlaced(db: Db, user: { id: string; email: string }, order: { id: string; referenceCode: string; amount: number; currency: string; campuses: number }): Promise<void> {
+export async function afterOrderPlaced(db: Db, user: { id: string; email: string }, order: { id: string; referenceCode: string; amount: number; currency: string; campuses: number; provider?: string }): Promise<void> {
   try {
     await db.insert(schema.auditLog).values({ actorUserId: user.id, action: "checkout.notice_acknowledged", entityType: "order", entityId: order.id, meta: { noticeVersion: NOTICE_VERSION } });
   } catch (err) {

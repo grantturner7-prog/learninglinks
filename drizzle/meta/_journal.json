@@ -36,6 +36,13 @@
       "when": 1794969645499,
       "tag": "0004_step4_account_deletion",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794974487491,
+      "tag": "0005_step5_ecpay",
+      "breakpoints": true
     }
   ]
 }

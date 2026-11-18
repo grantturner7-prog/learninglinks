@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { areaLabel } from "@/lib/geo-labels";
 import { listMyCampuses } from "@/lib/orgs/service";
+import { paymentMethods } from "@/lib/payments/config";
 import { PLANS } from "@/lib/plans";
 import { Link } from "@/i18n/navigation";
 
@@ -39,6 +40,7 @@ export default async function SchoolCheckoutPage({ params, searchParams }: Props
   return (
     <SchoolCheckout
       unitPrice={PLANS.school_tw.listPrice}
+      methods={paymentMethods()}
       preselect={preselect}
       campuses={campuses.map((c) => ({ id: c.id, name: c.name, place: areaLabel(c.city, c.district ? [c.district] : [], locale), endsAt: c.membership.endsAt?.toISOString() ?? null, active: c.membership.active }))}
     />

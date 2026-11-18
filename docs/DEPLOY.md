@@ -2,7 +2,7 @@
 
 This guide takes the site from this repository to a live address on one Linux server. It assumes no server experience; each step says what to type and what you should see. Anyone who runs servers can do it in an afternoon, so you can also hand this page to a helper.
 
-Everything below is for **Phase 1 (Taiwan)**. Credit cards and extra countries come later.
+Everything below is for **Phase 1 (Taiwan)**. Online payment uses ECPay (see `docs/PAYMENTS.md`); other countries come later.
 
 ## What you need
 
@@ -11,7 +11,8 @@ Everything below is for **Phase 1 (Taiwan)**. Credit cards and extra countries c
 | A server | Ubuntu 24.04, 2 CPUs, 4 GB memory, 40 GB disk is enough to start. Choose a region close to Taiwan (Taipei if offered, otherwise Tokyo or Singapore). **Where the server is matters for the privacy policy**, so tell your lawyer. |
 | A domain name | For example `learninglinks.tw`. You must be able to edit its DNS records. |
 | An email service | The site uses [Resend](https://resend.com). Free tier is fine at first. Production refuses to run sign-up without it. |
-| Your bank details | Account name, number, bank and branch, for the order page. |
+| An ECPay merchant account | For online payment (card, ATM, convenience store). See `docs/PAYMENTS.md`. |
+| Your bank details | Optional once ECPay is on. Account name, number, bank and branch, for the order page. |
 | About 3 hours | Most of it is waiting for DNS. |
 
 ## 1. Point the domain at the server
@@ -48,7 +49,7 @@ openssl rand -base64 24     # POSTGRES_PASSWORD
 openssl rand -base64 32     # CRON_SECRET
 ```
 
-`ADMIN_EMAILS` is the address you will sign up with to use `/admin`. `SUPPORT_EMAIL` is the public contact address shown on the legal pages. Keep `LEGAL_REVIEWED=false` until your lawyer has approved the legal text (see step 8).
+`ADMIN_EMAILS` is the address you will sign up with to use `/admin`. `SUPPORT_EMAIL` is the public contact address shown on the legal pages. Keep `LEGAL_REVIEWED=false` until your lawyer has approved the legal text (see step 8). Put your ECPay production keys in `ECPAY_MERCHANT_ID`, `ECPAY_HASH_KEY`, `ECPAY_HASH_IV` and set `ECPAY_MODE=production`; leave them empty to keep online payment off.
 
 ## 4. Set up email
 
@@ -76,7 +77,7 @@ This starts the database, applies the database migrations, starts the app, the H
 - `https://your-domain/api/health` shows `{"status":"ok"}`.
 - Open the home page in English and Chinese.
 - **Create your admin account:** sign up with the address in `ADMIN_EMAILS`, click the link in the verification email, then open `/admin`. You should see the Admin desk.
-- **Try a whole payment with test accounts:** sign up a test family, place an order on the join page, confirm it in `/admin` with the amount, and check the family can now see educators. Delete the test accounts afterwards (they can delete their own account in settings, or see the runbook).
+- **Try a whole payment with test accounts:** sign up a test family, place an order on the join page, then pay it (online: a real payment of NT$2,000 by your own card, refunded afterwards in ECPay's back office; bank transfer: confirm it in `/admin` with the amount), and check the family can now see educators. Delete the test accounts afterwards (they can delete their own account in settings, or see the runbook).
 - Send yourself a password-reset email to prove email works.
 
 ## 7. Backups

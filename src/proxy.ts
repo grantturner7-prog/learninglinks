@@ -1,6 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest } from "next/server";
 import { buildCsp, newNonce } from "./lib/csp";
+import { onlineCheckoutOrigin } from "./lib/payments/config";
 import { routing } from "./i18n/routing";
 
 const intl = createMiddleware(routing);
@@ -12,7 +13,8 @@ const intl = createMiddleware(routing);
 export default function proxy(request: NextRequest) {
   const production = process.env.NODE_ENV === "production";
   const nonce = newNonce();
-  const csp = buildCsp(nonce, production);
+  const checkout = onlineCheckoutOrigin();
+  const csp = buildCsp(nonce, production, checkout ? [checkout] : []);
   // Next.js reads the nonce from the request's CSP header and puts it on the scripts it renders.
   const headers = new Headers(request.headers);
   headers.set("x-nonce", nonce);

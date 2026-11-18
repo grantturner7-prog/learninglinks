@@ -30,7 +30,7 @@ export async function closeTestDb(): Promise<void> {
 
 /** Wipe everything these tests touch. Never point TEST_DATABASE_URL at a database you care about. */
 export async function resetTestDb(d: Db): Promise<void> {
-  await d.execute(sql`truncate table "user", organizations, memberships, orders, waitlist_signups, audit_log restart identity cascade`);
+  await d.execute(sql`truncate table "user", organizations, memberships, orders, waitlist_signups, audit_log, payment_events restart identity cascade`);
 }
 
 export async function makeUser(d: Db, accountType: AccountType, name = "Test"): Promise<{ id: string; accountType: AccountType }> {

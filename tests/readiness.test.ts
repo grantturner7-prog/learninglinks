@@ -23,7 +23,7 @@ describe("launch readiness", () => {
   it("refuses a development setup on every point that matters", () => {
     const dev = { NEXT_PUBLIC_APP_URL: "http://localhost:3000", BETTER_AUTH_SECRET: "dev-only-secret-do-not-use-in-production-0000", DATABASE_URL: "postgres://learninglinks:learninglinks@localhost:5432/learninglinks" };
     const checks = checkReadiness(dev);
-    for (const id of ["app_url", "auth_secret", "email_key", "admins", "bank", "support"]) expect(checks.find((c) => c.id === id)!.level, id).toBe("fail");
+    for (const id of ["app_url", "auth_secret", "email_key", "admins", "payment_route", "support"]) expect(checks.find((c) => c.id === id)!.level, id).toBe("fail");
     expect(worst(checks)).toBe("fail");
   });
   it("needs the real site address over https", () => {
@@ -34,8 +34,35 @@ describe("launch readiness", () => {
     expect(level({ ...good, BETTER_AUTH_SECRET: "change-me-change-me-change-me-change-me" }, "auth_secret")).toBe("fail");
     expect(level({ ...good, BETTER_AUTH_SECRET: "short" }, "auth_secret")).toBe("fail");
   });
-  it("needs all three bank fields", () => {
+  it("a half-filled set of bank details is an error, but no bank details at all is fine when ECPay is set", () => {
     expect(level({ ...good, BANK_ACCOUNT_NUMBER: "" }, "bank")).toBe("fail");
+    const online = { ...good, BANK_NAME: "", BANK_ACCOUNT_NAME: "", BANK_ACCOUNT_NUMBER: "", ECPAY_MERCHANT_ID: "1234567", ECPAY_HASH_KEY: "k".repeat(16), ECPAY_HASH_IV: "i".repeat(16), ECPAY_MODE: "production" };
+    expect(worst(checkReadiness(online))).toBe("pass");
+    expect(checkReadiness(online).some((c) => c.id === "bank")).toBe(false);
+  });
+  it("needs at least one way to pay", () => {
+    expect(level({ ...good, BANK_NAME: "", BANK_ACCOUNT_NAME: "", BANK_ACCOUNT_NUMBER: "" }, "payment_route")).toBe("fail");
+    expect(level(good, "payment_route")).toBe("pass");
+  });
+  describe("ECPay", () => {
+    const ecpay = { ...good, ECPAY_MERCHANT_ID: "1234567", ECPAY_HASH_KEY: "k".repeat(16), ECPAY_HASH_IV: "i".repeat(16), ECPAY_MODE: "production" };
+    it("passes with real production keys, alone or beside a bank account", () => {
+      expect(worst(checkReadiness(ecpay))).toBe("pass");
+    });
+    it("is not checked at all while it is switched off", () => {
+      expect(checkReadiness(good).some((c) => c.id.startsWith("ecpay"))).toBe(false);
+    });
+    it("fails when only some of the three keys are set", () => {
+      expect(level({ ...ecpay, ECPAY_HASH_IV: "" }, "ecpay_keys")).toBe("fail");
+    });
+    it("refuses to open the site in ECPay's test mode: it takes no real money", () => {
+      expect(level({ ...ecpay, ECPAY_MODE: "stage" }, "ecpay_mode")).toBe("fail");
+      expect(level({ ...ecpay, ECPAY_MODE: undefined }, "ecpay_mode")).toBe("fail");
+    });
+    it("refuses ECPay's public test accounts", () => {
+      expect(level({ ...ecpay, ECPAY_MERCHANT_ID: "3002607" }, "ecpay_not_test_account")).toBe("fail");
+      expect(level({ ...ecpay, ECPAY_MERCHANT_ID: "2000132" }, "ecpay_not_test_account")).toBe("fail");
+    });
   });
   it("warns (does not block) about draft legal text, a weak database password and missing reminders", () => {
     expect(level({ ...good, LEGAL_REVIEWED: "false" }, "legal")).toBe("warn");

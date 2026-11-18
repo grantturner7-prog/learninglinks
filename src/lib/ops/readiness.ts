@@ -33,7 +33,22 @@ export function checkReadiness(env: Env): Check[] {
   add("email_from", has(from) && !PLACEHOLDER.test(from), "warn", `Emails come from ${from}`, "EMAIL_FROM is still a placeholder. Use an address on a domain you verified with the email provider.");
 
   add("admins", has(env.ADMIN_EMAILS), "fail", "ADMIN_EMAILS lists who can confirm payments.", "ADMIN_EMAILS is empty: nobody could confirm a bank transfer or review reports.");
-  add("bank", has(env.BANK_NAME) && has(env.BANK_ACCOUNT_NAME) && has(env.BANK_ACCOUNT_NUMBER), "fail", "Bank details are set for the order page.", "BANK_NAME, BANK_ACCOUNT_NAME and BANK_ACCOUNT_NUMBER must be set, or members cannot see where to pay.");
+  // Buyers need at least one way to pay: online with ECPay, bank transfer, or both.
+  const bankSet = has(env.BANK_NAME) && has(env.BANK_ACCOUNT_NAME) && has(env.BANK_ACCOUNT_NUMBER);
+  const ecpaySet = has(env.ECPAY_MERCHANT_ID) && has(env.ECPAY_HASH_KEY) && has(env.ECPAY_HASH_IV);
+  add("payment_route", bankSet || ecpaySet, "fail", `Buyers can pay by ${[ecpaySet ? "ECPay (online)" : "", bankSet ? "bank transfer" : ""].filter(Boolean).join(" and ")}.`, "No way to pay is set up. Set the ECPAY_* keys (online) and/or BANK_NAME, BANK_ACCOUNT_NAME and BANK_ACCOUNT_NUMBER (bank transfer).");
+  if (has(env.BANK_NAME) || has(env.BANK_ACCOUNT_NAME) || has(env.BANK_ACCOUNT_NUMBER)) add("bank", bankSet, "fail", "Bank details are complete.", "Bank details are only partly filled in: set BANK_NAME, BANK_ACCOUNT_NAME and BANK_ACCOUNT_NUMBER together, or leave all three empty.");
+  if (has(env.ECPAY_MERCHANT_ID) || has(env.ECPAY_HASH_KEY) || has(env.ECPAY_HASH_IV)) {
+    add("ecpay_keys", ecpaySet, "fail", "ECPay merchant ID, HashKey and HashIV are all set.", "ECPay is only partly set up: ECPAY_MERCHANT_ID, ECPAY_HASH_KEY and ECPAY_HASH_IV must all be set, or all left empty.");
+    if (ecpaySet) {
+      const production = env.ECPAY_MODE === "production";
+      add("ecpay_mode", production, "fail", "ECPay is in production mode: real money.", "ECPAY_MODE is not 'production'. In test mode ECPay's page takes no real money, so nobody's membership would be paid for. Set ECPAY_MODE=production with your real merchant keys.");
+      const testAccount = env.ECPAY_MERCHANT_ID === "3002607" || env.ECPAY_MERCHANT_ID === "2000132" || env.ECPAY_MERCHANT_ID === "3002599";
+      add("ecpay_not_test_account", !testAccount, "fail", "The ECPay merchant ID is not one of ECPay's public test accounts.", "ECPAY_MERCHANT_ID is one of ECPay's public test accounts (their keys are published). Use the keys ECPay gave you for your own shop.");
+      const methods = (env.ECPAY_METHODS ?? "Credit,ATM,CVS").split(",").map((m) => m.trim()).filter(Boolean);
+      add("ecpay_methods", methods.length > 0, "warn", `ECPay offers: ${methods.join(", ")}.`, "ECPAY_METHODS is empty: only credit card will be offered.");
+    }
+  }
   add("cron", (env.CRON_SECRET ?? "").length >= 24, "warn", "CRON_SECRET is set (renewal reminders can run).", "CRON_SECRET is missing or short (24+ characters): renewal reminders will not run.");
   add("support", has(env.SUPPORT_EMAIL) && /@/.test(env.SUPPORT_EMAIL ?? ""), "fail", `Support address is ${env.SUPPORT_EMAIL}`, "SUPPORT_EMAIL is missing: the legal pages, appeals and privacy requests need a public address.");
   add("legal", env.LEGAL_REVIEWED === "true", "warn", "Legal text is marked as reviewed.", "LEGAL_REVIEWED is not true: the Terms, Privacy Policy and Waiver still show a DRAFT banner. Set it only after your lawyer approves them.");

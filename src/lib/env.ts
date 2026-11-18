@@ -24,6 +24,14 @@ const schema = z.object({
   BANK_ACCOUNT_NAME: optionalString,
   BANK_ACCOUNT_NUMBER: optionalString,
   BANK_BRANCH: optionalString,
+  /** ECPay (綠界) online payment. Leave all three empty to keep it off. */
+  ECPAY_MERCHANT_ID: optionalString,
+  ECPAY_HASH_KEY: optionalString,
+  ECPAY_HASH_IV: optionalString,
+  /** "stage" = ECPay's test server (default). "production" only with the live merchant account. */
+  ECPAY_MODE: z.preprocess(emptyToUndefined, z.enum(["stage", "production"]).default("stage")),
+  /** Which payment methods to offer on ECPay's page, comma separated: Credit, ATM, CVS, BARCODE, WebATM, ApplePay, TWQR, BNPL, WeiXin. */
+  ECPAY_METHODS: z.preprocess(emptyToUndefined, z.string().default("Credit,ATM,CVS")),
   /** Shared secret for scheduled jobs (renewal reminders). Without it the cron endpoint is disabled. */
   CRON_SECRET: z.preprocess(emptyToUndefined, z.string().min(24).optional()),
   LEGAL_REVIEWED: bool,

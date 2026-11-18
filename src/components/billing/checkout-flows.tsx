@@ -73,6 +73,31 @@ function Receipt({ lines, total, note, noDiscount }: { lines: string[]; total: s
   );
 }
 
+type Method = "bank_transfer" | "ecpay";
+const DEFAULT_METHODS: Method[] = ["bank_transfer"];
+
+/** Only shown while online payment is switched on. */
+function MethodChooser({ value, onChange, methods }: { value: Method; onChange: (m: Method) => void; methods: Method[] }) {
+  const t = useTranslations("billing.method");
+  const opts: { key: Method; title: string; hint: string }[] = ([
+    { key: "ecpay", title: t("online"), hint: t("onlineHint") },
+    { key: "bank_transfer", title: t("bank"), hint: t("bankHint") },
+  ] as { key: Method; title: string; hint: string }[]).filter((o) => methods.includes(o.key));
+  return (
+    <fieldset>
+      <legend className="label">{t("title")}</legend>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {opts.map((o) => (
+          <Tile key={o.key} on={value === o.key} onClick={() => onChange(o.key)}>
+            <span className="text-[16px] font-extrabold leading-tight">{o.title}</span>
+            <span className="text-sm text-ink-600">{o.hint}</span>
+          </Tile>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 function AckBox({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
   const tn = useTranslations("notice");
   return (
@@ -108,14 +133,15 @@ const invoicePayload = (i: InvoiceState) => ({ company: i.company, taxId: i.taxI
 
 /* ------------------------------ family ------------------------------ */
 
-export function FamilyJoin({ priceLabel }: { priceLabel: string }) {
+export function FamilyJoin({ priceLabel, methods = DEFAULT_METHODS }: { priceLabel: string; methods?: Method[] }) {
   const t = useTranslations("billing.family");
   const tf = useTranslations("billing.flow");
   const top = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(1);
   const [inv, setInv] = useState(EMPTY_INVOICE);
   const [ack, setAck] = useState(false);
-  const { busy, error, submit } = useCheckout(() => createFamilyOrderAction({ invoice: invoicePayload(inv), acknowledged: ack }));
+  const [method, setMethod] = useState<Method>(methods[0] ?? "bank_transfer");
+  const { busy, error, submit } = useCheckout(() => createFamilyOrderAction({ invoice: invoicePayload(inv), acknowledged: ack, method }));
   const labels = { ...useFrameLabels(step, 3), reassure: t("reassure") };
   const go = (n: number) => { setStep(n); top.current?.scrollIntoView({ behavior: "smooth", block: "start" }); };
   const taxBad = inv.company && (!isValidTaxId(inv.taxId.replace(/\s+/g, "")) || inv.title.trim() === "");
@@ -124,7 +150,7 @@ export function FamilyJoin({ priceLabel }: { priceLabel: string }) {
 
   return (
     <FlowFrame
-      step={step} total={3} labels={labels} cheer={t(`cheer.${ck}`)} say={t(`say.${sk}`)} question={t(`q.${sk}`)} error={step === 3 ? error : null}
+      step={step} total={3} labels={labels} cheer={t(`cheer.${ck}`)} say={step === 3 && method === "ecpay" ? t("say.s3Online") : t(`say.${sk}`)} question={t(`q.${sk}`)} error={step === 3 ? error : null}
       leaveHref="/dashboard" topRef={top} onJump={go}
       aside={<Receipt lines={[t("points.p1"), t("points.p3"), t("points.p4")]} total={priceLabel} note={useTranslations("billing.receipt")("familyTerm")} />}
       footer={
@@ -148,7 +174,8 @@ export function FamilyJoin({ priceLabel }: { priceLabel: string }) {
         <InvoiceStep value={inv} onChange={setInv} />
       ) : (
         <div className="flex flex-col gap-5">
-          <p className="text-[16px] leading-relaxed">{t("summary")}</p>
+          {methods.length > 1 ? <MethodChooser value={method} onChange={setMethod} methods={methods} /> : null}
+          <p className="text-[16px] leading-relaxed">{method === "ecpay" ? t("summaryOnline") : t("summary")}</p>
           <AckBox checked={ack} onChange={setAck} />
         </div>
       )}
@@ -167,7 +194,7 @@ export interface CheckoutCampus {
   active: boolean;
 }
 
-export function SchoolCheckout({ campuses, preselect, unitPrice }: { campuses: CheckoutCampus[]; preselect: string[]; unitPrice: number }) {
+export function SchoolCheckout({ campuses, preselect, unitPrice, methods = DEFAULT_METHODS }: { campuses: CheckoutCampus[]; preselect: string[]; unitPrice: number; methods?: Method[] }) {
   const t = useTranslations("billing.school");
   const tr = useTranslations("billing.receipt");
   const tf = useTranslations("billing.flow");
@@ -178,7 +205,8 @@ export function SchoolCheckout({ campuses, preselect, unitPrice }: { campuses: C
   const [picked, setPicked] = useState<string[]>(() => preselect.filter((id) => campuses.some((c) => c.id === id)));
   const [inv, setInv] = useState(EMPTY_INVOICE);
   const [ack, setAck] = useState(false);
-  const { busy, error, submit } = useCheckout(() => createSchoolOrderAction({ campusIds: picked, invoice: invoicePayload(inv), acknowledged: ack }));
+  const [method, setMethod] = useState<Method>(methods[0] ?? "bank_transfer");
+  const { busy, error, submit } = useCheckout(() => createSchoolOrderAction({ campusIds: picked, invoice: invoicePayload(inv), acknowledged: ack, method }));
   const labels = { ...useFrameLabels(step, 3), reassure: t("reassure") };
   const money = (n: number) => formatMoney(n, "TWD", locale);
   const total = picked.length * unitPrice;
@@ -190,7 +218,7 @@ export function SchoolCheckout({ campuses, preselect, unitPrice }: { campuses: C
 
   return (
     <FlowFrame
-      step={step} total={3} labels={labels} cheer={t(`cheer.${ck}`)} say={t(`say.${sk}`)} question={t(`q.${sk}`)} help={step === 1 ? t("pick") : null} error={step === 3 ? error : null}
+      step={step} total={3} labels={labels} cheer={t(`cheer.${ck}`)} say={step === 3 && method === "ecpay" ? t("say.s3Online") : t(`say.${sk}`)} question={t(`q.${sk}`)} help={step === 1 ? t("pick") : null} error={step === 3 ? error : null}
       leaveHref="/dashboard" topRef={top} onJump={go}
       aside={<Receipt lines={picked.length > 0 ? [tr("campusLine", { n: picked.length, price: money(unitPrice) })] : []} total={picked.length > 0 ? money(total) : null} note={tr("term")} noDiscount />}
       footer={
@@ -229,7 +257,8 @@ export function SchoolCheckout({ campuses, preselect, unitPrice }: { campuses: C
         <InvoiceStep value={inv} onChange={setInv} />
       ) : (
         <div className="flex flex-col gap-5">
-          <p className="text-[16px] leading-relaxed">{t("summary", { n: picked.length, total: money(total) })}</p>
+          {methods.length > 1 ? <MethodChooser value={method} onChange={setMethod} methods={methods} /> : null}
+          <p className="text-[16px] leading-relaxed">{t(method === "ecpay" ? "summaryOnline" : "summary", { n: picked.length, total: money(total) })}</p>
           <AckBox checked={ack} onChange={setAck} />
         </div>
       )}

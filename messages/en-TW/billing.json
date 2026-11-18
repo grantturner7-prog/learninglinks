@@ -60,7 +60,8 @@
     "say": {
       "s1": "Hi, I am Link. Here is exactly how this works, with no small print.",
       "s2": "Some families like an invoice with a company 統一編號. Totally optional.",
-      "s3": "Nearly done. I will make your order and show you where to send the transfer."
+      "s3": "Nearly done. I will make your order and show you where to send the transfer.",
+      "s3Online": "Nearly done. I will make your order, then you choose card, ATM or store code and pay on ECPay's secure page."
     },
     "q": {
       "s1": "Here is how it works",
@@ -69,15 +70,16 @@
     },
     "points": {
       "p1": "NT$2,000 for 12 months, VAT included",
-      "p2": "You pay once by bank transfer. No card is kept on file.",
-      "p3": "We confirm your payment by hand, then your 12 months start.",
+      "p2": "You pay once. Choose a bank transfer or, when it is switched on, pay online by card, ATM or convenience store. We never keep your card details.",
+      "p3": "Your 12 months start when your payment is confirmed: by us for a bank transfer, straight away for an online payment.",
       "p4": "It never renews by itself. We send a reminder before it ends.",
       "p5": "You can see tutors who offer private tutoring, and ask for one contact at a time."
     },
     "reassure": "We never ask for your ID number or your child's details.",
     "place": "Place my order",
     "placing": "Placing your order…",
-    "summary": "You are ordering one family membership for NT$2,000, VAT included. You will pay by bank transfer and nothing is charged by us until you do."
+    "summary": "You are ordering one family membership for NT$2,000, VAT included. You will pay by bank transfer and nothing is charged by us until you do.",
+    "summaryOnline": "You are ordering one family membership for NT$2,000, VAT included. You will pay on ECPay's secure page and nothing is charged until you do."
   },
   "school": {
     "cheer": {
@@ -88,7 +90,8 @@
     "say": {
       "s1": "Every campus has its own 12 months, so you can add campuses whenever you like.",
       "s2": "Schools usually want a company invoice. Add the 統一編號 here if you do.",
-      "s3": "Nearly done. I will make your order and show you where to send the transfer."
+      "s3": "Nearly done. I will make your order and show you where to send the transfer.",
+      "s3Online": "Nearly done. I will make your order, then you choose card, ATM or store code and pay on ECPay's secure page."
     },
     "q": {
       "s1": "Which campuses are you paying for?",
@@ -104,7 +107,8 @@
     "reassure": "We never ask for licences or ID numbers. We are only a connection website.",
     "place": "Place my order",
     "placing": "Placing your order…",
-    "summary": "You are ordering {n, plural, one {# campus} other {# campuses}} for {total}, VAT included. You will pay by bank transfer and nothing is charged by us until you do."
+    "summary": "You are ordering {n, plural, one {# campus} other {# campuses}} for {total}, VAT included. You will pay by bank transfer and nothing is charged by us until you do.",
+    "summaryOnline": "You are ordering {n, plural, one {# campus} other {# campuses}} for {total}, VAT included. You will pay on ECPay's secure page and nothing is charged until you do."
   },
   "order": {
     "back": "Back to my dashboard",
@@ -138,6 +142,50 @@
     "cancelHint": "Changed your mind? Cancelling is free. Only cancel if you have not transferred yet.",
     "paidOn": "Confirmed. Your membership runs until {date}.",
     "browse": "Browse educators",
-    "placed": "Placed on {date}"
+    "placed": "Placed on {date}",
+    "online": {
+      "title": "Pay online",
+      "waiting": "Waiting for your payment",
+      "intro": "You will go to ECPay's secure page and pay by card, ATM virtual account or at a convenience store. We never see or keep your card number.",
+      "working": "Taking you to ECPay…",
+      "confirming": "Thank you. We are confirming your payment with ECPay. This page updates by itself, usually within a minute.",
+      "failed": "The last payment did not go through ({reason}). You can try again.",
+      "atmTitle": "Your ATM transfer details",
+      "atm": "Bank code {bank}, virtual account {account}. Please pay before {date}. Your membership starts once ECPay tells us the money arrived.",
+      "cvsTitle": "Your convenience-store payment code",
+      "cvs": "Payment code {code}. Please pay at the store before {date}. Your membership starts once ECPay tells us the money arrived.",
+      "later": "You can come back to this page and pay later. The order stays here until you pay or cancel it.",
+      "errors": {
+        "signin": "Please sign in again.",
+        "unavailable": "Online payment is not available for this order right now.",
+        "not_pending": "This order is no longer waiting for payment.",
+        "rate": "Too many tries. Please wait a few minutes.",
+        "server": "Something went wrong. Nothing was charged. Please try again."
+      },
+      "methods": {
+        "Credit": {
+          "label": "Pay by card",
+          "hint": "Visa, MasterCard or JCB"
+        },
+        "ATM": {
+          "label": "ATM virtual account",
+          "hint": "Pay later by transfer or at an ATM"
+        },
+        "CVS": {
+          "label": "Convenience-store code",
+          "hint": "Pay later at 7-ELEVEN, FamilyMart, Hi-Life or OK mart"
+        }
+      },
+      "pick": "Choose how to pay:",
+      "reference": "Your order reference (quote it if you write to us):",
+      "cancelHint": "Changed your mind? Cancelling is free. Only cancel if you have not paid yet."
+    }
+  },
+  "method": {
+    "title": "How would you like to pay?",
+    "online": "Online with ECPay",
+    "onlineHint": "Card, ATM virtual account or convenience-store code. Your 12 months start as soon as the payment arrives.",
+    "bank": "Bank transfer",
+    "bankHint": "We show you the account and a reference code. We confirm the transfer by hand, which takes a few working days."
   }
 }

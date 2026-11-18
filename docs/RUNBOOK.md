@@ -4,9 +4,10 @@ For the owner and any helper. Server setup is in `docs/DEPLOY.md`. Commands assu
 
 ## Every working day (about 10 minutes at the start)
 
-Open `/admin` (English). It has three queues.
+Open `/admin` (English). It has these queues.
 
-1. **Waiting for payment.** Check the bank account. For each transfer that arrived, find the order by the **reference code** in the transfer note (the "Find an order by reference" box accepts any capitalisation), check the amount equals the order total, then press **Confirm payment** with the amount and the date on the bank statement. The membership starts at that moment and the buyer is emailed.
+0. **Online payments to check** (only appears when there is something). ECPay reported a payment the site would not decide alone: a different amount, a second payment, a payment for a cancelled order, or an order it could not find. Look the trade number up in the ECPay merchant back office, refund or fix by hand, then press **Mark as checked**. Normal online payments never appear here: they confirm themselves.
+1. **Waiting for payment.** Orders marked **Online (ECPay)** are waiting for the buyer to pay and confirm themselves; leave them. For **Bank transfer** orders: check the bank account. For each transfer that arrived, find the order by the **reference code** in the transfer note (the "Find an order by reference" box accepts any capitalisation), check the amount equals the order total, then press **Confirm payment** with the amount and the date on the bank statement. The membership starts at that moment and the buyer is emailed.
    - **Invoices.** The site records the buyer's invoice details (company name, 統一編號, email) but does not issue invoices. Issue the uniform invoice (統一發票) or receipt yourself, or through your accountant, when you confirm a payment. Ask your lawyer or accountant which entity must issue it.
    - Amount does not match (short or too much): do **not** confirm. Contact the buyer, then cancel the order or ask them to pay the difference.
    - Nothing arrived after a few days: leave it. The buyer can cancel it themselves.
@@ -22,6 +23,7 @@ Open `/admin` (English). It has three queues.
 
 ## Things that happen by themselves
 
+- **Online payments** (ECPay) start the membership and send the confirmation email as soon as ECPay's signed notice arrives. If a buyer says they paid but nothing happened, search their order by reference on the admin desk, then look at ECPay's back office: if ECPay shows it paid, press **Confirm payment** with the amount and today's date.
 - **Renewal reminders** go out 60, 30, 7 and 0 days before a membership ends. Nothing renews automatically and no card is charged.
 - **Nightly backups** go into `backups/` (database dump and profile photos). Check now and then: `ls -lh backups | tail`.
 

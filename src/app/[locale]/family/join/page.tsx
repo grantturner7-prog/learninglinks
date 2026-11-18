@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { FamilyJoin } from "@/components/billing/checkout-flows";
+import { paymentMethods } from "@/lib/payments/config";
 import { formatMoney, PLANS, priceForCampuses } from "@/lib/plans";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -15,5 +16,5 @@ export default async function FamilyJoinPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const price = formatMoney(priceForCampuses(PLANS.family_tw, 1), "TWD", locale);
-  return <FamilyJoin priceLabel={price} />;
+  return <FamilyJoin priceLabel={price} methods={paymentMethods()} />;
 }

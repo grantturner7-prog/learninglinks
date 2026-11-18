@@ -5,12 +5,15 @@ import { CopyButton } from "@/components/billing/copy-button";
 import { requireUser } from "@/lib/auth/session";
 import { getBankDetails } from "@/lib/billing/bank";
 import { getHolderMembership, getOrderForUser } from "@/lib/billing/orders";
+import { PayNow, RefreshWhilePending } from "@/components/billing/pay-now";
 import { getDb } from "@/lib/db";
+import { getEcpayConfig } from "@/lib/payments/config";
+import { getOrderPaymentView } from "@/lib/payments/service";
 import { formatMoney } from "@/lib/plans";
 import { Link } from "@/i18n/navigation";
 import { cancelOrderAction } from "./actions";
 
-type Props = { params: Promise<{ locale: string; id: string }> };
+type Props = { params: Promise<{ locale: string; id: string }>; searchParams: Promise<{ from?: string }> };
 
 export async function generateMetadata({ params }: Pick<Props, "params">): Promise<Metadata> {
   const { locale } = await params;
@@ -19,8 +22,9 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
 }
 
 /** The bank-transfer page: how much, where to send it, and the reference to quote. Only the buyer can open it. */
-export default async function OrderPage({ params }: Props) {
+export default async function OrderPage({ params, searchParams }: Props) {
   const { locale, id } = await params;
+  const { from } = await searchParams;
   setRequestLocale(locale);
   const user = await requireUser(locale, `/orders/${id}`);
   const db = getDb();
@@ -28,7 +32,11 @@ export default async function OrderPage({ params }: Props) {
   if (!order) notFound();
   const t = await getTranslations("billing.order");
   const f = await getFormatter();
-  const bank = getBankDetails();
+  const bank = order.provider === "bank_transfer" ? getBankDetails() : null;
+  const online = order.provider === "ecpay";
+  const pay = online && order.status === "pending" ? await getOrderPaymentView(db, order.id) : null;
+  const to = await getTranslations("billing.order.online");
+  const cfg = online ? getEcpayConfig() : null;
   const money = formatMoney(order.amount, order.currency, locale);
   const isSchool = order.planCode === "school_tw";
   const holder = isSchool ? null : await getHolderMembership(db, "user", user.id);
@@ -39,7 +47,7 @@ export default async function OrderPage({ params }: Props) {
       <Link href="/dashboard" className="link text-sm">← {t("back")}</Link>
       <h1 className="mt-3 text-4xl font-extrabold tracking-tight">{t("title")}</h1>
       <p className="mt-2 flex flex-wrap items-center gap-2">
-        <span className={order.status === "paid" ? "badge" : order.status === "pending" ? "badge-warn" : "badge-muted"}>{t(`status.${order.status}`)}</span>
+        <span className={order.status === "paid" ? "badge" : order.status === "pending" ? "badge-warn" : "badge-muted"}>{online && order.status === "pending" ? to("waiting") : t(`status.${order.status}`)}</span>
         <span className="text-sm text-ink-600">{t("placed", { date: day(order.createdAt) })}</span>
       </p>
 
@@ -50,7 +58,7 @@ export default async function OrderPage({ params }: Props) {
         </section>
       ) : null}
 
-      {order.status === "pending" ? (
+      {order.status === "pending" && !online ? (
         <>
           <section className="mt-6 rounded-[36px] bg-paper p-6 shadow-soft sm:p-8">
             <p className="text-sm font-extrabold uppercase tracking-wide text-brand-700">{t("reference")}</p>
@@ -85,6 +93,39 @@ export default async function OrderPage({ params }: Props) {
         </>
       ) : null}
 
+      {order.status === "pending" && online ? (
+        <>
+          {from === "ecpay" ? (
+            <p role="status" className="notice mt-6">{to("confirming")}</p>
+          ) : null}
+          {from === "ecpay" ? <RefreshWhilePending /> : null}
+          <section className="mt-6 rounded-[36px] bg-paper p-6 shadow-soft sm:p-8">
+            <p className="text-sm font-extrabold uppercase tracking-wide text-brand-700">{to("title")}</p>
+            <p className="mt-2 text-4xl font-extrabold tabular-nums" data-testid="amount">{money} <span className="text-base font-semibold text-ink-600">{t("vat")}</span></p>
+            <p className="mt-3 max-w-xl text-ink-700">{to("intro")}</p>
+            <p className="mt-3 font-bold">{to("pick")}</p>
+            {pay?.lastFailure ? <p role="alert" className="notice-error mt-4">{to("failed", { reason: pay.lastFailure })}</p> : null}
+            <div className="mt-5">
+              <PayNow orderId={order.id} locale={locale} methods={(cfg?.methods ?? []).map((m) => ({ key: m, label: to(`methods.${m}.label`), hint: to(`methods.${m}.hint`) }))} labels={{ working: to("working"), errors: { signin: to("errors.signin"), unavailable: to("errors.unavailable"), not_pending: to("errors.not_pending"), rate: to("errors.rate"), server: to("errors.server") } }} />
+            </div>
+            <p className="hint mt-3">{to("later")}</p>
+            <p className="mt-2 text-sm text-ink-600">{to("reference")} <b className="font-mono" data-testid="reference">{order.referenceCode}</b></p>
+          </section>
+          {pay?.info?.vAccount ? (
+            <section className="card mt-5" data-testid="atm-info">
+              <h2 className="text-xl font-extrabold">{to("atmTitle")}</h2>
+              <p className="mt-2">{to("atm", { bank: pay.info.bankCode ?? "", account: pay.info.vAccount, date: pay.info.expireDate ?? "" })}</p>
+            </section>
+          ) : null}
+          {pay?.info?.paymentNo ? (
+            <section className="card mt-5" data-testid="cvs-info">
+              <h2 className="text-xl font-extrabold">{to("cvsTitle")}</h2>
+              <p className="mt-2">{to("cvs", { code: pay.info.paymentNo, date: pay.info.expireDate ?? "" })}</p>
+            </section>
+          ) : null}
+        </>
+      ) : null}
+
       {order.campusList.length > 0 ? (
         <section className="card mt-5">
           <h2 className="text-xl font-extrabold">{t("campuses")}</h2>
@@ -99,7 +140,7 @@ export default async function OrderPage({ params }: Props) {
       {order.status === "pending" ? (
         <form action={cancelOrderAction} className="mt-6">
           <input type="hidden" name="orderId" value={order.id} />
-          <p className="hint mb-2">{t("cancelHint")}</p>
+          <p className="hint mb-2">{online ? to("cancelHint") : t("cancelHint")}</p>
           <button type="submit" className="btn btn-secondary">{t("cancel")}</button>
         </form>
       ) : null}

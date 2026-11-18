@@ -8,7 +8,7 @@ A **connection website** between educators and the people who need them. Educato
 ## Money
 - Schools: **NT$10,000 per campus for 12 months** (3 campuses = NT$30,000). **No discount for extra campuses and no proration.** A campus added mid-year pays the full NT$10,000 and gets its own full 12 months from the day it starts. Families: **NT$2,000 for 12 months**. The owner is firm on these prices: do not suggest changing them.
 - **VAT is included** in these prices (confirmed). One-time payment, 12-month term, **never auto-renews**. Prices are flat (no discounts unless the owner configures one).
-- **Payments:** Phase 1 (Taiwan only) is **bank transfer**, confirmed by an admin. **Credit card is added later**; keep the payment code provider-agnostic.
+- **Payments (owner decision, 18 Nov 2026):** online payment goes through **ECPay (綠界)**: card, ATM virtual account, convenience-store code (`src/lib/payments/`, `docs/PAYMENTS.md`). **Bank transfer** stays as an optional second route (confirmed by an admin; bank details come later, in the server's private settings). The payment code stays provider-agnostic (`orders.provider`). We never see or store card numbers; only a correctly signed ECPay notice starts a membership.
 - **Families launch with schools in Phase 1.** Launch order: Phase 1 Taiwan (educators, schools, families), Phase 2 Thailand and Vietnam, Phase 3 Japan, Korea and China.
 
 ## Who can see whom (non-negotiable)

@@ -1,7 +1,5 @@
 import { sql } from "drizzle-orm";
-import {
-  check, date, doublePrecision, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid,
-} from "drizzle-orm/pg-core";
+import { boolean, check, date, doublePrecision, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
 const ts = (name: string) => timestamp(name, { withTimezone: true });
@@ -263,6 +261,59 @@ export const orderItems = pgTable(
     organizationId: uuid("organization_id").notNull().references(() => organizations.id),
   },
   (t) => [uniqueIndex("order_item_uq").on(t.orderId, t.organizationId)],
+);
+
+export type AttemptStatus = "created" | "awaiting" | "paid" | "failed";
+
+/** One trip to an online payment page (ECPay). An order can have several: a buyer who leaves and returns starts a new one. */
+export const paymentAttempts = pgTable(
+  "payment_attempts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    orderId: uuid("order_id").notNull().references(() => orders.id, { onDelete: "cascade" }),
+    provider: text("provider").notNull().default("ecpay"),
+    /** What we call it at the provider (ECPay MerchantTradeNo). Unique, never reused. */
+    merchantTradeNo: text("merchant_trade_no").notNull().unique(),
+    amount: integer("amount").notNull(),
+    status: text("status").$type<AttemptStatus>().notNull().default("created"),
+    /** The provider's own transaction number (ECPay TradeNo), once it tells us. */
+    providerTradeNo: text("provider_trade_no"),
+    paymentType: text("payment_type"),
+    rtnCode: integer("rtn_code"),
+    rtnMsg: text("rtn_msg"),
+    /** ATM virtual account / convenience-store code to show the buyer on the order page. */
+    paymentInfo: jsonb("payment_info").$type<{ bankCode?: string; vAccount?: string; paymentNo?: string; expireDate?: string }>(),
+    paidAt: ts("paid_at"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    check("attempt_status_check", sql`${t.status} in ('created','awaiting','paid','failed')`),
+    index("attempt_order_idx").on(t.orderId, t.createdAt),
+  ],
+);
+
+export type PaymentOutcome = "applied" | "duplicate" | "ignored" | "invalid" | "needs_review";
+
+/** Everything the provider sends us, kept as received (append-only) so any money question can be answered later. */
+export const paymentEvents = pgTable(
+  "payment_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    provider: text("provider").notNull().default("ecpay"),
+    kind: text("kind").$type<"result" | "info" | "return">().notNull(),
+    merchantTradeNo: text("merchant_trade_no"),
+    /** Did the signature check out? Only valid events can change anything. */
+    valid: boolean("valid").notNull(),
+    simulated: boolean("simulated").notNull().default(false),
+    outcome: text("outcome").$type<PaymentOutcome>().notNull(),
+    note: text("note"),
+    payload: jsonb("payload").$type<Record<string, string>>().notNull(),
+    receivedAt: createdAt(),
+    reviewedAt: ts("reviewed_at"),
+    reviewedBy: text("reviewed_by"),
+  },
+  (t) => [index("payment_event_trade_idx").on(t.merchantTradeNo, t.receivedAt), index("payment_event_review_idx").on(t.outcome, t.reviewedAt)],
 );
 
 /** Which renewal reminders (60/30/7/0 days before the end) have been sent, so none is sent twice. */

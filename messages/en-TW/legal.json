@@ -94,10 +94,10 @@
           "id": "payment",
           "title": "How you pay",
           "paragraphs": [
-            "At launch you pay by bank transfer to the account shown on your order page. After you place an order you get a reference code; put it in the transfer note. Nothing is charged until you transfer the money.",
-            "An administrator checks that the correct amount arrived and then confirms your order by hand, which starts your membership. A payment for a different amount is not confirmed automatically.",
-            "You may cancel an order yourself while it is unpaid, at no cost. If you have already transferred money, please write to us instead of cancelling.",
-            "Credit-card payment will be added later and will come with its own payment terms.",
+            "You pay once for each 12-month membership. You can pay online through ECPay (綠界), a Taiwanese payment service, by card, ATM virtual account or convenience-store code, and, when we offer it, by bank transfer. You choose when you place the order. Nothing is charged until you pay.",
+            "Online payments happen on ECPay's own page. We never see or keep your card number. Your membership starts when ECPay confirms to us that the correct amount has arrived. For an ATM or convenience-store payment that is when you have paid, not when you receive the account number or code. A payment for a different amount is not applied automatically.",
+            "For a bank transfer you get a reference code to put in the transfer note, and an administrator checks that the correct amount arrived and confirms your order by hand, which starts your membership.",
+            "You may cancel an order yourself while it is unpaid, at no cost. If you have already paid, please write to us instead of cancelling.",
             "You may give a company name, a 統一編號 (the 8-digit Uniform Business Number of a company) and an invoice email address, or leave them out. We never need an ID number from you. The price you pay is the price shown when you place the order, in New Taiwan dollars. [For lawyer: how and when we issue the uniform invoice (統一發票) or other receipt, and which entity is the seller.]"
           ]
         },
@@ -337,8 +337,8 @@
           "bullets": [
             "Order details: who placed the order, the plan, the number of campuses, the amount (VAT included), the currency, the status, the reference code and the dates.",
             "Optional invoice details: a company name, a 統一編號 and an invoice email address.",
-            "Payment confirmation: when an administrator confirms a bank transfer they record the amount received, the date on the bank statement, a short note, and which administrator confirmed it.",
-            "We do not collect or store card numbers or bank account details on the site. When you pay by bank transfer, our own bank statement shows the transfer, which can include the sender's name and account details. We use it only to match your payment to your order. [For lawyer: the payment processors and privacy terms to add when credit-card payment is introduced.]"
+            "Payment confirmation: for an online payment, the payment notice ECPay sends us (our order number for the payment, ECPay's trade number, the amount, the payment method type, the time and the result). For a bank transfer, when an administrator confirms it they record the amount received, the date on the bank statement, a short note, and which administrator confirmed it.",
+            "We do not collect or store card numbers or bank account details on the site. When you pay online, you give your card or account details to ECPay on ECPay's page, not to us, and we send ECPay only the amount, a description of the membership and our own order number, not your name or email. ECPay may keep and use what you give it under its own privacy terms. When you pay by bank transfer, our own bank statement shows the transfer, which can include the sender's name and account details. We use it only to match your payment to your order. [For lawyer: the payment processor terms and the data-processing or privacy terms with ECPay, including where it processes data and how it must be described to users.]"
           ]
         },
         {
@@ -411,7 +411,7 @@
           "bullets": [
             "Hosting and storage providers, who run the website, the database and the photo files. [For lawyer: the name and location of the hosting, database and file-storage providers, and the contract terms the PDPA requires with them.]",
             "An email provider, which sends our service emails. The software is currently set up to use Resend. [For lawyer: confirm the email provider, where it processes data and the data-processing terms.]",
-            "Our bank, which receives bank transfers (see “Orders, payments and invoices”).",
+            "ECPay (綠界), which takes online payments, and our bank, which receives bank transfers (see “Orders, payments and invoices”).",
             "Authorities and advisers, where the law requires it or to establish or defend legal claims.",
             "Members and educators, as described in “Who can see your data”."
           ]
@@ -495,7 +495,7 @@
           "title": "Changes to this policy",
           "paragraphs": [
             "We may update this policy. The date and version at the top show when it was last changed. [For lawyer: how we must notify people of material changes, and when fresh consent is needed.]",
-            "Credit-card payment and sign-in through other services are not part of LearningLinks today. If they are added, this policy will describe them."
+            "Sign-in through other services is not part of LearningLinks today. If it is added, this policy will describe it."
           ]
         },
         {

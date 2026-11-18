@@ -5,6 +5,7 @@ import { afterOrderPlaced, invoiceFrom, type CheckoutPayload } from "@/lib/billi
 import { createFamilyOrder, OrderFailure, type OrderError } from "@/lib/billing/orders";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
+import { chooseMethod } from "@/lib/payments/config";
 import { allow } from "@/lib/rate-limit";
 
 export type CheckoutResult = { ok: true; orderId: string } | { ok: false; error: OrderError | "ack" | "rate" | "server" | "signin" };
@@ -16,7 +17,8 @@ export async function createFamilyOrderAction(p: CheckoutPayload): Promise<Check
   if (!allow(`order:${user.id}`, 10, 60 * 60_000)) return { ok: false, error: "rate" };
   try {
     const db = getDb();
-    const order = await createFamilyOrder(db, user, invoiceFrom(p.invoice));
+    const method = chooseMethod(p.method);
+    const order = await createFamilyOrder(db, user, invoiceFrom(p.invoice), method);
     await afterOrderPlaced(db, user, order);
     revalidatePath("/", "layout");
     return { ok: true, orderId: order.id };

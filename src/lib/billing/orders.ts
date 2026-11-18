@@ -39,6 +39,9 @@ export const MAX_PENDING_ORDERS = 5;
 /** A single order can cover at most this many campuses (a chain with more can place two orders). */
 export const MAX_CAMPUSES_PER_ORDER = 50;
 
+/** How the buyer chose to pay. "ecpay" is the online route (card, ATM account, convenience-store code). */
+export type PaymentMethod = "bank_transfer" | "ecpay";
+
 export interface InvoiceInput {
   /** 統一編號 for a company invoice. Optional: without it we issue a personal invoice. */
   taxId?: string | null;
@@ -81,7 +84,7 @@ async function insertOrder(db: Exec, v: Omit<typeof orders.$inferInsert, "refere
 }
 
 /** A family joins: NT$2,000 for 12 months, paid once by bank transfer. */
-export async function createFamilyOrder(db: Db, user: { id: string; accountType: AccountType }, invoice?: InvoiceInput) {
+export async function createFamilyOrder(db: Db, user: { id: string; accountType: AccountType }, invoice?: InvoiceInput, method: PaymentMethod = "bank_transfer") {
   if (user.accountType !== "family") throw new OrderFailure("wrong_account_type");
   const plan = PLANS.family_tw;
   const inv = cleanInvoice(invoice);
@@ -95,7 +98,7 @@ export async function createFamilyOrder(db: Db, user: { id: string; accountType:
       campuses: 1,
       currency: currencyOf(plan),
       countryCode: plan.countryCode,
-      provider: "bank_transfer",
+      provider: method,
       createdByUserId: user.id,
       ...inv,
     });
@@ -106,7 +109,7 @@ export async function createFamilyOrder(db: Db, user: { id: string; accountType:
  * A school buys one or more campuses: NT$10,000 per campus, each for its own full 12 months. There is no discount
  * for extra campuses and no proration. The buyer must belong to every campus they are paying for.
  */
-export async function createSchoolOrder(db: Db, user: { id: string; accountType: AccountType }, organizationIds: readonly string[], invoice?: InvoiceInput) {
+export async function createSchoolOrder(db: Db, user: { id: string; accountType: AccountType }, organizationIds: readonly string[], invoice?: InvoiceInput, method: PaymentMethod = "bank_transfer") {
   if (user.accountType !== "school") throw new OrderFailure("wrong_account_type");
   const ids = [...new Set(organizationIds)];
   if (ids.length === 0) throw new OrderFailure("no_campus");
@@ -132,7 +135,7 @@ export async function createSchoolOrder(db: Db, user: { id: string; accountType:
       campuses: ids.length,
       currency: currencyOf(plan),
       countryCode: plan.countryCode,
-      provider: "bank_transfer",
+      provider: method,
       createdByUserId: user.id,
       ...inv,
     });
@@ -144,6 +147,7 @@ export async function createSchoolOrder(db: Db, user: { id: string; accountType:
 export interface OrderView {
   id: string;
   status: "pending" | "paid" | "cancelled";
+  provider: string;
   planCode: PlanCode;
   amount: number;
   currency: string;
@@ -166,6 +170,7 @@ async function toViews(db: Exec, rows: (typeof orders.$inferSelect)[]): Promise<
   return rows.map((r) => ({
     id: r.id,
     status: r.status,
+    provider: r.provider,
     planCode: r.planCode as PlanCode,
     amount: r.amount,
     currency: r.currency,
@@ -253,7 +258,7 @@ export interface ConfirmResult {
  * a 12-month membership per campus (stacking after any term the campus still has, so nobody loses days by renewing
  * early), mark the order paid and write the audit trail. Confirming twice is safe: the second call changes nothing.
  */
-export async function confirmOrderPaid(db: Db, orderId: string, adminUserId: string, input: ConfirmInput, now: Date = new Date()): Promise<ConfirmResult> {
+export async function confirmOrderPaid(db: Db, orderId: string, adminUserId: string, input: ConfirmInput, now: Date = new Date(), opts: { allowCancelled?: boolean } = {}): Promise<ConfirmResult> {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.receivedOn) || Number.isNaN(Date.parse(input.receivedOn))) throw new OrderFailure("invalid_date");
   return db.transaction(async (tx) => {
     // FOR UPDATE: two admins pressing the button at once must not create two sets of memberships.
@@ -263,7 +268,8 @@ export async function confirmOrderPaid(db: Db, orderId: string, adminUserId: str
       const existing = await tx.select().from(memberships).where(eq(memberships.orderId, order.id));
       return { order, terms: existing.map((m) => ({ holderType: m.holderType, holderId: m.holderId, startsAt: m.startsAt, endsAt: m.endsAt })), created: false };
     }
-    if (order.status !== "pending") throw new OrderFailure("not_pending");
+    // Money that really arrived is never refused: an order cancelled a moment earlier is settled too, and flagged for the admin.
+    if (order.status !== "pending" && !(opts.allowCancelled && order.status === "cancelled")) throw new OrderFailure("not_pending");
     if (input.receivedAmount !== order.amount) throw new OrderFailure("amount_mismatch");
 
     const isSchool = PLANS[order.planCode as PlanCode]?.audience === "school";
@@ -286,10 +292,10 @@ export async function confirmOrderPaid(db: Db, orderId: string, adminUserId: str
 
     const [paid] = await tx
       .update(orders)
-      .set({ status: "paid", paidAt: now, paidAmount: input.receivedAmount, paidOn: input.receivedOn, paidNote: input.note?.trim().slice(0, 300) || null, confirmedBy: adminUserId })
+      .set({ status: "paid", cancelledAt: null, paidAt: now, paidAmount: input.receivedAmount, paidOn: input.receivedOn, paidNote: input.note?.trim().slice(0, 300) || null, confirmedBy: adminUserId })
       .where(eq(orders.id, order.id))
       .returning();
-    await tx.insert(auditLog).values({ actorUserId: adminUserId, action: "order.confirmed", entityType: "order", entityId: order.id, meta: { reference: order.referenceCode, amount: order.amount, campuses: holders.length } });
+    await tx.insert(auditLog).values({ actorUserId: adminUserId, action: "order.confirmed", entityType: "order", entityId: order.id, meta: { reference: order.referenceCode, amount: order.amount, campuses: holders.length, provider: order.provider, wasCancelled: order.status === "cancelled" } });
     return { order: paid!, terms, created: true };
   });
 }

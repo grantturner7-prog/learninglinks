@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth/session";
 import { afterOrderPlaced, invoiceFrom, type CheckoutPayload } from "@/lib/billing/checkout";
 import { createSchoolOrder, OrderFailure, type OrderError } from "@/lib/billing/orders";
 import { getDb } from "@/lib/db";
+import { chooseMethod } from "@/lib/payments/config";
 import { parseJobForm, type JobFieldErrors } from "@/lib/jobs/input";
 import { closeJob, createJob, JobFailure, type JobManageError } from "@/lib/jobs/manage";
 import { addCampusAndClaim, OrgFailure, submitClaim, type ClaimInput, type NewCampusInput, type OrgError } from "@/lib/orgs/service";
@@ -18,7 +19,8 @@ export async function createSchoolOrderAction(p: CheckoutPayload & { campusIds: 
   if (!allow(`order:${user.id}`, 10, 60 * 60_000)) return { ok: false, error: "rate" };
   try {
     const db = getDb();
-    const order = await createSchoolOrder(db, user, Array.isArray(p.campusIds) ? p.campusIds.filter((x) => typeof x === "string") : [], invoiceFrom(p.invoice));
+    const method = chooseMethod(p.method);
+    const order = await createSchoolOrder(db, user, Array.isArray(p.campusIds) ? p.campusIds.filter((x) => typeof x === "string") : [], invoiceFrom(p.invoice), method);
     await afterOrderPlaced(db, user, order);
     revalidatePath("/", "layout");
     return { ok: true, orderId: order.id };

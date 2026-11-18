@@ -6,8 +6,10 @@ import { findOrderByReference, listPendingOrdersForAdmin } from "@/lib/billing/o
 import { getDb } from "@/lib/db";
 import { listOpenReports, listSuspended } from "@/lib/moderation/service";
 import { listPendingClaims } from "@/lib/orgs/service";
+import { onlinePaymentEnabled } from "@/lib/payments/config";
+import { listPaymentsNeedingReview } from "@/lib/payments/service";
 import { formatMoney } from "@/lib/plans";
-import { cancelOrderAsAdminAction, reinstateAction, reviewClaimAction, reviewReportAction } from "./actions";
+import { cancelOrderAsAdminAction, markPaymentReviewedAction, reinstateAction, reviewClaimAction, reviewReportAction } from "./actions";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ ref?: string | string[]; confirmed?: string | string[]; again?: string }> };
 
@@ -27,7 +29,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
   const ref = (Array.isArray(sp.ref) ? sp.ref[0] : sp.ref)?.trim().slice(0, 40) ?? "";
   const confirmedRef = (Array.isArray(sp.confirmed) ? sp.confirmed[0] : sp.confirmed)?.trim().slice(0, 40) ?? "";
   const confirmedOrder = confirmedRef ? await findOrderByReference(db, confirmedRef) : null;
-  const [orders, claims, found, reports, suspended] = await Promise.all([listPendingOrdersForAdmin(db), listPendingClaims(db), ref ? findOrderByReference(db, ref) : Promise.resolve(null), listOpenReports(db), listSuspended(db)]);
+  const [orders, claims, found, reports, suspended, reviews] = await Promise.all([listPendingOrdersForAdmin(db), listPendingClaims(db), ref ? findOrderByReference(db, ref) : Promise.resolve(null), listOpenReports(db), listSuspended(db), listPaymentsNeedingReview(db)]);
   // Today's date in Taipei as YYYY-MM-DD: the default for "received on".
   const today = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Taipei" }).format(new Date());
   const money = (n: number, c: string) => formatMoney(n, c, locale);
@@ -36,7 +38,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
   return (
     <div className="container-page max-w-5xl py-10">
       <h1 className="text-4xl font-extrabold tracking-tight">Admin desk</h1>
-      <p className="mt-2 text-ink-600">Confirm bank transfers and review school claims. Memberships start the moment you confirm a payment.</p>
+      <p className="mt-2 text-ink-600">Confirm bank transfers and review school claims. Online (ECPay) payments confirm themselves. Memberships start the moment a payment is confirmed.</p>
 
       {confirmedOrder?.status === "paid" ? (
         <p role="status" className="notice mt-6 font-bold" data-testid="confirmed-banner">
@@ -91,14 +93,32 @@ export default async function AdminPage({ params, searchParams }: Props) {
         </section>
       ) : null}
 
+      {reviews.length > 0 ? (
+        <section className="mt-10" data-testid="payment-review">
+          <h2 className="text-2xl font-extrabold">Online payments to check ({reviews.length})</h2>
+          <p className="mt-1 text-ink-600">ECPay told us something the site would not decide by itself (a different amount, a second payment, or a payment for an order that was cancelled). Check it in the ECPay merchant dashboard, refund or fix by hand if needed, then mark it checked.</p>
+          <ul className="mt-3 flex flex-col gap-4">
+            {reviews.map((r) => (
+              <li key={r.id} className="card" data-testid="payment-review-item">
+                <p className="text-sm text-ink-600">{f.dateTime(r.receivedAt, { dateStyle: "medium", timeStyle: "short" })} · ECPay trade no. <span className="font-mono">{r.merchantTradeNo ?? "unknown"}</span>{r.orderReference ? <> · order <span className="font-mono">{r.orderReference}</span></> : null}</p>
+                <p className="mt-1">{r.note ?? "Needs a look."}</p>
+                <form action={markPaymentReviewedAction} className="mt-3"><input type="hidden" name="eventId" value={r.id} /><button type="submit" className="btn btn-secondary">Mark as checked</button></form>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       <section className="mt-10">
         <h2 className="text-2xl font-extrabold">Waiting for payment ({shown.length})</h2>
+        {onlinePaymentEnabled() ? <p className="mt-1 text-ink-600">Orders marked <b>Online</b> are waiting for the buyer to pay on ECPay. They confirm themselves when ECPay tells us the money arrived. Only confirm one by hand if you have checked the ECPay dashboard and the notice never reached us.</p> : null}
         <ul className="mt-3 flex flex-col gap-4">
           {shown.length === 0 ? <li className="card">Nothing is waiting.</li> : shown.map((o) => (
             <li key={o.id} className="card" data-testid="pending-order">
               <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                 <span className="font-mono text-xl font-extrabold">{o.referenceCode}</span>
                 <span className="text-xl font-extrabold">{money(o.amount, o.currency)}</span>
+                <span className="rounded-full bg-brand-100 px-3 py-0.5 text-xs font-extrabold text-ink-900" data-testid="order-provider">{o.provider === "ecpay" ? "Online (ECPay)" : "Bank transfer"}</span>
                 <span className="text-sm text-ink-600">{o.planCode === "school_tw" ? `School, ${o.campuses} campus${o.campuses === 1 ? "" : "es"}` : "Family"} · placed {f.dateTime(o.createdAt, { dateStyle: "medium" })}</span>
               </div>
               <p className="mt-1 text-sm">{o.buyerName} · {o.buyerEmail}</p>

@@ -1,41 +1,90 @@
 /**
- * Import licensed cram schools (補習班) from a government open-data table.
+ * Import licensed cram schools (補習班) from the Ministry of Education's open data.
  *
+ *   npm run db:import-cram -- --national [--dry-run] [--save-dir ./cram-raw] [--allow-partial]
+ *       Fetches the whole national table itself (22 files, one per city or county, from data.gov.tw dataset 16461).
+ *       Run it from a network in Taiwan: the Ministry's server refuses some foreign and cloud addresses.
+ *   npm run db:import-cram -- --dir ./cram-raw [--dry-run]
+ *       Reads every .json / .csv file in a folder (for example files saved with --save-dir, or downloaded by hand).
  *   npm run db:import-cram -- --file cram-schools.csv [--encoding big5] [--dry-run]
+ *       Reads a single CSV or JSON file.
  *
- * The file is a CSV (UTF-8 by default; many government files are Big5, use --encoding big5) or a JSON array of rows,
- * with columns such as 補習班名稱, 立案字號, 班別, 縣市, 地址. Only the name, kind, city, district and registration
- * number are kept. Addresses, phone numbers and owner names are read to find the district and then thrown away.
- * Schools are placed inside their district (approximate pins). Re-running updates existing rows by registration number.
- * See docs/LAUNCH_DATA.md for where to get the file and what to check.
+ * Only the name, kind, city and district are kept (and a registration number when the table has one). Addresses, phone
+ * numbers, email addresses and owner names are read to find the district and then thrown away. Schools are placed
+ * inside their district (approximate pins). Re-running updates existing rows. Nothing is written with --dry-run.
+ * See docs/LAUNCH_DATA.md.
  */
-import { readFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import { sql } from "drizzle-orm";
 import { closeDb, getDb, schema } from "../src/lib/db";
-import { planImport, rowsFromCsv, rowsFromObjects, type RawRow } from "../src/lib/import/cram";
+import { columnsOf, planImport, rowsFromCsv, rowsFromObjects, type Field, type RawRow } from "../src/lib/import/cram";
+import { DATASET_PAGE, fetchNational } from "../src/lib/import/cram-fetch";
 
 function arg(name: string): string | undefined {
   const i = process.argv.indexOf(name);
   return i > -1 ? process.argv[i + 1] : undefined;
 }
 
-async function main() {
-  const file = arg("--file");
-  if (!file) throw new Error("Usage: npm run db:import-cram -- --file <csv-or-json> [--encoding big5] [--dry-run]");
-  const dry = process.argv.includes("--dry-run");
-  const text = new TextDecoder(arg("--encoding") ?? "utf-8").decode(await readFile(file));
+type Parsed = { rows: RawRow[]; mapped: Field[]; columns: string[] };
 
-  let parsed: { rows: RawRow[]; mapped: string[] };
+function parseText(text: string): Parsed {
   if (/^\s*[[{]/.test(text)) {
     const json = JSON.parse(text) as unknown;
-    const list = Array.isArray(json) ? json : Object.values(json as Record<string, unknown>).find(Array.isArray);
-    parsed = rowsFromObjects((list ?? []) as Record<string, unknown>[]);
-  } else {
-    parsed = rowsFromCsv(text);
+    const list = (Array.isArray(json) ? json : Object.values(json as Record<string, unknown>).find(Array.isArray) ?? []) as Record<string, unknown>[];
+    return { ...rowsFromObjects(list), columns: columnsOf(list) };
   }
+  const r = rowsFromCsv(text);
+  return { ...r, columns: [] };
+}
+
+function merge(parts: Parsed[]): Parsed {
+  return { rows: parts.flatMap((p) => p.rows), mapped: [...new Set(parts.flatMap((p) => p.mapped))], columns: [...new Set(parts.flatMap((p) => p.columns))] };
+}
+
+async function load(): Promise<Parsed> {
+  const encoding = arg("--encoding") ?? "utf-8";
+  const decode = (b: Buffer) => new TextDecoder(encoding).decode(b);
+
+  if (process.argv.includes("--national")) {
+    console.log(`Fetching the national cram-school table (${DATASET_PAGE}) ...`);
+    const res = await fetchNational({ log: console.log });
+    const saveDir = arg("--save-dir");
+    if (saveDir) {
+      await mkdir(saveDir, { recursive: true });
+      for (const [i, f] of res.files.entries()) await writeFile(join(saveDir, `cram-${String(i + 1).padStart(2, "0")}.json`), f.raw);
+      console.log(`Saved ${res.files.length} raw files to ${saveDir}.`);
+    }
+    if (res.files.length === 0) {
+      throw new Error(`Nothing could be fetched (${res.failed[0]?.error ?? "no files"}). Run this from a network in Taiwan, or download the files in a browser from ${DATASET_PAGE} into a folder and use --dir <folder>.`);
+    }
+    if (res.failed.length > 0 && !process.argv.includes("--allow-partial")) {
+      throw new Error(`${res.failed.length} of ${res.files.length + res.failed.length} files failed (${res.failed.map((f) => f.label).join(", ")}). Nothing was imported. Run it again, or add --allow-partial to import what arrived.`);
+    }
+    if (res.suspicious.length > 0) console.log(`Row counts that differ from the published figure:\n  ${res.suspicious.join("\n  ")}`);
+    return merge(res.files.map((f) => ({ ...rowsFromObjects(f.rows), columns: columnsOf(f.rows) })));
+  }
+
+  const dir = arg("--dir");
+  if (dir) {
+    const names = (await readdir(dir)).filter((n) => /\.(json|csv)$/i.test(n)).sort();
+    if (names.length === 0) throw new Error(`No .json or .csv files in ${dir}.`);
+    console.log(`Reading ${names.length} files from ${dir}.`);
+    return merge(await Promise.all(names.map(async (n) => parseText(decode(await readFile(join(dir, n)))))));
+  }
+
+  const file = arg("--file");
+  if (!file) throw new Error("Usage: npm run db:import-cram -- --national | --dir <folder> | --file <csv-or-json>  [--encoding big5] [--dry-run]");
+  return parseText(decode(await readFile(file)));
+}
+
+async function main() {
+  const dry = process.argv.includes("--dry-run");
+  const parsed = await load();
   console.log(`Read ${parsed.rows.length} rows. Columns recognised: ${parsed.mapped.join(", ") || "none"}.`);
-  if (!parsed.mapped.includes("name")) throw new Error("No school-name column found. Expected a header such as 補習班名稱.");
-  if (!parsed.mapped.includes("address") && !(parsed.mapped.includes("city") && parsed.mapped.includes("district"))) throw new Error("No address (or city and district) columns found. Expected a header such as 地址.");
+  const seen = parsed.columns.length > 0 ? ` Columns in the data: ${parsed.columns.join(", ")}.` : "";
+  if (!parsed.mapped.includes("name")) throw new Error(`No school-name column found. Expected a header such as 補習班名稱.${seen}`);
+  if (!parsed.mapped.includes("address") && !(parsed.mapped.includes("city") && parsed.mapped.includes("district"))) throw new Error(`No address (or city and district) columns found. Expected a header such as 地址.${seen}`);
 
   const plan = planImport(parsed.rows);
   console.log(`Ready to import ${plan.records.length}. Skipped: ${plan.skipped.no_name} without a name, ${plan.skipped.no_area} with no recognisable city and district, ${plan.skipped.duplicate} duplicates.`);
