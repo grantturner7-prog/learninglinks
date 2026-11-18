@@ -193,7 +193,8 @@ export const orders = pgTable(
     invoiceTaxId: text("invoice_tax_id"),
     invoiceTitle: text("invoice_title"),
     invoiceEmail: text("invoice_email"),
-    createdByUserId: text("created_by_user_id").notNull().references(() => user.id),
+    /** Who placed the order. Null after that person deleted their account: the order stays as a business record. */
+    createdByUserId: text("created_by_user_id").references(() => user.id, { onDelete: "set null" }),
     paidAt: ts("paid_at"),
     cancelledAt: ts("cancelled_at"),
     /** What an admin recorded when matching the bank transfer. */

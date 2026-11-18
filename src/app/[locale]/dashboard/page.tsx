@@ -42,6 +42,11 @@ async function AdminCard() {
   );
 }
 
+async function AccountLink() {
+  const t = await getTranslations("account");
+  return <p className="mt-6 text-center text-sm"><Link href="/account" className="link font-semibold">{t("link")}</Link></p>;
+}
+
 async function OrdersList({ userId, locale }: { userId: string; locale: string }) {
   const t = await getTranslations("dashboard.home");
   const orders = (await listOrdersForUser(getDb(), userId)).slice(0, 5);
@@ -95,6 +100,7 @@ async function FamilyHome({ user, locale }: { user: HomeUser; locale: string }) 
         </section>
       )}
       <OrdersList userId={user.id} locale={locale} />
+      <AccountLink />
       {user.isAdmin ? <AdminCard /> : null}
     </div>
   );
@@ -147,6 +153,7 @@ async function SchoolHome({ user, locale }: { user: HomeUser; locale: string }) 
         </section>
       ) : null}
       <OrdersList userId={user.id} locale={locale} />
+      <AccountLink />
       {user.isAdmin ? <AdminCard /> : null}
     </div>
   );

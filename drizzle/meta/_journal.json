@@ -29,6 +29,13 @@
       "when": 1794968190401,
       "tag": "0003_step4_moderation",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794969645499,
+      "tag": "0004_step4_account_deletion",
+      "breakpoints": true
     }
   ]
 }

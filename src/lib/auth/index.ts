@@ -5,6 +5,7 @@ import { nextCookies } from "better-auth/next-js";
 import { getDb, schema } from "@/lib/db";
 import { APIError } from "better-auth/api";
 import { sanitizeAccountType } from "@/lib/auth/helpers";
+import { prepareAccountDeletion } from "@/lib/account/deletion";
 import { sendEmail } from "@/lib/email";
 import { getEnv } from "@/lib/env";
 import { NOTICE_VERSION } from "@/lib/notice";
@@ -51,10 +52,12 @@ function createAuth() {
       },
     },
     user: {
-      // "Delete my account" in educator settings. The password is required; rows go via ON DELETE CASCADE.
+      // "Delete my account" (educator settings and the Account page for schools and families). The password is required;
+      // rows go via ON DELETE CASCADE after prepareAccountDeletion has dealt with orders and campuses.
       deleteUser: {
         enabled: true,
         beforeDelete: async (u) => {
+          await prepareAccountDeletion(getDb(), u.id);
           const [p] = await getDb().select({ photoKey: schema.educatorProfiles.photoKey }).from(schema.educatorProfiles).where(eq(schema.educatorProfiles.userId, u.id)).limit(1);
           await deletePhoto(p?.photoKey);
         },

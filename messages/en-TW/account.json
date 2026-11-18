@@ -1,0 +1,25 @@
+{
+  "meta": "Account and privacy | LearningLinks",
+  "title": "Your account",
+  "intro": "Your details and your choices. You can delete your account here at any time.",
+  "details": "Signed in as",
+  "back": "Back to my dashboard",
+  "deleteTitle": "Delete my account",
+  "deleteIntro": "This removes your account for good. It cannot be undone.",
+  "family": {
+    "removed": "Removed: your account, your contact requests and any reports you sent.",
+    "kept": "Kept: paid orders stay as business records, without any link to you. Unpaid orders are cancelled and the invoice email you gave is erased.",
+    "membership": "Your membership ends with the account. We do not refund automatically. Write to us if you have a question."
+  },
+  "school": {
+    "removed": "Removed: your account, your links to your campuses, your claims, your contact requests and any reports you sent.",
+    "kept": "Kept: paid orders stay as business records, including the company name and 統一編號 you gave, without any link to you. Unpaid orders are cancelled and the invoice email you gave is erased.",
+    "campus": "A campus with no one left on it becomes unclaimed again and its job posts close. Someone else can claim it. Its paid membership is not touched."
+  },
+  "password": "Type your password to confirm",
+  "confirm": "Delete your account for good? This cannot be undone.",
+  "button": "Delete my account",
+  "wrongPassword": "That password is not right.",
+  "server": "Something went wrong. Nothing was deleted. Please try again.",
+  "link": "Account and privacy"
+}

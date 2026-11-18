@@ -33,7 +33,7 @@ export async function confirmOrderAction(_prev: AdminResult | null, fd: FormData
     const db = getDb();
     const res = await confirmOrderPaid(db, orderId, a.id, { receivedAmount: amount, receivedOn, note });
     if (res.created) {
-      const [buyer] = await db.select({ email: schema.user.email }).from(schema.user).where(eq(schema.user.id, res.order.createdByUserId)).limit(1);
+      const [buyer] = res.order.createdByUserId ? await db.select({ email: schema.user.email }).from(schema.user).where(eq(schema.user.id, res.order.createdByUserId)).limit(1) : [];
       if (buyer && res.terms.length > 0) await sendEmail(orderPaidEmail(buyer.email, { referenceCode: res.order.referenceCode, terms: res.terms })).catch((e) => console.error("paid email failed", e));
     }
     revalidatePath("/", "layout");

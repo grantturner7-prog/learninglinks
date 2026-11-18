@@ -211,7 +211,7 @@ export async function listPendingOrdersForAdmin(db: Db): Promise<AdminOrderView[
   const rows = await db
     .select({ order: orders, email: schema.user.email, name: schema.user.name })
     .from(orders)
-    .innerJoin(schema.user, eq(schema.user.id, orders.createdByUserId))
+    .leftJoin(schema.user, eq(schema.user.id, orders.createdByUserId))
     .where(eq(orders.status, "pending"))
     .orderBy(asc(orders.createdAt))
     .limit(200);
@@ -224,7 +224,7 @@ export async function findOrderByReference(db: Db, reference: string): Promise<A
   const [row] = await db
     .select({ order: orders, email: schema.user.email, name: schema.user.name })
     .from(orders)
-    .innerJoin(schema.user, eq(schema.user.id, orders.createdByUserId))
+    .leftJoin(schema.user, eq(schema.user.id, orders.createdByUserId))
     .where(eq(orders.referenceCode, normaliseReference(reference)))
     .limit(1);
   if (!row) return null;
