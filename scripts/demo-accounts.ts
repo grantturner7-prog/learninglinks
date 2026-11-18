@@ -15,6 +15,7 @@ import { confirmOrderPaid, createFamilyOrder, createSchoolOrder } from "../src/l
 if (process.env.NODE_ENV === "production") throw new Error("demo-accounts must never run in production");
 
 const BASE = process.env.DEMO_BASE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(BASE)) throw new Error(`demo-accounts only runs against a local server (got ${BASE}). It creates accounts with a publicly known password.`);
 const PASSWORD = "demo-password-1234";
 const SUFFIX = "@demo.test";
 const today = () => new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Taipei" }).format(new Date());
@@ -25,6 +26,9 @@ const ACCOUNTS = [
   { key: "school", email: `school${SUFFIX}`, type: "school", name: "Demo School Owner" },
   { key: "educator", email: `educator${SUFFIX}`, type: "educator", name: "Demo Educator" },
 ] as const;
+
+/** The first address in ADMIN_EMAILS, so the demo has a working admin desk (that address is an admin once verified). */
+const ADMIN_EMAIL = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean)[0];
 
 async function signUp(email: string, type: string, name: string): Promise<void> {
   const r = await fetch(`${BASE}/api/auth/sign-up/email`, {
@@ -41,7 +45,7 @@ async function signUp(email: string, type: string, name: string): Promise<void> 
 
 async function main() {
   const db = getDb();
-  const emails = [...ACCOUNTS.map((a) => a.email)];
+  const emails = [...ACCOUNTS.map((a) => a.email), ...(ADMIN_EMAIL ? [ADMIN_EMAIL] : [])];
 
   if (process.argv.includes("--remove")) {
     const users = await db.select({ id: schema.user.id }).from(schema.user).where(inArray(schema.user.email, emails));
@@ -57,6 +61,7 @@ async function main() {
   }
 
   for (const a of ACCOUNTS) await signUp(a.email, a.type, a.name);
+  if (ADMIN_EMAIL) await signUp(ADMIN_EMAIL, "educator", "Demo Admin");
   await db.update(schema.user).set({ emailVerified: true }).where(inArray(schema.user.email, emails));
   const users = Object.fromEntries((await db.select().from(schema.user).where(inArray(schema.user.email, emails))).map((u) => [u.email, u]));
   const u = (key: (typeof ACCOUNTS)[number]["key"]) => users[ACCOUNTS.find((a) => a.key === key)!.email]!;
@@ -95,7 +100,7 @@ async function main() {
       .insert(schema.educatorProfiles)
       .values({
         userId: edu.id, displayName: "Demo Educator", headline: "Fictional demo educator", bio: "A fictional profile for trying the site. Not a real person.", status: "published", publishedAt: new Date(),
-        city: "taichung", districts: ["taichung:xitun", "taichung:nantun"], openTo: ["full_time", "part_time", "private_tutoring"], subjects: ["english"], levels: ["elementary"], languages: ["en"], teachingModes: ["in_person"],
+        city: "taichung", districts: ["taichung:xitun", "taichung:nantun"], openTo: ["full_time", "part_time", "private_tutoring"], subjects: ["english-conversation", "phonics"], levels: ["elementary-lower", "elementary-upper"], languages: ["en"], teachingModes: ["in_person"],
         experienceBand: "5-9", workAuthorization: "open_work_rights", rateMin: 800, rateMax: 1200,
       })
       .returning({ id: schema.educatorProfiles.id });
@@ -107,7 +112,7 @@ async function main() {
   console.log(`  Family, not paid yet:        newfamily${SUFFIX}   try checkout and online payment`);
   console.log(`  School, 1 of 2 campuses paid: school${SUFFIX}      sees educators, posts jobs, pays the second campus`);
   console.log(`  Educator:                    educator${SUFFIX}    sees the school map and job posts`);
-  console.log(`  Admin desk:                  admin@example.com   (sign up with this address first if it does not exist; it must be in ADMIN_EMAILS)\n`);
+  console.log(ADMIN_EMAIL ? `  Admin desk:                  ${ADMIN_EMAIL}   open /admin after signing in\n` : "  Admin desk: set ADMIN_EMAILS in .env.local, run this again, then sign in with that address\n");
 }
 
 main().then(() => closeDb()).catch(async (err) => { console.error(err instanceof Error ? err.message : err); await closeDb().catch(() => {}); process.exit(1); });

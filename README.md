@@ -37,6 +37,19 @@ npm run db:seed-demo                               # fictional educators and job
 npm run geo:build                                  # regenerate the Taiwan boundary files in public/geo
 ```
 
+### See the whole site with demo logins
+
+With the server running (`npm run dev`) and the maps' data loaded, in a second window:
+
+```bash
+npm run db:seed-demo          # 120 fictional educators and 60 job posts
+npm run db:demo-accounts      # fictional logins, all with the password demo-password-1234
+```
+
+It prints the logins: a paid family (family@demo.test), a family that has not paid (newfamily@demo.test, to try checkout), a school with two campuses of which one is paid (school@demo.test), an educator (educator@demo.test) and the admin desk (the first address in `ADMIN_EMAILS`). Both scripts refuse to run in production, and `db:demo-accounts` only runs against a local server.
+
+To try **online payment** without real money, put ECPay's public test account in `.env.local` (the three values and `ECPAY_MODE=stage` are written in a comment in `.env.example`). the payment buttons then open ECPay's real test page. See `docs/PAYMENTS.md`.
+
 In development, emails (verification, password reset) are printed to the server log. In production `RESEND_API_KEY` is required and email verification is always enforced.
 
 ## Checks
