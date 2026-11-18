@@ -20,6 +20,7 @@
     "sync:map-worker": "node scripts/sync-map-worker.mjs",
     "predev": "node scripts/sync-map-worker.mjs",
     "prebuild": "node scripts/sync-map-worker.mjs",
+    "db:import-cram": "tsx --env-file-if-exists=.env.local scripts/import-cram-schools.ts",
     "db:import-schools": "tsx --env-file-if-exists=.env.local scripts/import-schools.ts",
     "db:seed-demo": "tsx --env-file-if-exists=.env.local scripts/seed-demo.ts",
     "preflight": "tsx --env-file-if-exists=.env.local scripts/preflight.ts"

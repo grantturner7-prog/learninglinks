@@ -12,7 +12,9 @@ Built so far (Phase 1, Taiwan):
 - **Step 2:** the educator side. A guided, one-question-at-a-time profile flow with a live preview card (the "Concierge" design; contact and ID scanner on free text, photo upload with metadata stripped), a waiver recorded with the exact wording shown, publish/hide/withdraw/delete, **audience-filtered member directory** (families see tutors, schools see full-/part-time educators), **job posts visible only to signed-in educators with a profile**, and the **map views**: an educator map for paying members (district level, never an address) and a school map with job pins for educators. Maps are self-hosted: no third-party tiles or scripts.
 - **Step 3:** schools and families. Guided join and checkout flows (family NT$2,000; school NT$10,000 per campus, each campus its own 12 months), a bank-transfer order page with a reference code, an **admin desk** (`/admin`, admins are the verified emails in `ADMIN_EMAILS`) to confirm transfers and approve school claims, memberships that start on confirmation and never auto-renew, **contact reveal** with a daily cap and an educator-side "who asked" list, school **job posting** (full-time/part-time only), renewal reminders (`POST /api/cron/reminders` daily with `Authorization: Bearer $CRON_SECRET`), and real dashboards.
 
-Not built yet: credit-card payments (later), reports, final legal text, deployment (Step 4). Set the `BANK_*` variables so the order page shows where to send the transfer.
+- **Step 4:** reporting and moderation (report buttons, an admin queue to suspend or remove, fair-process emails), drafts of the Terms, Privacy policy and Educator waiver for a lawyer to review, account deletion for schools and families, a Content-Security-Policy, an accessibility pass, a deployment kit (Docker, HTTPS, backups, health check, `npm run preflight`) and a cram-school importer.
+
+Not built: credit-card payments (later). Before launch: lawyer review, hosting and a domain, bank details, loading the cram-school table. Guides: `docs/DEPLOY.md` (go live), `docs/RUNBOOK.md` (daily running), `docs/LAUNCH_DATA.md` (school data).
 
 ## Run it locally
 

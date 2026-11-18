@@ -124,7 +124,10 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
               ) : null}
               <h2 className="mt-4 text-lg font-bold">{t("map.listTitle")}</h2>
             </div>
-          ) : null}
+          ) : (
+            // The list view has no map heading, so give the results a (visually hidden) one: headings must not skip a level.
+            <h2 className="sr-only">{t("title")}</h2>
+          )}
           <p className="mb-3 text-sm text-ink-500" aria-live="polite">{tc("results", { count: result.total })}</p>
           {result.items.length === 0 ? (
             <div className="card text-center"><h2 className="text-xl font-bold">{t("empty.title")}</h2><p className="mt-1 text-ink-600">{t("empty.body")}</p></div>

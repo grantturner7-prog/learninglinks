@@ -106,4 +106,5 @@ The migration step runs automatically before the new app starts. If an update go
 - **One server.** The abuse limits (sign-in tries, report and reveal bursts) are kept in the app's memory, which is correct for one server. If you ever run several copies of the app, move those limits into the database first.
 - **Logs.** `docker compose logs -f app` shows what the site is doing. Emails are sent through Resend; its dashboard shows delivery problems.
 - **Secrets.** `.env` holds every secret. Keep it out of git and out of chat. To rotate a secret, change it in `.env` and run `up -d` again (changing `BETTER_AUTH_SECRET` signs everyone out).
+- **Dependency warnings.** `npm audit` reports advisories in build and test tools (vitest, drizzle-kit, esbuild). None of them is part of the production image, which holds only what the running site needs. Re-check with `npm audit --omit=dev` before launch and after each big update.
 - **Social sign-in must stay off.** It would let people create accounts without the compliance acknowledgement. `preflight` fails if it is configured.

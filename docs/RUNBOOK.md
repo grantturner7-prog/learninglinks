@@ -7,6 +7,7 @@ For the owner and any helper. Server setup is in `docs/DEPLOY.md`. Commands assu
 Open `/admin` (English). It has three queues.
 
 1. **Waiting for payment.** Check the bank account. For each transfer that arrived, find the order by the **reference code** in the transfer note (the "Find an order by reference" box accepts any capitalisation), check the amount equals the order total, then press **Confirm payment** with the amount and the date on the bank statement. The membership starts at that moment and the buyer is emailed.
+   - **Invoices.** The site records the buyer's invoice details (company name, 統一編號, email) but does not issue invoices. Issue the uniform invoice (統一發票) or receipt yourself, or through your accountant, when you confirm a payment. Ask your lawyer or accountant which entity must issue it.
    - Amount does not match (short or too much): do **not** confirm. Contact the buyer, then cancel the order or ask them to pay the difference.
    - Nothing arrived after a few days: leave it. The buyer can cancel it themselves.
 2. **School claims to review.** Each claim names a school, a contact and a phone number. We do not verify licences or identity. Check that the school exists (its website or a phone call) and that the claimant is plausible, then **Approve** or **Reject**. Approving one claim automatically rejects other claims on the same campus.
