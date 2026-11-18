@@ -3,6 +3,639 @@
   "terms": "Terms of use",
   "privacy": "Privacy policy",
   "waiver": "Educator publication waiver",
-  "pending": "The full text is being prepared with a Taiwan lawyer and will be published here before launch.",
-  "meanwhile": "Until then, please note: LearningLinks is only a connection website."
+  "ui": {
+    "version": "Draft {n}",
+    "lastUpdated": "Last updated",
+    "contents": "Contents",
+    "legend": "This text is a draft. Text in square brackets that begins with “For lawyer:” marks a point that a lawyer must confirm or decide.",
+    "contactEmail": "Email us at",
+    "contactPending": "A contact address will be published here at launch.",
+    "backToTop": "Back to top"
+  },
+  "docs": {
+    "terms": {
+      "intro": "These terms explain how LearningLinks works and what we expect from everyone who uses it. They are written in plain language. This is a draft for a Taiwan lawyer to review before launch. Wherever a decision has not been made yet, the text says so in square brackets.",
+      "sections": [
+        {
+          "id": "notice",
+          "title": "What the notice at the top means",
+          "paragraphs": [
+            "The notice at the top of this page appears on every page of LearningLinks because it matters more than anything else in these terms. In plain words:"
+          ],
+          "bullets": [
+            "LearningLinks only connects people. We are not a school, an employer, an agent, a recruiter placing people in jobs, or a guarantor of anyone.",
+            "We do not carry out background checks on educators, schools or families. We do not check anyone's identity, qualifications, licences or work permits.",
+            "You are responsible for every check you need, such as proof of identity, a criminal-record certificate and the right to work or to teach, and for following all laws, policies and procedures that apply to you.",
+            "Private tutoring may not be allowed on some work permits. If this could apply to you, check it before you offer or book lessons."
+          ]
+        },
+        {
+          "id": "about",
+          "title": "What LearningLinks is",
+          "paragraphs": [
+            "LearningLinks is a website that lets educators (teachers, tutors and instructors) be found by schools and by families, and lets schools and families contact them directly. It is free for educators. Schools and families pay a flat membership to see educator profiles and to ask for educators' contact details.",
+            "We are not a party to any arrangement between an educator and a school or a family. We do not recruit, place, interview, select, vet, train, supervise or pay educators. We do not set pay or lesson rates, and we take no fee, commission or share of any pay or lesson fee. Any job, lesson or other arrangement is made directly between the people involved, and they are responsible for its terms.",
+            "We do not offer substitute or cover work as an option, and LearningLinks has no booking system, availability board or in-app chat. If a school and an educator talk about cover for an absent teacher, they do so between themselves, using the contact details the educator chose to share, and each must follow the rules that apply to them, including any limits on a work permit."
+          ]
+        },
+        {
+          "id": "operator",
+          "title": "Who runs LearningLinks",
+          "paragraphs": [
+            "LearningLinks is run by the business named below (“we”, “us”). We are based in Taichung, Taiwan.",
+            "[For lawyer: the operator's registered company name, registered address and 統一編號 (Uniform Business Number), and whether the operator is a company or a sole proprietor.]"
+          ]
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts and eligibility",
+          "paragraphs": [
+            "You need an account to use most of LearningLinks. You sign up as an educator, as a school or centre, or as a parent or family. An account is for one person: do not share your password, and tell us if you think someone else has used your account.",
+            "You sign in with your email address and a password of at least 10 characters, and we ask you to verify your email address. Give us true information and keep it up to date.",
+            "You must be an adult who can enter into a contract, and you must have the right to use LearningLinks in the way you do. [For lawyer: confirm the minimum age and any rules on minors.]",
+            "By creating an account, placing an order or publishing a profile you accept these terms and our [Privacy policy](/legal/privacy). Educators also agree to the [Educator publication waiver](/legal/educator-waiver). [For lawyer: confirm how schools and families accept these terms. At sign-up and at checkout the site currently records only that the person acknowledged the notice, not that they accepted these terms.]",
+            "If you sign up for a school, you may claim a campus only if you are entitled to act for it. An administrator reviews each claim by hand and approves it if it looks reasonable. This review does not verify your identity, your authority or the school's licences."
+          ]
+        },
+        {
+          "id": "educators",
+          "title": "Educators",
+          "paragraphs": [
+            "LearningLinks is free for educators. We never charge you to create a profile, to be found or to be contacted, and you should never pay anyone to be hired through LearningLinks. If someone asks you for money in connection with LearningLinks, please tell us.",
+            "Before your profile can be shown you must agree to the [Educator publication waiver](/legal/educator-waiver). Your profile is visible only to paying members, as described under “Who can see what”. You can hide, withdraw or delete your profile at any time in your Settings.",
+            "You are responsible for what you publish being true. You must have the right to work or teach in the ways you describe, including any permit you need. Credentials are self-declared: you give a description, a year and, if you wish, a link to proof hosted by someone else. We do not accept or store certificates or other documents.",
+            "You choose which contact details to add. Members see them one educator at a time, and you can see who asked (see “How members may use educator details”)."
+          ]
+        },
+        {
+          "id": "memberships",
+          "title": "School and family memberships",
+          "paragraphs": [
+            "Schools and families pay for a membership. The prices are:"
+          ],
+          "bullets": [
+            "Schools: **NT$10,000 per campus for 12 months.** A school with three campuses pays NT$30,000.",
+            "Families: **NT$2,000 for 12 months.**",
+            "Prices include VAT. They are flat: there is no discount for extra campuses and no proration. A campus added in the middle of the year pays the full NT$10,000 and gets its own full 12 months from the day it starts.",
+            "Each membership is one payment for one 12-month term. It **never auto-renews**: we do not keep a card and we never charge you again by ourselves. We send reminders before a term ends, and to continue you place a new order. If you renew early, the new 12 months start when the current ones end, so you lose no days.",
+            "A membership starts on the day we confirm your payment.",
+            "Each campus has its own membership, its own 12 months and its own daily limit for contact requests."
+          ]
+        },
+        {
+          "id": "memberships-use",
+          "title": "What a membership gives you",
+          "paragraphs": [
+            "A membership gives access to the educator directory and map for your kind of member (see “Who can see what”), to educators' contact details on request, and, for schools, to the right to post jobs. It does not promise that you will find, hire or be accepted by anyone.",
+            "A membership belongs to the family account or campus that bought it. It cannot be transferred, shared or resold. When a membership ends you lose access to educator profiles and contact details, and a school's job posts stop being shown (they are kept, and show again if the campus renews)."
+          ]
+        },
+        {
+          "id": "payment",
+          "title": "How you pay",
+          "paragraphs": [
+            "At launch you pay by bank transfer to the account shown on your order page. After you place an order you get a reference code; put it in the transfer note. Nothing is charged until you transfer the money.",
+            "An administrator checks that the correct amount arrived and then confirms your order by hand, which starts your membership. A payment for a different amount is not confirmed automatically.",
+            "You may cancel an order yourself while it is unpaid, at no cost. If you have already transferred money, please write to us instead of cancelling.",
+            "Credit-card payment will be added later and will come with its own payment terms.",
+            "You may give a company name, a 統一編號 (the 8-digit Uniform Business Number of a company) and an invoice email address, or leave them out. We never need an ID number from you. The price you pay is the price shown when you place the order, in New Taiwan dollars. [For lawyer: how and when we issue the uniform invoice (統一發票) or other receipt, and which entity is the seller.]"
+          ]
+        },
+        {
+          "id": "refunds",
+          "title": "Refunds and cancellation",
+          "paragraphs": [
+            "[For lawyer: refund and cancellation terms for paid memberships, including whether Taiwan's statutory right to cancel a distance sale within 7 days applies to a 12-month membership, and how it is handled.]",
+            "Until those terms are settled, this draft makes no promise either way about refunds of paid memberships. If you paid by mistake or paid twice, write to us at the address in the Contact section. An unpaid order can always be cancelled (see “How you pay”)."
+          ]
+        },
+        {
+          "id": "visibility",
+          "title": "Who can see what",
+          "paragraphs": [
+            "Nobody can see an educator's profile without a paid membership. There are no public profile pages, no public profile links and no listing in search engines. The only exception is a clearly labelled sample profile on our marketing pages, which is not a real person."
+          ],
+          "bullets": [
+            "Families see only educators who offer private tutoring or coaching. They see the tutoring side of a profile and the hourly rate, and they do not see an educator's wishes about school work.",
+            "Schools see only educators who are open to full-time or part-time work. They see the school-work side of a profile, and they never see that an educator also tutors or what the educator charges. Schools never see educators who offer private tutoring only.",
+            "Contact details are not part of a profile. A member asks for them one educator at a time.",
+            "On the map, educators appear at district level only, never at an address.",
+            "Profile photos follow the same rules as profiles.",
+            "Job posts are visible only to signed-in educators who have created a profile. They are not visible to the public, to search engines, to families, to other schools or to educators who have no profile."
+          ]
+        },
+        {
+          "id": "using-details",
+          "title": "How members may use educator details",
+          "paragraphs": [
+            "Members see educators' details so that they can contact an educator about work or private lessons. You may use what you see and what you receive only for that purpose. You must not:"
+          ],
+          "bullets": [
+            "copy, scrape, harvest, export or store profiles or contact details in bulk, by hand or with a tool;",
+            "share, sell, resell, publish or pass on educators' details, or give your login to anyone else;",
+            "use the details for marketing, advertising, mailing lists, surveys or any purpose other than arranging work or lessons with that educator;",
+            "keep contacting an educator who has asked you to stop;",
+            "try to get around the daily limit, the visibility rules or any other protection."
+          ]
+        },
+        {
+          "id": "using-details-limits",
+          "title": "Daily limit and record of requests",
+          "paragraphs": [
+            "Each campus, and each family, can ask for the contact details of only a limited number of different educators per day, counted by calendar day in Taiwan. Looking again on the same day at an educator you already asked for does not count again. We set the limit to protect educators from bulk copying, and we may change it.",
+            "Each request for an educator's contact details is recorded with the time and the kinds of details that were shown (for example email or phone). The educator can see that you asked: they see the name of a school, but they are not told which family. If you break these rules we may suspend your account (see “Reports, suspension and removal”). [For lawyer: confirm the restrictions on how members may use educator details and the remedies for breaking them.]"
+          ]
+        },
+        {
+          "id": "conduct",
+          "title": "Acceptable use and prohibited content",
+          "paragraphs": [
+            "Use LearningLinks honestly and lawfully. You must not:"
+          ],
+          "bullets": [
+            "give false, misleading or out-of-date information, pretend to be someone else, or claim to represent a school you do not represent;",
+            "post or ask for substitute or cover work, or offer it as a service on LearningLinks (job posts are for full-time or part-time work only);",
+            "put identity-card, passport or ARC numbers, home addresses, criminal records, health or financial information, or any information about children into a profile, a job post, a report or any other text. Our forms try to spot and reject some of these, but you remain responsible;",
+            "put phone numbers, email addresses, links or messaging IDs into free-text fields. They belong in the contact fields (educators) or the how-to-apply field (job posts);",
+            "discriminate unlawfully, for example by excluding or demeaning people because of their nationality, race, gender, age or religion;",
+            "defraud or mislead anyone, or ask an educator for payment, or ask them to send ID numbers or documents, through LearningLinks or before you have both agreed to work together;",
+            "harass, threaten, abuse or spam anyone, or use LearningLinks for anything unlawful;",
+            "upload malicious code, attack or probe the service, or bypass its protections."
+          ]
+        },
+        {
+          "id": "jobs",
+          "title": "Job posts",
+          "paragraphs": [
+            "Schools with an active membership may post full-time or part-time jobs for a campus. A campus can have a limited number of open posts at once. A post is not shown while its campus has no active membership or while the campus is suspended.",
+            "Job posts are shown only to signed-in educators who have a profile, in a list and on the school map. They are not shown to anyone else and are not indexed by search engines.",
+            "A school is solely responsible for its posts: that they are true, lawful, non-discriminatory and describe a real job. A post must not offer substitute or cover work. We do not check posts or schools, we are not the employer, and we are not a party to any hiring. Educators apply by contacting the school using the how-to-apply details in the post.",
+            "[For lawyer: confirm that publishing school job posts, shown only to signed-in educators with a profile, is consistent with Taiwan's rules on employment-service institutions and on job advertising, and whether any notice must appear in each post.]"
+          ]
+        },
+        {
+          "id": "content",
+          "title": "Content and intellectual property",
+          "paragraphs": [
+            "You own what you publish, such as your profile text, photo, job posts and report details. You are responsible for it, and you promise that you have the right to publish it, including any photo.",
+            "You give us a non-exclusive, royalty-free licence to host, store, resize, reproduce and show that content to the audiences described in these terms, and only to run LearningLinks. The licence ends when you delete the content or your account, except for copies we must keep for the reasons in the [Privacy policy](/legal/privacy). [For lawyer: confirm the licence wording (scope, territory, duration) for content users publish, including photos.]",
+            "We own LearningLinks, including its design, software, name, logo and the guide character “Link”. You may use them only as these terms allow. School names, types and locations on our map come from open data (Ministry of the Interior boundaries and OpenStreetMap contributors), and those sources have their own licences."
+          ]
+        },
+        {
+          "id": "reports",
+          "title": "Reports, suspension and removal",
+          "paragraphs": [
+            "If you see an educator profile, a school or a job post that breaks these terms, you can report it to us. A report asks for a reason, such as misleading information, abusive behaviour, a request for payment or documents, discrimination, or (for job posts) substitute or cover work, and allows a short written explanation. You can report only what you are allowed to see: a paying member can report an educator, and a signed-in educator with a profile can report a school or a job post.",
+            "An administrator reviews each report. We may dismiss it, or act. Acting means: suspending an educator's profile, which hides it from everyone until we lift the suspension (it then returns as hidden, and the educator decides whether to publish it again); suspending a school, which stops it from browsing educators, asking for contact details, posting jobs or placing orders, and removes its job posts and map pin from view; or removing a job post. We may also act without a report if we find a breach ourselves. We normally email the educator or the school's owners when we suspend or remove something.",
+            "We do not show who made a report to the educator or school that was reported. Reports are used only to run the service and are kept as described in the [Privacy policy](/legal/privacy).",
+            "If you think we were wrong, write to the support address with the details and we will review your message. [For lawyer: confirm the complaint and appeal process, including whether to commit to response times.]"
+          ]
+        },
+        {
+          "id": "dealings",
+          "title": "Your dealings with other people",
+          "paragraphs": [
+            "Everything that happens between users is between them: contracts, pay, hours, lessons, cancellations, payments and disputes. LearningLinks is not responsible for what an educator, a school or a family does or fails to do, including whether an educator turns up, is qualified or is safe, or whether a school or family pays.",
+            "Meeting people carries risk. Please use our [Safety guide](/safety). For lessons with children, start in a public place, or online with a parent present, and complete your own checks.",
+            "Educators, schools and families must follow the laws that apply to them, including those on work permits, tax, labour, child protection and personal data."
+          ]
+        },
+        {
+          "id": "disclaimers",
+          "title": "Disclaimers",
+          "paragraphs": [
+            "LearningLinks is provided “as is” and “as available”. We do not promise that it will be uninterrupted or free of errors, that profiles or job posts are accurate or complete, or that you will find an educator, a job, a school or a family.",
+            "Information about educators, schools and job posts is written by them. We do not verify it. A label such as “self-declared” means exactly that.",
+            "[For lawyer: confirm that these disclaimers, including those about background checks, safety and the conduct of users, are enforceable and sufficient under Taiwan law.]"
+          ]
+        },
+        {
+          "id": "liability",
+          "title": "Limitation of liability",
+          "paragraphs": [
+            "[For lawyer: limitation of liability, including any cap on our total liability to members and educators, and the liability that Taiwan law does not allow us to exclude.]",
+            "Nothing in these terms limits any liability that cannot be limited by law."
+          ]
+        },
+        {
+          "id": "termination",
+          "title": "Ending your account and suspension",
+          "paragraphs": [
+            "You can stop using LearningLinks at any time. Educators can delete their profile or their whole account in Settings, and schools and families can delete their account on the Account page. What happens to the unused part of a paid membership is covered under “Refunds and cancellation”.",
+            "We may suspend or end your account, or remove your content, if you break these terms, if the law requires it, or if we reasonably think it is needed to protect other people or the service. [For lawyer: what happens to a paid membership when we suspend or end an account for breaking these terms.]",
+            "What we keep and what we delete when an account ends is described in the [Privacy policy](/legal/privacy)."
+          ]
+        },
+        {
+          "id": "changes",
+          "title": "Changes to these terms and to the service",
+          "paragraphs": [
+            "We may update these terms, for example when we add features or when the law changes. The date and version at the top show when this text was last changed. [For lawyer: how, and how far in advance, we must tell members about material changes, and whether continuing to use LearningLinks counts as accepting them.]",
+            "We may add, change or remove features over time."
+          ]
+        },
+        {
+          "id": "law",
+          "title": "Governing law and disputes",
+          "paragraphs": [
+            "[For lawyer: governing law and the court that will hear disputes.]",
+            "If you have a complaint, please write to us first so that we can try to sort it out."
+          ]
+        },
+        {
+          "id": "contact",
+          "title": "Contact and reports",
+          "paragraphs": [
+            "Write to us with questions about these terms, to report a problem, to appeal a decision, to ask about a payment, or to close a school or family account.",
+            "You can report a profile, a school or a job post where you see it, or by writing to us."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "intro": "This policy explains what personal data LearningLinks collects, why we collect it, who can see it, how long we keep it and what choices you have. It follows the structure of the notification duties in Taiwan's Personal Data Protection Act (PDPA) as we understand them. This is a draft for a Taiwan lawyer to review. Wherever a fact or decision has not been confirmed, the text says so in square brackets.",
+      "sections": [
+        {
+          "id": "notice",
+          "title": "What the notice at the top means for your data",
+          "paragraphs": [
+            "The notice at the top of this page applies to everything on LearningLinks. For your data it means three things:"
+          ],
+          "bullets": [
+            "What people say about themselves, such as qualifications, work-permit category and school claims, is self-declared. We do not check it.",
+            "Because we do not carry out background checks or verify identity, we collect no criminal records and no identity documents. See “What we never collect”.",
+            "You are responsible for the checks you need and for the laws that apply to you, including laws about how you handle other people's personal data once you have received it."
+          ]
+        },
+        {
+          "id": "controller",
+          "title": "Who is responsible for your data",
+          "paragraphs": [
+            "The operator named below decides why and how your personal data is handled on LearningLinks. We are based in Taichung, Taiwan.",
+            "[For lawyer: the operator's registered name, registered address, 統一編號 (Uniform Business Number) and the contact person for personal-data matters.]",
+            "You can reach us at the address in the Contact section."
+          ]
+        },
+        {
+          "id": "pdpa",
+          "title": "About this policy",
+          "paragraphs": [
+            "Taiwan's PDPA expects us to tell you who we are, why we collect your data, what kinds of data we collect, for how long and where it is used, who may receive it, what rights you have, and what happens if you choose not to give it. We have organised this policy around those points.",
+            "Giving us your data is voluntary. Without a name, an email address and a password we cannot create an account, and without the information a profile needs we cannot publish it.",
+            "[For lawyer: confirm that this policy meets each notification duty under the PDPA and its enforcement rules, including the specific purpose and data categories we must state.]"
+          ]
+        },
+        {
+          "id": "collect-everyone",
+          "title": "What we collect from everyone",
+          "paragraphs": [
+            "When you create an account and use LearningLinks we collect:"
+          ],
+          "bullets": [
+            "Account details: your name (or the name you choose), your email address, a password stored only as a hash (a scrambled form we cannot read), and whether you joined as an educator, a school or centre, or a family.",
+            "Your notice acknowledgement: that you ticked the box, when, and which version of the notice.",
+            "Sign-in records: while you are signed in, a session record with a session token, the times it was created and expires, your IP address and your browser type.",
+            "Abuse-protection counters: short-lived counts of attempts to sign in, sign up or ask for emails, linked to your IP address, so that we can slow down automated attacks.",
+            "Service emails: we send emails only to run your account, such as email verification, password reset, order and payment messages and membership reminders. They are not advertising."
+          ]
+        },
+        {
+          "id": "collect-educators",
+          "title": "What we collect from educators",
+          "paragraphs": [
+            "Educators give us the following. Most of it is chosen from lists. To publish a profile you need at least a display name, subjects, levels, languages, how you teach, a city, what you are open to and one contact detail; the rest is optional. None of it is shown to anyone until you publish your profile."
+          ],
+          "bullets": [
+            "Profile: display name, headline, short bio, city and districts (never an address), subjects, levels, languages, in-person or online teaching, what you are open to (full-time, part-time, private tutoring), experience range, your work-authorisation category (a category you choose, never a permit number) and, if you offer tutoring, an hourly rate range.",
+            "Credentials you choose to list: a label, a year and an optional link to proof hosted by someone else. We store the link, never a document.",
+            "Contact details you choose to add: email, LINE, WhatsApp, WeChat and phone. Only the ones you add.",
+            "An optional photo, which we resize and re-save (see “How we protect your data”).",
+            "Your consent record: when you agreed to the educator waiver, which version, in which language, which boxes you ticked, the exact words you were shown, a keyed hash of your IP address (not the address itself) and, if you withdraw, when.",
+            "Contact requests: each time a member asks for your contact details we record the time, which kinds of contact details were shown (for example email or LINE), and whether the request came from a school (and which campus) or from a family."
+          ]
+        },
+        {
+          "id": "collect-members",
+          "title": "What we collect from schools and families",
+          "paragraphs": [
+            "Schools and families give us the following."
+          ],
+          "bullets": [
+            "School claims: the name and role of the person claiming a campus, a phone number, an optional note, and the campus claimed. An administrator reviews each claim by hand. An approved campus keeps a private contact email and phone number that only that campus and our administrators can see.",
+            "School details: school name, type, city and district, website and map position. Many schools are listed from public open data (OpenStreetMap contributors and government open data) before anyone claims them. A school added by hand is placed at the centre of its district, not at an address. Only signed-in educators with a profile see schools on the map, and school accounts can search the list by name to find their own campus.",
+            "Job posts: title, type, description, subjects, levels, place, pay range, start date and how to apply (which may be an email address, phone number or LINE ID that the school chooses to show).",
+            "Contact requests: your account, your campus (for schools), the time and which educator's details you asked to see. Families should not enter any details about their children."
+          ]
+        },
+        {
+          "id": "collect-orders",
+          "title": "Orders, payments and invoices",
+          "paragraphs": [
+            "When a school or a family buys a membership, we keep:"
+          ],
+          "bullets": [
+            "Order details: who placed the order, the plan, the number of campuses, the amount (VAT included), the currency, the status, the reference code and the dates.",
+            "Optional invoice details: a company name, a 統一編號 and an invoice email address.",
+            "Payment confirmation: when an administrator confirms a bank transfer they record the amount received, the date on the bank statement, a short note, and which administrator confirmed it.",
+            "We do not collect or store card numbers or bank account details on the site. When you pay by bank transfer, our own bank statement shows the transfer, which can include the sender's name and account details. We use it only to match your payment to your order. [For lawyer: the payment processors and privacy terms to add when credit-card payment is introduced.]"
+          ]
+        },
+        {
+          "id": "collect-other",
+          "title": "Reports, logs and waitlist",
+          "paragraphs": [
+            "We also keep the following."
+          ],
+          "bullets": [
+            "Reports: when you report a profile, a school or a job post we store your account, what you reported, the reason you chose, any details you wrote (up to 500 characters), the time and, later, the decision with who made it and when. Administrators can see who made a report. The educator or school that was reported cannot.",
+            "Audit log: a record of important actions, such as accepting the waiver, publishing or hiding a profile, creating or closing a job, confirming an order, deciding a claim or a report. It records who did it, what, when and a few technical details such as an order reference.",
+            "Waitlist: if you ask us to tell you when we open in another country, your email address, that country, whether you are an educator, a school or a family, and your language.",
+            "Technical logs: our servers and hosting provider keep ordinary technical logs, which can include IP addresses, the pages requested and error information. [For lawyer: what the hosting provider's logs record and how long they are kept.]"
+          ]
+        },
+        {
+          "id": "never",
+          "title": "What we never collect",
+          "paragraphs": [
+            "We deliberately do not ask for, and do not want, any of the following. Please do not put them in your profile, a job post, a report or any message to us:",
+            "Our forms try to spot and reject text that looks like an ID number, an address or a contact detail in a free-text field. This is a safety net, not a guarantee. If you find any of these on LearningLinks, tell us and we will remove it."
+          ],
+          "bullets": [
+            "ID card, passport or ARC (Alien Resident Certificate) numbers, or copies of those documents;",
+            "criminal records or police-record certificates;",
+            "health data or financial data, such as bank or card details;",
+            "home addresses (the map shows districts only);",
+            "children's data of any kind;",
+            "certificates or other documents: credentials are self-declared, with an optional link to proof hosted by someone else."
+          ]
+        },
+        {
+          "id": "use",
+          "title": "How we use your data",
+          "paragraphs": [
+            "We use personal data to run LearningLinks: to create and secure accounts; to show educator profiles to the members who are allowed to see them; to let members ask for contact details and let educators see who asked; to take orders, confirm payments and deal with invoices; to keep proof of what educators agreed to; to deal with reports and keep the service safe; to send service emails; and to meet legal duties.",
+            "We do not sell personal data. We do not use it for advertising or for profiling, and the site has no analytics or advertising trackers."
+          ]
+        },
+        {
+          "id": "visibility",
+          "title": "Who can see your data",
+          "paragraphs": [
+            "In short:"
+          ],
+          "bullets": [
+            "Your educator profile is shown only to signed-in paying members, and only the side that fits them: schools see educators open to full-time or part-time work, and families see educators who offer private tutoring, together with the hourly rate. It is never shown to the public or to search engines. Your photo follows the same rules.",
+            "Your contact details are shown to a paying member only when they ask for them, one educator at a time, within a daily limit. You can see who asked: the name of a school, or “a family” without naming it.",
+            "A school's job posts and map pins are shown only to signed-in educators who have a profile.",
+            "A school's private contact email and phone number are visible only to that campus and to our administrators.",
+            "Reports are visible only to our administrators.",
+            "Administrators, meaning people we authorise to run the service, can see account, order, claim, report and audit-log data as needed to do that.",
+            "Details that a member has already received are the member's responsibility. We cannot control what a member does with them, but our terms forbid misuse."
+          ]
+        },
+        {
+          "id": "cookies",
+          "title": "Cookies",
+          "paragraphs": [
+            "LearningLinks uses only essential cookies: a sign-in cookie that keeps you signed in, and a cookie that remembers the language you chose (it is removed when you close your browser). We do not use analytics, advertising or tracking cookies, and there are no third-party trackers.",
+            "The map and the fonts are served from our own site, not from a third-party map or font service."
+          ]
+        },
+        {
+          "id": "sharing",
+          "title": "Who we share data with",
+          "paragraphs": [
+            "We do not sell personal data and we do not share it for advertising. We share it only with:"
+          ],
+          "bullets": [
+            "Hosting and storage providers, who run the website, the database and the photo files. [For lawyer: the name and location of the hosting, database and file-storage providers, and the contract terms the PDPA requires with them.]",
+            "An email provider, which sends our service emails. The software is currently set up to use Resend. [For lawyer: confirm the email provider, where it processes data and the data-processing terms.]",
+            "Our bank, which receives bank transfers (see “Orders, payments and invoices”).",
+            "Authorities and advisers, where the law requires it or to establish or defend legal claims.",
+            "Members and educators, as described in “Who can see your data”."
+          ]
+        },
+        {
+          "id": "transfers",
+          "title": "Transfers outside Taiwan",
+          "paragraphs": [
+            "[For lawyer: whether personal data is stored or processed outside Taiwan, for example by the hosting or email provider, and if so in which countries and under what safeguards or restrictions.]",
+            "LearningLinks launches in Taiwan first. If we later open in other countries and that changes where data is handled, this policy will say so."
+          ]
+        },
+        {
+          "id": "retention",
+          "title": "How long we keep data",
+          "paragraphs": [
+            "We keep data only as long as we need it for the purposes above."
+          ],
+          "bullets": [
+            "Account data: while your account exists.",
+            "Educator profile, contact details and photo: until you delete them. Hiding a profile keeps the data but shows it to no one. Deleting your profile removes the profile, the contact details and the photo file, and also the record of which members asked for your contact details.",
+            "Consent record: while your account exists, even after you delete your profile or withdraw, so that we can show what you agreed to. It holds the waiver wording and your choices, not your profile. Deleting your whole account deletes it too.",
+            "Contact-request records: until the educator's profile, or the account that made the request, is deleted.",
+            "Order and invoice records: kept after a membership ends, because they are business and tax records. [For lawyer: how long order and invoice records must be kept under Taiwan tax and accounting rules.]",
+            "Reports: kept until the report is resolved and for a further period. [For lawyer: how long resolved reports are kept before they are deleted.]",
+            "Sign-in sessions, abuse-protection counters, the audit log, waitlist emails and backups: [For lawyer: retention periods for each.] Audit-log entries are not deleted when an account is deleted; they refer to accounts only by an internal ID and contain no profile content."
+          ]
+        },
+        {
+          "id": "deletion",
+          "title": "Hiding, withdrawing and deleting",
+          "paragraphs": [
+            "In Settings an educator can do the following at any time, with immediate effect:"
+          ],
+          "bullets": [
+            "Hide your profile: it disappears from every member's view at once. Your data is kept so that you can publish again.",
+            "Withdraw your agreement to the educator waiver: this hides your profile at once. You can agree again later.",
+            "Delete your profile: this removes the profile, the contact details and the photo. Your account stays, and we keep the consent record.",
+            "Delete your account: this removes your account and everything linked to it, including the profile, the contact details, the photo, the consent record and your sign-in sessions. You must enter your password.",
+            "Schools and families can delete their account themselves on the Account page (open it from the dashboard; you must enter your password). This removes the account, the links to campuses, claims, contact requests and reports. Unpaid orders are cancelled and the invoice email is erased. Paid orders are kept as business records without any link to you, and a campus with nobody left on it becomes unclaimed again.",
+            "Members may already have seen or saved your details before you hid or deleted your profile. We cannot take back information a member has already received. [For lawyer: confirm the wording on details that members already received, and any duty on members to delete them.]"
+          ]
+        },
+        {
+          "id": "security",
+          "title": "How we protect your data",
+          "paragraphs": [
+            "These measures are in place today."
+          ],
+          "bullets": [
+            "The site uses HTTPS and tells browsers to always use it.",
+            "Passwords are stored only as hashes by our sign-in system (Better Auth), and must be at least 10 characters. In the live service every account must verify its email address.",
+            "Sign-in, sign-up and password-reset attempts are rate-limited.",
+            "Our servers check who you are and what you may see on every request. The rules about who sees which educator are applied in one place in our code. Photos are served only to the educator and to members allowed to see that educator.",
+            "Photos are decoded, resized to 512 × 512 pixels and saved again. This removes embedded metadata, such as the place where a photo was taken.",
+            "Contact details can be read only through a request that checks membership, the audience and the daily limit, and each new request is logged.",
+            "Administrator access is limited to people we authorise, who must sign in with a verified email address.",
+            "No system is perfectly secure. [For lawyer: describe encryption at rest, backups, access controls and the breach-notification procedure once the hosting is chosen.]"
+          ]
+        },
+        {
+          "id": "rights",
+          "title": "Your rights",
+          "paragraphs": [
+            "Under the PDPA you can ask us to tell you whether we hold personal data about you and let you see it; to give you a copy; to correct or complete it; to stop collecting, processing or using it; and to delete it.",
+            "Educators can do much of this themselves in Settings (edit, hide, withdraw and delete), and schools and families can delete their account on the Account page. For everything else write to the support address in the Contact section. We may need to confirm that you are the account holder before we act.",
+            "[For lawyer: how quickly we must answer a rights request, whether we may charge a fee, the grounds on which we may refuse, and the authority you may complain to.]"
+          ]
+        },
+        {
+          "id": "children",
+          "title": "Children",
+          "paragraphs": [
+            "LearningLinks is for adults: educators, school staff and parents or guardians. It is not directed to children, and children should not create accounts.",
+            "We do not collect children's data. Families contact educators directly, and should not put details about their children into anything they send us, such as a report. If you find a child's information on LearningLinks, tell us and we will remove it.",
+            "Educators teach children, but any dealings with a child are arranged between the educator and the child's parent or school, not through our site."
+          ]
+        },
+        {
+          "id": "changes",
+          "title": "Changes to this policy",
+          "paragraphs": [
+            "We may update this policy. The date and version at the top show when it was last changed. [For lawyer: how we must notify people of material changes, and when fresh consent is needed.]",
+            "Credit-card payment and sign-in through other services are not part of LearningLinks today. If they are added, this policy will describe them."
+          ]
+        },
+        {
+          "id": "contact",
+          "title": "Contact and reports",
+          "paragraphs": [
+            "Write to us with questions about your data, to use the rights above, or to tell us about data that should not be on LearningLinks.",
+            "You can report a profile, a school or a job post where you see it, or by writing to us. Reports are described in our [Terms of use](/legal/terms)."
+          ]
+        }
+      ]
+    },
+    "waiver": {
+      "intro": "This is the full text behind the short summary you see before you publish your educator profile. Before your profile can be shown to anyone you must tick every required confirmation listed below. This is a draft for a Taiwan lawyer to review. Wherever a decision has not been made yet, the text says so in square brackets.",
+      "sections": [
+        {
+          "id": "notice",
+          "title": "What the notice at the top means for you",
+          "paragraphs": [
+            "As an educator, the notice at the top of this page means:"
+          ],
+          "bullets": [
+            "LearningLinks only connects you with schools and families. We do not check them, and we do not check you: there is no background check and no verification of your identity, qualifications, licences or work permits. What your profile says is self-declared.",
+            "You are responsible for completing every check you need and for following all laws, policies and procedures that apply to you.",
+            "You must have the right to work or teach in the ways you describe. Private tutoring may not be allowed on some work permits, so check your own situation before you offer lessons.",
+            "Any arrangement with a school or a family, including cover for an absent teacher, is for you and them to agree between yourselves."
+          ]
+        },
+        {
+          "id": "summary",
+          "title": "The short version",
+          "paragraphs": [
+            "LearningLinks is free for educators. By agreeing to this waiver you allow us to show your profile to paying members, and to let them ask for your contact details. Nothing is public.",
+            "You can change your mind at any time: see “Hiding, withdrawing and deleting” below.",
+            "[For lawyer: confirm that this waiver gives the consent needed under the PDPA for showing profile data to paying members and for contact on request, including for educators who are outside Taiwan.]"
+          ]
+        },
+        {
+          "id": "profile-fields",
+          "title": "What goes on your profile",
+          "paragraphs": [
+            "Your profile is what paying members see. It is not public: it is shown only to signed-in paying members, in the way described under “Who can see you”.",
+            "Your display name must be a name only, and your headline and bio are checked so that they do not contain contact details, ID numbers or addresses. Your profile can contain only the following, and only what you choose to fill in:"
+          ]
+        },
+        {
+          "id": "contact-details",
+          "title": "Your contact details",
+          "paragraphs": [
+            "Your contact details are separate from your profile. A member opens them one educator at a time by pressing a button, and each member has a daily limit. Each request is recorded. You can see who asked: a school by name, and a family without a name. Your contact details are never shown in your profile, on the map or in search results.",
+            "You add only the ones you want. The list below shows what you can add and the rules that apply:"
+          ]
+        },
+        {
+          "id": "never-collected",
+          "title": "What we never ask for or store",
+          "paragraphs": [
+            "Our forms try to reject ID numbers, addresses and contact details written into free-text fields. Credentials are self-declared: you list a description, a year and, if you wish, a link to proof hosted by someone else. We store the link, never a document.",
+            "If you choose to show a school or a family a sensitive document, you do that directly with them, and LearningLinks is not part of that exchange. Do not share ID numbers or documents until you have agreed to work together.",
+            "Please do not put any of these in your profile or anywhere else on LearningLinks:"
+          ]
+        },
+        {
+          "id": "who-sees",
+          "title": "Who can see you",
+          "paragraphs": [
+            "Nobody can see your profile without a paying membership: not the public, not other educators and not search engines. There are no public profile pages or links. A sample profile on our marketing pages is not a real person. Your photo follows the same rules. Separately, once you have a profile you can see schools' job posts.",
+            "Which paying members see you depends on what you are open to:"
+          ]
+        },
+        {
+          "id": "arrangements",
+          "title": "Arrangements between you and others",
+          "paragraphs": [
+            "LearningLinks is not part of any arrangement between you and a school or a family, such as a job, lessons or cover for an absent teacher. You are responsible for the terms you agree and for following the rules that apply to you, including any limits on your work permit."
+          ]
+        },
+        {
+          "id": "responsibilities",
+          "title": "Your responsibilities",
+          "paragraphs": [
+            "By using LearningLinks as an educator you accept these responsibilities:"
+          ],
+          "bullets": [
+            "Your information is true, and you keep it up to date.",
+            "You have the right to work or teach in the ways you describe, including any work permit you need. Private tutoring may not be allowed on some work permits.",
+            "You do not put ID numbers, addresses, criminal records, health or financial information, or information about children in your profile.",
+            "You complete your own checks on any school or family before you work with them, and you follow all laws, policies and procedures that apply to you.",
+            "You never pay anyone to be hired through LearningLinks. If someone asks you to, tell us.",
+            "You follow our [Terms of use](/legal/terms)."
+          ]
+        },
+        {
+          "id": "confirmations",
+          "title": "The confirmations you tick",
+          "paragraphs": [
+            "Before your profile can be shown you must tick each required box below. The wording is exactly what you see when you publish, and it is the wording we record. The last box is optional.",
+            "The optional box asks whether we may send you news and tips about LearningLinks. Leave it unticked if you do not want them. Your profile can be published without it. The site currently sends only service emails. [For lawyer: the rules and wording for any marketing messages the optional box covers, including how to opt out.]"
+          ]
+        },
+        {
+          "id": "record",
+          "title": "What we record about your agreement",
+          "paragraphs": [
+            "In detail: each time you agree we add a new record with the time, the version of the waiver, the language, which boxes you ticked, the exact words you were shown, and a keyed hash of your IP address (a scrambled form that we cannot turn back into the address). We never rewrite what an old record says; when you withdraw, we mark your records with the time you withdrew. The record holds no profile content. We keep it while your account exists, even after you delete your profile, and it is deleted if you delete your account.",
+            "[For lawyer: confirm that recording consent this way is sufficient proof under Taiwan law, and for how long the record should be kept.]",
+            "[For lawyer: confirm that this page, which explains the waiver in full, and the short wording in the boxes that educators tick and that we record, are consistent, and which of the two is the text educators agree to.]"
+          ]
+        },
+        {
+          "id": "control",
+          "title": "Hiding, withdrawing and deleting",
+          "paragraphs": [
+            "In more detail, you can do the following in Settings at any time:"
+          ],
+          "bullets": [
+            "Hide your profile: it disappears from every member's view at once, and you can publish it again later.",
+            "Withdraw your agreement: this also hides your profile at once. You can agree again later.",
+            "Delete your profile: this removes your profile, your contact details and your photo, and the record of who asked for your contact details. Your account stays, and we keep the record of your agreement.",
+            "Delete your account: this removes your account and everything linked to it, including the record of your agreement.",
+            "Members may already have seen or saved your details before you did any of this, and we cannot take back what they have received. [For lawyer: confirm the wording on details that members already received, and any duty on members to delete them.]"
+          ]
+        },
+        {
+          "id": "changes",
+          "title": "If this waiver changes",
+          "paragraphs": [
+            "If we change this waiver in a way that matters, we will give it a new version and ask you to agree again. A record of an older version does not count as agreement to the new one. [For lawyer: how and when educators must re-agree after a material change, including for profiles that are already published.]",
+            "The date and version at the top show when this text was last changed."
+          ]
+        },
+        {
+          "id": "contact",
+          "title": "Contact and reports",
+          "paragraphs": [
+            "Write to us if you have questions about this waiver, want to see or correct your data, or want us to remove something.",
+            "If you see a school or a job post that breaks our terms, you can report it, or write to us. Educators with a profile can report schools and job posts."
+          ]
+        }
+      ]
+    }
+  }
 }

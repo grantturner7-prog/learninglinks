@@ -27,6 +27,8 @@ const schema = z.object({
   /** Shared secret for scheduled jobs (renewal reminders). Without it the cron endpoint is disabled. */
   CRON_SECRET: z.preprocess(emptyToUndefined, z.string().min(24).optional()),
   LEGAL_REVIEWED: bool,
+  /** Public support address shown in the Contact block of the Terms, Privacy policy and Educator waiver pages. */
+  SUPPORT_EMAIL: optionalString,
   FOUNDING_DISCOUNT_PERCENT: z.preprocess(emptyToUndefined, z.coerce.number().int().min(0).max(90).default(0)),
   /** Dev/test only: lets checkout run before a country's launch gate is green. Ignored in production. */
   LAUNCH_GATE_OVERRIDE: bool,
