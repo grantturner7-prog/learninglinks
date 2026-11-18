@@ -18,6 +18,10 @@ Built so far (Phase 1, Taiwan):
 
 Before launch: lawyer review, hosting and a domain, ECPay merchant keys, bank details (optional), loading the cram-school table. Guides: `docs/DEPLOY.md` (go live), `docs/RUNBOOK.md` (daily running), `docs/LAUNCH_DATA.md` (school data).
 
+## Try it without installing anything
+
+`docs/demo/LearningLinks-demo.html` is a single file with pretend people and data. Double-click it: sign up, join as a family or school, pay on a **simulated** ECPay page, search educators on the map, post jobs, use the admin desk, switch between English and 繁中. Everything stays in your browser. It shows the look and the flows; the real rules and payments live in the actual site below. Rebuild it with `python3 docs/demo/build.py` (it pulls the real notice wording, map shapes and font from this repository).
+
 ## Run it locally
 
 Needs Node 22+ and PostgreSQL 16.

@@ -1,0 +1,156 @@
+/* ================= shell ================= */
+const ROLES = [["visitor", () => T("Visitor", "訪客")], ["family", () => T("Family", "家庭")], ["school", () => T("School", "學校")], ["educator", () => T("Educator", "教師")], ["admin", () => "Admin"]];
+function navItems() {
+  const m = me();
+  if (!m) return [["home", T("Home", "首頁")], ["educators", T("Find educators", "尋找教師")]];
+  if (m.type === "family") return [["dashboard", T("Dashboard", "儀表板")], ["educators", T("Find educators", "尋找教師")]];
+  if (m.type === "school") return [["dashboard", T("Dashboard", "儀表板")], ["educators", T("Find educators", "尋找教師")], ["campuses", T("My campuses", "我的校區")], ["myjobs", T("Jobs", "職缺")]];
+  if (m.type === "educator") return [["dashboard", T("Dashboard", "儀表板")], ["profile", T("My profile", "我的檔案")], ["jobs", T("Job posts", "職缺")]];
+  return [["admin", "Admin desk"]];
+}
+const GROUP = { join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
+function shell(inner) {
+  const cur = GROUP[st.view] || st.view;
+  return `<div class="demo"><div class="wrap"><b>${T("DEMO", "示範")}</b><span>${T("Pretend people and data. Nothing is saved on a server and no money moves.", "虛構的人物與資料。沒有任何資料存到伺服器，也沒有任何款項移動。")}</span>
+      <span class="chips" role="group" aria-label="${T("Try the site as", "以此身分試用")}">${ROLES.map(([k, l]) => `<button class="chip" data-act="role" data-v="${k}" aria-pressed="${st.role === k}">${l()}</button>`).join("")}</span><button class="link" data-act="reset">${T("Start over", "重新開始")}</button></div></div>
+    <div class="wrap"><header class="top"><button class="brand" data-act="nav" data-v="${me() ? "dashboard" : "home"}">${MARK}<span>LearningLinks</span></button><nav class="nav" aria-label="${T("Main", "主要")}">${navItems().map(([v, l]) => `<button data-act="nav" data-v="${v}" ${cur === v ? 'aria-current="page"' : ""}>${l}</button>`).join("")}</nav>
+      <div class="lang" role="group" aria-label="Language"><button data-act="lang" data-v="zh" aria-pressed="${st.lang === "zh"}">繁中</button><button data-act="lang" data-v="en" aria-pressed="${st.lang === "en"}">EN</button></div>${me() ? `<button class="btn" data-act="signout">${T("Sign out", "登出")}</button>` : `<button class="btn btn-primary" data-act="start" data-v="">${T("Sign up", "註冊")}</button>`}</header>
+    <main id="main">${inner}</main>
+    <footer class="fine"><div class="notice" role="note"><b>${h(noticeFull().lead)}</b> ${h(noticeFull().full)}</div><div class="links"><span>${T("In the real site: Terms, Privacy policy and Educator waiver (drafts, to be reviewed by your lawyer), Safety guide.", "真實網站中：服務條款、隱私權政策、教師刊登同意書（草稿，待律師審閱）、安全指南。")}</span></div></footer></div>${st.toast ? `<div class="toast" role="status">${h(st.toast)}</div>` : ""}`;
+}
+
+function render(scrollTop) {
+  const a = document.activeElement;
+  const aid = a && a.id, ss = a && a.selectionStart, se = a && a.selectionEnd;
+  const y = window.scrollY;
+  const fn = V[st.view] || V.home;
+  let inner;
+  try { inner = fn(); } catch (err) { console.error(err); inner = `<div class="card">Something went wrong in this demo screen. <button class="btn" data-act="reset">Start over</button></div>`; }
+  document.getElementById("app").innerHTML = shell(inner);
+  document.title = "LearningLinks demo";
+  document.documentElement.lang = st.lang === "zh" ? "zh-Hant-TW" : "en";
+  if (aid) { const el = document.getElementById(aid); if (el) { el.focus({ preventScroll: true }); try { if (ss != null) el.setSelectionRange(ss, se); } catch (e) { /* not a text field */ } } }
+  window.scrollTo(0, scrollTop ? 0 : y);
+}
+
+/* ================= people and presets ================= */
+const DEFAULT_NAME = { family: "Demo Family", school: "Demo School", educator: "Demo Educator", admin: "Demo Admin" };
+function clearPerson(type) {
+  const id = "p-" + type;
+  st.orders = st.orders.filter((o) => o.by !== id);
+  st.memberships = st.memberships.filter((x) => x.holder !== id);
+  Object.keys(st.owners).forEach((k) => { if (st.owners[k] === id) delete st.owners[k]; });
+  st.reveals = st.reveals.filter((r) => r.by !== id);
+  st.jobs = st.jobs.filter((j) => !j.mine || st.owners[j.schoolId]);
+  if (type === "educator") st.myProfile = null;
+}
+function makePerson(type, name) { clearPerson(type); st.people[type] = { id: "p-" + type, type, name: name || DEFAULT_NAME[type] }; st.role = type; }
+function payNow(o) { settle(o, "demo"); }
+function preset(name) {
+  if (name === "family_paid") { makePerson("family", "Mei"); const o = newOrder("family", [], "ecpay", null); payNow(o); go("educators"); }
+  else if (name === "school_paid") { makePerson("school", "Sunny"); st.owners.s1 = "p-school"; st.owners.s2 = "p-school"; const o = newOrder("school", ["s1"], "ecpay", null); payNow(o); go("dashboard"); }
+  else if (name === "educator") {
+    makePerson("educator", "Lin");
+    st.myProfile = { published: true, openTo: ["full_time", "private_tutoring"], city: "taichung", district: "taichung:xitun", subjects: ["english-conversation", "phonics"], levels: ["kindergarten", "elementary"], name: "Lin", head: "Friendly English teacher for young learners", bio: "I love songs, stories and games in class. Six years of teaching in Taichung.", rateMin: 700, rateMax: 1100, wish: "Kindergarten or cram school, afternoons", email: "lin@example.invalid", line: "lin-line", langs: ["en"], exp: "5-9" };
+    go("dashboard");
+  } else if (name === "admin") { makePerson("admin"); go("admin"); }
+}
+
+/* ================= actions ================= */
+const A = {
+  nav: (el) => { const v = el.dataset.v; if (v === "profile") return openProfile(); if (v === "dashboard" && !me()) return go("home"); go(v); },
+  lang: (el) => { st.lang = el.dataset.v; save(); render(false); },
+  reset: () => { st = fresh(); save(); render(true); },
+  role: (el) => { const v = el.dataset.v; if (v === "visitor") { st.role = "visitor"; return go("home"); } if (!st.people[v]) { st.people[v] = { id: "p-" + v, type: v, name: DEFAULT_NAME[v] }; } st.role = v; go(v === "admin" ? "admin" : "dashboard"); },
+  signout: () => { st.role = "visitor"; go("home"); },
+  start: (el) => { const v = el.dataset.v; go("signup"); st.form.role = v || ""; render(true); },
+  preset: (el) => preset(el.dataset.v),
+  pick: (el) => { st.form[el.dataset.k] = el.dataset.v; render(false); },
+  toggle: (el) => { const k = el.dataset.k, v = el.dataset.v; const a = st.form[k] || []; st.form[k] = a.includes(v) ? a.filter((x) => x !== v) : a.concat(v); render(false); },
+  togglePick: (el) => { const a = st.form.picked || []; const v = el.dataset.v; st.form.picked = a.includes(v) ? a.filter((x) => x !== v) : a.concat(v); render(false); },
+  city: (el) => { st.form.city = st.form.city === el.dataset.v ? "" : el.dataset.v; st.form.pin = ""; render(false); },
+  pin: (el) => { st.form.pin = st.form.pin === el.dataset.v ? "" : el.dataset.v; render(false); },
+  clearJobs: () => { st.form.city = ""; st.form.pin = ""; render(false); },
+  back: () => go(st.prev ? st.prev.view : "dashboard", st.prev ? st.prev.args : {}),
+
+  signup1: () => { st.form.step = 2; render(true); },
+  signupBack: () => { st.form.step = (st.form.step || 2) - 1; render(true); },
+  signup2: () => { st.form.step = 3; render(true); },
+  signup3: () => { const role = st.form.role, name = (st.form.name || "").trim(); makePerson(role, name); toast(T("Account created. Welcome!", "帳號已建立，歡迎！")); go("dashboard"); },
+
+  join: (el) => go("join", { type: el.dataset.v }),
+  joinNext: () => { st.form.step = (st.form.step || 1) + 1; render(true); },
+  joinBack: () => { st.form.step = (st.form.step || 2) - 1; render(true); },
+  placeOrder: () => {
+    const type = st.args.type, f = st.form;
+    const campusIds = type === "school" ? (f.picked || []) : [];
+    const invoice = f.inv === "company" ? { tax: f.tax, title: f.title } : null;
+    const o = newOrder(type, campusIds, f.method || "ecpay", invoice);
+    go("order", { id: o.id });
+  },
+  order: (el) => go("order", { id: el.dataset.v }),
+  cancelOrder: (el) => { const o = st.orders.find((x) => x.id === el.dataset.v); if (o && o.status === "pending") o.status = "cancelled"; toast(T("Order cancelled.", "訂單已取消。")); go("dashboard"); },
+  toEcpay: (el) => go("ecpay", { id: el.dataset.v, m: el.dataset.m }),
+  ecpayPay: (el) => { const o = st.orders.find((x) => x.id === el.dataset.v); settle(o, "system:ecpay"); toast(T("Payment received. In the real site ECPay tells our server, and your membership starts by itself.", "已收到付款。在真實網站中，綠界會通知我們的伺服器，您的會員資格會自動開始。")); go("order", { id: o.id }); },
+  ecpayNumber: (el) => { const o = st.orders.find((x) => x.id === el.dataset.v); const k = el.dataset.m; const exp = addMonths(TODAY, 0).replace(/-\d\d$/, "-" + String(Math.min(28, Number(TODAY.slice(8)) + 3)).padStart(2, "0")); o.info = k === "ATM" ? { kind: "ATM", bank: "812", account: "9103" + String(Math.floor(Math.random() * 1e12)).padStart(12, "0"), expire: exp } : { kind: "CVS", code: "LLL" + String(Math.floor(Math.random() * 1e11)).padStart(11, "0"), expire: exp }; go("order", { id: o.id }); },
+  simulateNotice: (el) => { const o = st.orders.find((x) => x.id === el.dataset.v); settle(o, "system:ecpay"); toast(T("Pretend notice received: membership started.", "已收到模擬通知：會員資格已開始。")); go("order", { id: o.id }); },
+  adminAsk: () => { st.people.admin = st.people.admin || { id: "p-admin", type: "admin", name: DEFAULT_NAME.admin }; st.role = "admin"; go("admin"); },
+
+  claim: (el) => { st.owners[el.dataset.v] = pid(); save(); toast(T("Campus claimed. (The real site asks an administrator to approve this.)", "已認領校區。（真實網站會由管理員審核。）")); render(false); },
+  jobPublish: () => {
+    const f = st.form; const paid = ownedCampuses(pid()).filter((s) => campusActive(pid(), s.id));
+    st.jobs.push({ id: uid("j"), mine: true, schoolId: f.campus || paid[0].id, title: f.title.trim(), type: f.jtype || "full_time", subject: f.subject || "english-conversation", desc: f.desc.trim(), contact: f.contact.trim(), status: "open" });
+    toast(T("Job post published. Signed-in educators with a profile can see it.", "職缺已發布。已登入且有檔案的教師可以看到。")); go("myjobs");
+  },
+  closeJob: (el) => { const j = st.jobs.find((x) => x.id === el.dataset.v); if (j) j.status = "closed"; render(false); },
+
+  viewEdu: (el) => { st.prev = { view: st.view, args: st.args }; go("educator", { id: el.dataset.v }); },
+  reveal: (el) => {
+    const m = me(); const id = el.dataset.v;
+    if (st.reveals.some((r) => r.eduId === id && r.by === m.id)) return render(false);
+    if (st.reveals.filter((r) => r.by === m.id && r.day === TODAY).length >= REVEAL_CAP) return toast(T("You have reached today's limit.", "您已達今日上限。"));
+    st.reveals.push({ eduId: id, by: m.id, byType: m.type, byName: m.name, day: TODAY }); save(); render(false);
+  },
+  reportOpen: (el) => { st.prev = { view: st.view, args: st.args }; go("report", { t: el.dataset.t, id: el.dataset.v }); },
+  reportSubmit: () => { st.reports.push({ id: uid("r"), type: st.args.t, targetId: st.args.id, reason: st.form.reason || "misleading", details: st.form.details || "", by: me() ? me().type : "visitor", status: "open" }); toast(T("Report sent to an administrator. Thank you.", "檢舉已送交管理員，謝謝您。")); go(st.prev ? st.prev.view : "dashboard", st.prev ? st.prev.args : {}); },
+
+  hideProfile: () => { st.myProfile.published = false; toast(T("Profile hidden.", "檔案已隱藏。")); go("dashboard"); },
+  profNext: () => { st.form.step = (st.form.step || 1) + 1; render(true); },
+  profBack: () => { st.form.step = (st.form.step || 2) - 1; render(true); },
+  profPublish: () => {
+    const f = st.form;
+    st.myProfile = { published: true, openTo: f.open, city: f.city, district: f.district || null, subjects: f.subjects, levels: f.levels, name: f.name.trim(), head: f.head.trim(), bio: f.bio.trim(), rateMin: Number(f.rateMin) || null, rateMax: Number(f.rateMax) || null, wish: f.wish, email: f.email.trim(), line: f.line, langs: ["en"], exp: "2-4" };
+    toast(T("Your profile is published.", "您的檔案已發布。")); go("dashboard");
+  },
+
+  adminConfirm: (el) => {
+    const o = st.orders.find((x) => x.id === el.dataset.v); const amt = Number(String(st.form["amt-" + o.id] ?? o.amount).replace(/[,\s]/g, ""));
+    if (amt !== o.amount) { st.form.adminMsg = "The amount does not match the order total. Check the bank statement; a short payment is not confirmed."; st.form.adminOk = false; return render(false); }
+    settle(o, "admin"); st.form.adminMsg = `Confirmed ${o.ref}. The membership has started and the buyer has been emailed.`; st.form.adminOk = true; save(); render(false);
+  },
+  markChecked: (el) => { const r = st.payReview.find((x) => x.id === el.dataset.v); if (r) r.done = true; render(false); },
+  suspend: (el) => { const r = st.reports.find((x) => x.id === el.dataset.v); r.status = "actioned"; if (r.type === "educator") st.suspended[r.targetId] = true; else st.removedJobs[r.targetId] = true; save(); render(false); },
+  dismiss: (el) => { const r = st.reports.find((x) => x.id === el.dataset.v); r.status = "dismissed"; save(); render(false); },
+  reinstate: (el) => { delete st.suspended[el.dataset.v]; save(); render(false); },
+};
+
+/* ================= events ================= */
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-act]");
+  if (!el || el.disabled) return;
+  const fn = A[el.dataset.act];
+  if (fn) { e.preventDefault(); fn(el, e); save(); }
+});
+document.addEventListener("keydown", (e) => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches('[role="button"][data-act]')) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent("click", { bubbles: true })); }
+});
+function onField(e) {
+  const el = e.target;
+  if (!el.dataset || !el.dataset.f) return;
+  st.form[el.dataset.f] = el.type === "checkbox" ? el.checked : el.value;
+  if (el.type === "checkbox" || el.tagName === "SELECT" || el.dataset.r || e.type === "input") render(false);
+}
+document.addEventListener("input", onField);
+document.addEventListener("change", (e) => { if (e.target.type === "checkbox" || e.target.tagName === "SELECT") onField(e); });
+
+render(true);
