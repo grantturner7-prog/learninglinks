@@ -23,7 +23,7 @@ async function payFamily(db: Db, userId: string, startsAt: Date, endsAt: Date) {
   await db.insert(schema.memberships).values({ holderType: "user", holderId: userId, orderId: o!.id, planCode: "family_tw", startsAt, endsAt });
 }
 async function paySchool(db: Db, userId: string, startsAt: Date, endsAt: Date) {
-  const [org] = await db.insert(schema.organizations).values({ name: "Sunshine", type: "cram_school", city: "taichung", latitude: 24.15, longitude: 120.65 }).returning();
+  const [org] = await db.insert(schema.organizations).values({ name: "Sunshine", type: "cram_school", city: "taichung", latitude: 24.15, longitude: 120.65, status: "claimed" }).returning();
   await db.insert(schema.orgMembers).values({ organizationId: org!.id, userId, role: "owner" });
   const [o] = await db.insert(schema.orders).values({ holderType: "org", holderId: org!.id, planCode: "school_tw", amount: 10000, currency: "TWD", countryCode: "TW", status: "paid", provider: "bank_transfer", referenceCode: `R${Math.random()}`, createdByUserId: userId }).returning();
   await db.insert(schema.memberships).values({ holderType: "org", holderId: org!.id, orderId: o!.id, planCode: "school_tw", startsAt, endsAt });
