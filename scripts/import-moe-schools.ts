@@ -1,5 +1,5 @@
 /**
- * Import the Ministry of Education's school directories: government and private elementary, junior-high and
+ * Import the Ministry of Education's school directories: government and private kindergartens, elementary, junior-high and
  * senior-high schools, universities and colleges, and the schools for international residents.
  *
  *   npm run db:import-moe -- --dry-run          fetch and report, write nothing
@@ -8,7 +8,7 @@
  *   npm run db:import-moe -- --dir ./moe-raw    read .csv files from a folder instead (names as in --save-dir)
  *   npm run db:import-moe -- --save-dir ./moe-raw   also keep the downloaded files
  *
- * Source: data.gov.tw datasets 6087, 6088, 6089, 6090, 24393, 6091, 28589 and 32958 (Government Open Data License v1).
+ * Source: data.gov.tw datasets 6086, 6087, 6088, 6089, 6090, 24393, 6091, 28589 and 32958 (Government Open Data License v1).
  * Only the name, kind, public/private, city, district and the school's public website are kept; no addresses and no
  * phone numbers. Schools already in the database from the OpenStreetMap import are recognised by name and city and
  * updated (they keep their exact map position and any claim); the rest are added. Re-running is safe.
@@ -91,7 +91,7 @@ async function main() {
   if (has("--prune")) {
     // Entries from the map data that the Ministry lists do not recognise and whose names say they are a part of a school
     // ("土木工程學系", "…校區", "…分校"). Never touches a listing that anyone has claimed or applied to claim.
-    const junk = await db.execute(sql`select id, name from organizations o where source = 'osm_import' and status = 'unclaimed' and ownership is null and type in ('elementary','junior_high','senior_high','university') and not exists (select 1 from org_claims c where c.organization_id = o.id) and not exists (select 1 from org_members m where m.organization_id = o.id)`);
+    const junk = await db.execute(sql`select id, name from organizations o where source = 'osm_import' and status = 'unclaimed' and ownership is null and type in ('kindergarten','elementary','junior_high','senior_high','university') and not exists (select 1 from org_claims c where c.organization_id = o.id) and not exists (select 1 from org_members m where m.organization_id = o.id)`);
     const ids = (junk.rows as { id: string; name: string }[]).filter((r) => NOT_A_SCHOOL.test(r.name)).map((r) => r.id);
     for (let i = 0; i < ids.length; i += 500) await db.delete(schema.organizations).where(sql`${schema.organizations.id} in (${sql.join(ids.slice(i, i + 500).map((x) => sql`${x}::uuid`), sql`, `)})`);
     console.log(`Removed ${ids.length} entries that are parts of schools, not schools.`);

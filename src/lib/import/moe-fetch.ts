@@ -18,6 +18,7 @@ export interface MoeSource {
 }
 
 export const MOE_SOURCES: MoeSource[] = [
+  { kind: "kindergarten", label: "幼兒園名錄 (kindergartens, public and private)", datasetId: 6086, fallbackUrl: "https://stats.moe.gov.tw/files/opendata/k1_new.csv", perYear: false },
   { kind: "elementary", label: "國民小學名錄 (elementary)", datasetId: 6087, fallbackUrl: "https://stats.moe.gov.tw/files/school/115/e1_new.csv", perYear: true },
   { kind: "junior_high", label: "國民中學名錄 (junior high)", datasetId: 6088, fallbackUrl: "https://stats.moe.gov.tw/files/opendata/j1_new.csv", perYear: false },
   { kind: "senior_high", label: "一般高級中等學校名錄 (senior high and vocational)", datasetId: 6089, fallbackUrl: "https://stats.moe.gov.tw/files/school/115/high.csv", perYear: true },

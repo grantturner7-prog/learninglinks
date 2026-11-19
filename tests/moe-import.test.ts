@@ -72,6 +72,33 @@ describe("Ministry of Education school lists: kinds, places, privacy", () => {
   });
 });
 
+describe("kindergartens: the Ministry's national kindergarten list", () => {
+  const { rows } = rowsFromMoeCsv(f("moe-kindergarten.csv"));
+  const plan = planMoe([{ kind: "kindergarten", rows }]);
+  const get = (needle: string) => plan.records.find((r) => r.name.includes(needle))!;
+  it("reads the district from its own column and keeps only the newest year", () => {
+    expect(rows.some((r) => r.districtZh === "中和區" || r.districtZh.endsWith("區"))).toBe(true);
+    expect(new Set(latestYear(rows).map((r) => r.year)).size).toBe(1);
+    expect(get("溫特爾")).toMatchObject({ type: "kindergarten", ownership: "private", city: "new-taipei" });
+    expect(get("溫特爾").district?.startsWith("new-taipei:")).toBe(true);
+  });
+  it("lists public kindergartens attached to government schools too", () => {
+    const pub = plan.records.find((r) => r.ownership === "public");
+    expect(pub?.type).toBe("kindergarten");
+  });
+  it("calls a kindergarten bilingual or international only when its own name says so, not its operator's", () => {
+    expect(get("愛妮爾國際").type).toBe("bilingual_school");
+    expect(get("林口康橋國際").type).toBe("bilingual_school");
+    expect(get("大觀非營利").type).toBe("kindergarten"); // "…中華國際嬰幼兒發展學會" is the operator
+    expect(get("中信高級中等學校附設幼兒園").type).toBe("kindergarten"); // "中信國際學校財團法人" is the foundation
+    expect(refineKind("kindergarten", "私立Sunny English幼兒園")).toBe("bilingual_school");
+  });
+  it("recognises 幼稚園 and 幼兒園 as the same, and keeps no address or phone", () => {
+    expect(coreName("私立小太陽幼稚園")).toBe(coreName("小太陽幼兒園"));
+    expect(JSON.stringify(plan.records)).not.toMatch(/連城路|三樹路|\(02\)|平河里/);
+  });
+});
+
 describe("recognising the same school in two lists", () => {
   it("ignores who runs it, spaces, and 台 against 臺", () => {
     expect(coreName("市立板橋國中")).toBe(coreName("板橋國中"));

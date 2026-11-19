@@ -13,8 +13,8 @@ import { matchArea, parseCsv, placeInDistrict } from "./cram";
  * keep phone numbers. Pins sit inside the district, never at an address.
  */
 
-export type MoeKind = "elementary" | "junior_high" | "senior_high" | "university" | "international";
-export type SchoolKind = "elementary" | "junior_high" | "senior_high" | "university" | "international_school" | "bilingual_school";
+export type MoeKind = "kindergarten" | "elementary" | "junior_high" | "senior_high" | "university" | "international";
+export type SchoolKind = "kindergarten" | "elementary" | "junior_high" | "senior_high" | "university" | "international_school" | "bilingual_school";
 
 export interface MoeRow {
   year: number | null;
@@ -22,6 +22,8 @@ export interface MoeRow {
   name: string;
   ownership: "public" | "private" | null;
   cityZh: string;
+  /** The kindergarten list names the district in its own column. */
+  districtZh: string;
   address: string;
   website: string;
   /** International-school files are in English. */
@@ -39,6 +41,7 @@ const COLS = {
   name: ["學校名稱", "School name"],
   ownership: ["公/私立"],
   city: ["縣市名稱"],
+  district: ["鄉鎮市區名稱"],
   address: ["地址", "Address"],
   website: ["網址", "Website"],
   county: ["county"],
@@ -67,6 +70,7 @@ export function rowsFromMoeCsv(text: string): { rows: MoeRow[]; columns: string[
       // The military-academy file has no public/private column: every one of them is a government school.
       ownership: own.startsWith("公") ? "public" : own.startsWith("私") ? "private" : ix.level >= 0 ? "public" : english ? "private" : null,
       cityZh: unbracket(cell(r, ix.city)),
+      districtZh: cell(r, ix.district),
       address: unbracket(cell(r, ix.address)),
       website: cell(r, ix.website),
       english,
@@ -90,7 +94,7 @@ const norm = (s: string) => s.replace(/台/g, "臺").replace(/[\s　()（）\-�
 
 const CITY_PREFIX = /^(?:臺北市|新北市|桃園市|臺中市|臺南市|高雄市|基隆市|新竹市|嘉義市|新竹縣|苗栗縣|彰化縣|南投縣|雲林縣|嘉義縣|屏東縣|宜蘭縣|花蓮縣|臺東縣|澎湖縣|金門縣|連江縣)(?!立)/;
 const OWNER_PREFIX = /^(?:國立|私立|財團法人|市立|縣立|臺北市立|新北市立|桃園市立|臺中市立|臺南市立|高雄市立|基隆市立|新竹市立|嘉義市立|[^\s]{1,3}[縣市]立)/;
-const LEVEL_WORDS: [RegExp, string][] = [[/國民小學/g, "國小"], [/國民中學/g, "國中"], [/國民中小學/g, "國中小"], [/高級中學/g, "高中"], [/高級中等學校/g, "高中"], [/高級職業學校/g, "高職"]];
+const LEVEL_WORDS: [RegExp, string][] = [[/幼稚園/g, "幼兒園"], [/[（(]委託[^）)]*[）)]/g, ""], [/國民小學/g, "國小"], [/國民中學/g, "國中"], [/國民中小學/g, "國中小"], [/高級中學/g, "高中"], [/高級中等學校/g, "高中"], [/高級職業學校/g, "高職"]];
 
 /**
  * A school's name without who runs it ("市立", "私立"), without the city and district some listings put in front
@@ -114,6 +118,12 @@ export const NOT_A_SCHOOL = /學系|系所|研究所|學位學程|校區|分校|
 export function refineKind(kind: MoeKind, name: string): SchoolKind {
   if (kind === "university") return "university";
   if (kind === "international") return "international_school";
+  if (kind === "kindergarten") {
+    // Official kindergarten names rarely say "bilingual" (the rules discourage it), so only a few can be recognised. The
+    // operator's name ("…股份有限公司附設…", "(委託…學會辦理)") is not the school's name, so it is not looked at.
+    const own = name.replace(/[（(][^）)]*[）)]/g, "").replace(/^.*附設/, "");
+    return /雙語|美語|英語|國際|bilingual|international|english/i.test(own) ? "bilingual_school" : "kindergarten";
+  }
   if (/雙語/.test(name)) return "bilingual_school";
   if (/國際|international/i.test(name)) return "international_school";
   return kind;
@@ -208,7 +218,7 @@ export function planMoe(sets: { kind: MoeKind; rows: MoeRow[] }[]): MoePlan {
         city = cityKeyOfEnglish(r.countyEn);
         if (city) district = districtFromEnglish(city, r.address);
       } else {
-        const area = matchArea({ city: r.cityZh, address: r.address });
+        const area = matchArea({ city: r.cityZh, district: r.districtZh, address: r.address });
         if (area) { city = area.city; district = area.district; }
         else {
           // City known but the district could not be read from the address: keep the school at city level.

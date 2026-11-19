@@ -4,7 +4,7 @@ Educators are never imported: they create their own profile. What the site needs
 
 ## Government and private schools, universities, international schools (Ministry of Education)
 
-The Ministry of Education publishes its school directories as open data (data.gov.tw datasets 6087, 6088, 6089, 6090, 24393, 6091, 28589 and 32958; Government Open Data License v1). One command fetches and loads them:
+The Ministry of Education publishes its school directories as open data (data.gov.tw datasets 6086 (kindergartens), 6087, 6088, 6089, 6090, 24393, 6091, 28589 and 32958; Government Open Data License v1). One command fetches and loads them:
 
 ```bash
 npm run db:import-moe -- --dry-run     # fetch and report, write nothing
@@ -15,12 +15,13 @@ What it loads (school year 115 / 2026):
 
 | Kind | Schools | Government / private |
 |---|---|---|
+| Kindergartens, government (including those attached to government schools) and private | 6,745 | about 2,430 / 4,320 |
 | Elementary schools | 2,607 | 2,575 / 32 |
 | Junior high schools | 739 | 725 / 14 |
 | Senior high and vocational schools (including evening schools) | 496 | 308 / 188 |
 | Universities, colleges, technical colleges, military and police academies | 148 | 56 / 92 |
 | Schools for international residents (American, Japanese, European, Korean and others) | 22 | private |
-| Bilingual and international schools recognised by name (雙語, 國際) | 7 | |
+| (of these, recognised as bilingual or international by their own name: 雙語, 國際, 美語, English) | 72 | private |
 
 Every school says whether it is **government (公立) or private (私立)**, as the Ministry lists it. The site keeps only the name, kind, government/private, city, district and the school's public website. Street addresses and phone numbers are read to find the district and thrown away, and pins sit inside the district, never at an address.
 
@@ -28,8 +29,8 @@ Schools already loaded from the map data (OpenStreetMap) are **recognised by nam
 
 Limits, honestly:
 
-- **Kindergartens:** the Ministry has no national kindergarten list on open data (only some cities publish their own). Kindergartens come from the map data (about 1,100, far fewer than exist). A kindergarten that is not listed adds itself (below).
-- **Private bilingual schools:** Taiwan publishes no national list of them. They are recognised only when the name says so (雙語, 國際) or when they are on the Ministry's list of schools for international residents. Others add themselves, or can be tagged later.
+- **Kindergartens** are covered: the Ministry's 幼兒園名錄 (about 6,700 government and private kindergartens, newest year in the file). Its newest school year is 114 (2025), a year behind the other lists, so a kindergarten opened since then will be missing and adds itself (below).
+- **Bilingual schools: no official list exists.** "Bilingual" is a teaching programme, not a registered kind of school, and official kindergarten names rarely say it. What we can recognise: schools whose own name says so (雙語, 國際, 美語, English: 72 found, nearly all private kindergartens) and the 22 schools for international residents. Sources checked and why they are not enough: the Ministry's list of high schools with bilingual departments (a PDF of about ten schools), the Ministry's yearly approvals for bilingual campuses (about 100 government schools, announced as documents, not as data) and city announcements (Taipei, Tainan, Kaohsiung publish their own lists as web pages and PDFs). The practical route is for schools to say it themselves (see below).
 - **Cram schools** (about 17,800) are a separate file: see the next section.
 - A few map-data entries whose names differ a lot from the Ministry's can still appear twice.
 
