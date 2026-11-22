@@ -42,7 +42,7 @@ export interface JobDto {
   startsOn: string | null;
   applyContact: string | null;
   postedAt: Date;
-  school: { id: string; name: string; type: string };
+  school: { id: string; name: string; type: string; bilingual: boolean };
 }
 
 export const JOB_PAGE_SIZE = 12;
@@ -58,17 +58,17 @@ export async function listOpenJobs(db: Db, viewer: JobViewer | null, f: JobFilte
   const where = and(...conds);
   const [{ n } = { n: 0 }] = await db.select({ n: sql<number>`count(*)::int` }).from(jobs).where(where);
   const rows = await db
-    .select({ job: jobs, orgId: organizations.id, orgName: organizations.name, orgType: organizations.type })
+    .select({ job: jobs, orgId: organizations.id, orgName: organizations.name, orgType: organizations.type, orgBilingual: organizations.bilingual })
     .from(jobs)
     .innerJoin(organizations, eq(jobs.organizationId, organizations.id))
     .where(where)
     .orderBy(desc(jobs.createdAt), jobs.id)
     .limit(JOB_PAGE_SIZE)
     .offset((page - 1) * JOB_PAGE_SIZE);
-  const items: JobDto[] = rows.map(({ job, orgId, orgName, orgType }) => ({
+  const items: JobDto[] = rows.map(({ job, orgId, orgName, orgType, orgBilingual }) => ({
     id: job.id, title: job.title, type: job.type, description: job.description, subjects: job.subjects, levels: job.levels,
     city: job.city, district: job.district, salaryMin: job.salaryMin, salaryMax: job.salaryMax, salaryUnit: job.salaryUnit,
-    startsOn: job.startsOn, applyContact: job.applyContact, postedAt: job.createdAt, school: { id: orgId, name: orgName, type: orgType },
+    startsOn: job.startsOn, applyContact: job.applyContact, postedAt: job.createdAt, school: { id: orgId, name: orgName, type: orgType, bilingual: orgBilingual },
   }));
   return { items, total: n, page, pageSize: JOB_PAGE_SIZE };
 }
@@ -123,7 +123,7 @@ export interface SchoolDetail {
 export async function getSchoolWithJobs(db: Db, viewer: JobViewer | null, id: string, now: Date = new Date()): Promise<SchoolDetail | null> {
   if (!canSeeJobs(viewer) || !/^[0-9a-f-]{36}$/i.test(id)) return null;
   const [org] = await db
-    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, city: organizations.city, district: organizations.district, website: organizations.website })
+    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, bilingual: organizations.bilingual, city: organizations.city, district: organizations.district, website: organizations.website })
     .from(organizations)
     .where(and(eq(organizations.id, id), ne(organizations.status, "suspended")))
     .limit(1);
@@ -134,7 +134,7 @@ export async function getSchoolWithJobs(db: Db, viewer: JobViewer | null, id: st
     jobs: rows.map((job) => ({
       id: job.id, title: job.title, type: job.type, description: job.description, subjects: job.subjects, levels: job.levels,
       city: job.city, district: job.district, salaryMin: job.salaryMin, salaryMax: job.salaryMax, salaryUnit: job.salaryUnit,
-      startsOn: job.startsOn, applyContact: job.applyContact, postedAt: job.createdAt, school: { id: org.id, name: org.name, type: org.type },
+      startsOn: job.startsOn, applyContact: job.applyContact, postedAt: job.createdAt, school: { id: org.id, name: org.name, type: org.type, bilingual: org.bilingual },
     })),
   };
 }

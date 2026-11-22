@@ -249,7 +249,7 @@ const OPEN = { full_time: ["Full-time work", "全職工作"], part_time: ["Part-
 const KIND = { kindergarten: ["Kindergarten", "幼兒園"], elementary: ["Elementary school", "國小"], junior_high: ["Junior high school", "國中"], senior_high: ["Senior high school", "高中職"], university: ["University or college", "大專校院"], cram_school: ["Cram school", "補習班"], language_school: ["Language school", "語言學校"], international_school: ["International school", "國際學校"], bilingual_school: ["Bilingual school", "雙語學校"], other: ["Other", "其他"] };
 /** Ways to browse the school list (the same groups the real site uses). */
 const GROUPS = { public: ["Government schools", "公立學校"], private: ["Private schools", "私立學校"], university: ["Universities and colleges", "大專校院"], international: ["International and bilingual", "國際與雙語學校"], kindergarten: ["Kindergartens", "幼兒園"], cram: ["Cram and language schools", "補習班與語言學校"] };
-const inGroup = (s, g) => g === "public" ? s.ownership === "public" : g === "private" ? s.ownership === "private" : g === "university" ? s.kind === "university" : g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" : g === "kindergarten" ? s.kind === "kindergarten" : g === "cram" ? s.kind === "cram_school" || s.kind === "language_school" : true;
+const inGroup = (s, g) => g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" || !!st.bil[s.id] : g === "public" ? s.ownership === "public" : g === "private" ? s.ownership === "private" : g === "university" ? s.kind === "university" : g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" : g === "kindergarten" ? s.kind === "kindergarten" : g === "cram" ? s.kind === "cram_school" || s.kind === "language_school" : true;
 
 /* ---------- fictional educators (made up for this demo; nobody real) ---------- */
 let _seed = 7;
@@ -324,7 +324,7 @@ const fresh = () => ({
   lang: "en", role: "visitor", view: "home", args: {}, form: {}, people: {}, orders: [], memberships: [], owners: {},
   jobs: JSON.parse(JSON.stringify(SEED_JOBS)), reveals: [], reports: [], suspended: {}, removedJobs: {}, myProfile: null,
   payReview: [{ id: "r1", ref: "LL-7K3Q-9FXD", note: "ECPay reported NT$1,000 for an order of NT$2,000. The site did not start a membership.", done: false }],
-  seq: 1, toast: "", custom: [],
+  seq: 1, toast: "", custom: [], bil: {},
 });
 let st = fresh();
 try { const raw = localStorage.getItem(KEY); if (raw) st = Object.assign(fresh(), JSON.parse(raw)); } catch (e) { /* storage may be blocked: the demo still works, it just forgets on reload */ }
@@ -343,6 +343,11 @@ const pid = () => (me() ? me().id : null);
 const familyActive = (p) => st.memberships.some((m) => m.holder === p && m.kind === "family" && m.end > TODAY);
 /** Any school in the demo: the pretend ones, the Ministry's lists, or one the visitor added. */
 const schoolById = (id) => SCHOOLS.find((s) => s.id === id) || REAL_BY_ID.get(id) || st.custom.find((s) => s.id === id) || null;
+/** The school's own statement that it teaches bilingually (or its kind says so). Not checked by anyone. */
+const isBil = (s) => s.kind === "bilingual_school" || !!st.bil[s.id];
+/** The tick box: optional, the school's own words, never checked by us. */
+const bilTick = () => `<label class="ack" style="margin-top:14px"><input type="checkbox" id="f-bil" data-f="bil" data-r="1" ${st.form.bil ? "checked" : ""}><span><b>${T("We teach bilingually or run English-immersion classes", "我們提供雙語教學或英語沉浸式課程")}</b><br><span class="small muted" style="font-weight:500">${T("Optional. If you tick this, your listing shows a “Bilingual” badge and appears under International and bilingual schools. It is your own description and we do not check it. You can change it later on your campuses page.", "選填。勾選後，您的學校會顯示「雙語」標章，並列入「國際與雙語學校」。這是學校自行說明的內容，我們不會查證。之後可在「您的校區」頁面更改。")}</span></span></label>`;
+const bilBadge = (s) => (st.bil[s.id] && s.kind !== "bilingual_school" ? ` <span class="badge" data-testid="bilingual-badge">${T("Bilingual", "雙語")}</span>` : "");
 const ownedCampuses = (p) => Object.keys(st.owners).filter((id) => st.owners[id] === p).map(schoolById).filter(Boolean);
 const campusActive = (p, sid) => st.memberships.some((m) => m.holder === p && m.kind === "campus" && m.schoolId === sid && m.end > TODAY);
 const paidCampusIds = (p) => ownedCampuses(p).filter((s) => campusActive(p, s.id)).map((s) => s.id);
@@ -686,13 +691,25 @@ V.campuses = () => {
   const cityOpts = Object.keys(CITY).filter((k) => pool.some((s) => s.city === k)).map((k) => `<option value="${k}" ${city === k ? "selected" : ""}>${h(lab(CITY[k]))}</option>`).join("");
   const addBtn = `<button class="btn" data-act="nav" data-v="addschool">${T("Cannot find it? Add my school", "找不到嗎？新增我的學校")}</button>`;
   return `<div class="stack"><div><h1>${T("Find your school", "尋找您的學校")}</h1><p class="muted">${T("The list holds the Ministry of Education's government and private schools, universities, schools for international residents, and cram schools. Claim each campus you want to pay for. Each campus is NT$10,000 for its own 12 months. In the real site an administrator checks every claim.", "清單包含教育部公布的公私立學校、大專校院、外國僑民學校與補習班。認領您要付費的每個校區。每個校區 NT$10,000，各有 12 個月。在真實網站中，每個認領都會由管理員審核。")}</p></div>
-    ${ownedCampuses(m.id).length ? `<div class="card soft stack"><h2>${T("Your campuses", "您的校區")}</h2>${ownedCampuses(m.id).map((s) => `<div class="row" style="justify-content:space-between"><span><b>${h(s.name)}</b><br><span class="small muted">${s.ownership ? (s.ownership === "public" ? T("Government", "公立") : T("Private", "私立")) + " · " : ""}${h(lab(KIND[s.kind] || KIND.other))} · ${h(placeName(s))}</span></span><span class="badge">${T("Your campus", "您的校區")}</span></div>`).join("")}</div>` : ""}
+    ${ownedCampuses(m.id).length ? `<div class="card soft stack"><h2>${T("Your campuses", "您的校區")}</h2>${ownedCampuses(m.id).map((s) => `<div class="row" style="justify-content:space-between"><span><b>${h(s.name)}</b><br><span class="small muted">${s.ownership ? (s.ownership === "public" ? T("Government", "公立") : T("Private", "私立")) + " · " : ""}${h(lab(KIND[s.kind] || KIND.other))} · ${h(placeName(s))}${bilBadge(s)}</span></span><span class="row"><button class="link-btn" data-act="toggleBil" data-v="${s.id}" data-testid="bilingual-toggle">${st.bil[s.id] ? T("Remove the Bilingual badge", "移除「雙語」標章") : T("Show the Bilingual badge", "顯示「雙語」標章")}</button><span class="badge">${T("Your campus", "您的校區")}</span></span></div>`).join("")}</div>` : ""}
     <div class="card flat stack"><div class="lab">${T("Browse by kind", "依類型瀏覽")}</div><div class="pills"><button class="pill" data-act="pick" data-k="g" data-v="" aria-pressed="${!g}">${T("All", "全部")}</button>${Object.keys(GROUPS).map((k) => `<button class="pill" data-act="pick" data-k="g" data-v="${k}" aria-pressed="${g === k}">${h(lab(GROUPS[k]))}</button>`).join("")}</div>
       <div class="grid g2"><div><label class="lab" for="f-q">${T("Name (part of it is enough)", "校名（輸入一部分即可）")}</label><input class="field" id="f-q" data-f="q" value="${h(val("q"))}" placeholder="${T("e.g. Taipei American, 東海, Sunshine", "例如：Taipei American、東海、Sunshine")}"></div><div><label class="lab" for="f-city">${T("City or county", "縣市")}</label><select class="field" id="f-city" data-f="city" data-r="1"><option value="">${T("Any", "不限")}</option>${cityOpts}</select></div></div></div>
     ${browsing ? `<p class="muted small">${match.length.toLocaleString("en-US")} ${T("schools match", "間學校符合")}${match.length > 40 ? " · " + T("showing the first 40", "顯示前 40 間") : ""}</p>` : `<p class="muted">${T("Pick a kind or a city to browse, or type part of the name.", "請選擇類型或縣市瀏覽，或輸入校名的一部分。")} ${REAL_SCHOOLS.length.toLocaleString("en-US")} ${T("schools are in this demo's list.", "間學校在此示範的清單中。")}</p>`}
-    <div class="grid g2" data-testid="school-hits">${shown.map((s) => { const mine = st.owners[s.id] === m.id; return `<div class="card flat"><b>${h(s.name)}</b><div class="small muted">${s.ownership ? `<span class="badge plain">${s.ownership === "public" ? T("Government", "公立") : T("Private", "私立")}</span> ` : ""}${h(lab(KIND[s.kind] || KIND.other))} · ${h(placeName(s))}</div><div class="row" style="margin-top:10px">${mine ? `<span class="badge">${T("Your campus", "您的校區")}</span>` : `<button class="btn" data-act="claim" data-v="${s.id}">${T("This is my school", "這是我的學校")}</button>`}</div></div>`; }).join("")}</div>
+    <div class="grid g2" data-testid="school-hits">${shown.map((s) => { const mine = st.owners[s.id] === m.id; return `<div class="card flat"><b>${h(s.name)}</b><div class="small muted">${s.ownership ? `<span class="badge plain">${s.ownership === "public" ? T("Government", "公立") : T("Private", "私立")}</span> ` : ""}${h(lab(KIND[s.kind] || KIND.other))} · ${h(placeName(s))}${bilBadge(s)}</div><div class="row" style="margin-top:10px">${mine ? `<span class="badge">${T("Your campus", "您的校區")}</span>` : `<button class="btn" data-act="claimStart" data-v="${s.id}">${T("This is my school", "這是我的學校")}</button>`}</div></div>`; }).join("")}</div>
     ${browsing && !shown.length ? `<div class="card flat">${T("Nothing in the list matches. You can add your school below.", "清單中沒有符合的學校。您可以在下方新增您的學校。")}</div>` : ""}
     <div class="row">${addBtn}${ownedCampuses(m.id).length ? `<button class="btn btn-primary btn-lg" data-act="nav" data-v="dashboard">${T("Continue", "繼續")}</button>` : ""}</div></div>`;
+};
+
+/** Last question of claiming a school: anything to add, and (optional) whether it teaches bilingually. */
+V.claim = () => {
+  const m = me();
+  const sc = schoolById(st.args.id);
+  if (!m || m.type !== "school" || !sc) return V.home();
+  const f = st.form;
+  return frame({ step: 2, total: 2, aside: `<div class="eyebrow">${T("You are claiming", "您正在認領")}</div><p class="bold" style="font-size:20px;margin-top:6px">${h(sc.name)}</p><p class="small muted">${sc.ownership ? (sc.ownership === "public" ? T("Government", "公立") : T("Private", "私立")) + " · " : ""}${h(lab(KIND[sc.kind] || KIND.other))} · ${h(placeName(sc))}</p>`, exit: { act: "nav", v: "campuses", label: "← " + T("Back to the school list", "回到學校清單") },
+    say: T("Only our team sees your details, to check the claim.", "只有我們的團隊會看到您的資料，用來審核認領。"), q: T("Anything else we should know?", "還有什麼想告訴我們的嗎？"),
+    body: `<p class="hint">${T("In the real site you also give your name, role and phone number here, and an administrator checks the claim. In this demo the claim is accepted straight away.", "在真實網站中，您還會在這裡填寫姓名、職稱與電話，並由管理員審核認領。此示範會直接接受。")}</p>${bilTick()}`,
+    back: "claimBack", next: "claimSend", nextLabel: T("Send my claim", "送出認領"), nextDisabled: false });
 };
 
 /** A school that is not on any list: it gives its kind, name and area, never a street address. */
@@ -707,7 +724,7 @@ V.addschool = () => {
   const exit = { act: "nav", v: "campuses", label: "← " + T("Back to the school list", "回到學校清單") };
   const aside = `<div class="eyebrow">${T("Your school", "您的學校")}</div><p class="bold" style="font-size:20px;margin-top:6px">${h(f.name || T("Its name", "學校名稱"))}</p><p class="small muted">${f.kind ? h(lab(KIND[f.kind])) : ""}${f.city ? " · " + h(lab(CITY[f.city])) : ""}${f.district ? ", " + h(lab(DIST[f.district])) : ""}</p><p class="tiny muted" style="margin-top:10px">${T("We only keep its name, kind and area. We never ask for a street address. It is shown on the map by area.", "我們只保留校名、類型與地區，不會要求街道地址，地圖上也只顯示地區。")}</p>`;
   if (step === 1) return frame({ step, total: 3, aside, exit, say: T("No problem. Plenty of good schools are not on a list yet.", "沒問題，很多好學校還沒出現在清單中。"), q: T("What kind of school is it?", "這是哪一種學校？"),
-    body: `<div class="grid g3">${kinds.map((k) => `<button class="tile" data-act="pick" data-k="kind" data-v="${k}" ${sel("kind", k)}><span class="t">${h(lab(KIND[k]))}</span></button>`).join("")}</div>`, next: "addNext", nextLabel: T("Continue", "繼續"), nextDisabled: !f.kind });
+    body: `<div class="grid g3">${kinds.map((k) => `<button class="tile" data-act="pick" data-k="kind" data-v="${k}" ${sel("kind", k)}><span class="t">${h(lab(KIND[k]))}</span></button>`).join("")}</div>${bilTick()}`, next: "addNext", nextLabel: T("Continue", "繼續"), nextDisabled: !f.kind });
   if (step === 2) return frame({ step, total: 3, aside, exit, back: "addBack", say: T("Use the name people know it by.", "請使用大家熟悉的校名。"), q: T("What is it called?", "學校名稱是什麼？"),
     body: `<label class="lab" for="f-name">${T("School name", "學校名稱")}</label><input class="field" id="f-name" data-f="name" value="${h(f.name || "")}" maxlength="120" placeholder="${T("e.g. Maple Bilingual School", "例如：楓葉雙語學校")}">`, next: "addNext", nextLabel: T("Continue", "繼續"), nextDisabled: (f.name || "").trim().length < 2 });
   return frame({ step: 3, total: 3, aside, exit, back: "addBack", say: T("Only the area. The pin sits in the middle of it.", "只需要地區，標記會放在該地區的中央。"), q: T("Where is it?", "學校在哪裡？"),
@@ -793,7 +810,7 @@ V.jobs = () => {
     <div class="mapgrid"><div>${jobMap(schools, per, pin, city)}${city || pin ? `<button class="link-btn" data-act="clearJobs">${T("Show all areas", "顯示所有地區")}</button>` : ""}</div>
     <div class="stack"><h2>${ps ? h(ps.name) : city ? h(lab(CITY[city])) : T("All open jobs", "所有開放職缺")} <span class="muted small">(${shown.length})</span></h2>
     ${ps && !shown.length ? `<div class="card flat">${h(ps.name)} · ${h(lab(KIND[ps.kind]))} · ${h(placeName(ps))}<br><span class="muted small">${T("No open job posts at this school.", "此學校目前沒有開放職缺。")}</span></div>` : ""}
-    ${shown.length ? shown.map((j) => { const s = schoolById(j.schoolId); return `<article class="card flat stack"><div class="row" style="justify-content:space-between"><div><b style="font-size:18px">${h(j.title)}</b><div class="small muted">${h(s.name)} · ${h(lab(KIND[s.kind]))} · ${h(placeName(s))}</div></div><span class="badge apricot">${h(lab(OPEN[j.type]))}</span></div><p>${h(j.desc)}</p><div class="tags"><span class="badge">${h(lab(SUBJECT[j.subject]))}</span></div><p class="small"><b>${T("Apply:", "應徵：")}</b> ${h(j.contact)}</p><div><button class="link-btn" data-act="reportOpen" data-t="job" data-v="${j.id}">${T("Report this job post", "檢舉此職缺")}</button></div></article>`; }).join("") : ""}
+    ${shown.length ? shown.map((j) => { const s = schoolById(j.schoolId); return `<article class="card flat stack"><div class="row" style="justify-content:space-between"><div><b style="font-size:18px">${h(j.title)}</b><div class="small muted">${h(s.name)} · ${h(lab(KIND[s.kind]))} · ${h(placeName(s))}${bilBadge(s)}</div></div><span class="badge apricot">${h(lab(OPEN[j.type]))}</span></div><p>${h(j.desc)}</p><div class="tags"><span class="badge">${h(lab(SUBJECT[j.subject]))}</span></div><p class="small"><b>${T("Apply:", "應徵：")}</b> ${h(j.contact)}</p><div><button class="link-btn" data-act="reportOpen" data-t="job" data-v="${j.id}">${T("Report this job post", "檢舉此職缺")}</button></div></article>`; }).join("") : ""}
     <p class="small muted">${T("Job posts are written by schools. LearningLinks does not check them or the schools. Check every detail yourself.", "職缺由學校自行撰寫。LearningLinks 不會查核職缺或學校，請自行確認每個細節。")}</p></div></div></div>`;
 };
 
@@ -835,7 +852,7 @@ function navItems() {
   if (m.type === "educator") return [["dashboard", T("Dashboard", "儀表板")], ["profile", T("My profile", "我的檔案")], ["jobs", T("Job posts", "職缺")]];
   return [["admin", "Admin desk"]];
 }
-const GROUP = { addschool: "campuses", join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
+const GROUP = { claim: "campuses", addschool: "campuses", join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
 function shell(inner) {
   const cur = GROUP[st.view] || st.view;
   return `<div class="demo"><div class="wrap"><b>${T("DEMO", "示範")}</b><span>${T("Pretend people and data. Nothing is saved on a server and no money moves.", "虛構的人物與資料。沒有任何資料存到伺服器，也沒有任何款項移動。")}</span>
@@ -927,9 +944,12 @@ const A = {
   addBack: () => { st.form.step = (st.form.step || 2) - 1; render(true); },
   addSchool: () => {
     const f = st.form; const s = { id: uid("c"), name: f.name.trim(), kind: f.kind, ownership: null, city: f.city, district: f.district || null, custom: true };
-    st.custom.push(s); st.owners[s.id] = pid(); save(); toast(T("School added and claimed. (The real site asks an administrator to approve it first.)", "已新增並認領學校。（真實網站會先由管理員審核。）")); go("campuses");
+    st.custom.push(s); st.owners[s.id] = pid(); if (f.bil) st.bil[s.id] = true; save(); toast(T("School added and claimed. (The real site asks an administrator to approve it first.)", "已新增並認領學校。（真實網站會先由管理員審核。）")); go("campuses");
   },
-  claim: (el) => { st.owners[el.dataset.v] = pid(); save(); toast(T("Campus claimed. (The real site asks an administrator to approve this.)", "已認領校區。（真實網站會由管理員審核。）")); render(false); },
+  claimStart: (el) => { go("claim", { id: el.dataset.v }); },
+  claimBack: () => go("campuses"),
+  claimSend: () => { const id = st.args.id; st.owners[id] = pid(); if (st.form.bil) st.bil[id] = true; save(); toast(T("Campus claimed. (The real site asks an administrator to approve this.)", "已認領校區。（真實網站會由管理員審核。）")); go("campuses"); },
+  toggleBil: (el) => { const id = el.dataset.v; if (st.bil[id]) delete st.bil[id]; else st.bil[id] = true; save(); render(false); },
   jobPublish: () => {
     const f = st.form; const paid = ownedCampuses(pid()).filter((s) => campusActive(pid(), s.id));
     st.jobs.push({ id: uid("j"), mine: true, schoolId: f.campus || paid[0].id, title: f.title.trim(), type: f.jtype || "full_time", subject: f.subject || "english-conversation", desc: f.desc.trim(), contact: f.contact.trim(), status: "open" });

@@ -140,6 +140,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
               <p className="text-sm text-ink-600">{c.organization.type} · {c.organization.city ?? "—"} · source: {c.organization.source}{c.organization.website ? ` · ${c.organization.website}` : ""}</p>
               <p className="mt-2">{c.contactName}, {c.contactRole} · {c.contactPhone} · {c.userEmail}</p>
               {c.note ? <p className="text-sm text-ink-600">Note: {c.note}</p> : null}
+              {c.bilingual ? <p className="text-sm text-ink-600" data-testid="claim-bilingual">Says it teaches bilingually or runs English-immersion classes (its own statement, not checked). Approving shows a Bilingual badge.</p> : null}
               {c.competing > 0 ? <p className="notice mt-2">{c.competing} other claim(s) for this campus are waiting. Approving one rejects the rest.</p> : null}
               <form action={reviewClaimAction} className="mt-3 flex gap-3">
                 <input type="hidden" name="claimId" value={c.id} />

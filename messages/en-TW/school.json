@@ -234,5 +234,13 @@
     "doneBody": "Signed-in teachers with a profile can see it on the job board and on the map. You can close it any time.",
     "toJobs": "See my job posts",
     "another": "Post another"
+  },
+  "bilingual": {
+    "label": "We teach bilingually or run English-immersion classes",
+    "hint": "Optional. If you tick this, your listing shows a “Bilingual” badge and appears under International and bilingual schools. It is your own description and we do not check it. You can change it later on your campuses page.",
+    "badge": "Bilingual",
+    "turnOn": "Show the Bilingual badge",
+    "turnOff": "Remove the Bilingual badge",
+    "title": "Bilingual teaching"
   }
 }

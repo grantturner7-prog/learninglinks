@@ -13,6 +13,17 @@ import { addCampusAction, claimCampusAction, type ClaimResult } from "@/app/[loc
 
 const ROLES = ["director", "owner", "admin", "teacher"] as const;
 
+/** "We teach bilingually": optional, the school's own words. Applied to the campus when an administrator approves the claim. */
+function BilingualBox({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
+  const tb = useTranslations("school.bilingual");
+  return (
+    <label className={`${CARD} flex cursor-pointer items-start gap-3`}>
+      <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" checked={on} onChange={(e) => onChange(e.target.checked)} data-testid="bilingual-box" />
+      <span><span className="block text-[16px] font-extrabold leading-snug">{tb("label")}</span><span className="mt-1 block text-sm leading-relaxed text-ink-600">{tb("hint")}</span></span>
+    </label>
+  );
+}
+
 interface Props {
   /** Claim an existing listing (2 steps) or add a missing campus (4 steps). */
   mode: "claim" | "add";
@@ -38,6 +49,7 @@ export function CampusFlow(p: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ack, setAck] = useState(false);
+  const [bilingual, setBilingual] = useState(false);
   const [campus, setCampus] = useState({ name: "", type: "", city: "", district: "" });
   const [who, setWho] = useState({ name: "", role: "", phone: "", note: "" });
   const go = (n: number) => { setStep(n); setError(null); top.current?.scrollIntoView({ behavior: "smooth", block: "start" }); };
@@ -57,7 +69,7 @@ export function CampusFlow(p: Props) {
     setBusy(true);
     setError(null);
     try {
-      const claim = { contactName: who.name, contactRole: who.role, contactPhone: who.phone, note: who.note };
+      const claim = { contactName: who.name, contactRole: who.role, contactPhone: who.phone, note: who.note, bilingual };
       const res: ClaimResult = p.mode === "claim"
         ? await claimCampusAction({ organizationId: p.organizationId!, claim, acknowledged: ack })
         : await addCampusAction({ campus: { ...claim, name: campus.name, type: campus.type, city: campus.city, district: campus.district || undefined }, acknowledged: ack });
@@ -116,6 +128,7 @@ export function CampusFlow(p: Props) {
               {SCHOOL_TYPES.map((k) => <Tile key={k} on={campus.type === k} onClick={() => setCampus({ ...campus, type: k })}><span className="text-[15px] font-bold leading-tight">{tt(`schoolTypes.${k}` as "schoolTypes.cram_school")}</span></Tile>)}
             </div>
           </fieldset>
+          <BilingualBox on={bilingual} onChange={setBilingual} />
         </div>
       ) : p.mode === "add" && step === 2 ? (
         <div className="flex flex-col gap-7">
@@ -153,6 +166,7 @@ export function CampusFlow(p: Props) {
             <label className="label" htmlFor="w-note">{tc("fields.note")}</label>
             <textarea id="w-note" rows={3} className="field" maxLength={500} value={who.note} onChange={(e) => setWho({ ...who, note: e.target.value })} />
           </div>
+          {p.mode === "claim" ? <BilingualBox on={bilingual} onChange={setBilingual} /> : null}
           <label className={`${CARD} flex cursor-pointer items-start gap-3`}>
             <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" checked={ack} onChange={(e) => setAck(e.target.checked)} />
             <span className="text-[15px] font-semibold leading-relaxed">{tn("acknowledge")}</span>

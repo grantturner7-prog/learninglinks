@@ -114,6 +114,8 @@ export const organizations = pgTable(
     website: text("website"),
     /** Government (public) or private school, from the Ministry of Education lists. Null when we do not know (for example a campus a school added itself). */
     ownership: text("ownership").$type<"public" | "private">(),
+    /** The school's own statement that it teaches bilingually or runs English-immersion classes. Not checked by us. */
+    bilingual: boolean("bilingual").notNull().default(false),
     /** Where the listing came from: 'osm_import', 'gov_open_data' (licensed cram schools), 'moe_open_data' (Ministry of Education school lists), 'manual'. */
     source: text("source").notNull().default("manual"),
     sourceId: text("source_id"),
@@ -146,6 +148,8 @@ export const orgClaims = pgTable(
     contactRole: text("contact_role").notNull(),
     contactPhone: text("contact_phone").notNull(),
     note: text("note"),
+    /** Ticked by the claimant: "we teach bilingually". Copied to the campus when an administrator approves the claim. */
+    bilingual: boolean("bilingual").notNull().default(false),
     status: text("status").$type<ClaimStatus>().notNull().default("pending"),
     reviewedBy: text("reviewed_by"),
     reviewedAt: ts("reviewed_at"),

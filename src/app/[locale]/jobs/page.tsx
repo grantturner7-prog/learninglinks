@@ -183,6 +183,7 @@ async function JobCard({ j, locale, reportLabels }: { j: JobDto; locale: string;
   const t = await getTranslations("jobs.card");
   const tt = await getTranslations("taxonomy");
   const to = await getTranslations("jobs.filters");
+  const tb = await getTranslations("school.bilingual");
   const f = await getFormatter();
   const n = (v: number) => f.number(v);
   let salary: string | null = null;
@@ -196,6 +197,7 @@ async function JobCard({ j, locale, reportLabels }: { j: JobDto; locale: string;
     <article className="card flex h-full flex-col gap-3 p-5">
       <div className="flex flex-wrap items-center gap-2">
         <span className="badge">{j.type === "full_time" ? to("fullTime") : to("partTime")}</span>
+        {j.school.bilingual ? <span className="badge-muted">{tb("badge")}</span> : null}
         <span className="text-sm text-ink-500">{t("posted", { date: f.dateTime(j.postedAt, { dateStyle: "medium" }) })}</span>
       </div>
       <h2 className="text-lg font-bold">{j.title}</h2>

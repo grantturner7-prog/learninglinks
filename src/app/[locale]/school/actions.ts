@@ -8,7 +8,7 @@ import { getDb } from "@/lib/db";
 import { chooseMethod } from "@/lib/payments/config";
 import { parseJobForm, type JobFieldErrors } from "@/lib/jobs/input";
 import { closeJob, createJob, JobFailure, type JobManageError } from "@/lib/jobs/manage";
-import { addCampusAndClaim, OrgFailure, submitClaim, type ClaimInput, type NewCampusInput, type OrgError } from "@/lib/orgs/service";
+import { addCampusAndClaim, OrgFailure, setCampusBilingual, submitClaim, type ClaimInput, type NewCampusInput, type OrgError } from "@/lib/orgs/service";
 import { allow } from "@/lib/rate-limit";
 import type { CheckoutResult } from "../family/actions";
 
@@ -47,6 +47,19 @@ export async function claimCampusAction(p: { organizationId: string; claim: Clai
     console.error("claim failed", err);
     return { ok: false, error: "server" };
   }
+}
+
+/** A campus member turns the "Bilingual" badge on or off. Form action: organizationId and value ("true"/"false"). */
+export async function setBilingualAction(fd: FormData): Promise<void> {
+  const user = await getCurrentUser();
+  const id = fd.get("organizationId");
+  if (!user || user.accountType !== "school" || typeof id !== "string") return;
+  try {
+    await setCampusBilingual(getDb(), user.id, id, fd.get("value") === "true");
+  } catch (err) {
+    if (!(err instanceof OrgFailure)) console.error("set bilingual failed", err);
+  }
+  revalidatePath("/", "layout");
 }
 
 export async function addCampusAction(p: { campus: NewCampusInput; acknowledged: boolean }): Promise<ClaimResult> {

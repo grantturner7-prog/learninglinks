@@ -50,6 +50,13 @@
       "when": 1794987400021,
       "tag": "0006_step6_school_ownership",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795390905770,
+      "tag": "0007_step7_bilingual_flag",
+      "breakpoints": true
     }
   ]
 }

@@ -5,6 +5,7 @@ import { getDb } from "@/lib/db";
 import { areaLabel } from "@/lib/geo-labels";
 import { isCityKey } from "@/lib/geo/taiwan";
 import { geoOptions } from "@/lib/geo-options";
+import { setBilingualAction } from "../actions";
 import { isSchoolGroup, listMyCampuses, listMyOpenClaims, SCHOOL_GROUPS, searchOrganizations } from "@/lib/orgs/service";
 import { Link } from "@/i18n/navigation";
 
@@ -41,6 +42,7 @@ export default async function CampusesPage({ params, searchParams }: Props) {
   const f = await getFormatter();
   const [campuses, claims, hits] = await Promise.all([listMyCampuses(db, user.id), listMyOpenClaims(db, user.id), q.length >= 2 || (q.length === 0 && browsing) ? searchOrganizations(db, q, { city, group: kind }, SHOW + 1) : Promise.resolve([])]);
   const tt = await getTranslations("taxonomy.schoolTypes");
+  const tb = await getTranslations("school.bilingual");
   const day = (d: Date) => f.dateTime(d, { dateStyle: "medium" });
 
   return (
@@ -53,7 +55,14 @@ export default async function CampusesPage({ params, searchParams }: Props) {
           <div key={c.id} className="card flex flex-wrap items-center gap-3">
             <div className="flex-1">
               <h2 className="text-lg font-extrabold">{c.name}</h2>
-              <p className="text-sm text-ink-600">{tt(c.type as "other")} · {areaLabel(c.city, c.district ? [c.district] : [], locale)}</p>
+              <p className="text-sm text-ink-600">{tt(c.type as "other")} · {areaLabel(c.city, c.district ? [c.district] : [], locale)}{c.bilingual ? <> · <span className="badge" data-testid="bilingual-badge">{tb("badge")}</span></> : null}</p>
+              {c.suspended ? null : (
+                <form action={setBilingualAction} className="mt-1">
+                  <input type="hidden" name="organizationId" value={c.id} />
+                  <input type="hidden" name="value" value={String(!c.bilingual)} />
+                  <button type="submit" className="link text-sm font-bold" data-testid="bilingual-toggle">{c.bilingual ? tb("turnOff") : tb("turnOn")}</button>
+                </form>
+              )}
               {c.suspended ? <p className="notice-error mt-2 text-sm">{t("suspendedNote")}</p> : null}
               <p className="mt-1 text-sm font-semibold">{c.suspended ? <span className="badge-warn">{t("suspended")}</span> : c.membership.active ? <span className="badge">{t("active", { date: day(c.membership.endsAt!) })}</span> : c.membership.endsAt ? <span className="badge-warn">{t("expired", { date: day(c.membership.endsAt) })}</span> : <span className="badge-muted">{t("inactive")}</span>}</p>
             </div>
@@ -98,7 +107,7 @@ export default async function CampusesPage({ params, searchParams }: Props) {
                 <li key={h.id} className="flex flex-wrap items-center gap-3 rounded-2xl bg-brand-50 p-4">
                   <div className="flex-1">
                     <p className="font-extrabold">{h.name}</p>
-                    <p className="text-sm text-ink-600">{h.ownership ? <><span className="badge-muted">{t(h.ownership === "public" ? "ownershipPublic" : "ownershipPrivate")}</span>{" "}</> : null}{tt(h.type as "other")} · {areaLabel(h.city, h.district ? [h.district] : [], locale)}</p>
+                    <p className="text-sm text-ink-600">{h.ownership ? <><span className="badge-muted">{t(h.ownership === "public" ? "ownershipPublic" : "ownershipPrivate")}</span>{" "}</> : null}{tt(h.type as "other")} · {areaLabel(h.city, h.district ? [h.district] : [], locale)}{h.bilingual && h.type !== "bilingual_school" ? <> · <span className="badge">{tb("badge")}</span></> : null}</p>
                   </div>
                   {h.status === "unclaimed" ? <Link href={`/school/claim/${h.id}` as "/school/claim/[orgId]"} className="btn btn-primary">{t("claimIt")}</Link> : <span className="badge-muted">{t("taken")}</span>}
                 </li>

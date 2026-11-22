@@ -8,7 +8,7 @@ function navItems() {
   if (m.type === "educator") return [["dashboard", T("Dashboard", "儀表板")], ["profile", T("My profile", "我的檔案")], ["jobs", T("Job posts", "職缺")]];
   return [["admin", "Admin desk"]];
 }
-const GROUP = { addschool: "campuses", join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
+const GROUP = { claim: "campuses", addschool: "campuses", join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
 function shell(inner) {
   const cur = GROUP[st.view] || st.view;
   return `<div class="demo"><div class="wrap"><b>${T("DEMO", "示範")}</b><span>${T("Pretend people and data. Nothing is saved on a server and no money moves.", "虛構的人物與資料。沒有任何資料存到伺服器，也沒有任何款項移動。")}</span>
@@ -100,9 +100,12 @@ const A = {
   addBack: () => { st.form.step = (st.form.step || 2) - 1; render(true); },
   addSchool: () => {
     const f = st.form; const s = { id: uid("c"), name: f.name.trim(), kind: f.kind, ownership: null, city: f.city, district: f.district || null, custom: true };
-    st.custom.push(s); st.owners[s.id] = pid(); save(); toast(T("School added and claimed. (The real site asks an administrator to approve it first.)", "已新增並認領學校。（真實網站會先由管理員審核。）")); go("campuses");
+    st.custom.push(s); st.owners[s.id] = pid(); if (f.bil) st.bil[s.id] = true; save(); toast(T("School added and claimed. (The real site asks an administrator to approve it first.)", "已新增並認領學校。（真實網站會先由管理員審核。）")); go("campuses");
   },
-  claim: (el) => { st.owners[el.dataset.v] = pid(); save(); toast(T("Campus claimed. (The real site asks an administrator to approve this.)", "已認領校區。（真實網站會由管理員審核。）")); render(false); },
+  claimStart: (el) => { go("claim", { id: el.dataset.v }); },
+  claimBack: () => go("campuses"),
+  claimSend: () => { const id = st.args.id; st.owners[id] = pid(); if (st.form.bil) st.bil[id] = true; save(); toast(T("Campus claimed. (The real site asks an administrator to approve this.)", "已認領校區。（真實網站會由管理員審核。）")); go("campuses"); },
+  toggleBil: (el) => { const id = el.dataset.v; if (st.bil[id]) delete st.bil[id]; else st.bil[id] = true; save(); render(false); },
   jobPublish: () => {
     const f = st.form; const paid = ownedCampuses(pid()).filter((s) => campusActive(pid(), s.id));
     st.jobs.push({ id: uid("j"), mine: true, schoolId: f.campus || paid[0].id, title: f.title.trim(), type: f.jtype || "full_time", subject: f.subject || "english-conversation", desc: f.desc.trim(), contact: f.contact.trim(), status: "open" });

@@ -23,7 +23,8 @@ export type OrgError =
   | "invalid_city"
   | "invalid_district"
   | "claim_not_pending"
-  | "not_a_member";
+  | "not_a_member"
+  | "not_yours";
 
 export class OrgFailure extends Error {
   constructor(public code: OrgError) {
@@ -41,6 +42,8 @@ export interface OrgSearchHit {
   type: string;
   /** Government or private, from the Ministry of Education lists. Null when unknown. */
   ownership: "public" | "private" | null;
+  /** The school says it teaches bilingually (its own statement, not checked). */
+  bilingual: boolean;
   city: string | null;
   district: string | null;
   status: "unclaimed" | "claimed" | "suspended";
@@ -55,7 +58,7 @@ const groupWhere = (g: SchoolGroup) =>
   g === "public" ? eq(organizations.ownership, "public")
   : g === "private" ? eq(organizations.ownership, "private")
   : g === "university" ? eq(organizations.type, "university")
-  : g === "international" ? inArray(organizations.type, ["international_school", "bilingual_school"])
+  : g === "international" ? sql`(${inArray(organizations.type, ["international_school", "bilingual_school"])} or ${organizations.bilingual} = true)`
   : g === "kindergarten" ? eq(organizations.type, "kindergarten")
   : inArray(organizations.type, ["cram_school", "language_school"]);
 
@@ -76,7 +79,7 @@ export async function searchOrganizations(db: Db, q: string, f: { city?: string;
   if (f.city) where.push(eq(organizations.city, f.city));
   if (f.group) where.push(groupWhere(f.group));
   return db
-    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, ownership: organizations.ownership, city: organizations.city, district: organizations.district, status: organizations.status })
+    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, ownership: organizations.ownership, bilingual: organizations.bilingual, city: organizations.city, district: organizations.district, status: organizations.status })
     .from(organizations)
     .where(and(...where))
     // Free listings first, then those the Ministry's lists confirmed (they say government or private), then by name.
@@ -89,6 +92,8 @@ export interface ClaimInput {
   contactRole: string;
   contactPhone: string;
   note?: string;
+  /** "We teach bilingually or run English-immersion classes." Applied to the campus only when the claim is approved. */
+  bilingual?: boolean;
 }
 
 function cleanClaim(i: ClaimInput) {
@@ -99,7 +104,7 @@ function cleanClaim(i: ClaimInput) {
   if (contactRole.length < 2 || contactRole.length > 80) throw new OrgFailure("invalid_role");
   // Taiwan numbers are 8-10 digits (landline with area code or mobile), optionally with +886.
   if (!/^\+?\d{8,14}$/.test(contactPhone)) throw new OrgFailure("invalid_phone");
-  return { contactName, contactRole, contactPhone, note: i.note?.trim().slice(0, 500) || null };
+  return { contactName, contactRole, contactPhone, note: i.note?.trim().slice(0, 500) || null, bilingual: i.bilingual === true };
 }
 
 async function assertClaimRoom(db: Db | Tx, userId: string): Promise<void> {
@@ -179,6 +184,8 @@ export interface PendingClaim {
   contactRole: string;
   contactPhone: string;
   note: string | null;
+  /** The claimant ticked "we teach bilingually". */
+  bilingual: boolean;
   userEmail: string;
   organization: { id: string; name: string; type: string; city: string | null; district: string | null; source: string; website: string | null };
   /** Other claims waiting on the same campus (a reviewer should know there is a competing claim). */
@@ -202,6 +209,7 @@ export async function listPendingClaims(db: Db): Promise<PendingClaim[]> {
     contactRole: claim.contactRole,
     contactPhone: claim.contactPhone,
     note: claim.note,
+    bilingual: claim.bilingual,
     userEmail: email,
     organization: { id: org.id, name: org.name, type: org.type, city: org.city, district: org.district, source: org.source, website: org.website },
     competing: rows.filter((r) => r.claim.organizationId === claim.organizationId && r.claim.id !== claim.id).length,
@@ -221,7 +229,7 @@ export async function approveClaim(db: Db, claimId: string, adminUserId: string,
     if (!org) throw new OrgFailure("not_found");
     if (org.status !== "unclaimed") throw new OrgFailure("already_claimed");
     const [claimant] = await tx.select({ email: schema.user.email }).from(schema.user).where(eq(schema.user.id, claim.userId)).limit(1);
-    await tx.update(organizations).set({ status: "claimed", claimedAt: now, contactEmail: claimant?.email ?? null, contactPhone: claim.contactPhone }).where(eq(organizations.id, org.id));
+    await tx.update(organizations).set({ status: "claimed", claimedAt: now, contactEmail: claimant?.email ?? null, contactPhone: claim.contactPhone, bilingual: claim.bilingual || org.bilingual }).where(eq(organizations.id, org.id));
     await tx.insert(orgMembers).values({ organizationId: org.id, userId: claim.userId, role: "owner" }).onConflictDoNothing();
     await tx.update(orgClaims).set({ status: "approved", reviewedBy: adminUserId, reviewedAt: now }).where(eq(orgClaims.id, claim.id));
     await tx
@@ -247,6 +255,8 @@ export interface MyCampus {
   city: string | null;
   district: string | null;
   role: "owner" | "member";
+  /** The school says it teaches bilingually. */
+  bilingual: boolean;
   /** True while an admin has suspended the campus after a report. It cannot post, browse or be paid for. */
   suspended: boolean;
   membership: HolderMembership;
@@ -255,7 +265,7 @@ export interface MyCampus {
 /** The campuses this school user belongs to, each with where its own 12 months stand. */
 export async function listMyCampuses(db: Db, userId: string, now: Date = new Date()): Promise<MyCampus[]> {
   const rows = await db
-    .select({ id: organizations.id, name: organizations.name, type: organizations.type, city: organizations.city, district: organizations.district, role: orgMembers.role, status: organizations.status })
+    .select({ id: organizations.id, name: organizations.name, type: organizations.type, bilingual: organizations.bilingual, city: organizations.city, district: organizations.district, role: orgMembers.role, status: organizations.status })
     .from(orgMembers)
     .innerJoin(organizations, eq(orgMembers.organizationId, organizations.id))
     .where(and(eq(orgMembers.userId, userId), inArray(organizations.status, ["claimed", "suspended"])))
@@ -283,6 +293,19 @@ export async function listMyOpenClaims(db: Db, userId: string): Promise<MyClaim[
 }
 
 /** True when the user is a member of this campus. Used by every school-side action. */
+/**
+ * A campus member says (or stops saying) that the school teaches bilingually. Only members of an approved campus can,
+ * so nobody can tag a school they do not belong to. It is the school's own statement: we do not check it. Logged.
+ */
+export async function setCampusBilingual(db: Db, userId: string, organizationId: string, value: boolean): Promise<void> {
+  if (!(await isOrgMember(db, userId, organizationId))) throw new OrgFailure("not_yours");
+  await db.transaction(async (tx) => {
+    const res = await tx.update(organizations).set({ bilingual: value }).where(and(eq(organizations.id, organizationId), inArray(organizations.status, ["claimed"]))).returning({ id: organizations.id });
+    if (res.length === 0) throw new OrgFailure("not_found");
+    await tx.insert(auditLog).values({ actorUserId: userId, action: "campus.bilingual_set", entityType: "organization", entityId: organizationId, meta: { value } });
+  });
+}
+
 export async function isOrgMember(db: Db, userId: string, organizationId: string): Promise<boolean> {
   if (!/^[0-9a-f-]{36}$/i.test(organizationId)) return false;
   const [m] = await db.select({ u: orgMembers.userId }).from(orgMembers).where(and(eq(orgMembers.userId, userId), eq(orgMembers.organizationId, organizationId))).limit(1);

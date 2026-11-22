@@ -13,7 +13,7 @@ const fresh = () => ({
   lang: "en", role: "visitor", view: "home", args: {}, form: {}, people: {}, orders: [], memberships: [], owners: {},
   jobs: JSON.parse(JSON.stringify(SEED_JOBS)), reveals: [], reports: [], suspended: {}, removedJobs: {}, myProfile: null,
   payReview: [{ id: "r1", ref: "LL-7K3Q-9FXD", note: "ECPay reported NT$1,000 for an order of NT$2,000. The site did not start a membership.", done: false }],
-  seq: 1, toast: "", custom: [],
+  seq: 1, toast: "", custom: [], bil: {},
 });
 let st = fresh();
 try { const raw = localStorage.getItem(KEY); if (raw) st = Object.assign(fresh(), JSON.parse(raw)); } catch (e) { /* storage may be blocked: the demo still works, it just forgets on reload */ }
@@ -32,6 +32,11 @@ const pid = () => (me() ? me().id : null);
 const familyActive = (p) => st.memberships.some((m) => m.holder === p && m.kind === "family" && m.end > TODAY);
 /** Any school in the demo: the pretend ones, the Ministry's lists, or one the visitor added. */
 const schoolById = (id) => SCHOOLS.find((s) => s.id === id) || REAL_BY_ID.get(id) || st.custom.find((s) => s.id === id) || null;
+/** The school's own statement that it teaches bilingually (or its kind says so). Not checked by anyone. */
+const isBil = (s) => s.kind === "bilingual_school" || !!st.bil[s.id];
+/** The tick box: optional, the school's own words, never checked by us. */
+const bilTick = () => `<label class="ack" style="margin-top:14px"><input type="checkbox" id="f-bil" data-f="bil" data-r="1" ${st.form.bil ? "checked" : ""}><span><b>${T("We teach bilingually or run English-immersion classes", "我們提供雙語教學或英語沉浸式課程")}</b><br><span class="small muted" style="font-weight:500">${T("Optional. If you tick this, your listing shows a “Bilingual” badge and appears under International and bilingual schools. It is your own description and we do not check it. You can change it later on your campuses page.", "選填。勾選後，您的學校會顯示「雙語」標章，並列入「國際與雙語學校」。這是學校自行說明的內容，我們不會查證。之後可在「您的校區」頁面更改。")}</span></span></label>`;
+const bilBadge = (s) => (st.bil[s.id] && s.kind !== "bilingual_school" ? ` <span class="badge" data-testid="bilingual-badge">${T("Bilingual", "雙語")}</span>` : "");
 const ownedCampuses = (p) => Object.keys(st.owners).filter((id) => st.owners[id] === p).map(schoolById).filter(Boolean);
 const campusActive = (p, sid) => st.memberships.some((m) => m.holder === p && m.kind === "campus" && m.schoolId === sid && m.end > TODAY);
 const paidCampusIds = (p) => ownedCampuses(p).filter((s) => campusActive(p, s.id)).map((s) => s.id);
