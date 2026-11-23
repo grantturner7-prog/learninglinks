@@ -51,8 +51,14 @@ export async function submitReport(db: Db, user: { id: string; accountType: Acco
       const [j] = await db.select({ id: jobs.id }).from(jobs).where(and(eq(jobs.id, input.targetId), eq(jobs.status, "open"), jobIsLive(now))).limit(1);
       if (!j) throw new ModerationFailure("not_found");
     } else {
-      const [o] = await db.select({ id: organizations.id }).from(organizations).where(and(eq(organizations.id, input.targetId), eq(organizations.status, "claimed"))).limit(1);
-      if (!o) throw new ModerationFailure("not_found");
+      // A school someone runs (claimed) can be reported for anything. A school nobody has claimed yet has only one
+      // thing of ours to complain about: the picture we show for it. A picture report always needs a picture.
+      const [o] = await db.select({ id: organizations.id, status: organizations.status }).from(organizations).where(eq(organizations.id, input.targetId)).limit(1);
+      if (!o || o.status === "suspended") throw new ModerationFailure("not_found");
+      if (input.reason === "picture") {
+        const [ph] = await db.select({ id: schema.organizationPhotos.organizationId }).from(schema.organizationPhotos).where(eq(schema.organizationPhotos.organizationId, input.targetId)).limit(1);
+        if (!ph) throw new ModerationFailure("not_found");
+      } else if (o.status !== "claimed") throw new ModerationFailure("not_found");
     }
   }
 

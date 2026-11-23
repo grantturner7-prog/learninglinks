@@ -116,6 +116,8 @@ export interface SchoolDetail {
   address: string | null;
   ownership: "public" | "private" | null;
   bilingual: boolean;
+  /** Someone runs this listing (the school has joined). Decides what can be reported about it. */
+  claimed: boolean;
   /** A picture of the establishment, with the credit its licence requires. Null: no picture yet. */
   photo: SchoolPhotoView | null;
   jobs: JobDto[];
@@ -141,15 +143,17 @@ export interface SchoolPhotoView {
 export async function getSchoolWithJobs(db: Db, viewer: JobViewer | null, id: string, now: Date = new Date()): Promise<SchoolDetail | null> {
   if (!canSeeJobs(viewer) || !/^[0-9a-f-]{36}$/i.test(id)) return null;
   const [org] = await db
-    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, bilingual: organizations.bilingual, city: organizations.city, district: organizations.district, address: organizations.address, ownership: organizations.ownership, website: organizations.website })
+    .select({ id: organizations.id, name: organizations.name, nameEn: organizations.nameEn, type: organizations.type, bilingual: organizations.bilingual, city: organizations.city, district: organizations.district, address: organizations.address, ownership: organizations.ownership, status: organizations.status, website: organizations.website })
     .from(organizations)
     .where(and(eq(organizations.id, id), ne(organizations.status, "suspended")))
     .limit(1);
   if (!org) return null;
   const rows = await db.select().from(jobs).where(and(eq(jobs.organizationId, id), eq(jobs.status, "open"), jobIsLive(now))).orderBy(desc(jobs.createdAt));
   const [ph] = await db.select().from(schema.organizationPhotos).where(eq(schema.organizationPhotos.organizationId, id)).limit(1);
+  const { status, ...facts } = org;
   return {
-    ...org,
+    ...facts,
+    claimed: status === "claimed",
     photo: ph ? { version: ph.photoKey.slice(0, 8), width: ph.width, height: ph.height, source: ph.source, author: ph.author, licence: ph.licence, licenceUrl: ph.licenceUrl, sourceUrl: ph.sourceUrl } : null,
     jobs: rows.map((job) => ({
       id: job.id, title: job.title, type: job.type, description: job.description, subjects: job.subjects, levels: job.levels,

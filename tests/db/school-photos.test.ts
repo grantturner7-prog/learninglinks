@@ -7,6 +7,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { Db } from "@/lib/db";
 import { schema } from "@/lib/db";
 import { getJobViewer, getSchoolWithJobs } from "@/lib/jobs/service";
+import { ModerationFailure, submitReport } from "@/lib/moderation/service";
 import { getSchoolPhotoKey, removeSchoolPhoto, setSchoolPhoto, type SchoolPhotoCredit } from "@/lib/orgs/photos";
 import { processSchoolPhoto, readSchoolPhoto } from "@/lib/uploads/school-photos";
 import { TEST_DB_URL, closeTestDb, makeUser, openTestDb, resetTestDb } from "./helpers";
@@ -117,5 +118,53 @@ describe.skipIf(!TEST_DB_URL)("school pictures (real Postgres)", () => {
   it("a school with no published address shows none (only its area is known)", async () => {
     const s = await school({ address: null, source: "gov_open_data" });
     expect((await getSchoolWithJobs(db, await educatorWithProfile(), s.id))!.address).toBeNull();
+  });
+
+  describe("reporting a school's picture", () => {
+    const code = async (p: Promise<unknown>) => p.then(() => "ok", (e: unknown) => (e instanceof ModerationFailure ? e.code : `threw ${String(e)}`));
+    async function educatorUser() {
+      const u = await makeUser(db, "educator", "Rep");
+      await db.insert(schema.educatorProfiles).values({ userId: u.id, displayName: "Rep", status: "published", publishedAt: new Date(), openTo: ["full_time"], city: "taichung", districts: [], subjects: ["phonics"], levels: ["elementary"], languages: ["en"], teachingModes: ["in_person"], workAuthorization: "open_work_rights" });
+      return u;
+    }
+
+    it("a school nobody has claimed can be reported for its picture, and for nothing else", async () => {
+      const s = await school(); // unclaimed
+      const u = await educatorUser();
+      await setSchoolPhoto(db, s.id, await picture(), credit, "system:test");
+      expect(await code(submitReport(db, u, { targetType: "organization", targetId: s.id, reason: "picture" }))).toBe("ok");
+      expect(await code(submitReport(db, u, { targetType: "organization", targetId: s.id, reason: "misleading" }))).toBe("not_found");
+      const [rep] = await db.select().from(schema.reports);
+      expect(rep).toMatchObject({ reason: "picture", status: "open", targetId: s.id });
+      expect((await getSchoolWithJobs(db, await getJobViewer(db, u), s.id))!.claimed).toBe(false);
+    });
+
+    it("a picture report needs a picture", async () => {
+      const s = await school();
+      const u = await educatorUser();
+      expect(await code(submitReport(db, u, { targetType: "organization", targetId: s.id, reason: "picture" }))).toBe("not_found");
+      expect(await db.select().from(schema.reports)).toHaveLength(0);
+    });
+
+    it("a school that has joined can be reported for anything, including its picture", async () => {
+      const s = await school({ status: "claimed", claimedAt: new Date() });
+      const u = await educatorUser();
+      await setSchoolPhoto(db, s.id, await picture(), credit, "system:test");
+      expect(await code(submitReport(db, u, { targetType: "organization", targetId: s.id, reason: "misleading" }))).toBe("ok");
+      const u2 = await educatorUser();
+      expect(await code(submitReport(db, u2, { targetType: "organization", targetId: s.id, reason: "picture" }))).toBe("ok");
+      expect((await getSchoolWithJobs(db, await getJobViewer(db, u), s.id))!.claimed).toBe(true);
+    });
+
+    it("only people who can see the school card may report: not families, not educators without a profile, never a suspended school", async () => {
+      const s = await school();
+      await setSchoolPhoto(db, s.id, await picture(), credit, "system:test");
+      expect(await code(submitReport(db, await makeUser(db, "family"), { targetType: "organization", targetId: s.id, reason: "picture" }))).toBe("not_allowed");
+      expect(await code(submitReport(db, await makeUser(db, "educator", "NoProfile"), { targetType: "organization", targetId: s.id, reason: "picture" }))).toBe("not_allowed");
+      await db.update(schema.organizations).set({ status: "suspended" }).where(eq(schema.organizations.id, s.id));
+      expect(await code(submitReport(db, await educatorUser(), { targetType: "organization", targetId: s.id, reason: "picture" }))).toBe("not_found");
+      // "picture" is not a reason for an educator or a job post
+      expect(await code(submitReport(db, await educatorUser(), { targetType: "job", targetId: s.id, reason: "picture" }))).toBe("invalid_reason");
+    });
   });
 });

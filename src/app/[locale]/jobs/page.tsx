@@ -74,6 +74,14 @@ export default async function JobsPage({ params, searchParams }: Props) {
     const qs = q.toString();
     return `/jobs${qs ? `?${qs}` : ""}`;
   })();
+  // What can be reported about the chosen school: anything once the school has joined; before that only the picture we
+  // show for it (if there is one). A school with nothing reportable gets no report button.
+  let schoolReport: React.ReactNode = null;
+  if (school) {
+    const all = await getReportLabels("organization");
+    const reasons = all.reasons.filter((r) => (r.key === "picture" ? !!school.photo : school.claimed));
+    if (reasons.length > 0) schoolReport = <ReportButton targetType="organization" targetId={school.id} labels={{ ...all, reasons }} />;
+  }
   const tc = await getTranslations("common");
   const f = await getFormatter();
   const pages = Math.max(1, Math.ceil(result.total / result.pageSize));
@@ -107,7 +115,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
             <Link href={toggleJobsHref} className="link">{withJobs ? `${tm("onlyJobs")} ✓` : tm("onlyJobs")}</Link>
           </div>
           {school ? (
-            <SchoolCard school={school} locale={locale} closeHref={viewHref("map")} actions={<ReportButton targetType="organization" targetId={school.id} labels={await getReportLabels("organization")} />}>
+            <SchoolCard school={school} locale={locale} closeHref={viewHref("map")} actions={schoolReport}>
               {school.jobs.length === 0 ? <p className="text-ink-600">{tm("noJobsAtSchool")}</p> : (
                 <>
                   <h3 className="font-bold">{tm("schoolOpen")}</h3>
