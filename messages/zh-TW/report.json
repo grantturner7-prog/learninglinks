@@ -12,6 +12,7 @@
     "payment_or_documents": "要求付款、收費或個人證件",
     "discriminatory": "有歧視內容",
     "substitute_work": "提供代課或臨時代班",
+    "picture": "照片不正確或有人物入鏡",
     "other": "其他"
   },
   "detailsLabel": "發生了什麼事？（選填，最多 500 字）",

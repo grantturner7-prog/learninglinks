@@ -40,6 +40,31 @@ Limits, honestly:
 
 Browsing: "Find your school" can list every government school, private school, university, international or bilingual school, kindergarten or cram school, filtered by city, without typing a name.
 
+## School addresses
+
+The Ministry's lists publish each school's own address, and the importer keeps it (owner decision, 23 Nov 2026) so an educator who taps a school sees where it is. These are schools and kindergartens on a public directory, not homes. **Phone numbers and staff names are never kept**: a school enters its own contact details when it joins. Run `npm run db:import-moe` again to fill addresses in for schools loaded before this change. An address a claimed school entered itself is never overwritten. Pins do not move to the address (we do not look addresses up on a map): schools from the map data keep their real position, Ministry-only schools sit inside their district.
+
+Cram schools are different: their importer still keeps the district only, because a small cram school can be run from someone's home.
+
+## School pictures
+
+When an educator taps a school, the card shows a picture of the establishment. The owner's rule: **the building, gate or grounds only, never people**, and only pictures we are allowed to reuse.
+
+**Where pictures come from.** Wikimedia Commons, found through Wikidata's list of Taiwan's schools. Only public-domain, CC0, CC BY and CC BY-SA pictures are used, and the credit each licence requires (photographer, licence, link) is stored and shown under the picture. We never copy pictures from search engines, school websites or social media: those belong to someone.
+
+**How much there is.** Not much: about 600 of Taiwan's 11,000-odd schools have a picture linked there directly, and about 300 more have a folder of pictures. They are mostly universities and high schools; almost no kindergartens. Every other school shows a "No picture yet" tile until the school adds its own.
+
+**How a picture gets in.**
+1. `python3 scripts/research/find-school-photos.py out-dir` lists the candidates with licence and author and downloads a 960px copy of each. Commons allows an anonymous program only about one picture a minute, so this takes hours; it saves as it goes and can be stopped and run again (`--no-download` writes the list for what has arrived so far; `--with-folders` also looks in photo folders).
+2. `python3 scripts/research/screen-school-photos.py out-dir` runs an automatic people detector as a safety net and makes numbered contact sheets.
+3. **A person looks at every picture.** Left out: any picture with a person in it (however small), anything that is not the school from outside (a logo, a map, a classroom, an event), and anything doubtful.
+4. The pictures that pass go into `data/school-photos.json`, each with the fingerprint (SHA-256) of the exact file that was looked at.
+5. `npm run db:import-school-photos` (on the server, after the school imports) downloads each reviewed picture again, **refuses any file whose fingerprint differs** from the reviewed one, strips its hidden details, and attaches it to its school. Matching is strict (same name, and the same city or a position within a few hundred metres); a picture that could belong to two schools is left out. Use `--dry-run` first. Re-running is safe.
+
+**Taking a picture down.** An educator can report a school with the reason "The picture is wrong or shows people". On the admin desk the report shows the picture with a **Remove the picture** button. The school stays listed. A school can also simply ask.
+
+**For your lawyer.** CC BY-SA asks for credit and a link to the licence (shown under each picture) and applies "share alike" to adapted versions; we show the picture unchanged apart from resizing. The question is in the brief.
+
 ## What is already loaded
 
 About 5,480 schools (kindergartens, elementary to senior high, universities, language and international schools) came from the old site's dataset (run this first, then the Ministry import above), which was originally built from OpenStreetMap. They have exact coordinates and no contact details. `npm run db:import-schools` loads them.

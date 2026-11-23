@@ -64,6 +64,13 @@
       "when": 1795412389514,
       "tag": "0008_step8_refunds",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795419848542,
+      "tag": "0009_step9_school_photos",
+      "breakpoints": true
     }
   ]
 }

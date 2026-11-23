@@ -1,0 +1,94 @@
+{
+ "about": "School pictures that a person has looked at: each shows the establishment only, with no people anywhere in it, under a licence that allows reuse. Loaded by `npm run db:import-school-photos`. See docs/LAUNCH_DATA.md.",
+ "rule": "Strict reading of the owner's rule (23 Nov 2026): no person anywhere in the picture, however small, and no posters showing people. Anything doubtful is left out.",
+ "reviewedOn": "2026-11-23",
+ "entries": [
+  {
+   "wikidata": "Q10927124",
+   "zh": "臺中市立清水高級中學",
+   "lat": 24.2682,
+   "lng": 120.575,
+   "file": "File:台中市立清水高中校門2.jpg",
+   "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/%E5%8F%B0%E4%B8%AD%E5%B8%82%E7%AB%8B%E6%B8%85%E6%B0%B4%E9%AB%98%E4%B8%AD%E6%A0%A1%E9%96%802.jpg/960px-%E5%8F%B0%E4%B8%AD%E5%B8%82%E7%AB%8B%E6%B8%85%E6%B0%B4%E9%AB%98%E4%B8%AD%E6%A0%A1%E9%96%802.jpg",
+   "pageUrl": "https://commons.wikimedia.org/wiki/File:%E5%8F%B0%E4%B8%AD%E5%B8%82%E7%AB%8B%E6%B8%85%E6%B0%B4%E9%AB%98%E4%B8%AD%E6%A0%A1%E9%96%802.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Putinliu",
+   "sha256": "9b0b4e922af6aee10dcadd59edf490229f83f4d99a17673adb0514e404919dce"
+  }
+ ],
+ "leftOut": [
+  {
+   "wikidata": "Q10927159",
+   "zh": "臺中市立文華高級中學",
+   "file": "File:WHSH front door.jpg",
+   "why": "people at the entrance and a rider"
+  },
+  {
+   "wikidata": "Q10927162",
+   "zh": "國立臺中科技大學",
+   "file": "File:National Taichung University of Science and Technology front gate.jpg",
+   "why": "a rider and people walking"
+  },
+  {
+   "wikidata": "Q10927166",
+   "zh": "臺中市立臺中家事商業高級中等學校",
+   "file": "File:National Taichung Home Economics and Commercial High School.jpg",
+   "why": "a banner printed with students' photos"
+  },
+  {
+   "wikidata": "Q10927167",
+   "zh": "臺中市立臺中工業高級中等學校",
+   "file": "File:台中高工校門.JPG",
+   "why": "a driver visible in a truck"
+  },
+  {
+   "wikidata": "Q10927165",
+   "zh": "臺中市立臺中第二高級中學",
+   "file": "File:國立台中二中.jpg",
+   "why": "students visible behind the gate"
+  },
+  {
+   "wikidata": "Q6978817",
+   "zh": "臺中市立臺中第一高級中學",
+   "file": "File:Taichung First Senior High School front gate 20070813a.jpg",
+   "why": "students walking through the gate"
+  },
+  {
+   "wikidata": "Q10938255",
+   "zh": "臺中市立大里高級中學",
+   "file": "File:台中市立大里高中.jpg",
+   "why": "a banner printed with people's photos"
+  },
+  {
+   "wikidata": "Q15907403",
+   "zh": "光華學校財團法人臺中市光華高級工業職業學校",
+   "file": "File:台中光華高工.jpg",
+   "why": "a person by the cars and a rider"
+  },
+  {
+   "wikidata": "Q15907583",
+   "zh": "臺中市私立青年高級中學",
+   "file": "File:Youth senior High School in Dali, Taichung.JPG",
+   "why": "a crowd at the entrance"
+  },
+  {
+   "wikidata": "Q15907671",
+   "zh": "臺中市立忠明高級中學",
+   "file": "File:臺中市立忠明高中.jpg",
+   "why": "a small figure at the left edge"
+  },
+  {
+   "wikidata": "Q15907808",
+   "zh": "臺中市立新社高級中學",
+   "file": "File:新社高中靜思樓.JPG",
+   "why": "people under the arch"
+  },
+  {
+   "wikidata": "Q15907923",
+   "zh": "臺中市立雙十國民中學",
+   "file": "File:台中市立雙十國民中學-遠拍.jpg",
+   "why": "two people walking"
+  }
+ ]
+}

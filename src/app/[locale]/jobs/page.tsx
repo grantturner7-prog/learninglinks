@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { getCurrentUser, requireUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
+import { SchoolCard } from "@/components/jobs/school-card";
 import { SchoolMapPanel } from "@/components/jobs/school-map-panel";
 import { getJobViewer, getSchoolWithJobs, listOpenJobs, type JobDto } from "@/lib/jobs/service";
 import { getMapLabels } from "@/lib/map-labels";
@@ -74,7 +75,6 @@ export default async function JobsPage({ params, searchParams }: Props) {
     return `/jobs${qs ? `?${qs}` : ""}`;
   })();
   const tc = await getTranslations("common");
-  const tt = await getTranslations("taxonomy");
   const f = await getFormatter();
   const pages = Math.max(1, Math.ceil(result.total / result.pageSize));
   const href = (p: number) => {
@@ -107,23 +107,14 @@ export default async function JobsPage({ params, searchParams }: Props) {
             <Link href={toggleJobsHref} className="link">{withJobs ? `${tm("onlyJobs")} ✓` : tm("onlyJobs")}</Link>
           </div>
           {school ? (
-            <div className="card mt-4 flex flex-col gap-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <span className="badge">{tm("selected")}</span>
-                  <h2 className="mt-1 text-xl font-bold">{school.name}</h2>
-                  <p className="text-sm text-ink-600">{tt(`schoolTypes.${school.type as "cram_school"}`)}{school.city ? ` · ${cityLabel(school.city, locale)}` : ""}</p>
-                </div>
-                <Link href={viewHref("map")} className="btn btn-ghost">{tm("clearSchool")}</Link>
-              </div>
-              <ReportButton targetType="organization" targetId={school.id} labels={await getReportLabels("organization")} />
+            <SchoolCard school={school} locale={locale} closeHref={viewHref("map")} actions={<ReportButton targetType="organization" targetId={school.id} labels={await getReportLabels("organization")} />}>
               {school.jobs.length === 0 ? <p className="text-ink-600">{tm("noJobsAtSchool")}</p> : (
                 <>
                   <h3 className="font-bold">{tm("schoolOpen")}</h3>
                   <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">{school.jobs.map((j) => <li key={j.id}><JobCard j={j} locale={locale} reportLabels={reportJobLabels} /></li>)}</ul>
                 </>
               )}
-            </div>
+            </SchoolCard>
           ) : null}
         </section>
       ) : null}

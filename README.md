@@ -37,7 +37,8 @@ Optional data for the maps (development):
 
 ```bash
 npm run db:import-schools -- --file schools.json   # ~5,500 school locations (see the licence note in the script)
-npm run db:import-moe -- --prune                    # Ministry of Education school lists: government and private schools, universities, international schools
+npm run db:import-moe -- --prune                    # Ministry of Education school lists: government and private schools, universities, international schools (with their published addresses)
+npm run db:import-school-photos -- --dry-run        # reviewed school pictures (data/school-photos.json): buildings only, never people; see docs/LAUNCH_DATA.md
 npm run db:seed-demo                               # fictional educators and jobs; never runs in production
 npm run geo:build                                  # regenerate the Taiwan boundary files in public/geo
 ```
@@ -74,7 +75,8 @@ Database integration tests run only when `TEST_DATABASE_URL` points at a throwaw
 | `src/lib/membership/`, `src/lib/reveal/` | 12-month term rules, contact-reveal daily cap |
 | `src/lib/auth/` | Better Auth setup, server-side acknowledgement check |
 | `src/lib/educators/`, `src/lib/consent/` | Profile rules, contact/ID scanner, waiver record |
-| `src/lib/directory/`, `src/lib/jobs/` | Audience-filtered educator queries and map counts; job posts and school pins (educators only) |
+| `src/lib/directory/`, `src/lib/jobs/` | Audience-filtered educator queries and map counts; job posts, school pins and the school card (picture, name, address) for educators only |
+| `data/`, `src/lib/orgs/photos.ts`, `scripts/research/` | School pictures: the reviewed list, storing and taking down a picture, and the research scripts that find candidates |
 | `src/components/map/`, `src/lib/geo/`, `public/geo/` | The self-hosted map: components, country map config, boundary data. `place-names.ts` holds the rules for where names, count bubbles and pins go (pure, unit-tested in `tests/map-names.test.ts`) |
 | `messages/<locale>/*.json` | All copy. `notice.json` is the canonical compliance wording |
 | `src/lib/db/schema/` | Drizzle schema; migrations in `drizzle/` |

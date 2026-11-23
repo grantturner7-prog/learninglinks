@@ -12,6 +12,7 @@
     "payment_or_documents": "Asks for money, a fee or personal documents",
     "discriminatory": "Discriminatory",
     "substitute_work": "Offers substitute or cover work",
+    "picture": "The picture is wrong or shows people",
     "other": "Something else"
   },
   "detailsLabel": "What happened? (optional, up to 500 characters)",

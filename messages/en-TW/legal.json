@@ -179,7 +179,7 @@
           "paragraphs": [
             "You own what you publish, such as your profile text, photo, job posts and report details. You are responsible for it, and you promise that you have the right to publish it, including any photo.",
             "You give us a non-exclusive, royalty-free licence to host, store, resize, reproduce and show that content to the audiences described in these terms, and only to run LearningLinks. The licence ends when you delete the content or your account, except for copies we must keep for the reasons in the [Privacy policy](/legal/privacy). [For lawyer: confirm the licence wording (scope, territory, duration) for content users publish, including photos.]",
-            "We own LearningLinks, including its design, software, name, logo and the guide character “Link”. You may use them only as these terms allow. School names, types and locations on our map come from open data (Ministry of the Interior boundaries and OpenStreetMap contributors), and those sources have their own licences."
+            "We own LearningLinks, including its design, software, name, logo and the guide character “Link”. You may use them only as these terms allow. School names, types, addresses and locations on our map come from open data (Ministry of the Interior boundaries, Ministry of Education school lists and OpenStreetMap contributors), and those sources have their own licences. Pictures of school buildings come from Wikimedia Commons under open licences; each is shown with its photographer and licence, and remains theirs."
           ]
         },
         {
@@ -323,7 +323,7 @@
           ],
           "bullets": [
             "School claims: the name and role of the person claiming a campus, a phone number, an optional note, and the campus claimed. An administrator reviews each claim by hand. An approved campus keeps a private contact email and phone number that only that campus and our administrators can see.",
-            "School details: school name, type, city and district, website and map position. Many schools are listed from public open data (OpenStreetMap contributors and government open data) before anyone claims them. A school added by hand is placed at the centre of its district, not at an address. Only signed-in educators with a profile see schools on the map, and school accounts can search the list by name to find their own campus.",
+            "School details: school name, type, city and district, the school's published address, website, map position and, for some schools, a picture of the school building (never of people). Many schools are listed from public open data (OpenStreetMap contributors and government open data) before anyone claims them. A school added by hand is placed at the centre of its district, not at an address. Only signed-in educators with a profile see schools on the map, and school accounts can search the list by name to find their own campus.",
             "Job posts: title, type, description, subjects, levels, place, pay range, start date and how to apply (which may be an email address, phone number or LINE ID that the school chooses to show).",
             "Contact requests: your account, your campus (for schools), the time and which educator's details you asked to see. Families should not enter any details about their children."
           ]

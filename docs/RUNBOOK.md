@@ -16,6 +16,7 @@ Open `/admin` (English). It has these queues.
 3. **Reports to review.** Read the reason and details, look at what was reported, then:
    - **Hide the profile / Suspend the school / Remove the job post** when it breaks the rules. The affected person is emailed and told how to appeal. Every open report about the same target is closed together.
    - **Dismiss** when there is nothing wrong.
+   - **A report about a school's picture** ("The picture is wrong or shows people") shows the picture on the report. Press **Remove the picture** if it shows any person, shows the wrong place, or the school asked; the school stays listed. Then press **Dismiss** to close the report.
    Aim to answer reports within two working days. The reporter is never revealed to the person reported.
 
 **Suspended right now** lists everything hidden by moderation, with a **Reinstate** button. A reinstated educator profile comes back *hidden*: the educator publishes it again when they choose.

@@ -30,6 +30,11 @@ services:
     env_file: ../.env
     environment:
       DATABASE_URL: postgres://learninglinks:${POSTGRES_PASSWORD}@db:5432/learninglinks
+      # Data commands run in this container too (`run --rm migrate npm run db:import-school-photos`): the school
+      # pictures they store must land in the same folder the site reads from.
+      UPLOAD_DIR: /data/uploads
+    volumes:
+      - uploads:/data/uploads
     depends_on:
       db: { condition: service_healthy }
 

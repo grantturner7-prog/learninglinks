@@ -8,6 +8,7 @@ import { refundAndEnd, REFUND_METHODS } from "@/lib/billing/refunds";
 import { getDb } from "@/lib/db";
 import { markPaymentReviewed } from "@/lib/payments/service";
 import { sendEmail } from "@/lib/email";
+import { removeSchoolPhoto } from "@/lib/orgs/photos";
 import { approveClaim, OrgFailure, rejectClaim } from "@/lib/orgs/service";
 import { moderationNoticeEmail } from "@/lib/moderation/emails";
 import { ModerationFailure, reinstate, resolveReport } from "@/lib/moderation/service";
@@ -174,6 +175,19 @@ export async function reinstateAction(fd: FormData): Promise<void> {
     await reinstate(getDb(), type, id, a.id);
   } catch (err) {
     if (!(err instanceof ModerationFailure)) console.error("reinstate failed", err);
+  }
+  revalidatePath("/", "layout");
+}
+
+/** Take a school's picture down (it shows people, it is the wrong school, or the school asked). The school itself stays. */
+export async function removeSchoolPhotoAction(fd: FormData): Promise<void> {
+  const a = await admin();
+  const id = fd.get("organizationId");
+  if (!a || typeof id !== "string" || !/^[0-9a-f-]{36}$/i.test(id)) return;
+  try {
+    await removeSchoolPhoto(getDb(), id, a.id);
+  } catch (err) {
+    console.error("remove school photo failed", err);
   }
   revalidatePath("/", "layout");
 }

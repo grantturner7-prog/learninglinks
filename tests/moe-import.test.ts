@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { TW_CITY_BBOX } from "@/lib/geo/tw-centroids.generated";
-import { coreName, latestYear, NOT_A_SCHOOL, placeInCity, planMoe, refineKind, rowsFromMoeCsv } from "@/lib/import/moe";
+import { cleanAddress, coreName, latestYear, NOT_A_SCHOOL, placeInCity, planMoe, refineKind, rowsFromMoeCsv } from "@/lib/import/moe";
 import { isTrustedMoeUrl, pickCsv } from "@/lib/import/moe-fetch";
 
 const f = (n: string) => readFileSync(`tests/fixtures/${n}`, "utf8");
@@ -55,10 +55,21 @@ describe("Ministry of Education school lists: kinds, places, privacy", () => {
     expect(tas).toMatchObject({ type: "international_school", ownership: "private", city: "taipei", nameEn: "Taipei American School" });
     expect(get("Kaohsiung Test School")).toMatchObject({ city: "kaohsiung", district: "kaohsiung:zuoying" }); // "Kaohsiun City" and "Zuoying District"
   });
-  it("keeps no street address and no phone number, only a place inside the district", () => {
+  it("keeps the school's published address (owner decision, 23 Nov 2026) but never a phone number", () => {
     const json = JSON.stringify(plan.records);
-    expect(json).not.toMatch(/指南路|羅斯福路|\(02\)|\(07\)|\d{4}-?\d{4}/);
-    for (const r of plan.records) expect(Object.keys(r).sort()).toEqual(["city", "countryCode", "district", "latitude", "longitude", "name", "nameEn", "ownership", "source", "sourceId", "type", "website"].sort());
+    expect(json).toMatch(/指南路/); // National Chengchi University's own address, as the Ministry publishes it
+    expect(json).not.toMatch(/\(02\)|\(07\)|\d{4}-?\d{4}/);
+    // exactly these facts and nothing else: no phone, no principal's name, no fax
+    for (const r of plan.records) expect(Object.keys(r).sort()).toEqual(["address", "city", "countryCode", "district", "latitude", "longitude", "name", "nameEn", "ownership", "source", "sourceId", "type", "website"].sort());
+    const nccu = plan.records.find((r) => r.name === "國立政治大學")!;
+    expect(nccu.address).toMatch(/^臺北市文山區指南路/); // no postcode in front
+  });
+  it("tidies a published address and refuses an empty one", () => {
+    expect(cleanAddress("[116]臺北市文山區指南路二段64號")).toBe("臺北市文山區指南路二段64號");
+    expect(cleanAddress("116 臺北市文山區  指南路二段64號 ")).toBe("臺北市文山區 指南路二段64號");
+    expect(cleanAddress("")).toBeNull();
+    expect(cleanAddress("  -  ")).toBeNull();
+    expect(cleanAddress("臺".repeat(400))!.length).toBe(160);
   });
   it("gives every school a stable id so a second run updates instead of duplicating", () => {
     const again = planMoe([{ kind: "university", rows: rowsFromMoeCsv(f("moe-university.csv")).rows }]);
@@ -93,9 +104,10 @@ describe("kindergartens: the Ministry's national kindergarten list", () => {
     expect(get("中信高級中等學校附設幼兒園").type).toBe("kindergarten"); // "中信國際學校財團法人" is the foundation
     expect(refineKind("kindergarten", "私立Sunny English幼兒園")).toBe("bilingual_school");
   });
-  it("recognises 幼稚園 and 幼兒園 as the same, and keeps no address or phone", () => {
+  it("recognises 幼稚園 and 幼兒園 as the same, keeps the published address and never a phone number", () => {
     expect(coreName("私立小太陽幼稚園")).toBe(coreName("小太陽幼兒園"));
-    expect(JSON.stringify(plan.records)).not.toMatch(/連城路|三樹路|\(02\)|平河里/);
+    expect(JSON.stringify(plan.records)).toMatch(/連城路|三樹路/);
+    expect(JSON.stringify(plan.records)).not.toMatch(/\(02\)|\d{4}-?\d{4}/);
   });
 });
 

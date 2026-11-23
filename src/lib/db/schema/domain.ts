@@ -136,6 +136,33 @@ export const organizations = pgTable(
   ],
 );
 
+export type SchoolPhotoSource = "wikimedia_commons" | "school_upload";
+
+/**
+ * One picture of a school: the establishment itself (its gate, building or grounds), never people. A picture only
+ * gets here after a person has looked at it. For a picture from Wikimedia Commons we keep the credit its licence
+ * requires us to show, and the fingerprint of the exact file that was looked at.
+ */
+export const organizationPhotos = pgTable(
+  "organization_photos",
+  {
+    organizationId: uuid("organization_id").primaryKey().references(() => organizations.id, { onDelete: "cascade" }),
+    /** File name in the upload folder (see src/lib/uploads/school-photos.ts). */
+    photoKey: text("photo_key").notNull(),
+    width: integer("width").notNull(),
+    height: integer("height").notNull(),
+    source: text("source").$type<SchoolPhotoSource>().notNull(),
+    author: text("author"),
+    licence: text("licence"),
+    licenceUrl: text("licence_url"),
+    /** The picture's own page at the source, which the credit line links to. */
+    sourceUrl: text("source_url"),
+    reviewedSha256: text("reviewed_sha256"),
+    createdAt: createdAt(),
+  },
+  (t) => [check("org_photo_source_check", sql`${t.source} in ('wikimedia_commons','school_upload')`)],
+);
+
 export type ClaimStatus = "pending" | "approved" | "rejected";
 
 export const orgClaims = pgTable(

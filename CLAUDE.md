@@ -46,5 +46,13 @@ The canonical wording is `messages/*/notice.json` (English and Traditional Chine
 ## Data we never collect or store
 ID, passport or ARC numbers, criminal records, health or financial data, home addresses, children's data. Credentials are self-declared (links only, never documents).
 
+## The school card: picture, name, address (owner decision, 23 Nov 2026)
+When an educator taps a school on the map they see **a picture of the school, its name and its address**.
+- **Pictures show the establishment only (gate, building, grounds). Never people**, and above all never children. A person looks at every picture before it is allowed in; anything doubtful is left out. A school with no picture shows a friendly "no picture yet" tile.
+- **Only pictures we are allowed to reuse**: openly licensed photos (Wikimedia Commons: public domain, CC0, CC BY, CC BY-SA) shown with the credit the licence requires, or a picture the school provides itself. Never copy pictures from search engines, school websites or social media.
+- **Addresses**: the school's own address as the Ministry of Education publishes it (official schools and kindergartens). Cram schools stay at district level (a small one can be run from a home) until the school enters its own address.
+- **Contact details come from the school itself**: when a school signs up it enters the correct contact person and details. We never import phone numbers or staff names.
+- The reviewed list is `data/school-photos.json` (each entry carries the fingerprint of the exact file that was looked at); `npm run db:import-school-photos` loads it; an admin can take any picture down from a report (`docs/LAUNCH_DATA.md`).
+
 ## Working agreement
 Show **mock-ups and get approval before any expensive build**. The owner approved the mock-ups and said "go" for **Step 1** (running site: home, marketing pages, sign-up, sign-in), then for **Step 2** (educator side, map) and, with "Do it in the order you think is best" (17 Nov 2026), for the **Concierge home page, guided sign-up and Step 3** (schools and families, bank-transfer payments, contact reveal, school job posts). On 18 Nov 2026 the owner said "go ahead with Step 4": reporting and moderation, drafts of the legal pages, the deployment kit, hardening and launch data tooling. All of it is built. The owner will approach their lawyer **after the whole site is complete**, so the legal pages are complete drafts with visible `[For lawyer: ...]` placeholders and stay marked DRAFT until `LEGAL_REVIEWED=true`. The owner has not supplied bank details yet: they go in the server's private settings, never in the code. Never claim something is verified unless it was run.

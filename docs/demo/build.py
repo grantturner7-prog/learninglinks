@@ -17,7 +17,13 @@ font = base64.b64encode((ROOT / "node_modules/@fontsource-variable/plus-jakarta-
 css = (SRC / "style.css").read_text(encoding="utf8")
 js = "\n".join((SRC / f).read_text(encoding="utf8") for f in ["data.js", "core.js", "map.js", "views1.js", "views2.js", "app.js"])
 REAL = (Path(__file__).resolve().parent / "schools-moe.json").read_text(encoding="utf8")
-head_js = f"const NOTICE = {json.dumps(NOTICE, ensure_ascii=False)};\nconst MAPD = {MAPD};\nconst REAL = {REAL};\n"
+# A handful of real schools with their real, reviewed pictures (docs/demo/school-pictures.json; the pictures themselves
+# are small WebP files in docs/demo/pictures/). Everything else on the demo's school map is pretend.
+PICS_JSON = Path(__file__).resolve().parent / "school-pictures.json"
+pics = json.loads(PICS_JSON.read_text(encoding="utf8")) if PICS_JSON.exists() else []
+for pic in pics:
+    pic["src"] = "data:image/webp;base64," + base64.b64encode((PICS_JSON.parent / "pictures" / pic.pop("file")).read_bytes()).decode()
+head_js = f"const NOTICE = {json.dumps(NOTICE, ensure_ascii=False)};\nconst MAPD = {MAPD};\nconst REAL = {REAL};\nconst PICTURED = {json.dumps(pics, ensure_ascii=False)};\n"
 fontface = f"@font-face {{ font-family: 'Plus Jakarta Sans'; font-style: normal; font-weight: 200 800; font-display: swap; src: url(data:font/woff2;base64,{font}) format('woff2'); }}\n"
 TITLE = "LearningLinks Demo"
 body = f'<div id="app"></div>\n<script>\n{head_js}{js}\n</script>'

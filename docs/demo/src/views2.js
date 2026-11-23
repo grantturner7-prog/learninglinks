@@ -177,6 +177,24 @@ V.profile = () => {
     next: "profPublish", nextLabel: T("Publish my profile", "發布我的檔案"), nextDisabled: !(f.email || "").includes("@") || !f.waiver || !f.ack });
 };
 
+/** What an educator sees after tapping a school: a picture of the establishment (never people), its name, kind and address. */
+function schoolCard(s) {
+  const p = s.picture;
+  const name = st.lang === "zh" && s.nameZh ? s.nameZh : s.name;
+  const other = s.nameZh ? (st.lang === "zh" ? s.name : s.nameZh) : "";
+  const pretendAddr = T(`No. ${10 + (s.seed % 180)}, Demo Road, ${placeName(s)}`, `${placeName(s)}示範路 ${10 + (s.seed % 180)} 號`);
+  const pic = p
+    ? `<img class="schoolpic" src="${p.src}" alt="${h(T(`${name}: the school from outside`, `${name}的學校外觀`))}" width="${p.width}" height="${p.height}" data-testid="school-photo">
+       <figcaption class="small muted" data-testid="school-photo-credit">${T("Photo", "攝影")}: ${h(p.author)} · <a href="${h(p.licenceUrl)}" target="_blank" rel="noopener noreferrer">${h(p.licence)}</a> · <a href="${h(p.pageUrl)}" target="_blank" rel="noopener noreferrer">${T("via Wikimedia Commons", "取自維基共享資源")}</a></figcaption>`
+    : `<div class="schoolpic none" data-testid="school-no-photo"><svg viewBox="0 0 64 64" width="52" height="52" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 54h48M14 54V30l18-12 18 12v24M26 54V40h12v14M32 18V8m0 0h9v6h-9"/><path d="M20 34h4M40 34h4M20 44h2M42 44h2"/></svg><b>${T("No picture yet", "尚無照片")}</b><span class="small muted">${T("A school can add its own picture when it joins.", "學校加入後可自行提供照片。")}</span></div>`;
+  return `<article class="card flat schoolcard" data-testid="school-card"><figure>${pic}</figure>
+    <div class="stack" style="gap:8px"><div class="row" style="justify-content:space-between;align-items:flex-start"><div><span class="badge">${T("Selected school", "已選擇的學校")}</span><h3 style="margin-top:6px;font-size:22px" data-testid="school-name">${h(name)}</h3>${other ? `<div class="muted">${h(other)}</div>` : ""}</div><button class="link-btn" data-act="pin" data-v="${s.id}">${T("Close", "關閉")}</button></div>
+    <div class="row small" style="gap:8px"><span class="muted">${h(lab(KIND[s.kind]))}</span>${s.ownership ? `<span class="badge plain">${s.ownership === "public" ? T("Government school", "公立學校") : T("Private school", "私立學校")}</span>` : ""}${bilBadge(s)}</div>
+    <dl class="facts"><dt>${T("Address", "地址")}</dt><dd data-testid="school-address">${h(s.address || pretendAddr)}${s.address ? "" : ` <span class="small muted">(${T("pretend address: this is a pretend school", "示範地址：這是示範學校")})</span>`}</dd></dl>
+    <p class="small muted">${T("Contact details appear here once the school has joined and entered them itself.", "學校加入並自行填寫後，聯絡方式才會顯示在這裡。")}</p>
+    ${s.realSchool ? `<p class="small muted">${T("A real school, shown with its public address and a picture that is free to reuse. It has not joined LearningLinks.", "這是真實的學校，顯示其公開地址與可自由使用的照片；該校尚未加入 LearningLinks。")}</p>` : ""}</div></article>`;
+}
+
 V.jobs = () => {
   const m = me();
   if (!m || m.type !== "educator" || !st.myProfile) return `<div class="stack"><h1>${T("Job posts from schools", "學校的職缺")}</h1><div class="card soft"><p>${T("Job posts are visible only to signed-in educators who have a profile. Not to the public, families, other schools or search engines.", "職缺只有已登入且有檔案的教師看得到，公眾、家庭、其他學校與搜尋引擎都看不到。")}</p>${m && m.type === "educator" ? `<div class="row" style="margin-top:14px"><button class="btn btn-primary btn-lg" data-act="nav" data-v="profile">${T("Create my profile", "建立我的檔案")}</button></div>` : `<div class="row" style="margin-top:14px"><button class="btn btn-primary btn-lg" data-act="start" data-v="educator">${T("I am an educator (free)", "我是教師（免費）")}</button></div>`}</div></div>`;
@@ -190,7 +208,8 @@ V.jobs = () => {
   return `<div class="stack"><div><h1>${T("Job posts from schools", "學校的職缺")}</h1><p class="muted">${T("Full-time and part-time jobs posted by schools. Only signed-in educators with a profile can see this page.", "學校刊登的全職與兼職職缺。只有已登入且有檔案的教師看得到此頁。")}</p></div>
     <div class="mapgrid"><div>${jobMap(schools, per, pin, city)}${city || pin ? `<button class="link-btn" data-act="mall">${T("Show all areas", "顯示所有地區")}</button>` : ""}</div>
     <div class="stack"><h2>${ps ? h(ps.name) : city ? h(lab(CITY[city])) : T("All open jobs", "所有開放職缺")} <span class="muted small">(${shown.length})</span></h2>
-    ${ps && !shown.length ? `<div class="card flat">${h(ps.name)} · ${h(lab(KIND[ps.kind]))} · ${h(placeName(ps))}<br><span class="muted small">${T("No open job posts at this school.", "此學校目前沒有開放職缺。")}</span></div>` : ""}
+    ${ps ? schoolCard(ps) : ""}
+    ${ps && !shown.length ? `<p class="muted">${T("This school has no open job posts right now.", "這所學校目前沒有職缺。")}</p>` : ""}
     ${shown.length ? shown.map((j) => { const s = schoolById(j.schoolId); return `<article class="card flat stack"><div class="row" style="justify-content:space-between"><div><b style="font-size:18px">${h(j.title)}</b><div class="small muted">${h(s.name)} · ${h(lab(KIND[s.kind]))} · ${h(placeName(s))}${bilBadge(s)}</div></div><span class="badge apricot">${h(lab(OPEN[j.type]))}</span></div><p>${h(j.desc)}</p><div class="tags"><span class="badge">${h(lab(SUBJECT[j.subject]))}</span></div><p class="small"><b>${T("Apply:", "應徵：")}</b> ${h(j.contact)}</p><div><button class="link-btn" data-act="reportOpen" data-t="job" data-v="${j.id}">${T("Report this job post", "檢舉此職缺")}</button></div></article>`; }).join("") : ""}
     <p class="small muted">${T("Job posts are written by schools. LearningLinks does not check them or the schools. Check every detail yourself.", "職缺由學校自行撰寫。LearningLinks 不會查核職缺或學校，請自行確認每個細節。")}</p></div></div></div>`;
 };

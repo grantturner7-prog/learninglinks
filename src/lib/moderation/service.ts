@@ -78,7 +78,8 @@ export interface OpenReport {
   reporterEmail: string;
   /** Other open reports about the same target (a reviewer should see a pile-up). */
   alsoReported: number;
-  target: { label: string; sub: string; state: string; exists: boolean };
+  /** `pictureVersion` is set when the target is a school that has a picture (so the desk can show it and take it down). */
+  target: { label: string; sub: string; state: string; exists: boolean; pictureVersion?: string };
 }
 
 async function describeTarget(db: Db, type: ReportTargetType, id: string): Promise<OpenReport["target"]> {
@@ -88,7 +89,8 @@ async function describeTarget(db: Db, type: ReportTargetType, id: string): Promi
   }
   if (type === "organization") {
     const [o] = await db.select({ name: organizations.name, type: organizations.type, status: organizations.status }).from(organizations).where(eq(organizations.id, id)).limit(1);
-    return o ? { label: o.name, sub: o.type, state: o.status, exists: true } : { label: "(missing school)", sub: "", state: "gone", exists: false };
+    const [ph] = o ? await db.select({ key: schema.organizationPhotos.photoKey }).from(schema.organizationPhotos).where(eq(schema.organizationPhotos.organizationId, id)).limit(1) : [];
+    return o ? { label: o.name, sub: o.type, state: o.status, exists: true, pictureVersion: ph?.key.slice(0, 8) } : { label: "(missing school)", sub: "", state: "gone", exists: false };
   }
   const [j] = await db.select({ title: jobs.title, org: organizations.name, status: jobs.status, removedAt: jobs.removedAt }).from(jobs).innerJoin(organizations, eq(jobs.organizationId, organizations.id)).where(eq(jobs.id, id)).limit(1);
   return j ? { label: j.title, sub: j.org, state: j.removedAt ? "removed" : j.status, exists: true } : { label: "(missing job)", sub: "", state: "gone", exists: false };

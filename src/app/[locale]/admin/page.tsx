@@ -12,7 +12,7 @@ import { listPendingClaims } from "@/lib/orgs/service";
 import { onlinePaymentEnabled } from "@/lib/payments/config";
 import { listPaymentsNeedingReview } from "@/lib/payments/service";
 import { formatMoney } from "@/lib/plans";
-import { cancelOrderAsAdminAction, markPaymentReviewedAction, reinstateAction, reviewClaimAction, reviewReportAction } from "./actions";
+import { cancelOrderAsAdminAction, markPaymentReviewedAction, reinstateAction, removeSchoolPhotoAction, reviewClaimAction, reviewReportAction } from "./actions";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ ref?: string | string[]; confirmed?: string | string[]; again?: string }> };
 
@@ -131,6 +131,17 @@ export default async function AdminPage({ params, searchParams }: Props) {
               {r.details ? <p className="mt-2 whitespace-pre-line">{r.details}</p> : null}
               <p className="mt-1 text-sm text-ink-600">Reported by {r.reporterEmail}. The reported person is never told who.</p>
               {r.alsoReported > 0 ? <p className="notice mt-2">{r.alsoReported} other open report(s) about the same {r.targetType}. Acting closes them all.</p> : null}
+              {r.targetType === "organization" && r.target.pictureVersion ? (
+                <div className="mt-3 flex flex-wrap items-start gap-4" data-testid="report-picture">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- served by our own gated route */}
+                  <img src={`/api/schools/${r.targetId}/photo?v=${r.target.pictureVersion}`} alt={`The picture shown for ${r.target.label}`} width={240} height={150} className="h-[150px] w-[240px] rounded-2xl object-cover" />
+                  <form action={removeSchoolPhotoAction} className="flex max-w-sm flex-col gap-2">
+                    <input type="hidden" name="organizationId" value={r.targetId} />
+                    <p className="text-sm text-ink-600">This is the picture shown for the school. Take it down if it shows people, shows the wrong place, or the school asked. The school stays listed; then dismiss the report.</p>
+                    <button type="submit" className="btn btn-secondary self-start">Remove the picture</button>
+                  </form>
+                </div>
+              ) : null}
               <form action={reviewReportAction} className="mt-3 flex flex-wrap gap-3">
                 <input type="hidden" name="reportId" value={r.id} />
                 <button type="submit" name="decision" value="action" className="btn btn-primary" disabled={!r.target.exists}>{r.targetType === "educator" ? "Hide the profile (suspend)" : r.targetType === "organization" ? "Suspend the school" : "Remove the job post"}</button>

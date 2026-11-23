@@ -234,3 +234,15 @@ footer.fine .links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 
 
 .edu { height: 100%; }
 .edu > .row:last-child { margin-top: auto; }
+
+/* ---------- the school card (picture, name, address) ---------- */
+.schoolcard { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 620px) { .schoolcard { grid-template-columns: minmax(0, 240px) minmax(0, 1fr); } }
+.schoolcard figure { margin: 0; }
+.schoolpic { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 22px; background: var(--lilac-50); }
+.schoolpic.none { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 12px; text-align: center; color: var(--lilac-700); }
+.schoolpic.none b { color: var(--ink); }
+.schoolcard figcaption { margin-top: 6px; }
+.facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; margin: 0; }
+.facts dt { font-weight: 800; color: var(--ink-3); }
+.facts dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }

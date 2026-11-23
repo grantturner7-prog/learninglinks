@@ -90,7 +90,7 @@ The `backup` service writes a compressed database dump and a copy of the profile
 2. Your lawyer has approved the Terms, Privacy Policy and Educator Waiver. Then set `LEGAL_REVIEWED=true` in `.env` and run `docker compose up -d` again to remove the draft banner.
 3. The open questions in `docs/MASTER_PLAN.md` that need counsel are answered, in particular job advertising and the licence for the school-location data.
 4. Remove demo data if you loaded any: `npm run db:seed-demo -- --remove`.
-   Load the school data (see `docs/LAUNCH_DATA.md`): `npm run db:import-schools`, then `npm run db:import-moe -- --prune` (government and private schools, universities, international schools), then `npm run db:import-cram -- --national` (cram schools; run it from Taiwan).
+   Load the school data (see `docs/LAUNCH_DATA.md`): `npm run db:import-schools`, then `npm run db:import-moe -- --prune` (government and private schools, universities, international schools), then `npm run db:import-cram -- --national` (cram schools; run it from Taiwan), then `npm run db:import-school-photos` (the reviewed school pictures; it needs to reach upload.wikimedia.org and is slow by design, about one picture every few seconds). Run each of these in the tools container so files land where the site reads them, for example `docker compose -f deploy/docker-compose.yml --env-file .env run --rm migrate npm run db:import-school-photos -- --dry-run`.
 5. Set an uptime monitor (for example UptimeRobot) on `https://your-domain/api/health`, with an email alert to you.
 
 ## Updating the site later

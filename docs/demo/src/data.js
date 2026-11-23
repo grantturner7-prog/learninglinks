@@ -90,7 +90,10 @@ const SCHOOL_ROWS = [
   ["Anping Kids Academy", "kindergarten", "tainan", "tainan:anping"], ["Old Town Cram School", "cram_school", "tainan", "tainan:east"],
   ["Science Park Bilingual School", "international_school", "hsinchu-city", "hsinchu-city:east"], ["Riverside Kindergarten", "kindergarten", "changhua", "changhua:changhua"],
 ];
-const SCHOOLS = SCHOOL_ROWS.map((r, i) => ({ id: "s" + (i + 1), name: r[0], kind: r[1], ownership: "private", city: r[2], district: r[3], owner: null, seed: i * 37 + 11 }));
+const SCHOOLS = SCHOOL_ROWS.map((r, i) => ({ id: "s" + (i + 1), name: r[0], kind: r[1], ownership: "private", city: r[2], district: r[3], owner: null, seed: i * 37 + 11 }))
+  // A few real schools with their real address and a real picture (PICTURED comes from the build), so the school
+  // card can be seen as it looks on the real site. The pretend schools above have no picture and a pretend address.
+  .concat(PICTURED.map((p, i) => ({ id: "p" + (i + 1), name: p.name, nameZh: p.nameZh, kind: p.kind, ownership: p.ownership, city: p.city, district: p.district, address: p.address, picture: p, owner: null, seed: i * 53 + 7, realSchool: true })));
 
 /* ---------- the Ministry of Education's school lists (government and private schools, universities, schools for international residents) ---------- */
 REAL.cities.forEach(([k, en, zh]) => { if (!CITY[k]) CITY[k] = [en, zh]; });

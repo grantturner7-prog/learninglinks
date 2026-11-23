@@ -8,9 +8,12 @@ import { matchArea, parseCsv, placeInDistrict } from "./cram";
  * License v1): government and private elementary, junior-high and senior-high schools, universities and colleges,
  * and the schools for international residents. Pure functions: the script and the tests feed them text.
  *
- * Privacy rule, same as the cram-school import: we keep the name, the kind, public/private, the city and district
- * and the school's public website. We read the street address only to find the district, then throw it away. We never
- * keep phone numbers. Pins sit inside the district, never at an address.
+ * What we keep: the name, the kind, public/private, the city and district, the school's public website and (owner
+ * decision, 23 Nov 2026) the school's own address as the Ministry publishes it, so an educator can see where a school
+ * is. These are schools and kindergartens on the Ministry's public directory, not people's homes. We never keep phone
+ * numbers or the names of staff: a school enters its own contact details when it joins. The cram-school import is
+ * different and still keeps the district only, because a small cram school can be run from a home.
+ * Pins sit inside the district, not on the address (we do not look addresses up on a map).
  */
 
 export type MoeKind = "kindergarten" | "elementary" | "junior_high" | "senior_high" | "university" | "international";
@@ -184,6 +187,8 @@ export interface MoeRecord {
   latitude: number;
   longitude: number;
   website: string | null;
+  /** The school's address as the Ministry publishes it (Chinese, or English for the international-school list). */
+  address: string | null;
   source: "moe_open_data";
   sourceId: string;
 }
@@ -205,6 +210,12 @@ const cleanWebsite = (w: string): string | null => {
     return null;
   }
 };
+
+/** A published school address, tidied: no postcode in front, no stray spaces. Null when there is nothing usable. */
+export function cleanAddress(a: string): string | null {
+  const t = a.replace(/[\s　]+/g, " ").replace(/^\s*(?:\[\d{3,6}\]|\d{3,6})\s*/, "").trim().slice(0, 160);
+  return t.length >= 6 ? t : null;
+}
 
 export function planMoe(sets: { kind: MoeKind; rows: MoeRow[] }[]): MoePlan {
   const plan: MoePlan = { records: [], skipped: { no_area: 0, duplicate: 0 }, unplaced: [], perType: {}, perOwnership: {} };
@@ -234,7 +245,7 @@ export function planMoe(sets: { kind: MoeKind; rows: MoeRow[] }[]): MoePlan {
       const pos = (district ? placeInDistrict(district, sourceId) : null) ?? placeInCity(city, sourceId);
       if (!pos) { plan.skipped.no_area++; continue; }
       const type = refineKind(kind, name);
-      plan.records.push({ countryCode: "TW", name, nameEn: r.english ? name : null, type, ownership: r.ownership, city, district, latitude: pos.lat, longitude: pos.lng, website: cleanWebsite(r.website), source: "moe_open_data", sourceId });
+      plan.records.push({ countryCode: "TW", name, nameEn: r.english ? name : null, type, ownership: r.ownership, city, district, latitude: pos.lat, longitude: pos.lng, website: cleanWebsite(r.website), address: cleanAddress(r.address), source: "moe_open_data", sourceId });
       plan.perType[type] = (plan.perType[type] ?? 0) + 1;
       if (r.ownership) plan.perOwnership[r.ownership] = (plan.perOwnership[r.ownership] ?? 0) + 1;
     }

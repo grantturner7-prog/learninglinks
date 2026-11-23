@@ -9,8 +9,8 @@
  *   npm run db:import-moe -- --save-dir ./moe-raw   also keep the downloaded files
  *
  * Source: data.gov.tw datasets 6086, 6087, 6088, 6089, 6090, 24393, 6091, 28589 and 32958 (Government Open Data License v1).
- * Only the name, kind, public/private, city, district and the school's public website are kept; no addresses and no
- * phone numbers. Schools already in the database from the OpenStreetMap import are recognised by name and city and
+ * Kept: the name, kind, public/private, city, district, the school's public website and its published address. Never
+ * kept: phone numbers and the names of staff. Schools already in the database from the OpenStreetMap import are recognised by name and city and
  * updated (they keep their exact map position and any claim); the rest are added. Re-running is safe.
  */
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
@@ -74,16 +74,17 @@ async function main() {
 
   for (let i = 0; i < matched.length; i += 400) {
     const part = matched.slice(i, i + 400);
-    const vals = sql.join(part.map(({ id, r }) => sql`(${id}::uuid, ${r.ownership}, ${r.type}, ${r.website})`), sql`, `);
-    // Keep the exact position, any claim and any website the school already has; add public/private, the kind and a website.
-    await db.execute(sql`update organizations o set ownership = v.ownership, type = v.type, website = coalesce(o.website, v.website), updated_at = now() from (values ${vals}) as v(id, ownership, type, website) where o.id = v.id`);
+    const vals = sql.join(part.map(({ id, r }) => sql`(${id}::uuid, ${r.ownership}, ${r.type}, ${r.website}, ${r.address})`), sql`, `);
+    // Keep the exact position, any claim and any website the school already has; add public/private, the kind, a website
+    // and the published address. An address a claimed school entered itself is never replaced.
+    await db.execute(sql`update organizations o set ownership = v.ownership, type = v.type, website = coalesce(o.website, v.website), address = case when o.status = 'claimed' and o.address is not null then o.address else v.address end, updated_at = now() from (values ${vals}) as v(id, ownership, type, website, address) where o.id = v.id`);
   }
   for (let i = 0; i < fresh.length; i += 500) {
     await db.insert(schema.organizations).values(fresh.slice(i, i + 500)).onConflictDoUpdate({
       target: [schema.organizations.source, schema.organizations.sourceId],
       targetWhere: sql`${schema.organizations.sourceId} is not null`,
       // Never touch status, claim or contact columns: a school that has been claimed stays claimed.
-      set: { name: sql`excluded.name`, nameEn: sql`excluded.name_en`, type: sql`excluded.type`, ownership: sql`excluded.ownership`, city: sql`excluded.city`, district: sql`excluded.district`, latitude: sql`excluded.latitude`, longitude: sql`excluded.longitude`, website: sql`excluded.website`, updatedAt: sql`now()` },
+      set: { name: sql`excluded.name`, nameEn: sql`excluded.name_en`, type: sql`excluded.type`, ownership: sql`excluded.ownership`, city: sql`excluded.city`, district: sql`excluded.district`, latitude: sql`excluded.latitude`, longitude: sql`excluded.longitude`, website: sql`excluded.website`, address: sql`case when ${schema.organizations.status} = 'claimed' and ${schema.organizations.address} is not null then ${schema.organizations.address} else excluded.address end`, updatedAt: sql`now()` },
     });
   }
   console.log(`Imported: ${matched.length} existing listings updated, ${fresh.length} schools added.`);
