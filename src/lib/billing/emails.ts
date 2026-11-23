@@ -58,6 +58,32 @@ export function orderPaidEmail(to: string, o: { referenceCode: string; terms: { 
   };
 }
 
+/**
+ * Tell the buyer a refund was recorded and/or a membership was ended early. We never promise how long a bank takes:
+ * that depends on the card issuer or bank, not on us.
+ */
+export function refundEmail(to: string, o: { referenceCode: string; amount: number; currency: string; endedNames: string[]; endedOn: Date | null; isSchool: boolean }): EmailMessage {
+  const amountZh = formatMoney(o.amount, o.currency, "zh-TW");
+  const amountEn = formatMoney(o.amount, o.currency, "en-TW");
+  const day = o.endedOn?.toISOString().slice(0, 10) ?? "";
+  const names = o.endedNames.join("、");
+  const zh: string[] = [];
+  const en: string[] = [];
+  if (o.amount > 0) {
+    zh.push(`我們已為訂單 ${o.referenceCode} 退款 ${amountZh}。款項多久會出現在您的信用卡或銀行帳戶，視發卡銀行或您的銀行而定。`);
+    en.push(`We have refunded ${amountEn} for order ${o.referenceCode}. How long it takes to appear on your card or bank account depends on your card issuer or bank.`);
+  }
+  if (o.endedOn) {
+    zh.push(o.isSchool && names ? `下列校區的會員資格已於 ${day} 結束：${names}。` : `您的會員資格已於 ${day} 結束。`);
+    en.push(o.isSchool && names ? `Membership has ended as of ${day} for: ${names}.` : `Your membership ended on ${day}.`);
+  }
+  return {
+    to,
+    subject: `LearningLinks order ${o.referenceCode} updated / 訂單 ${o.referenceCode} 已更新`,
+    text: [zh.join(" "), en.join(" "), `若有疑問，請回覆此信或來信告訴我們。/ If you have a question, reply to this email or write to us.`, `${siteUrl()}/dashboard`].join("\n\n") + footer,
+  };
+}
+
 export function renewalReminderEmail(to: string, o: { name: string; endsAt: Date; daysLeft: number }): EmailMessage {
   const day = o.endsAt.toISOString().slice(0, 10);
   const zh = o.daysLeft <= 0 ? `${o.name} 的會員資格今天（${day}）到期。` : `${o.name} 的會員資格將於 ${day} 到期（約 ${o.daysLeft} 天後）。`;

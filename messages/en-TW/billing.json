@@ -141,6 +141,9 @@
     "cancel": "Cancel this order",
     "cancelHint": "Changed your mind? Cancelling is free. Only cancel if you have not transferred yet.",
     "paidOn": "Confirmed. Your membership runs until {date}.",
+    "refunded": "A refund of {amount} has been recorded for this order. How long it takes to appear on your card or bank account depends on your card issuer or bank.",
+    "endedOn": "Your membership for this order ended on {date}.",
+    "refundedBadge": "Refunded",
     "browse": "Browse educators",
     "placed": "Placed on {date}",
     "online": {

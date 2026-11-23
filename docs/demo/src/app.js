@@ -137,6 +137,27 @@ const A = {
     if (amt !== o.amount) { st.form.adminMsg = "The amount does not match the order total. Check the bank statement; a short payment is not confirmed."; st.form.adminOk = false; return render(false); }
     settle(o, "admin"); st.form.adminMsg = `Confirmed ${o.ref}. The membership has started and the buyer has been emailed.`; st.form.adminOk = true; save(); render(false);
   },
+  openRefund: (el) => { st.form = { openRefund: el.dataset.v }; render(false); },
+  closeRefund: () => { st.form = {}; render(false); },
+  /** Pretend version of the real refund button: same rules as the server (never more than was paid, a reason, a tick). */
+  adminRefund: (el) => {
+    const o = st.orders.find((x) => x.id === el.dataset.v); const f = st.form;
+    const bad = (m) => { f.refundMsg = m; f.refundOk = false; render(false); };
+    const raw = String(f["rf-amt"] ?? "0").replace(/[,\s]/g, ""); const amt = raw === "" ? 0 : Number(raw);
+    const left = o.amount - (o.refunds || []).reduce((a, r) => a + r.amt, 0);
+    const ends = st.memberships.filter((m) => m.orderId === o.id && f["rf-end-" + m.id] && !m.endedEarly && m.end > TODAY);
+    const reason = String(f["rf-reason"] || "").trim();
+    if (!f["rf-ok"]) return bad("Tick the box to confirm you understand this takes effect straight away.");
+    if (!Number.isInteger(amt) || amt < 0) return bad("Enter the refund as a whole number of NT$ (0 if no money is being returned).");
+    if (!reason) return bad("Write the reason. It is kept in the record.");
+    if (amt > left) return bad("That is more than is left to refund on this order.");
+    if (amt === 0 && ends.length === 0) return bad("Enter a refund amount or tick a membership to end.");
+    if (amt > 0) (o.refunds = o.refunds || []).push({ amt, method: f["rf-method"] || "ecpay_backoffice", reason, on: TODAY });
+    ends.forEach((m) => { m.endedEarly = { on: TODAY, reason, was: m.end }; m.end = TODAY; });
+    const bits = [amt > 0 ? `refund of ${nt(amt)} recorded` : null, ends.length ? `${ends.length} membership${ends.length === 1 ? "" : "s"} ended` : null].filter(Boolean);
+    st.form = { refundMsg: `${o.ref}: ${bits.join(" and ")}. In the real site the buyer is emailed and the member loses access at once.`, refundOk: true };
+    save(); render(false);
+  },
   markChecked: (el) => { const r = st.payReview.find((x) => x.id === el.dataset.v); if (r) r.done = true; render(false); },
   suspend: (el) => { const r = st.reports.find((x) => x.id === el.dataset.v); r.status = "actioned"; if (r.type === "educator") st.suspended[r.targetId] = true; else st.removedJobs[r.targetId] = true; save(); render(false); },
   dismiss: (el) => { const r = st.reports.find((x) => x.id === el.dataset.v); r.status = "dismissed"; save(); render(false); },

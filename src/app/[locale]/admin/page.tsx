@@ -1,8 +1,11 @@
+import { randomUUID } from "node:crypto";
 import type { Metadata } from "next";
 import { getFormatter, setRequestLocale } from "next-intl/server";
 import { ConfirmForm } from "@/components/admin/confirm-form";
+import { RefundForm } from "@/components/admin/refund-form";
 import { requireAdmin } from "@/lib/auth/session";
 import { findOrderByReference, listPendingOrdersForAdmin } from "@/lib/billing/orders";
+import { getOrderRefundState, listRecentPaidOrders, type MembershipState } from "@/lib/billing/refunds";
 import { getDb } from "@/lib/db";
 import { listOpenReports, listSuspended } from "@/lib/moderation/service";
 import { listPendingClaims } from "@/lib/orgs/service";
@@ -29,7 +32,10 @@ export default async function AdminPage({ params, searchParams }: Props) {
   const ref = (Array.isArray(sp.ref) ? sp.ref[0] : sp.ref)?.trim().slice(0, 40) ?? "";
   const confirmedRef = (Array.isArray(sp.confirmed) ? sp.confirmed[0] : sp.confirmed)?.trim().slice(0, 40) ?? "";
   const confirmedOrder = confirmedRef ? await findOrderByReference(db, confirmedRef) : null;
-  const [orders, claims, found, reports, suspended, reviews] = await Promise.all([listPendingOrdersForAdmin(db), listPendingClaims(db), ref ? findOrderByReference(db, ref) : Promise.resolve(null), listOpenReports(db), listSuspended(db), listPaymentsNeedingReview(db)]);
+  const [orders, claims, found, reports, suspended, reviews, recentPaid] = await Promise.all([listPendingOrdersForAdmin(db), listPendingClaims(db), ref ? findOrderByReference(db, ref) : Promise.resolve(null), listOpenReports(db), listSuspended(db), listPaymentsNeedingReview(db), listRecentPaidOrders(db, 10)]);
+  const foundState = found?.status === "paid" ? await getOrderRefundState(db, found.id) : null;
+  const stateLabel: Record<MembershipState, string> = { active: "running", upcoming: "starts later", expired: "ran its full term", ended_early: "ended early" };
+  const day = (d: Date) => f.dateTime(d, { dateStyle: "medium" });
   // Today's date in Taipei as YYYY-MM-DD: the default for "received on".
   const today = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Taipei" }).format(new Date());
   const money = (n: number, c: string) => formatMoney(n, c, locale);
@@ -38,7 +44,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
   return (
     <div className="container-page max-w-5xl py-10">
       <h1 className="text-4xl font-extrabold tracking-tight">Admin desk</h1>
-      <p className="mt-2 text-ink-600">Confirm bank transfers and review school claims. Online (ECPay) payments confirm themselves. Memberships start the moment a payment is confirmed.</p>
+      <p className="mt-2 text-ink-600">Confirm bank transfers, review school claims, and refund or end a membership. Online (ECPay) payments confirm themselves. Memberships start the moment a payment is confirmed.</p>
 
       {confirmedOrder?.status === "paid" ? (
         <p role="status" className="notice mt-6 font-bold" data-testid="confirmed-banner">
@@ -48,13 +54,70 @@ export default async function AdminPage({ params, searchParams }: Props) {
 
       <section className="card mt-8">
         <h2 className="text-2xl font-extrabold">Find an order by reference</h2>
+        <p className="mt-1 text-ink-600">Open a paid order to refund it or end a membership early.</p>
         <form method="get" className="mt-3 flex flex-wrap gap-3" role="search">
           <label htmlFor="ref" className="sr-only">Reference code</label>
           <input id="ref" name="ref" className="field max-w-xs" placeholder="LL-XXXX-XXXX" defaultValue={ref} />
           <button type="submit" className="btn btn-secondary">Find</button>
         </form>
         {ref && !found ? <p className="mt-3">No order with that reference.</p> : null}
-        {found && found.status !== "pending" ? <p className="mt-3">{found.referenceCode} is <b>{found.status}</b>{found.paidAt ? ` (paid ${f.dateTime(found.paidAt, { dateStyle: "medium" })})` : ""}.</p> : null}
+        {found && found.status === "cancelled" ? <p className="mt-3">{found.referenceCode} is <b>cancelled</b>.</p> : null}
+        {found && found.status === "pending" ? <p className="mt-3">{found.referenceCode} is <b>waiting for payment</b>. It is in the list further down.</p> : null}
+
+        {found && found.status === "paid" && foundState ? (
+          <div className="mt-4 border-t-2 border-dotted border-[#cbb8eb] pt-4" data-testid="paid-order">
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span className="font-mono text-xl font-extrabold">{found.referenceCode}</span>
+              <span className="text-xl font-extrabold">{money(foundState.paid, found.currency)}</span>
+              <span className="rounded-full bg-brand-100 px-3 py-0.5 text-xs font-extrabold text-ink-900">{found.provider === "ecpay" ? "Online (ECPay)" : "Bank transfer"}</span>
+              <span className="text-sm text-ink-600">{found.planCode === "school_tw" ? `School, ${found.campuses} campus${found.campuses === 1 ? "" : "es"}` : "Family"}{found.paidAt ? ` · paid ${day(found.paidAt)}` : ""}</span>
+            </div>
+            <p className="mt-1 text-sm">{found.buyerName} · {found.buyerEmail ?? "account deleted"}</p>
+
+            <h3 className="mt-4 text-lg font-extrabold">Memberships on this order</h3>
+            <ul className="mt-1 flex flex-col gap-1" data-testid="order-memberships">
+              {foundState.memberships.map((m) => (
+                <li key={m.id} className="text-sm" data-testid="order-membership">
+                  <b>{m.campus ?? "Family membership"}</b> · {day(m.startsAt)} to {day(m.endsAt)} · <span className={m.state === "ended_early" ? "font-bold text-danger-600" : ""}>{stateLabel[m.state]}</span>
+                  {m.state === "ended_early" && m.originalEndsAt ? ` (would have run to ${day(m.originalEndsAt)})` : ""}
+                  {m.endedEarlyReason ? ` · ${m.endedEarlyReason}` : ""}
+                </li>
+              ))}
+            </ul>
+
+            <h3 className="mt-4 text-lg font-extrabold">Refunds so far</h3>
+            {foundState.refunds.length === 0 ? <p className="text-sm text-ink-600" data-testid="no-refunds">None.</p> : (
+              <ul className="mt-1 flex flex-col gap-1" data-testid="order-refunds">
+                {foundState.refunds.map((r) => (
+                  <li key={r.id} className="text-sm" data-testid="order-refund">{money(r.amount, found.currency)} · sent {r.refundedOn} by {r.method === "ecpay_backoffice" ? "ECPay back office" : r.method === "bank_transfer" ? "bank transfer" : "another way"} · {r.reason}</li>
+                ))}
+              </ul>
+            )}
+            <p className="mt-1 text-sm text-ink-600">Paid {money(foundState.paid, found.currency)}, refunded {money(foundState.refunded, found.currency)}, {money(foundState.refundable, found.currency)} left to refund.</p>
+
+            <RefundForm
+              orderId={found.id}
+              requestId={randomUUID()}
+              today={today}
+              refundable={foundState.refundable}
+              buyerEmail={found.buyerEmail}
+              endable={foundState.memberships.filter((m) => m.state === "active" || m.state === "upcoming").map((m) => ({ id: m.id, label: m.campus ?? "Family membership", runs: `${day(m.startsAt)} to ${day(m.endsAt)}` }))}
+            />
+          </div>
+        ) : null}
+
+        {recentPaid.length > 0 ? (
+          <div className="mt-5">
+            <h3 className="text-lg font-extrabold">Recently paid</h3>
+            <ul className="mt-1 flex flex-col gap-1" data-testid="recent-paid">
+              {recentPaid.map((p) => (
+                <li key={p.id} className="text-sm">
+                  <a className="link font-mono font-bold" href={`?ref=${encodeURIComponent(p.referenceCode)}`}>{p.referenceCode}</a> · {money(p.amount, "TWD")} · {p.planCode === "school_tw" ? `School, ${p.campuses} campus${p.campuses === 1 ? "" : "es"}` : "Family"}{p.buyerEmail ? ` · ${p.buyerEmail}` : ""}{p.paidAt ? ` · ${day(p.paidAt)}` : ""}{p.refunded > 0 ? ` · refunded ${money(p.refunded, "TWD")}` : ""}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </section>
 
       <section className="mt-8">

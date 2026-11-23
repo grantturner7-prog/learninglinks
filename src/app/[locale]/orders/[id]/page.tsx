@@ -47,14 +47,16 @@ export default async function OrderPage({ params, searchParams }: Props) {
       <Link href="/dashboard" className="link text-sm">← {t("back")}</Link>
       <h1 className="mt-3 text-4xl font-extrabold tracking-tight">{t("title")}</h1>
       <p className="mt-2 flex flex-wrap items-center gap-2">
-        <span className={order.status === "paid" ? "badge" : order.status === "pending" ? "badge-warn" : "badge-muted"}>{online && order.status === "pending" ? to("waiting") : t(`status.${order.status}`)}</span>
+        <span className={order.status === "paid" ? "badge" : order.status === "pending" ? "badge-warn" : "badge-muted"}>{online && order.status === "pending" ? to("waiting") : order.status === "paid" && order.refundedAmount >= order.amount ? t("refundedBadge") : t(`status.${order.status}`)}</span>
         <span className="text-sm text-ink-600">{t("placed", { date: day(order.createdAt) })}</span>
       </p>
 
       {order.status === "paid" ? (
         <section className="card mt-6">
-          {holder?.endsAt ? <p className="text-lg font-semibold">{t("paidOn", { date: day(holder.endsAt) })}</p> : null}
-          <Link href={isSchool ? "/school/campuses" : "/educators"} className="btn btn-primary mt-4">{isSchool ? t("back") : t("browse")}</Link>
+          {holder?.endsAt && !order.membershipEndedAt ? <p className="text-lg font-semibold">{t("paidOn", { date: day(holder.endsAt) })}</p> : null}
+          {order.refundedAmount > 0 ? <p className="mt-2" data-testid="refund-note">{t("refunded", { amount: formatMoney(order.refundedAmount, order.currency, locale) })}</p> : null}
+          {order.membershipEndedAt ? <p className="mt-2" data-testid="ended-note">{t("endedOn", { date: day(order.membershipEndedAt) })}</p> : null}
+          {order.membershipEndedAt ? null : <Link href={isSchool ? "/school/campuses" : "/educators"} className="btn btn-primary mt-4">{isSchool ? t("back") : t("browse")}</Link>}
         </section>
       ) : null}
 

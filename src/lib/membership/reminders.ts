@@ -1,4 +1,4 @@
-import { and, eq, gt, gte, inArray, lte } from "drizzle-orm";
+import { and, eq, gt, gte, inArray, isNull, lte } from "drizzle-orm";
 import type { Db } from "@/lib/db";
 import { schema } from "@/lib/db";
 import { renewalReminderEmail } from "@/lib/billing/emails";
@@ -16,6 +16,7 @@ export interface ReminderReport {
 /**
  * Renewal reminders: 60, 30, 7 and 0 days before a membership ends, each sent at most once, and none when the
  * holder has already bought the next term. Memberships never renew by themselves, so this email is the only nudge.
+ * A membership an admin ended early (a refund) never gets a "your membership is ending" reminder.
  * Safe to run as often as you like (daily is enough): the (membership, day) pair is recorded after a send.
  */
 export async function sendDueReminders(db: Db, now: Date = new Date(), send: (m: EmailMessage) => Promise<void> = sendEmail): Promise<ReminderReport> {
@@ -23,7 +24,7 @@ export async function sendDueReminders(db: Db, now: Date = new Date(), send: (m:
   const candidates = await db
     .select()
     .from(memberships)
-    .where(and(lte(memberships.startsAt, now), gt(memberships.endsAt, new Date(now.getTime() - 86_400_000)), lte(memberships.endsAt, horizon)));
+    .where(and(lte(memberships.startsAt, now), gt(memberships.endsAt, new Date(now.getTime() - 86_400_000)), lte(memberships.endsAt, horizon), isNull(memberships.endedEarlyAt)));
   const report: ReminderReport = { checked: candidates.length, sent: 0, failed: 0 };
   if (candidates.length === 0) return report;
 

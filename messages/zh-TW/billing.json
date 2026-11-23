@@ -141,6 +141,9 @@
     "cancel": "取消這筆訂單",
     "cancelHint": "改變主意了嗎？取消不收費。若您尚未匯款才請取消。",
     "paidOn": "已確認收款，會員資格有效至 {date}。",
+    "refunded": "此訂單已記錄退款 {amount}。款項多久會出現在您的信用卡或銀行帳戶，視發卡銀行或您的銀行而定。",
+    "endedOn": "此訂單的會員資格已於 {date} 結束。",
+    "refundedBadge": "已退款",
     "browse": "瀏覽教師",
     "placed": "訂單日期 {date}",
     "online": {

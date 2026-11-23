@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, inArray, isNotNull, sql } from "drizzle-orm";
 import type { Db } from "@/lib/db";
 import { schema } from "@/lib/db";
 import type { AccountType } from "@/lib/db/schema/auth";
@@ -7,7 +7,7 @@ import { currencyOf, PLANS, priceForCampuses, TERM_MONTHS, type PlanCode } from 
 import { generateReferenceCode, normaliseReference } from "./reference";
 import { isValidTaxId } from "./tax-id";
 
-const { orders, orderItems, memberships, organizations, orgMembers, auditLog } = schema;
+const { orders, orderItems, orderRefunds, memberships, organizations, orgMembers, auditLog } = schema;
 
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
 type Exec = Db | Tx;
@@ -26,7 +26,16 @@ export type OrderError =
   | "not_found"
   | "not_pending"
   | "amount_mismatch"
-  | "invalid_date";
+  | "invalid_date"
+  | "not_paid"
+  | "invalid_amount"
+  | "invalid_request"
+  | "method_required"
+  | "reason_required"
+  | "too_much"
+  | "nothing_to_do"
+  | "membership_not_found"
+  | "membership_not_active";
 
 export class OrderFailure extends Error {
   constructor(public code: OrderError) {
@@ -157,6 +166,10 @@ export interface OrderView {
   paidAt: Date | null;
   invoice: { taxId: string | null; title: string | null; email: string | null };
   campusList: { id: string; name: string; district: string | null; city: string | null }[];
+  /** NT$ handed back to the buyer so far (0 if none). */
+  refundedAmount: number;
+  /** When a membership bought with this order was ended early by an admin (the latest such moment), else null. */
+  membershipEndedAt: Date | null;
 }
 
 async function toViews(db: Exec, rows: (typeof orders.$inferSelect)[]): Promise<OrderView[]> {
@@ -167,6 +180,9 @@ async function toViews(db: Exec, rows: (typeof orders.$inferSelect)[]): Promise<
     .innerJoin(organizations, eq(orderItems.organizationId, organizations.id))
     .where(inArray(orderItems.orderId, rows.map((r) => r.id)))
     .orderBy(asc(organizations.name));
+  const ids = rows.filter((r) => r.status === "paid").map((r) => r.id);
+  const refunds = ids.length === 0 ? [] : await db.select({ orderId: orderRefunds.orderId, amount: orderRefunds.amount }).from(orderRefunds).where(inArray(orderRefunds.orderId, ids));
+  const early = ids.length === 0 ? [] : await db.select({ orderId: memberships.orderId, at: memberships.endedEarlyAt }).from(memberships).where(and(inArray(memberships.orderId, ids), isNotNull(memberships.endedEarlyAt)));
   return rows.map((r) => ({
     id: r.id,
     status: r.status,
@@ -180,6 +196,8 @@ async function toViews(db: Exec, rows: (typeof orders.$inferSelect)[]): Promise<
     paidAt: r.paidAt,
     invoice: { taxId: r.invoiceTaxId, title: r.invoiceTitle, email: r.invoiceEmail },
     campusList: items.filter((i) => i.orderId === r.id).map((i) => ({ id: i.id, name: i.name, district: i.district, city: i.city })),
+    refundedAmount: refunds.filter((x) => x.orderId === r.id).reduce((a, x) => a + x.amount, 0),
+    membershipEndedAt: early.filter((x) => x.orderId === r.id).reduce<Date | null>((a, x) => (x.at && (!a || x.at > a) ? x.at : a), null),
   }));
 }
 

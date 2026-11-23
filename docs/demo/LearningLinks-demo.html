@@ -514,6 +514,7 @@ V.dashboard = () => {
       ${mem && mem.end > TODAY ? `<div class="card soft"><span class="badge">${T("Active", "有效")}</span><h2 style="margin-top:8px">${T("Your membership runs until", "您的會員資格有效至")} ${fmtDate(mem.end)}</h2><p class="muted" style="margin-top:6px">${T("It never renews by itself. We will remind you before it ends.", "不會自動續約，到期前會提醒您。")}</p><div class="row" style="margin-top:16px"><button class="btn btn-primary btn-lg" data-act="nav" data-v="educators">${T("Find educators", "尋找教師")}</button></div></div>`
       : pend ? `<div class="card soft"><span class="badge apricot">${T("Waiting for payment", "等待付款")}</span><h2 style="margin-top:8px">${T("Your order is ready", "您的訂單已建立")}: ${nt(pend.amount)}</h2><div class="row" style="margin-top:16px"><button class="btn btn-primary btn-lg" data-act="order" data-v="${pend.id}">${T("Open my order", "開啟我的訂單")}</button></div></div>`
       : `<div class="card soft"><h2>${T("Join for 12 months", "加入 12 個月")}</h2><div class="price" style="margin:6px 0">${nt(PRICE_FAMILY)} <span class="small muted">${T("VAT included", "含稅")}</span></div><p class="muted">${T("See educators who offer private tutoring, on a map and a list, and ask for their contact details.", "在地圖與清單上查看提供私人家教的教師，並申請查看他們的聯絡方式。")}</p><div class="row" style="margin-top:16px"><button class="btn btn-primary btn-lg" data-act="join" data-v="family">${T("Join as a family", "以家庭加入")}</button></div></div>`}
+      ${myOrders().some((o) => o.status === "paid") ? `<div class="card flat"><h2>${T("Your orders", "您的訂單")}</h2><ul class="stack" style="list-style:none;padding:0;margin-top:10px">${myOrders().filter((o) => o.status === "paid").map((o) => `<li class="row"><span class="grow"><b class="num">${o.ref}</b> · ${nt(o.amount)}</span><span class="badge">${(o.refunds || []).reduce((a, r) => a + r.amt, 0) >= o.amount ? T("Refunded", "已退款") : T("Paid", "已付款")}</span><button class="btn" data-act="order" data-v="${o.id}">${T("View order", "查看訂單")}</button></li>`).join("")}</ul></div>` : ""}
       </div>`;
   }
   if (m.type === "school") {
@@ -581,10 +582,12 @@ V.order = () => {
   if (!o || o.by !== pid()) return `<div class="card">${T("Order not found.", "找不到訂單。")} <button class="link-btn" data-act="nav" data-v="dashboard">${T("Back", "返回")}</button></div>`;
   const label = o.type === "family" ? T("Family membership, 12 months", "家庭會員 12 個月") : T(`School membership, 12 months × ${o.campusIds.length} campus(es)`, `學校會員 12 個月 × ${o.campusIds.length} 間校區`);
   const head = `<div class="stack"><button class="link-btn" data-act="nav" data-v="dashboard">← ${T("Back to my dashboard", "回到我的儀表板")}</button><h1>${T("Your order", "您的訂單")}</h1>
-    <div class="row"><span class="badge ${o.status === "paid" ? "" : "apricot"}">${o.status === "paid" ? T("Paid", "已付款") : o.status === "cancelled" ? T("Cancelled", "已取消") : T("Waiting for your payment", "等待您付款")}</span><span class="muted">${label}</span></div>`;
+    <div class="row"><span class="badge ${o.status === "paid" ? "" : "apricot"}">${o.status === "paid" ? ((o.refunds || []).reduce((a, r) => a + r.amt, 0) >= o.amount ? T("Refunded", "已退款") : T("Paid", "已付款")) : o.status === "cancelled" ? T("Cancelled", "已取消") : T("Waiting for your payment", "等待您付款")}</span><span class="muted">${label}</span></div>`;
   const tail = `<div class="card flat"><h3>${T("Invoice details", "發票資料")}</h3><p>${o.invoice && o.invoice.tax ? `${h(o.invoice.title || "")} · 統一編號 ${h(o.invoice.tax)}` : T("Personal invoice", "個人發票")}</p></div>${o.campusIds.length ? `<div class="card flat"><h3>${T("Campuses", "校區")}</h3><ul>${o.campusIds.map((id) => `<li>${h(schoolById(id).name)}</li>`).join("")}</ul></div>` : ""}`;
   if (o.status === "paid") {
     const ms = st.memberships.filter((m) => m.orderId === o.id);
+    const refundedAmt = (o.refunds || []).reduce((a, r) => a + r.amt, 0); const endedEarly = ms.find((m) => m.endedEarly);
+    if (refundedAmt > 0 || endedEarly) return `${head}<div class="card soft stack">${refundedAmt > 0 ? `<p>${T(`A refund of ${nt(refundedAmt)} has been recorded for this order. How long it takes to appear on your card or bank account depends on your card issuer or bank.`, `此訂單已記錄退款 ${nt(refundedAmt)}。款項多久會出現在您的信用卡或銀行帳戶，視發卡銀行或您的銀行而定。`)}</p>` : ""}${endedEarly ? `<p>${T(`Your membership for this order ended on ${fmtDate(endedEarly.endedEarly.on)}.`, `此訂單的會員資格已於 ${fmtDate(endedEarly.endedEarly.on)} 結束。`)}</p>` : `<p>${T("Thank you. Your membership continues.", "謝謝您，您的會員資格繼續有效。")}</p>`}</div>${tail}</div>`;
     return `${head}<div class="card soft"><h2>${T("Thank you. Your membership has started.", "謝謝您，您的會員資格已開始。")}</h2><p class="muted" style="margin-top:6px">${T("Paid", "付款日")} ${fmtDate(o.paidOn)} · ${nt(o.amount)} ${T("VAT included", "含稅")} · ${T("It never renews by itself.", "不會自動續約。")}</p><ul style="margin:10px 0 0">${ms.map((m) => `<li>${m.schoolId ? h(schoolById(m.schoolId).name) + ": " : ""}${fmtDate(m.start)} → ${fmtDate(m.end)}</li>`).join("")}</ul><div class="row" style="margin-top:16px"><button class="btn btn-primary btn-lg" data-act="nav" data-v="educators">${T("Find educators", "尋找教師")}</button></div></div>${tail}</div>`;
   }
   if (o.status === "cancelled") return `${head}<div class="card">${T("This order was cancelled.", "此訂單已取消。")}</div>${tail}</div>`;
@@ -831,15 +834,39 @@ V.admin = () => {
   const reports = st.reports.filter((r) => r.status === "open");
   const sus = Object.keys(st.suspended).filter((k) => st.suspended[k]);
   const who = (id) => { const p = Object.values(st.people).find((x) => x.id === id); return p ? `${p.name} (${p.type})` : id; };
-  return `<div class="stack"><div><h1>Admin desk</h1><p class="muted">Confirm bank transfers and review reports. Online (ECPay) payments confirm themselves. Memberships start the moment a payment is confirmed.</p></div>
+  const paidOrders = st.orders.filter((o) => o.status === "paid").slice(-10).reverse();
+  const refundedOf = (o) => (o.refunds || []).reduce((a, r) => a + r.amt, 0);
+  const mLabel = (m) => (m.kind === "family" ? "Family membership" : (schoolById(m.schoolId) || { name: "Campus" }).name);
+  const mState = (m) => (m.endedEarly ? "ended early" : m.end > TODAY ? "running" : "ran its full term");
+  const METHOD = { ecpay_backoffice: "ECPay back office", bank_transfer: "Bank transfer", other: "Something else" };
+  const refundForm = (o, left, endable) => `<div class="card soft stack" id="refund-form"><h3>Refund or end membership</h3>
+    ${endable.length ? `<fieldset class="stack" style="border:0;padding:0;margin:0"><legend class="lab">End membership now</legend>${endable.map((m) => `<label class="ack"><input type="checkbox" id="f-rf-end-${m.id}" data-f="rf-end-${m.id}" ${st.form["rf-end-" + m.id] ? "checked" : ""}><span><b>${h(mLabel(m))}</b> <span class="small muted">${m.start} to ${m.end}</span></span></label>`).join("")}<p class="hint">The member loses access the moment you press the button. Nothing else on the account is touched.</p></fieldset>` : `<p class="small muted">No membership on this order is still running, so there is nothing to end.</p>`}
+    <div class="row"><div><label class="lab small" for="f-rf-amt">Refund (NT$)</label><input class="field" style="max-width:160px" id="f-rf-amt" data-f="rf-amt" inputmode="numeric" value="${h(val("rf-amt", "0"))}" ${left === 0 ? "disabled" : ""}></div>
+    <div><label class="lab small" for="f-rf-method">Sent back by</label><select class="field" id="f-rf-method" data-f="rf-method" ${left === 0 ? "disabled" : ""}>${Object.entries(METHOD).map(([k, l]) => `<option value="${k}" ${val("rf-method", "ecpay_backoffice") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div></div>
+    <p class="hint">${left > 0 ? `Up to ${nt(left)} can still be refunded on this order. Leave 0 to end a membership without refunding.` : "The whole amount has already been refunded."} This site does not send money: send it first in the ECPay merchant back office (or by bank transfer), then record it here.</p>
+    <div><label class="lab" for="f-rf-reason">Reason (kept in the record)</label><input class="field" id="f-rf-reason" data-f="rf-reason" maxlength="300" value="${h(val("rf-reason"))}"></div>
+    <label class="ack"><input type="checkbox" id="f-rf-ok" data-f="rf-ok" ${st.form["rf-ok"] ? "checked" : ""}><span>I understand this takes effect straight away and cannot be undone from here. Any money has already been sent back, or none is being returned.</span></label>
+    <div class="row"><button class="btn btn-primary" data-act="adminRefund" data-v="${o.id}">Record it</button><button class="btn" data-act="closeRefund">Cancel</button></div></div>`;
+  const paidCard = (o) => {
+    const ms = st.memberships.filter((m) => m.orderId === o.id); const left = o.amount - refundedOf(o); const endable = ms.filter((m) => !m.endedEarly && m.end > TODAY);
+    return `<div class="card flat stack" data-testid="paid-order"><div class="row"><b class="num" style="font-size:20px">${o.ref}</b><b>${nt(o.amount)}</b><span class="badge ${o.method === "ecpay" ? "" : "apricot"}">${o.method === "ecpay" ? "Online (ECPay)" : "Bank transfer"}</span><span class="small muted">${o.type === "family" ? "Family" : "School, " + o.campusIds.length + " campus(es)"} · ${h(who(o.by))}</span></div>
+      <ul class="small" style="margin:0 0 0 18px">${ms.map((m) => `<li><b>${h(mLabel(m))}</b> · ${m.start} to ${m.end} · ${mState(m)}${m.endedEarly ? ` (would have run to ${m.endedEarly.was}) · ${h(m.endedEarly.reason)}` : ""}</li>`).join("")}</ul>
+      ${(o.refunds || []).length ? `<ul class="small" style="margin:0 0 0 18px">${o.refunds.map((r) => `<li>${nt(r.amt)} refunded · sent ${r.on} by ${METHOD[r.method] || "another way"} · ${h(r.reason)}</li>`).join("")}</ul>` : `<p class="small muted">No refunds so far.</p>`}
+      <p class="small muted">Paid ${nt(o.amount)}, refunded ${nt(refundedOf(o))}, ${nt(left)} left to refund.</p>
+      ${st.form.openRefund === o.id ? refundForm(o, left, endable) : (left > 0 || endable.length) ? `<div><button class="btn" data-act="openRefund" data-v="${o.id}">Refund or end membership</button></div>` : ""}</div>`;
+  };
+  return `<div class="stack"><div><h1>Admin desk</h1><p class="muted">Confirm bank transfers, review reports, and refund or end a membership. Online (ECPay) payments confirm themselves. Memberships start the moment a payment is confirmed.</p></div>
     ${st.form.adminMsg ? `<div class="notice ${st.form.adminOk ? "ok" : "bad"}" role="status">${h(st.form.adminMsg)}</div>` : ""}
     ${reviews.length ? `<section class="stack"><h2>Online payments to check (${reviews.length})</h2><p class="muted">ECPay told us something the site would not decide by itself (a different amount, a second payment, or a payment for a cancelled order). Check it in the ECPay merchant dashboard, then mark it checked.</p>${reviews.map((r) => `<div class="card flat"><p class="small muted">Order ${h(r.ref)}</p><p>${h(r.note)}</p><button class="btn" data-act="markChecked" data-v="${r.id}">Mark as checked</button></div>`).join("")}</section>` : ""}
     <section class="stack"><h2>Waiting for payment (${pending.length})</h2>${pending.length ? pending.map((o) => `<div class="card flat stack"><div class="row"><b class="num" style="font-size:20px">${o.ref}</b><b>${nt(o.amount)}</b><span class="badge ${o.method === "ecpay" ? "" : "apricot"}">${o.method === "ecpay" ? "Online (ECPay)" : "Bank transfer"}</span><span class="small muted">${o.type === "family" ? "Family" : "School, " + o.campusIds.length + " campus(es)"} · ${h(who(o.by))}</span></div>
       ${o.method === "ecpay" ? `<p class="small muted">Waiting for the buyer to pay on ECPay. It confirms itself when ECPay tells us the money arrived. Only confirm by hand if you have checked the ECPay dashboard and the notice never reached us.</p>` : ""}
       <div class="row"><div><label class="lab small" for="f-amt-${o.id}">Amount received (NT$)</label><input class="field" style="max-width:180px" id="f-amt-${o.id}" data-f="amt-${o.id}" inputmode="numeric" value="${h(val("amt-" + o.id, String(o.amount)))}"></div><button class="btn btn-primary" data-act="adminConfirm" data-v="${o.id}">Confirm payment</button></div></div>`).join("") : `<div class="card flat">Nothing is waiting.</div>`}</section>
+    <section class="stack" id="recently-paid"><h2>Recently paid (${paidOrders.length})</h2><p class="muted">Open a paid order to refund it or end a membership early. The real site never sends money itself: you send it back first in ECPay's back office (or by bank transfer), then record it here.</p>
+      ${st.form.refundMsg ? `<div class="notice ${st.form.refundOk ? "ok" : "bad"}" role="status">${h(st.form.refundMsg)}</div>` : ""}
+      ${paidOrders.length ? paidOrders.map((o) => paidCard(o)).join("") : `<div class="card flat">No paid orders yet. Pay one as a family or school first (switch role at the top).</div>`}</section>
     <section class="stack"><h2>Reports to review (${reports.length})</h2>${reports.length ? reports.map((r) => { const nm = r.type === "educator" ? ((EDU.find((e) => e.id === r.targetId) || (st.myProfile ? { name: st.myProfile.name } : {})).name) : (st.jobs.find((j) => j.id === r.targetId) || {}).title; return `<div class="card flat stack"><p class="small muted">${r.type} · reason: <b>${h(r.reason)}</b></p><p class="bold">${h(nm)}</p>${r.details ? `<p>${h(r.details)}</p>` : ""}<p class="small muted">Reported by ${h(r.by)}. The reported person is never told who.</p><div class="row"><button class="btn btn-primary" data-act="suspend" data-v="${r.id}">${r.type === "educator" ? "Hide the profile (suspend)" : "Remove the job post"}</button><button class="btn" data-act="dismiss" data-v="${r.id}">Dismiss</button></div></div>`; }).join("") : `<div class="card flat">No reports waiting.</div>`}</section>
     ${sus.length ? `<section class="stack"><h2>Suspended right now</h2>${sus.map((id) => `<div class="card flat row" style="justify-content:space-between"><span><b>${h((EDU.find((e) => e.id === id) || { name: id }).name)}</b> <span class="small muted">educator profile</span></span><button class="btn" data-act="reinstate" data-v="${id}">Reinstate</button></div>`).join("")}</section>` : ""}
-    <section class="stack"><h2>Memberships (${st.memberships.length})</h2>${st.memberships.length ? `<div class="scroll-x"><table class="tbl"><thead><tr><th>Holder</th><th>Kind</th><th>Starts</th><th>Ends</th></tr></thead><tbody>${st.memberships.map((x) => `<tr><td>${h(who(x.holder))}</td><td>${x.schoolId ? h(schoolById(x.schoolId).name) : "Family"}</td><td>${x.start}</td><td>${x.end}</td></tr>`).join("")}</tbody></table></div>` : `<div class="card flat">None yet.</div>`}</section></div>`;
+    <section class="stack"><h2>Memberships (${st.memberships.length})</h2>${st.memberships.length ? `<div class="scroll-x"><table class="tbl"><thead><tr><th>Holder</th><th>Kind</th><th>Starts</th><th>Ends</th></tr></thead><tbody>${st.memberships.map((x) => `<tr><td>${h(who(x.holder))}</td><td>${x.schoolId ? h(schoolById(x.schoolId).name) : "Family"}</td><td>${x.start}</td><td>${x.end}${x.endedEarly ? " (ended early)" : ""}</td></tr>`).join("")}</tbody></table></div>` : `<div class="card flat">None yet.</div>`}</section></div>`;
 };
 
 /* ================= shell ================= */
@@ -980,6 +1007,27 @@ const A = {
     const o = st.orders.find((x) => x.id === el.dataset.v); const amt = Number(String(st.form["amt-" + o.id] ?? o.amount).replace(/[,\s]/g, ""));
     if (amt !== o.amount) { st.form.adminMsg = "The amount does not match the order total. Check the bank statement; a short payment is not confirmed."; st.form.adminOk = false; return render(false); }
     settle(o, "admin"); st.form.adminMsg = `Confirmed ${o.ref}. The membership has started and the buyer has been emailed.`; st.form.adminOk = true; save(); render(false);
+  },
+  openRefund: (el) => { st.form = { openRefund: el.dataset.v }; render(false); },
+  closeRefund: () => { st.form = {}; render(false); },
+  /** Pretend version of the real refund button: same rules as the server (never more than was paid, a reason, a tick). */
+  adminRefund: (el) => {
+    const o = st.orders.find((x) => x.id === el.dataset.v); const f = st.form;
+    const bad = (m) => { f.refundMsg = m; f.refundOk = false; render(false); };
+    const raw = String(f["rf-amt"] ?? "0").replace(/[,\s]/g, ""); const amt = raw === "" ? 0 : Number(raw);
+    const left = o.amount - (o.refunds || []).reduce((a, r) => a + r.amt, 0);
+    const ends = st.memberships.filter((m) => m.orderId === o.id && f["rf-end-" + m.id] && !m.endedEarly && m.end > TODAY);
+    const reason = String(f["rf-reason"] || "").trim();
+    if (!f["rf-ok"]) return bad("Tick the box to confirm you understand this takes effect straight away.");
+    if (!Number.isInteger(amt) || amt < 0) return bad("Enter the refund as a whole number of NT$ (0 if no money is being returned).");
+    if (!reason) return bad("Write the reason. It is kept in the record.");
+    if (amt > left) return bad("That is more than is left to refund on this order.");
+    if (amt === 0 && ends.length === 0) return bad("Enter a refund amount or tick a membership to end.");
+    if (amt > 0) (o.refunds = o.refunds || []).push({ amt, method: f["rf-method"] || "ecpay_backoffice", reason, on: TODAY });
+    ends.forEach((m) => { m.endedEarly = { on: TODAY, reason, was: m.end }; m.end = TODAY; });
+    const bits = [amt > 0 ? `refund of ${nt(amt)} recorded` : null, ends.length ? `${ends.length} membership${ends.length === 1 ? "" : "s"} ended` : null].filter(Boolean);
+    st.form = { refundMsg: `${o.ref}: ${bits.join(" and ")}. In the real site the buyer is emailed and the member loses access at once.`, refundOk: true };
+    save(); render(false);
   },
   markChecked: (el) => { const r = st.payReview.find((x) => x.id === el.dataset.v); if (r) r.done = true; render(false); },
   suspend: (el) => { const r = st.reports.find((x) => x.id === el.dataset.v); r.status = "actioned"; if (r.type === "educator") st.suspended[r.targetId] = true; else st.removedJobs[r.targetId] = true; save(); render(false); },

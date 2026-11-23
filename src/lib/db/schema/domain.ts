@@ -230,6 +230,15 @@ export const memberships = pgTable(
     campuses: integer("campuses").notNull().default(1),
     startsAt: ts("starts_at").notNull(),
     endsAt: ts("ends_at").notNull(),
+    /**
+     * Set when an admin ended this membership before its natural end (refund, mistake, abuse). The row is kept for the
+     * record; `endsAt` is pulled back to that moment so every "is this member active?" check stops at once, and the
+     * date it would have ended on is kept in `originalEndsAt`.
+     */
+    endedEarlyAt: ts("ended_early_at"),
+    endedEarlyBy: text("ended_early_by"),
+    endedEarlyReason: text("ended_early_reason"),
+    originalEndsAt: ts("original_ends_at"),
     createdAt: createdAt(),
   },
   (t) => [
@@ -256,6 +265,33 @@ export const contactReveals = pgTable(
     index("reveal_org_day_idx").on(t.organizationId, t.createdAt),
     index("reveal_user_day_idx").on(t.userId, t.createdAt),
     index("reveal_educator_idx").on(t.educatorId, t.createdAt),
+  ],
+);
+
+export type RefundMethod = "ecpay_backoffice" | "bank_transfer" | "other";
+
+/**
+ * Money handed back to a buyer. This site never moves money: an admin sends it in ECPay's merchant back office (or by
+ * bank transfer) and then records it here, so the books and the buyer's order page agree. An order stays "paid"; the
+ * refund state is worked out from these rows. `requestId` makes a double click or a retry record only once.
+ */
+export const orderRefunds = pgTable(
+  "order_refunds",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    orderId: uuid("order_id").notNull().references(() => orders.id),
+    amount: integer("amount").notNull(),
+    method: text("method").$type<RefundMethod>().notNull(),
+    refundedOn: date("refunded_on").notNull(),
+    reason: text("reason").notNull(),
+    requestId: text("request_id").notNull().unique(),
+    createdBy: text("created_by").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    check("refund_amount_check", sql`${t.amount} > 0`),
+    check("refund_method_check", sql`${t.method} in ('ecpay_backoffice','bank_transfer','other')`),
+    index("refund_order_idx").on(t.orderId),
   ],
 );
 

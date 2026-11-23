@@ -43,7 +43,22 @@ Two things in test mode only reach us if ECPay can call our server over the inte
 
 ## Refunds
 
-Refunds are made in ECPay's merchant back office, not in this site. If you refund a buyer, also cancel or end their membership (ask a developer: there is no refund button yet; it is a small addition). ECPay charges your shop a fee on each payment; ask ECPay for the current rates. The buyer's price does not change.
+**The site never moves money.** You send the money back yourself, then record it on the admin desk so the books, the buyer's order page and the membership all agree.
+
+1. **Send the money back first.** Online payments: in ECPay's merchant back office, find the order by its trade number and refund it there (ECPay decides what is possible for each payment type). Bank transfers: send it from your bank. Note the date.
+2. **Record it.** Open `/admin`, find the order by its reference (or click it under **Recently paid**) and use **Refund or end membership**:
+   - tick the membership(s) to end now (a school order has one per campus: tick only the campus that is leaving), and/or enter the NT$ you sent back, how you sent it and the date;
+   - write the reason (it is kept in the audit log);
+   - tick the confirmation box and press **Record it**. The buyer is emailed unless you untick that box.
+3. A membership ended this way stops at once: the family or school loses access to educators immediately, no renewal reminder is sent for it, and if they buy again the new 12 months start from that day.
+
+Good to know:
+- **Part refunds** are fine (the total can never exceed what was paid); you can refund without ending the membership and end a membership without refunding.
+- **A school paid NT$10,000 per campus.** When one campus leaves, refund NT$10,000 (or whatever you decide) and end that campus only. The other campuses keep running.
+- **Recording twice is safe:** a double click or a retry is recorded once. A refund that is wrong cannot be undone from the screen; tell a developer, who can correct it in the database and the audit log will show both.
+- **The refund policy is yours to decide.** This button records what you did; it does not decide who is entitled to a refund. Taiwan's 7-day cancellation right for distance sales may apply to a 12-month membership: that is one of the questions in the lawyer brief.
+- ECPay charges your shop a fee on each payment and may not return it on a refund; ask ECPay for the current rules. The buyer's price does not change.
+- Ending a membership does not delete the account, the profile or the order. The order stays "paid" (it was paid) and shows the refund beside it.
 
 ## For developers
 

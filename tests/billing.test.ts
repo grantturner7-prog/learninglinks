@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import noticeEn from "../messages/en-TW/notice.json";
+import noticeZh from "../messages/zh-TW/notice.json";
 import { cleanInvoice, OrderFailure } from "@/lib/billing/orders";
 import { generateReferenceCode, normaliseReference } from "@/lib/billing/reference";
 import { isValidTaxId } from "@/lib/billing/tax-id";
@@ -85,5 +87,25 @@ describe("job post rules", () => {
     expect(parseJobForm(form({ ...base, description: "Send your passport A123456789 to us" })).errors.description).toBe("idNumber");
     expect(parseJobForm(form({ ...base, description: "Come to 中正路 12 號" })).errors.description).toBe("address");
     expect(parseJobForm(form({ ...base, applyContact: "" })).errors.applyContact).toBe("required");
+  });
+});
+
+describe("refund email", () => {
+  it("is bilingual, ends with the compliance notice, and never promises how fast a bank pays", async () => {
+    const { refundEmail } = await import("@/lib/billing/emails");
+    const full = refundEmail("a@b.tw", { referenceCode: "LL-ABCD-EFGH", amount: 2000, currency: "TWD", endedNames: [], endedOn: new Date("2026-11-20T04:00:00Z"), isSchool: false });
+    expect(full.subject).toContain("LL-ABCD-EFGH");
+    expect(full.text).toContain("退款");
+    expect(full.text).toContain("refunded");
+    expect(full.text).toContain("2026-11-20");
+    expect(full.text).toMatch(/depends on your card issuer or bank/);
+    expect(full.text).not.toMatch(/within \d+|business days|working days|工作天/i);
+    expect(full.text).toContain(noticeZh.short); // the canonical compliance notice, both languages
+    expect(full.text).toContain(noticeEn.short);
+
+    const campuses = refundEmail("a@b.tw", { referenceCode: "LL-ABCD-EFGH", amount: 0, currency: "TWD", endedNames: ["Sunshine Cram School", "Moon Kindergarten"], endedOn: new Date("2026-11-20T04:00:00Z"), isSchool: true });
+    expect(campuses.text).toContain("Sunshine Cram School");
+    expect(campuses.text).toContain("Moon Kindergarten");
+    expect(campuses.text).not.toContain("refunded"); // no money moved, so it must not claim a refund
   });
 });

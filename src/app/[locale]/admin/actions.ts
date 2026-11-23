@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth/session";
 import { adminCancelOrder, confirmOrderPaid, OrderFailure } from "@/lib/billing/orders";
-import { sendPaidEmail } from "@/lib/billing/paid-email";
+import { sendPaidEmail, sendRefundEmail } from "@/lib/billing/paid-email";
+import { refundAndEnd, REFUND_METHODS } from "@/lib/billing/refunds";
 import { getDb } from "@/lib/db";
 import { markPaymentReviewed } from "@/lib/payments/service";
 import { sendEmail } from "@/lib/email";
@@ -49,6 +50,63 @@ export async function confirmOrderAction(_prev: AdminResult | null, fd: FormData
       return { ok: false, message: m[err.code] ?? err.code };
     }
     console.error("confirm failed", err);
+    return { ok: false, message: "Something went wrong. Nothing was changed." };
+  }
+}
+
+/**
+ * Record a refund and/or end memberships on a paid order. The site does not send the money: the admin has already
+ * sent it (ECPay back office or bank transfer) and the form says so in a box they must tick.
+ */
+export async function refundOrderAction(_prev: AdminResult | null, fd: FormData): Promise<AdminResult> {
+  const a = await admin();
+  if (!a) return { ok: false, message: "Not allowed" };
+  if (fd.get("understood") !== "on") return { ok: false, message: "Tick the box to confirm you understand this takes effect straight away." };
+  const rawAmount = String(fd.get("amount") ?? "").replace(/[,\s]/g, "");
+  const amount = rawAmount === "" ? 0 : Number(rawAmount);
+  const method = String(fd.get("method") ?? "");
+  const refundedOn = String(fd.get("refundedOn") ?? "");
+  const notify = fd.get("notify") === "on";
+  try {
+    const db = getDb();
+    const now = new Date();
+    const res = await refundAndEnd(
+      db,
+      String(fd.get("orderId") ?? ""),
+      a.id,
+      {
+        requestId: String(fd.get("requestId") ?? ""),
+        amount,
+        method: REFUND_METHODS.find((m) => m === method) ?? null,
+        refundedOn: refundedOn || null,
+        reason: String(fd.get("reason") ?? ""),
+        endMembershipIds: fd.getAll("end").filter((v): v is string => typeof v === "string"),
+      },
+      now,
+    );
+    revalidatePath("/", "layout");
+    if (!res.applied) return { ok: true, message: `${res.referenceCode}: this was already recorded. Nothing changed.` };
+    const mail = notify ? await sendRefundEmail(db, res, now) : null;
+    const bits = [res.refunded > 0 ? `refund of NT$${res.refunded.toLocaleString("en-US")} recorded` : null, res.ended.length > 0 ? `${res.ended.length} membership${res.ended.length === 1 ? "" : "s"} ended` : null].filter(Boolean);
+    return { ok: true, message: `${res.referenceCode}: ${bits.join(" and ")}.${mail === "sent" ? " The buyer has been emailed." : mail === "none" ? " There is no email address for this buyer, so nobody was emailed." : mail === "failed" ? " The email to the buyer could NOT be sent: please tell them yourself." : ""}` };
+  } catch (err) {
+    if (err instanceof OrderFailure) {
+      const m: Record<string, string> = {
+        not_found: "Order not found.",
+        not_paid: "Only a paid order can be refunded.",
+        invalid_amount: "Enter the refund as a whole number of NT$ (0 if no money is being returned).",
+        invalid_request: "This form is out of date. Reload the page and try again.",
+        method_required: "Choose how the money was sent back.",
+        invalid_date: "Enter the day the money was sent back.",
+        reason_required: "Write the reason. It is kept in the record.",
+        too_much: "That is more than is left to refund on this order.",
+        nothing_to_do: "Enter a refund amount or tick a membership to end.",
+        membership_not_found: "One of the memberships is not part of this order.",
+        membership_not_active: "One of those memberships has already ended. Reload the page.",
+      };
+      return { ok: false, message: m[err.code] ?? err.code };
+    }
+    console.error("refund failed", err);
     return { ok: false, message: "Something went wrong. Nothing was changed." };
   }
 }
