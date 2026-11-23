@@ -42,12 +42,21 @@ export interface CountryMapConfig {
   pointMaxZoom: number;
   /** Localised name for a city or district key (any "xx-CC" locale; Chinese locales get Chinese). */
   label(key: string, locale: string): string;
+  /**
+   * The full name, for a heading, the map's "where am I" bar or a screen reader: "Xitun District", "Shetou Township".
+   * Several cities have an "East" or a "Xinyi", so the short name alone is not enough out of context. Chinese names
+   * already carry their ending (西屯區), and city keys are returned unchanged.
+   */
+  longLabel(key: string, locale: string): string;
 }
 
 const twNames = new Map<string, { zh: string; en: string }>();
 for (const d of ALL_TW_DISTRICTS) twNames.set(d.key, { zh: d.zh, en: d.en });
 for (const d of DISTRICTS) twNames.set(d.key, { zh: d.zh, en: d.en });
 for (const c of CITIES) twNames.set(c.key, { zh: c.zh, en: c.en });
+
+/** What the last character of a Taiwanese town name means in English. */
+const TW_ENDINGS: Record<string, string> = { "區": "District", "鄉": "Township", "鎮": "Township", "市": "City" };
 
 const TW: CountryMapConfig = {
   code: "TW",
@@ -64,6 +73,14 @@ const TW: CountryMapConfig = {
     const n = twNames.get(key);
     if (!n) return key;
     return locale.startsWith("zh") ? n.zh : n.en;
+  },
+  longLabel(key, locale) {
+    const n = twNames.get(key);
+    if (!n) return key;
+    if (locale.startsWith("zh")) return n.zh;
+    if (levelOfKey(key) === "city") return n.en;
+    const ending = TW_ENDINGS[n.zh.slice(-1)];
+    return ending && !n.en.endsWith(ending) ? `${n.en} ${ending}` : n.en;
   },
 };
 

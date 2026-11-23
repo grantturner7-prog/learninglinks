@@ -89,38 +89,7 @@ const sel = (k, v) => (st.form[k] === v ? 'aria-pressed="true"' : 'aria-pressed=
 const has = (k, v) => (st.form[k] || []).includes(v);
 const selm = (k, v) => `aria-pressed="${has(k, v)}"`;
 
-/* ---------- map ---------- */
-const FILLS = ["#fffaf6", "#ebe3f8", "#dccff3", "#b7a0e3", "#9a80d1"];
-const fillFor = (n) => FILLS[n <= 0 ? 0 : n <= 2 ? 1 : n <= 4 ? 2 : n <= 7 ? 3 : 4];
-/** Schools of one city sit on a small ring around the city's middle, so pins never cover each other. */
-function mapPins(s) {
-  const c = MAP.c[s.city]; const mates = (mapPins.set || SCHOOLS).filter((x) => x.city === s.city); const n = mates.length; const i = mates.indexOf(s);
-  if (n === 1) return { x: c.x, y: c.y };
-  const ang = (2 * Math.PI * i) / n + 0.6, r = Math.min(12, 5 + n * 1.6);
-  return { x: Math.round((c.x + Math.cos(ang) * r) * 10) / 10, y: Math.round((c.y + Math.sin(ang) * r) * 10) / 10 };
-}
-
-/** Taiwan with a count bubble per city; click a city to filter the list beside it. */
-function educatorMap(counts, selected, note) {
-  const paths = Object.entries(MAP.c).map(([k, c]) => `<path class="city${selected === k ? " sel" : ""}" d="${c.d}" fill="${fillFor(counts[k] || 0)}" data-act="city" data-v="${k}" role="button" tabindex="0" aria-label="${h(lab(CITY[k]))}: ${counts[k] || 0}"><title>${h(lab(CITY[k]))}</title></path>`).join("");
-  const NUDGE = { taipei: [-3, -4], "new-taipei": [7, 5], keelung: [6, -3], taoyuan: [-6, 0], "hsinchu-city": [-3, 2] };
-  const bubbles = Object.keys(counts).filter((k) => counts[k] > 0 && MAP.c[k]).map((k) => { const n = NUDGE[k] || [0, 0]; const c = { x: MAP.c[k].x + n[0], y: MAP.c[k].y + n[1] }; const r = 5.5 + Math.min(4, Math.log2(counts[k] + 1)); return `<g class="bub" data-act="city" data-v="${k}"><circle cx="${c.x}" cy="${c.y}" r="${r}"/><text x="${c.x}" y="${c.y}">${counts[k]}</text></g>`; }).join("");
-  const labels = Object.keys(counts).filter((k) => counts[k] > 0 && MAP.c[k] && ["taichung", "tainan", "kaohsiung", "hsinchu-city"].includes(k)).map((k) => { const c = MAP.c[k]; return `<text class="lbl" x="${c.x}" y="${c.y + 15}">${h(lab(CITY[k]).replace(" City", ""))}</text>`; }).join("");
-  return `<div class="map"><svg viewBox="0 0 ${MAP.W} ${MAP.H}" role="group" aria-label="${T("Map of Taiwan", "臺灣地圖")}">${paths}${labels}${bubbles}</svg>
-    <div class="legend"><b>${T("Educators per area", "各地區教師人數")}</b><div class="scale">${FILLS.map((f) => `<i style="background:${f}"></i>`).join("")}</div><div class="row small" style="gap:14px;justify-content:space-between"><span>${T("Fewer", "較少")}</span><span>${T("More", "較多")}</span></div></div></div>
-    <p class="mapnote">${note}</p>`;
-}
-
-/** Taiwan with a pin per school; schools with open job posts carry an apricot dot. */
-function jobMap(schools, jobCount, selectedSchool, selectedCity) {
-  mapPins.set = schools;
-  const counts = {}; schools.forEach((s) => { counts[s.city] = (counts[s.city] || 0) + 1; });
-  const paths = Object.entries(MAP.c).map(([k, c]) => `<path class="city${selectedCity === k ? " sel" : ""}" d="${c.d}" fill="${fillFor(counts[k] || 0)}" data-act="city" data-v="${k}"><title>${h(lab(CITY[k]))}</title></path>`).join("");
-  const pins = schools.map((s) => { const p = mapPins(s); const j = jobCount[s.id] || 0; return `<g class="pin" data-act="pin" data-v="${s.id}" role="button" tabindex="0" aria-label="${h(s.name)}"><circle class="s" cx="${p.x}" cy="${p.y}" r="${selectedSchool === s.id ? 6 : 4.4}"/>${j ? `<circle class="j" cx="${p.x + 3.8}" cy="${p.y - 3.8}" r="2.7"/>` : ""}<title>${h(s.name)}</title></g>`; }).join("");
-  return `<div class="map"><svg viewBox="0 0 ${MAP.W} ${MAP.H}" role="group" aria-label="${T("Map of schools", "學校地圖")}">${paths}${pins}</svg>
-    <div class="legend"><div><span class="dot" style="background:var(--lilac-600)"></span>${T("School", "學校")}</div><div><span class="dot" style="background:var(--apricot-500)"></span>${T("Has open job posts", "有開放職缺")}</div></div></div>
-    <p class="mapnote">${T("Schools are shown by area in this demo. Pins with an apricot dot have open job posts.", "此示範以地區顯示學校。有橘色圓點的標記代表有開放職缺。")}</p>`;
-}
+/* The map lives in map.js (zoomable, with every district). */
 
 /* ---------- guided flow frame: one question at a time, Link asks, a receipt or preview beside it ---------- */
 const LINK = `<svg width="56" height="56" viewBox="0 0 64 64" aria-hidden="true"><circle cx="26" cy="32" r="17" fill="#fde3cc" stroke="#f08f45" stroke-width="4.2"/><circle cx="38" cy="32" r="17" fill="#ebe3f8" fill-opacity=".85" stroke="#2b1730" stroke-width="4.2"/><path d="M28.95 15.26A17 17 0 0 1 35 17.58" fill="none" stroke="#f08f45" stroke-width="4.2"/><circle cx="28.6" cy="29.2" r="1.9" fill="#2b1730"/><circle cx="35.4" cy="29.2" r="1.9" fill="#2b1730"/><path d="M27.4 35.2Q32 40.2 36.6 35.2" fill="none" stroke="#2b1730" stroke-width="2.2" stroke-linecap="round"/></svg>`;

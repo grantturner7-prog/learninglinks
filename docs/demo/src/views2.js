@@ -24,16 +24,20 @@ V.educators = () => {
   const base = visibleTo(type);
   const f = { subject: val("subject"), city: val("city"), work: val("work") };
   const pass = (e) => (!f.subject || e.subjects.includes(f.subject)) && (type !== "school" || !f.work || e.openTo.includes(f.work));
-  const counts = {}; base.filter(pass).forEach((e) => { counts[e.city] = (counts[e.city] || 0) + 1; });
-  const list = base.filter((e) => pass(e) && (!f.city || e.city === f.city));
+  // A district only counts while its own city is the one chosen (the City box can change underneath it).
+  if (st.form.district && (cityOfDist(st.form.district) !== f.city || !GEO.dBy.has(st.form.district))) st.form.district = "";
+  const district = val("district");
+  const onMap = base.filter(pass);
+  const list = onMap.filter((e) => (!f.city || e.city === f.city) && (!district || e.district === district));
+  const where = district ? (st.lang === "zh" ? lab(CITY[f.city]) + distFull(district) : distFull(district) + ", " + lab(CITY[f.city])) : f.city ? lab(CITY[f.city]) : "";
   const opt = (obj, cur) => Object.keys(obj).map((k) => `<option value="${k}" ${cur === k ? "selected" : ""}>${h(lab(obj[k]))}</option>`).join("");
   return `<div class="stack"><div><h1>${T("Find educators", "尋找教師")}</h1><p class="muted">${type === "family" ? T("Showing educators who offer private tutoring or coaching.", "顯示提供私人家教或輔導的教師。") : T("Showing educators who are open to full-time or part-time work.", "顯示開放全職或兼職工作的教師。")}</p></div>
     ${type === "family" ? `<div class="notice">${h(noticeFull().tutoringWork)}</div>` : ""}
     <div class="card flat filters"><div class="grid g3"><div><label class="lab" for="f-subject">${T("Subject", "科目")}</label><select class="field" id="f-subject" data-f="subject" data-r="1"><option value="">${T("Any", "不限")}</option>${opt(SUBJECT, f.subject)}</select></div>
       <div><label class="lab" for="f-city">${T("City", "縣市")}</label><select class="field" id="f-city" data-f="city" data-r="1"><option value="">${T("Any", "不限")}</option>${DEMO_CITIES.map((c) => `<option value="${c}" ${f.city === c ? "selected" : ""}>${h(lab(CITY[c]))}</option>`).join("")}</select></div>
       ${type === "school" ? `<div><label class="lab" for="f-work">${T("Open to", "開放型態")}</label><select class="field" id="f-work" data-f="work" data-r="1"><option value="">${T("Full-time or part-time", "全職或兼職")}</option><option value="full_time" ${f.work === "full_time" ? "selected" : ""}>${T("Full-time", "全職")}</option><option value="part_time" ${f.work === "part_time" ? "selected" : ""}>${T("Part-time", "兼職")}</option></select></div>` : ""}</div></div>
-    <div class="mapgrid"><div>${educatorMap(counts, f.city, T("Educators appear by area, never by address. Tap an area to see them.", "教師只顯示所在地區，不顯示地址。點選地區即可查看。") + " · " + base.filter(pass).length + " " + T("educators on the map", "位教師"))}${f.city ? `<button class="link-btn" data-act="city" data-v="${f.city}">${T("Show all areas", "顯示所有地區")}</button>` : ""}</div>
-    <div class="stack"><h2>${f.city ? T("Educators in", "教師位於") + " " + h(lab(CITY[f.city])) : T("Educators in all areas", "所有地區的教師")} <span class="muted small">(${list.length})</span></h2>${list.length ? `<div class="grid g2">${list.slice(0, 12).map((e) => eduCard(e, type)).join("")}</div>${list.length > 12 ? `<p class="muted small">${T("Showing the first 12. Narrow the filters to see others.", "僅顯示前 12 位。請縮小篩選條件查看其他教師。")}</p>` : ""}` : `<div class="card flat">${T("Nobody matches. Try removing a filter.", "沒有符合的教師，請試著移除篩選條件。")}</div>`}</div></div></div>`;
+    <div class="mapgrid"><div>${educatorMap(onMap, f.city, district, T("Educators appear by area, never by address. Tap a city, then a district, to see who is there.", "教師只顯示所在地區，不顯示地址。先點選縣市，再點選行政區，即可查看該區的教師。") + " · " + onMap.length + " " + T("educators on the map", "位教師"))}${f.city ? `<button class="link-btn" data-act="mall">${T("Show all areas", "顯示所有地區")}</button>` : ""}</div>
+    <div class="stack"><h2>${where ? T("Educators in", "教師位於") + " " + h(where) : T("Educators in all areas", "所有地區的教師")} <span class="muted small">(${list.length})</span></h2>${list.length ? `<div class="grid g2">${list.slice(0, 12).map((e) => eduCard(e, type)).join("")}</div>${list.length > 12 ? `<p class="muted small">${T("Showing the first 12. Narrow the filters to see others.", "僅顯示前 12 位。請縮小篩選條件查看其他教師。")}</p>` : ""}` : `<div class="card flat">${T("Nobody matches. Try removing a filter.", "沒有符合的教師，請試著移除篩選條件。")}</div>`}</div></div></div>`;
 };
 
 V.educator = () => {
@@ -179,12 +183,12 @@ V.jobs = () => {
   const jobs = openJobs();
   const per = {}; jobs.forEach((j) => { per[j.schoolId] = (per[j.schoolId] || 0) + 1; });
   const city = val("city"), pin = val("pin");
-  const withJobs = Object.keys(per).map(schoolById).filter((x) => x && !SCHOOLS.includes(x) && MAP.c[x.city]);
+  const withJobs = Object.keys(per).map(schoolById).filter((x) => x && !SCHOOLS.includes(x) && GEO.cBy.has(x.city));
   const schools = SCHOOLS.concat(withJobs);
   const shown = jobs.filter((j) => { const s = schoolById(j.schoolId); return (!city || s.city === city) && (!pin || j.schoolId === pin); });
   const ps = pin ? schoolById(pin) : null;
   return `<div class="stack"><div><h1>${T("Job posts from schools", "學校的職缺")}</h1><p class="muted">${T("Full-time and part-time jobs posted by schools. Only signed-in educators with a profile can see this page.", "學校刊登的全職與兼職職缺。只有已登入且有檔案的教師看得到此頁。")}</p></div>
-    <div class="mapgrid"><div>${jobMap(schools, per, pin, city)}${city || pin ? `<button class="link-btn" data-act="clearJobs">${T("Show all areas", "顯示所有地區")}</button>` : ""}</div>
+    <div class="mapgrid"><div>${jobMap(schools, per, pin, city)}${city || pin ? `<button class="link-btn" data-act="mall">${T("Show all areas", "顯示所有地區")}</button>` : ""}</div>
     <div class="stack"><h2>${ps ? h(ps.name) : city ? h(lab(CITY[city])) : T("All open jobs", "所有開放職缺")} <span class="muted small">(${shown.length})</span></h2>
     ${ps && !shown.length ? `<div class="card flat">${h(ps.name)} · ${h(lab(KIND[ps.kind]))} · ${h(placeName(ps))}<br><span class="muted small">${T("No open job posts at this school.", "此學校目前沒有開放職缺。")}</span></div>` : ""}
     ${shown.length ? shown.map((j) => { const s = schoolById(j.schoolId); return `<article class="card flat stack"><div class="row" style="justify-content:space-between"><div><b style="font-size:18px">${h(j.title)}</b><div class="small muted">${h(s.name)} · ${h(lab(KIND[s.kind]))} · ${h(placeName(s))}${bilBadge(s)}</div></div><span class="badge apricot">${h(lab(OPEN[j.type]))}</span></div><p>${h(j.desc)}</p><div class="tags"><span class="badge">${h(lab(SUBJECT[j.subject]))}</span></div><p class="small"><b>${T("Apply:", "應徵：")}</b> ${h(j.contact)}</p><div><button class="link-btn" data-act="reportOpen" data-t="job" data-v="${j.id}">${T("Report this job post", "檢舉此職缺")}</button></div></article>`; }).join("") : ""}

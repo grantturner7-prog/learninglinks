@@ -62,6 +62,7 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
   const f = await getFormatter();
 
   const areaName = (key: string) => requireCountryMap("TW").label(key, locale);
+  const areaFullName = (key: string) => requireCountryMap("TW").longLabel(key, locale);
   const districtsByCity: Record<string, FilterOption[]> = {};
   for (const d of DISTRICTS) (districtsByCity[d.city] ??= []).push({ key: d.key, label: districtLabel(d.key, locale) });
   const pages = Math.max(1, Math.ceil(result.total / result.pageSize));
@@ -134,7 +135,7 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
                 </nav>
               ) : null}
               <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h2 className="text-lg font-bold" data-testid="list-title">{selectedKey ? t("map.listTitleArea", { area: !filters.district ? cityLabel(filters.city, locale) : locale.startsWith("zh") ? `${cityLabel(filters.city, locale)}${areaName(filters.district)}` : `${areaName(filters.district)}, ${cityLabel(filters.city, locale)}` }) : t("map.listTitleAll")}</h2>
+                <h2 className="text-lg font-bold" data-testid="list-title">{selectedKey ? t("map.listTitleArea", { area: !filters.district ? cityLabel(filters.city, locale) : locale.startsWith("zh") ? `${cityLabel(filters.city, locale)}${areaFullName(filters.district)}` : `${areaFullName(filters.district)}, ${cityLabel(filters.city, locale)}` }) : t("map.listTitleAll")}</h2>
                 {selectedKey ? <Link href={clearAreaHref} scroll={false} className="link text-sm">{t("map.clearArea")}</Link> : null}
               </div>
             </div>

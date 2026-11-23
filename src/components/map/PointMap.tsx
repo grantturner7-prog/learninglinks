@@ -260,7 +260,7 @@ function PointLayers({ points, selectedId, onSelect, locale, fitKey }: { points:
             {here ? (
               <>
                 <li><span className="ll-crumb__here">{country.label(cityOfKey(here.district), locale)}</span></li>
-                <li><span className="ll-crumb__here">{country.label(here.district, locale)}</span></li>
+                <li><span className="ll-crumb__here">{country.longLabel(here.district, locale)}</span></li>
               </>
             ) : null}
           </ol>

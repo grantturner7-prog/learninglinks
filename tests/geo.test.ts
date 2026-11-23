@@ -106,3 +106,31 @@ describe("Taiwan map data", () => {
     expect(vendored.equals(installed)).toBe(true);
   });
 });
+
+describe("full area names", () => {
+  it("adds what kind of place it is in English, because several cities have an East or a Xinyi", async () => {
+    const { requireCountryMap } = await import("@/lib/geo");
+    const tw = requireCountryMap("TW");
+    expect(tw.label("taichung:xitun", "en-TW")).toBe("Xitun");
+    expect(tw.longLabel("taichung:xitun", "en-TW")).toBe("Xitun District");
+    expect(tw.longLabel("taichung:east", "en-TW")).toBe("East District");
+    expect(tw.longLabel("changhua:shetou", "en-TW")).toBe("Shetou Township");
+    expect(tw.longLabel("changhua:changhua", "en-TW")).toBe("Changhua City");
+  });
+
+  it("leaves Chinese names and city names as they are", async () => {
+    const { requireCountryMap } = await import("@/lib/geo");
+    const tw = requireCountryMap("TW");
+    expect(tw.longLabel("taichung:xitun", "zh-TW")).toBe("西屯區");
+    expect(tw.longLabel("taichung", "en-TW")).toBe("Taichung City");
+    expect(tw.longLabel("taichung", "zh-TW")).toBe("臺中市");
+    expect(tw.longLabel("nowhere:at-all", "en-TW")).toBe("nowhere:at-all");
+  });
+
+  it("gives every one of the 368 districts a full English name that says what it is", async () => {
+    const { ALL_TW_DISTRICTS, requireCountryMap } = await import("@/lib/geo");
+    const tw = requireCountryMap("TW");
+    expect(ALL_TW_DISTRICTS).toHaveLength(368);
+    for (const d of ALL_TW_DISTRICTS) expect(tw.longLabel(d.key, "en-TW"), d.key).toMatch(/ (District|Township|City)$/);
+  });
+});

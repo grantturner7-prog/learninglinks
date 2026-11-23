@@ -375,7 +375,7 @@ function AreaLayers({ bubbles, selected, onPick, onClear, locale }: { bubbles: r
             data-label={side ? "1" : "0"}
             data-side={side ?? "below"}
             aria-pressed={sel}
-            aria-label={fmt(plural(labels.areaOne, labels.areaOther, c.count), { name, count: c.count })}
+            aria-label={fmt(plural(labels.areaOne, labels.areaOther, c.count), { name: country.longLabel(c.key, locale), count: c.count })}
             onClick={() => onPick(c.key, c.level)}
             onMouseEnter={() => setHover(c.key)}
             onMouseLeave={() => setHover(null)}
@@ -417,7 +417,7 @@ function AreaLayers({ bubbles, selected, onPick, onClear, locale }: { bubbles: r
             </li>
             {selDistrict ? (
               <li>
-                <span className="ll-crumb__here" aria-current="true">{country.label(selDistrict, locale)}</span>
+                <span className="ll-crumb__here" aria-current="true">{country.longLabel(selDistrict, locale)}</span>
               </li>
             ) : null}
           </ol>

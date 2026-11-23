@@ -18,10 +18,21 @@ const DIST = {
   "taoyuan:zhongli": ["Zhongli", "中壢區"], "taoyuan:taoyuan": ["Taoyuan", "桃園區"],
   "kaohsiung:zuoying": ["Zuoying", "左營區"], "kaohsiung:sanmin": ["Sanmin", "三民區"],
   "tainan:east": ["East", "東區"], "tainan:anping": ["Anping", "安平區"],
-  "hsinchu-city:east": ["East", "東區"], "changhua:city": ["Changhua City", "彰化市"],
+  "hsinchu-city:east": ["East", "東區"], "changhua:changhua": ["Changhua", "彰化市"],
 };
 const DEMO_CITIES = ["taichung", "taipei", "new-taipei", "taoyuan", "kaohsiung", "tainan", "hsinchu-city", "changhua"];
 const distsOf = (city) => Object.keys(DIST).filter((k) => k.startsWith(city + ":"));
+/** Where the pretend educators live: real districts of the main cities, so the district view of the map has something to show. */
+const EDU_DISTS = {
+  taichung: ["xitun", "nantun", "beitun", "daya", "fengyuan", "west", "north", "taiping", "dali", "tanzi"],
+  taipei: ["daan", "xinyi", "neihu", "shilin", "zhongshan", "songshan", "wenshan", "beitou"],
+  "new-taipei": ["banqiao", "zhonghe", "xindian", "yonghe", "sanchong", "tamsui", "linkou"],
+  taoyuan: ["zhongli", "taoyuan", "bade", "guishan", "luzhu"],
+  kaohsiung: ["zuoying", "sanmin", "lingya", "fengshan", "gushan", "nanzi"],
+  tainan: ["east", "anping", "north", "yongkang", "annan"],
+  "hsinchu-city": ["east", "north", "xiangshan"],
+  changhua: ["changhua", "yuanlin", "lukang"],
+};
 
 /* ---------- taxonomy ---------- */
 const SUBJECT = {
@@ -40,7 +51,7 @@ let _seed = 7;
 const rnd = () => ((_seed = (_seed * 1664525 + 1013904223) % 4294967296) / 4294967296);
 const pick = (a) => a[Math.floor(rnd() * a.length)];
 const some = (a, n) => [...a].sort(() => rnd() - 0.5).slice(0, n);
-const NAMES = ["Alex T.", "Brenda L.", "Chris W.", "Dana K.", "Emil H.", "Fiona C.", "Grace Y.", "Henry P.", "Iris M.", "Jack S.", "Kelly N.", "Leo R.", "Mia B.", "Noah D.", "Olivia F.", "Peter G.", "Quinn A.", "Rosa V.", "Sam J.", "Tina Z.", "Uma Q.", "Victor O.", "Wendy E.", "Xavier I.", "Yuki U.", "Zane H.", "Amy C.", "Ben L.", "Cora M.", "Dylan P.", "Elena S.", "Finn K.", "Gina T.", "Hugo L."];
+const NAMES = ["Alex T.", "Brenda L.", "Chris W.", "Dana K.", "Emil H.", "Fiona C.", "Grace Y.", "Henry P.", "Iris M.", "Jack S.", "Kelly N.", "Leo R.", "Mia B.", "Noah D.", "Olivia F.", "Peter G.", "Quinn A.", "Rosa V.", "Sam J.", "Tina Z.", "Uma Q.", "Victor O.", "Wendy E.", "Xavier I.", "Yuki U.", "Zane H.", "Amy C.", "Ben L.", "Cora M.", "Dylan P.", "Elena S.", "Finn K.", "Gina T.", "Hugo L.", "Ivy W.", "Jonas R.", "Kira D.", "Liam F.", "Mona G.", "Nico B.", "Opal H.", "Paul Y.", "Rhea N.", "Seth C.", "Tara V.", "Umar K.", "Vera S.", "Will A."];
 const HEAD_T = { "english-conversation": "English conversation at your kitchen table", phonics: "Phonics and reading for young learners", mathematics: "Patient maths tutor for exam years", science: "Science made hands-on", mandarin: "Mandarin for beginners and newcomers", music: "Piano and music theory, step by step", art: "Creative art lessons for curious kids", "test-prep-english": "English test prep that builds confidence" };
 const BIO = [
   "I keep lessons practical and friendly. I plan each term around what the learner wants to be able to do, and I send a short note to parents after each session.",
@@ -48,14 +59,16 @@ const BIO = [
   "I work calmly with beginners and shy learners. Expect games, songs and plenty of encouragement.",
   "I prepare students for school tests and certificates with weekly practice and honest feedback.",
 ];
-const EDU = Array.from({ length: 34 }, (_, i) => {
+const _perCity = {};
+const EDU = Array.from({ length: 48 }, (_, i) => {
   const city = DEMO_CITIES[[0, 0, 1, 2, 3, 0, 4, 5, 6, 7, 1, 0, 2, 0, 3, 0][i % 16]];
-  const ds = distsOf(city);
+  const ds = EDU_DISTS[city].map((d) => city + ":" + d);
+  const k = (_perCity[city] = (_perCity[city] || 0) + 1) - 1; // this city's k-th educator: a district now and then holds two, so the shading has something to say
   const kind = i % 3; // 0 tutoring only, 1 school work only, 2 both
   const openTo = kind === 0 ? ["private_tutoring"] : kind === 1 ? (i % 2 ? ["full_time", "part_time"] : ["full_time"]) : ["part_time", "private_tutoring"];
   const tut = openTo.includes("private_tutoring");
   return {
-    id: "e" + (i + 1), name: NAMES[i % NAMES.length], city, district: ds.length ? ds[i % ds.length] : null, openTo,
+    id: "e" + (i + 1), name: NAMES[i % NAMES.length], city, district: ds[Math.floor(k * 0.7) % ds.length], openTo,
     subjects: some(Object.keys(SUBJECT), 1 + (i % 3)), levels: some(Object.keys(LEVEL), 1 + (i % 2)), langs: i % 5 === 0 ? ["en", "zh"] : ["en"],
     exp: ["0-1", "2-4", "5-9", "10+"][i % 4], rateMin: tut ? 500 + (i % 5) * 100 : null, rateMax: tut ? 900 + (i % 5) * 100 : null,
     head: null, bio: BIO[i % BIO.length],
@@ -75,7 +88,7 @@ const SCHOOL_ROWS = [
   ["Bamboo Cram School", "cram_school", "taoyuan", "taoyuan:zhongli"], ["Seed & Sprout Kindergarten", "kindergarten", "taoyuan", "taoyuan:taoyuan"],
   ["Pearl Language Centre", "language_school", "kaohsiung", "kaohsiung:zuoying"], ["Tidewater Cram School", "cram_school", "kaohsiung", "kaohsiung:sanmin"],
   ["Anping Kids Academy", "kindergarten", "tainan", "tainan:anping"], ["Old Town Cram School", "cram_school", "tainan", "tainan:east"],
-  ["Science Park Bilingual School", "international_school", "hsinchu-city", "hsinchu-city:east"], ["Riverside Kindergarten", "kindergarten", "changhua", "changhua:city"],
+  ["Science Park Bilingual School", "international_school", "hsinchu-city", "hsinchu-city:east"], ["Riverside Kindergarten", "kindergarten", "changhua", "changhua:changhua"],
 ];
 const SCHOOLS = SCHOOL_ROWS.map((r, i) => ({ id: "s" + (i + 1), name: r[0], kind: r[1], ownership: "private", city: r[2], district: r[3], owner: null, seed: i * 37 + 11 }));
 

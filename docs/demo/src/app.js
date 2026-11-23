@@ -24,9 +24,11 @@ function render(scrollTop) {
   const aid = a && a.id, ss = a && a.selectionStart, se = a && a.selectionEnd;
   const y = window.scrollY;
   const fn = V[st.view] || V.home;
+  MAP_PENDING = {};
   let inner;
   try { inner = fn(); } catch (err) { console.error(err); inner = `<div class="card">Something went wrong in this demo screen. <button class="btn" data-act="reset">Start over</button></div>`; }
   document.getElementById("app").innerHTML = shell(inner);
+  mapsMount();
   document.title = "LearningLinks demo";
   document.documentElement.lang = st.lang === "zh" ? "zh-Hant-TW" : "en";
   if (aid) { const el = document.getElementById(aid); if (el) { el.focus({ preventScroll: true }); try { if (ss != null) el.setSelectionRange(ss, se); } catch (e) { /* not a text field */ } } }
@@ -71,6 +73,12 @@ const A = {
   city: (el) => { st.form.city = st.form.city === el.dataset.v ? "" : el.dataset.v; st.form.pin = ""; render(false); },
   pin: (el) => { st.form.pin = st.form.pin === el.dataset.v ? "" : el.dataset.v; render(false); },
   clearJobs: () => { st.form.city = ""; st.form.pin = ""; render(false); },
+  /* the map: tap a city, tap a district, back out to all of Taiwan */
+  mcity: (el, e) => { st.form.city = el.dataset.v; st.form.district = ""; st.form.pin = ""; MAP_FORCE = true; render(false); mapKeyFocus(el, e); },
+  mdist: (el, e) => { st.form.city = cityOfDist(el.dataset.v); st.form.district = el.dataset.v; st.form.pin = ""; MAP_FORCE = true; render(false); mapKeyFocus(el, e); },
+  mall: (el, e) => { st.form.city = ""; st.form.district = ""; st.form.pin = ""; MAP_FORCE = true; render(false); mapKeyFocus(el, e); },
+  mfit: (el, e) => { MAP_FORCE = true; render(false); mapKeyFocus(el, e); },
+  mzoom: (el) => { const slot = el.closest(".zslot"); const m = slot && MV[slot.id]; if (m) m.zoomAt(el.dataset.v === "in" ? 2 : 0.5, m.cw / 2, m.ch / 2, 240); },
   back: () => go(st.prev ? st.prev.view : "dashboard", st.prev ? st.prev.args : {}),
 
   signup1: () => { st.form.step = 2; render(true); },

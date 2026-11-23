@@ -3,7 +3,7 @@
 :root {
   --blush: #fcf3ee; --paper: #fffdfb; --ink: #2b1730; --ink-2: #4a3550; --ink-3: #5b4560; --ink-4: #6e5a73;
   --line: #e2cdd0; --line-2: #efdfdb;
-  --lilac-50: #f5f0fc; --lilac-100: #ebe3f8; --lilac-200: #dccff3; --lilac-300: #b7a0e3; --lilac-500: #7c5fba; --lilac-600: #66489e; --lilac-700: #553a8c;
+  --lilac-50: #f5f0fc; --lilac-100: #ebe3f8; --lilac-200: #dccff3; --lilac-300: #b7a0e3; --lilac-400: #9a80d1; --lilac-500: #7c5fba; --lilac-600: #66489e; --lilac-700: #553a8c;
   --apricot-300: #fde3cc; --apricot-400: #f7a96b; --apricot-500: #f08f45; --apricot-700: #a94a0e;
   --warn-bg: #fff0e2; --warn-ink: #7a3a0b; --bad-bg: #fdf0ef; --bad: #b42318; --ok-bg: #f1f7ee; --ok: #2f5d2a;
   --shadow: 0 1px 2px rgb(60 25 70 / .06), 0 8px 20px -10px rgb(60 25 70 / .16);
@@ -143,17 +143,56 @@ textarea.field { min-height: 96px; resize: vertical; }
 
 /* map */
 .map { position: relative; background: radial-gradient(120% 90% at 30% 20%, #fdf7fb 0%, #efe4f1 100%); border-radius: 28px; box-shadow: var(--shadow); overflow: hidden; }
-.map svg { display: block; width: 100%; height: auto; max-height: 560px; }
-.map .city { fill: #fffaf6; stroke: #b7a0e3; stroke-width: .6; cursor: pointer; transition: fill .15s; }
-.map .city:hover { fill: var(--lilac-100); }
-.map .city.sel { stroke: var(--apricot-500); stroke-width: 1.6; }
-.map .bub { cursor: pointer; }
-.map .bub circle { fill: var(--lilac-600); stroke: #fff; stroke-width: 2.2; }
-.map .bub text { fill: #fff; font-weight: 800; font-size: 11px; text-anchor: middle; dominant-baseline: central; pointer-events: none; font-family: var(--font); }
-.map .lbl { font-size: 8.5px; fill: var(--ink); font-weight: 800; text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: #fffdfb; stroke-width: 2.4px; font-family: var(--font); }
-.map .pin { cursor: pointer; }
-.map .pin circle.s { fill: var(--lilac-600); stroke: #fff; stroke-width: 1.4; }
-.map .pin circle.j { fill: var(--apricot-500); stroke: #fff; stroke-width: 1; }
+/* The zoomable map (map.js). Shapes are SVG; bubbles, pins and names are real elements laid over it, so they keep
+   one size on screen at any zoom and the bubbles and pins are proper buttons. */
+.zmap { height: 520px; touch-action: pan-x pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.zmap[data-drag] { cursor: grabbing; }
+@media (max-width: 640px) { .zmap { height: 420px; } }
+.zsvg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.zsvg path { vector-effect: non-scaling-stroke; }
+.zshadow { fill: none; stroke: rgb(60 25 70 / .1); stroke-width: 8; stroke-linejoin: round; }
+.zland { fill: #fffaf6; }
+.zc, .zd { fill: transparent; }
+.zd { stroke: var(--line); stroke-width: .9; }
+.zc.on, .zd.on { cursor: pointer; }
+@media (hover: hover) { .zc.on:hover, .zd.on:hover { stroke: var(--lilac-700); stroke-width: 2; } }
+.zc.dim, .zd.dim { fill-opacity: .38; }
+.zcl { fill: none; stroke: var(--lilac-300); stroke-width: 1.2; stroke-linejoin: round; pointer-events: none; }
+.zsel-glow { fill: none; stroke: var(--apricot-400); stroke-width: 7; opacity: .4; stroke-linejoin: round; pointer-events: none; }
+.zsel { fill: none; stroke: var(--apricot-500); stroke-width: 2.6; stroke-linejoin: round; pointer-events: none; }
+.zmap[data-mode="country"] .zg-d, .zmap[data-mode="district"] .zg-c { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { .zg-c, .zg-d { transition: opacity .25s; } }
+.zov { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.zov > * { position: absolute; left: 0; top: 0; }
+.zov [hidden] { display: none; }
+.zb { width: var(--size); height: var(--size); border-radius: 50%; border: 2.5px solid #fff; background: var(--lilac-600); color: #fff; font-weight: 800; font-size: 13px; line-height: 1; display: grid; place-items: center; padding: 0; cursor: pointer; pointer-events: auto; box-shadow: 0 0 0 5px rgb(102 72 158 / .16), var(--shadow); }
+@media (hover: hover) { .zb:hover { background: var(--lilac-700); } }
+.zb[aria-pressed="true"] { background: var(--ink); box-shadow: 0 0 0 3px var(--apricot-400), var(--shadow); }
+.zb-name, .zp-name { position: absolute; left: 50%; top: calc(100% + 5px); transform: translateX(-50%); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 800; line-height: 1.25; white-space: nowrap; box-shadow: var(--shadow); display: none; pointer-events: none; }
+.zp-name { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.zb[data-label="1"] .zb-name, .zp[data-label="1"] .zp-name { display: block; }
+.zb[data-label="t"] .zb-name { display: block; top: auto; bottom: calc(100% + 5px); }
+.zb[data-label="r"] .zb-name { display: block; top: 50%; left: calc(100% + 6px); transform: translateY(-50%); }
+.zb[data-label="l"] .zb-name { display: block; top: 50%; left: auto; right: calc(100% + 6px); transform: translateY(-50%); }
+.zb-badge { position: absolute; right: -3px; top: -3px; width: 12px; height: 12px; border-radius: 50%; background: var(--apricot-500); border: 2px solid #fff; }
+.zp { width: 28px; height: 28px; border: 0; background: none; padding: 0; cursor: pointer; pointer-events: auto; display: grid; place-items: center; border-radius: 50%; }
+.zp-dot { width: 17px; height: 17px; border-radius: 50%; background: var(--lilac-600); border: 2.5px solid #fff; box-shadow: var(--shadow); }
+.zp:hover .zp-dot { background: var(--lilac-700); }
+.zp[aria-pressed="true"] .zp-dot { width: 22px; height: 22px; background: var(--ink); box-shadow: 0 0 0 3px var(--apricot-400), var(--shadow); }
+.zp-badge { position: absolute; right: -4px; top: -5px; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 999px; background: var(--apricot-500); color: var(--ink); border: 1.5px solid #fff; font-size: 10.5px; font-weight: 800; line-height: 13px; text-align: center; }
+.zn { color: var(--ink); font-size: 11.5px; font-weight: 700; line-height: 1.2; white-space: nowrap; pointer-events: none; text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 3px var(--paper), 0 0 4px var(--paper); }
+.zcrumb { position: absolute; left: 10px; top: 10px; max-width: calc(100% - 72px); display: flex; flex-wrap: wrap; align-items: center; gap: 0 2px; background: var(--paper); border-radius: 16px; padding: 3px 6px; box-shadow: var(--shadow); font-size: 13.5px; font-weight: 800; cursor: default; }
+.zcrumb button { background: none; border: 0; padding: 5px 6px; border-radius: 8px; color: var(--lilac-700); font-weight: 800; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.zcrumb button:hover { background: var(--lilac-50); }
+.zcrumb button[aria-current] { color: var(--ink); text-decoration: none; }
+.zsep { color: var(--ink-3); }
+.zctl { position: absolute; right: 10px; top: 10px; display: grid; background: var(--paper); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; cursor: default; }
+.zctl button { width: 40px; height: 40px; border: 0; background: none; color: var(--lilac-700); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.zctl button + button { border-top: 1.5px solid var(--line-2); }
+.zctl button:hover { background: var(--lilac-50); }
+.zctl button:focus-visible, .zcrumb button:focus-visible { outline-offset: -3px; }
+.zmap .legend { cursor: default; }
+.zcrumb, .zctl, .zmap .legend { z-index: 2; }
 .legend { position: absolute; left: 12px; bottom: 12px; background: var(--paper); border-radius: 16px; padding: 8px 12px; font-size: 12.5px; box-shadow: var(--shadow); display: grid; gap: 4px; }
 .legend .scale { display: flex; gap: 3px; }
 .legend .scale i { width: 22px; height: 9px; border-radius: 3px; }
@@ -192,8 +231,6 @@ footer.fine .links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 
 @media (prefers-reduced-motion: no-preference) { .card, .tile, .btn { transition: box-shadow .15s, border-color .15s, background .15s; } }
 .mapgrid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); align-items: start; }
 @media (min-width: 900px) { .mapgrid { grid-template-columns: minmax(340px, 440px) minmax(0, 1fr); } .mapgrid > :first-child { position: sticky; top: 12px; } }
-.map .bub text { font-size: 7px; }
-.map .lbl { font-size: 6.4px; stroke-width: 2px; }
 
 .edu { height: 100%; }
 .edu > .row:last-child { margin-top: auto; }
