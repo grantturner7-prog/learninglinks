@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { parseDirectoryFilters } from "@/lib/directory/params";
 import { getAreaCounts, getMemberAudience, searchEducators } from "@/lib/directory/service";
+import { requireCountryMap } from "@/lib/geo";
 import { CITIES, DISTRICTS } from "@/lib/geo/taiwan";
 import { cityLabel, districtLabel } from "@/lib/geo-labels";
 import { getMapLabels } from "@/lib/map-labels";
@@ -52,11 +53,15 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
   const mapLabels = view === "map" ? await getMapLabels() : null;
   const selectedKey = filters.district ?? filters.city ?? null;
   const mapTotal = bubbles.reduce((n, b) => n + b.count, 0);
+  // The districts of the chosen city that have educators, most first: the same choice as tapping the map, as plain
+  // links, for small districts that are hard to tap and for people who do not use the map.
+  const cityDistricts = filters.city ? bubbles.filter((b) => b.level === "district" && b.key.startsWith(`${filters.city}:`)) : [];
   const t = await getTranslations("directory");
   const tt = await getTranslations("taxonomy");
   const tc = await getTranslations("common");
   const f = await getFormatter();
 
+  const areaName = (key: string) => requireCountryMap("TW").label(key, locale);
   const districtsByCity: Record<string, FilterOption[]> = {};
   for (const d of DISTRICTS) (districtsByCity[d.city] ??= []).push({ key: d.key, label: districtLabel(d.key, locale) });
   const pages = Math.max(1, Math.ceil(result.total / result.pageSize));
@@ -64,6 +69,7 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
   for (const [k, v] of Object.entries(filters)) if (v && k !== "page") filterParams[k] = String(v);
   const withView = (extra: Record<string, string> = {}, v: "map" | "list" = view) => {
     const q = new URLSearchParams({ ...filterParams, ...extra });
+    for (const [k, val] of Object.entries(extra)) if (!val) q.delete(k);
     if (v === "list") q.set("view", "list");
     const s = q.toString();
     return `/educators${s ? `?${s}` : ""}`;
@@ -116,13 +122,21 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
             <div className="mb-5">
               <AreaMapPanel bubbles={bubbles} selectedKey={selectedKey} locale={locale} labels={mapLabels} params={{ ...filterParams }} />
               <p className="mt-2 text-sm text-ink-500">{t("map.areaHint")} · {t("map.mapSummary", { count: mapTotal })}</p>
-              {selectedKey ? (
-                <p className="mt-1 flex flex-wrap items-center gap-2 text-sm font-semibold">
-                  {t("map.area", { area: filters.district ? districtLabel(filters.district, locale) : cityLabel(filters.city, locale) })}
-                  <Link href={clearAreaHref} className="link font-normal">{t("map.clearArea")}</Link>
-                </p>
+              {cityDistricts.length > 0 ? (
+                <nav aria-label={t("map.districtsIn", { city: cityLabel(filters.city, locale) })} className="mt-3" data-testid="district-chips">
+                  <p className="text-sm font-bold">{t("map.districtsIn", { city: cityLabel(filters.city, locale) })}</p>
+                  <ul className="mt-2 flex flex-wrap gap-2">
+                    <li><Link href={withView({ district: "" })} scroll={false} className="chip" aria-current={filters.district ? undefined : "true"}>{t("map.allOfCity", { city: cityLabel(filters.city, locale) })}</Link></li>
+                    {cityDistricts.map((b) => (
+                      <li key={b.key}><Link href={withView({ district: b.key })} scroll={false} className="chip" aria-current={filters.district === b.key ? "true" : undefined}>{areaName(b.key)} <span className="chip__n">{f.number(b.count)}</span></Link></li>
+                    ))}
+                  </ul>
+                </nav>
               ) : null}
-              <h2 className="mt-4 text-lg font-bold">{t("map.listTitle")}</h2>
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h2 className="text-lg font-bold" data-testid="list-title">{selectedKey ? t("map.listTitleArea", { area: !filters.district ? cityLabel(filters.city, locale) : locale.startsWith("zh") ? `${cityLabel(filters.city, locale)}${areaName(filters.district)}` : `${areaName(filters.district)}, ${cityLabel(filters.city, locale)}` }) : t("map.listTitleAll")}</h2>
+                {selectedKey ? <Link href={clearAreaHref} scroll={false} className="link text-sm">{t("map.clearArea")}</Link> : null}
+              </div>
             </div>
           ) : (
             // The list view has no map heading, so give the results a (visually hidden) one: headings must not skip a level.

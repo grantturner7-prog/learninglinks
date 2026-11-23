@@ -26,6 +26,10 @@
     "areaHint": "Educators appear by area, never by address. Tap an area to see them.",
     "clearArea": "Show all areas",
     "listTitle": "Educators in this area",
+    "listTitleArea": "Educators in {area}",
+    "listTitleAll": "Educators in all of Taiwan",
+    "districtsIn": "Districts in {city}",
+    "allOfCity": "All of {city}",
     "allAreas": "All of Taiwan",
     "attributionBoundary": "Boundaries: Ministry of the Interior open data",
     "mapSummary": "{count, plural, one {# educator} other {# educators}} on the map"

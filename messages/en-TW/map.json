@@ -18,6 +18,9 @@
   "jobsOne": "{count} open job",
   "jobsOther": "{count} open jobs",
   "pinFallback": "School",
+  "crumbRoot": "Taiwan",
+  "crumbAria": "Selected area",
+  "hereAria": "Area in view",
   "gestureDesktop": "Use ctrl + scroll to zoom the map",
   "gestureMac": "Use ⌘ + scroll to zoom the map",
   "gestureMobile": "Use two fingers to move the map"

@@ -26,6 +26,10 @@
     "areaHint": "教師以區域呈現，不會顯示地址。點選區域即可查看。",
     "clearArea": "顯示全部區域",
     "listTitle": "此區域的教師",
+    "listTitleArea": "{area}的教師",
+    "listTitleAll": "全臺灣的教師",
+    "districtsIn": "{city}各區",
+    "allOfCity": "{city}全區",
     "allAreas": "全台灣",
     "attributionBoundary": "行政區界線：內政部開放資料",
     "mapSummary": "地圖上共 {count} 位教師"

@@ -18,6 +18,11 @@ export interface MapShellProps {
   legend?: ReactNode;
   /** Called when the user presses the "show everything" control. */
   onReset?: () => void;
+  /**
+   * How far in a person can zoom. There is no street background yet, so past the point where one district fills the
+   * frame there is nothing more to see: the area map stops earlier than the school map, whose pins need the room.
+   */
+  maxZoom?: number;
   children?: ReactNode;
 }
 
@@ -37,7 +42,7 @@ const WORKER_URL = "/vendor/maplibre/maplibre-gl-worker.mjs";
  * land, district and county lines) and provides zoom/reset controls, attribution and loading and no-WebGL states.
  * Layers and markers are supplied by children (see AreaMap and PointMap).
  */
-export function MapShell({ country, labels, className = "", gestures = "auto", legend, onReset, children }: MapShellProps) {
+export function MapShell({ country, labels, className = "", gestures = "auto", legend, onReset, maxZoom = 14.5, children }: MapShellProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [ctx, setCtx] = useState<MapCtx | null>(null);
   const [painted, setPainted] = useState(false);
@@ -74,7 +79,7 @@ export function MapShell({ country, labels, className = "", gestures = "auto", l
           fitBoundsOptions: { padding: pad },
           maxBounds: [[w - 2.5, s - 2], [e + 2.5, n + 2]],
           minZoom: 5,
-          maxZoom: 14.5, // no street basemap yet, so deeper zoom would only show empty land
+          maxZoom,
           attributionControl: false,
           cooperativeGestures: coop,
           locale: {
@@ -112,7 +117,7 @@ export function MapShell({ country, labels, className = "", gestures = "auto", l
       setPainted(false);
       map?.remove();
     };
-  }, [country, gestures]);
+  }, [country, gestures, maxZoom]);
 
   const reset = useCallback(() => {
     if (!ctx) return;

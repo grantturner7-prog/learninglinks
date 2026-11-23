@@ -12,7 +12,7 @@ export async function getMapLabels(overrides: Partial<MapLabels> = {}): Promise<
     attribution: t("attribution"), legendEducators: t("legendEducators"), legendFewer: t("legendFewer"), legendMore: t("legendMore"),
     legendSchool: t("legendSchool"), legendJobs: t("legendJobs"), areaOne: t.raw("areaOne") as string, areaOther: t.raw("areaOther") as string,
     clusterOne: t.raw("clusterOne") as string, clusterOther: t.raw("clusterOther") as string, jobsOne: t.raw("jobsOne") as string, jobsOther: t.raw("jobsOther") as string,
-    pinFallback: t("pinFallback"), gestureDesktop: t("gestureDesktop"), gestureMac: t("gestureMac"), gestureMobile: t("gestureMobile"),
+    pinFallback: t("pinFallback"), crumbRoot: t("crumbRoot"), crumbAria: t("crumbAria"), hereAria: t("hereAria"), gestureDesktop: t("gestureDesktop"), gestureMac: t("gestureMac"), gestureMobile: t("gestureMobile"),
     ...overrides,
   };
 }

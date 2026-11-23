@@ -18,6 +18,9 @@
   "jobsOne": "{count} 個職缺",
   "jobsOther": "{count} 個職缺",
   "pinFallback": "學校",
+  "crumbRoot": "全臺灣",
+  "crumbAria": "已選區域",
+  "hereAria": "目前顯示的區域",
   "gestureDesktop": "請按住 Ctrl 並滾動滑鼠以縮放地圖",
   "gestureMac": "請按住 ⌘ 並滾動以縮放地圖",
   "gestureMobile": "請用兩指移動地圖"

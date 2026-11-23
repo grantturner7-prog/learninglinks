@@ -26,6 +26,12 @@ export interface MapLabels {
   jobsOther: string;
   /** Accessible name for a pin that has no name of its own. */
   pinFallback: string;
+  /** First part of the "where am I" bar: the whole country, e.g. "Taiwan". Pressing it shows everything again. */
+  crumbRoot: string;
+  /** Accessible name of the bar when it shows the chosen area. */
+  crumbAria: string;
+  /** Accessible name of the bar when it only says which area is in view. */
+  hereAria: string;
   gestureDesktop: string;
   gestureMac: string;
   gestureMobile: string;

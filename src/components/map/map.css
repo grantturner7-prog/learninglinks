@@ -264,48 +264,58 @@
 }
 
 /* ---------- school pins ---------- */
+/* The button is 24px (the smallest comfortable press target); the dot people see is drawn inside it. */
 .ll-pin {
   position: relative;
   display: block;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  animation: ll-pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+}
+.ll-pin::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
   border: 2.5px solid #fff;
   border-radius: 50%;
   background: #66489e;
-  cursor: pointer;
   box-shadow: 0 0 0 3px rgb(102 72 158 / 0.16), 0 1px 3px rgb(60 25 70 / 0.5);
-  transition: transform 0.16s, box-shadow 0.16s, background 0.16s;
-  animation: ll-pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+  transition: transform 0.16s, box-shadow 0.16s, background 0.16s, inset 0.16s;
 }
 .ll-pin::after {
   /* Generous touch target around a small dot. */
   content: "";
   position: absolute;
-  inset: -11px;
+  inset: -7px;
   border-radius: 50%;
 }
-.ll-pin:hover,
-.ll-pin:focus-visible {
+.ll-pin:hover::before,
+.ll-pin:focus-visible::before {
   transform: scale(1.3);
   background: #3f2a68;
 }
-.ll-pin--jobs {
-  width: 18px;
-  height: 18px;
+.ll-pin--jobs::before {
+  inset: 3px;
   background: #553a8c;
   box-shadow: 0 0 0 4px rgb(247 169 107 / 0.4), 0 1px 3px rgb(60 25 70 / 0.5);
 }
-.ll-pin[data-selected="1"] {
-  width: 24px;
-  height: 24px;
+.ll-pin[data-selected="1"]::before {
+  inset: 0;
   background: #f7a96b;
   box-shadow: 0 0 0 7px rgb(247 169 107 / 0.35), 0 4px 10px rgb(169 74 14 / 0.55);
 }
+.ll-pin .ll-pin__name {
+  top: calc(100% + 3px);
+}
 .ll-pin__badge {
   position: absolute;
-  top: -11px;
-  right: -13px;
+  top: -7px;
+  right: -9px;
   display: grid;
   place-items: center;
   min-width: 16px;
@@ -324,9 +334,17 @@
 .ll-pin--legend {
   display: inline-block;
   flex: none;
+  width: 16px;
+  height: 16px;
   cursor: default;
   animation: none;
   pointer-events: none;
+}
+.ll-pin--legend::before {
+  inset: 0;
+}
+.ll-pin--legend.ll-pin--jobs::before {
+  inset: -1px;
 }
 .ll-pin--legend::after {
   display: none;
@@ -364,6 +382,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ll-bubble,
   .ll-pin,
+  .ll-pin::before,
   .ll-veil,
   .ll-veil__dot,
   .ll-bubble__name,
@@ -371,4 +390,136 @@
     animation: none;
     transition: none;
   }
+}
+
+/* ---------- quiet place names (text only: never buttons, never in the way of a tap) ---------- */
+.ll-marker > .ll-name {
+  pointer-events: none;
+}
+.ll-name {
+  display: block;
+  white-space: nowrap;
+  color: #2b1730;
+  font-size: 11.5px;
+  font-weight: 650;
+  line-height: 1.3;
+  /* A paper-coloured edge keeps the letters clear of the boundary lines they sit on. */
+  text-shadow: 0 0 2px #fbf6f1, 0 0 2px #fbf6f1, 0 0 3px #fbf6f1, 0 0 4px #fbf6f1;
+  animation: ll-fade 0.25s both;
+}
+.ll-name--city {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+/* Over shaded land a city name sits on a small plate, so it reads on any shade. */
+.ll-name--city[data-plate="1"] {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgb(255 253 251 / 0.86);
+  text-shadow: none;
+}
+/* Names outside the chosen city step back a little. */
+.ll-name[data-out="1"] {
+  font-weight: 500;
+}
+.ll-name[data-on="deep"] {
+  color: #fff;
+  text-shadow: 0 0 2px #3f2a68, 0 0 2px #3f2a68, 0 0 3px #3f2a68;
+}
+@keyframes ll-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- the "where am I" bar ---------- */
+.ll-crumb {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  max-width: calc(100% - 84px);
+  padding: 4px 6px;
+  border: 1px solid rgb(60 25 70 / 0.08);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.94);
+  box-shadow: 0 1px 2px rgb(60 25 70 / 0.1), 0 12px 26px -12px rgb(60 25 70 / 0.4);
+  backdrop-filter: blur(10px);
+}
+.ll-crumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ll-crumb li {
+  display: flex;
+  align-items: center;
+}
+.ll-crumb li + li::before {
+  content: "›";
+  margin: 0 1px;
+  color: #6d5a75;
+  font-weight: 700;
+}
+.ll-crumb__btn,
+.ll-crumb__here {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.ll-crumb__btn {
+  border: 0;
+  background: transparent;
+  color: #553a8c;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgb(85 58 140 / 0.35);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.ll-crumb__btn:hover,
+.ll-crumb__btn:focus-visible {
+  background: #f5f0fc;
+  text-decoration-color: currentColor;
+}
+.ll-crumb__here {
+  color: #2b1730;
+  font-weight: 800;
+}
+@media (pointer: coarse) {
+  .ll-crumb__btn,
+  .ll-crumb__here {
+    padding: 9px 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ll-name {
+    animation: none;
+  }
+}
+
+/* ---------- a bubble's name can sit above or beside it when there is no room underneath ---------- */
+.ll-bubble[data-side="above"] .ll-bubble__name {
+  top: auto;
+  bottom: calc(100% + 7px);
+}
+.ll-bubble[data-side="right"] .ll-bubble__name {
+  top: 50%;
+  left: calc(100% + 7px);
+  transform: translateY(-50%) !important;
+}
+.ll-bubble[data-side="left"] .ll-bubble__name {
+  top: 50%;
+  right: calc(100% + 7px);
+  left: auto;
+  transform: translateY(-50%) !important;
 }
