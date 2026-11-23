@@ -10,5 +10,5 @@ export default defineConfig([
     // names type-checks and even works in a browser, then throws ReferenceError during server rendering.
     rules: { "no-restricted-globals": ["error", "status", "event", "name", "length", "location"] },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "drizzle/**", ".data/**", "coverage/**", "public/vendor/**", "docs/demo/**"]),
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "drizzle/**", ".data/**", "coverage/**", "public/vendor/**", "docs/demo/**", "docs/review/**"]),
 ]);
