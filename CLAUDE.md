@@ -32,6 +32,14 @@ The owner rejected the first designs ("feels like filling out a form at the airp
 - **Type:** Plus Jakarta Sans (self-hosted via fontsource, never from a third-party CDN) with the system Traditional Chinese fonts as fallback.
 - The tokens live in `src/app/globals.css` (`@theme`). Do not hard-code colours elsewhere (the map reads `src/components/map/style.ts`).
 
+### Page look: "Atlas" (owner choice, 25 Nov 2026)
+The owner found the site "average at best" and not easy to use, and chose **Option A, "Atlas"** from two mock-ups (https://claude.ai/artifact/EebAwJvsVRYMFzg7ooPLCz; the other was "Neighbourhood"). Same palette, same font, and the one-question-at-a-time flows stay as they are. What Atlas adds:
+- **The map leads, on deep aubergine.** Aubergine top bar, hero and footer; apricot is the action colour on aubergine. The home page opens with the Taiwan map (a labelled sample), then true numbers only (schools from government lists; **never a count of educators**), then three doors with the price on each.
+- **The menu follows the person** (visitor, family, school, educator, admin): `src/components/site-header.tsx`. A phone gets the same links behind a menu button.
+- **Find page:** filters in one bar across the top, the list beside a map that stays in view. **Profile:** who they are, a dark contact card beside it, where they teach (districts only).
+- **The standing notice is a calm band above the footer on every page** (`ComplianceNotice variant="band"`): the canonical wording, unchanged, once per page. Sign-up, checkout and consent keep the boxed notice and the tick box. (This presentation was in the mock-up the owner chose; the owner has not yet confirmed it separately.)
+- Built so far: the frame, home page, members-only wall, find page and educator profile. The other pages sit inside the new frame with their earlier layout until they are redone.
+
 ## Features that were removed on purpose: do not build them
 The owner removed **live matching** (a live substitute board with chat) and **substitute work** as an option, to stay above board legally. Schools and educators discuss substitute cover **between themselves**, using the contact details an educator chose to share. Do not add a substitute option, availability board, presence, or in-app chat without the owner's explicit approval and a lawyer's opinion.
 

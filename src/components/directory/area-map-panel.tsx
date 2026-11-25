@@ -35,7 +35,7 @@ export function AreaMapPanel({ bubbles, selectedKey, locale, labels, params, bas
       locale={locale}
       labels={labels}
       gestures="auto"
-      className="h-[420px] sm:h-[520px]"
+      className="h-[380px] sm:h-[480px] lg:h-[min(560px,calc(100dvh-13rem))]"
       onSelect={(key, level) => (level === "district" ? go({ city: cityOfKey(key), district: key }) : go({ city: key, district: undefined }))}
       onClear={() => go({ city: undefined, district: undefined })}
     />

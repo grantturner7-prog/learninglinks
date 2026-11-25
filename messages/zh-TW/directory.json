@@ -15,11 +15,15 @@
     "mode": "授課方式",
     "any": "不限",
     "apply": "顯示教師",
-    "clear": "清除篩選"
+    "clear": "清除篩選",
+    "show": "篩選條件",
+    "hide": "收起篩選"
   },
   "view": {
-    "list": "列表",
-    "map": "地圖"
+    "list": "只看列表",
+    "map": "地圖",
+    "label": "結果的呈現方式",
+    "both": "地圖與列表"
   },
   "map": {
     "area": "顯示 {area} 的教師",
@@ -43,7 +47,13 @@
     "ratePerHour": "每小時 NT${min} 至 NT${max}",
     "rateFrom": "每小時 NT${min} 起",
     "rateUpTo": "每小時最高 NT${max}",
-    "experience": "{years} 年教學經驗"
+    "experience": "{years} 年教學經驗",
+    "range": "NT${min}–{max}",
+    "from": "NT${min} 起",
+    "upTo": "最高 NT${max}",
+    "perHour": "每小時",
+    "teachesIn": "以{languages}授課",
+    "viewOf": "查看檔案：{name}"
   },
   "detail": {
     "back": "返回結果",
@@ -60,10 +70,22 @@
     "rate": "每小時費用",
     "openTo": "接受的工作型態",
     "proof": "證明連結",
-    "contactSoon": "點選查看後，聯絡方式會顯示在這裡。"
+    "contactSoon": "點選查看後，聯絡方式會顯示在這裡。",
+    "experience": "教學經驗",
+    "whereTitle": "{name}的授課地區",
+    "districtOnly": "我們只顯示行政區，絕不顯示地址。",
+    "contactFamily": "私人家教",
+    "contactSchool": "接受的工作型態",
+    "rateNone": "費用請直接詢問",
+    "aboutName": "關於{name}",
+    "backArea": "返回地圖與列表"
   },
   "locked": {
     "title": "此頁僅限會員",
     "body": "教師僅將檔案提供給付費的學校與家長。"
+  },
+  "heading": {
+    "family": "您附近的家教",
+    "school": "您附近的教師"
   }
 }

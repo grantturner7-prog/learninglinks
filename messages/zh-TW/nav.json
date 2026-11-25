@@ -10,5 +10,17 @@
   "admin": "管理",
   "menu": "選單",
   "main": "主要導覽",
-  "jobs": "職缺"
+  "jobs": "職缺",
+  "howItWorks": "如何運作",
+  "findTutors": "找家教",
+  "myMembership": "我的會員",
+  "myJobs": "我的職缺",
+  "myCampuses": "我的校區",
+  "jobsMap": "職缺地圖",
+  "myProfile": "我的名片",
+  "whoAsked": "誰索取過",
+  "adminDesk": "管理後台",
+  "account": "我的帳號",
+  "closeMenu": "關閉選單",
+  "yourPages": "您的頁面"
 }

@@ -10,5 +10,17 @@
   "admin": "Admin",
   "menu": "Menu",
   "main": "Main navigation",
-  "jobs": "Jobs"
+  "jobs": "Jobs",
+  "howItWorks": "How it works",
+  "findTutors": "Find tutors",
+  "myMembership": "My membership",
+  "myJobs": "My job posts",
+  "myCampuses": "My campuses",
+  "jobsMap": "Jobs map",
+  "myProfile": "My profile",
+  "whoAsked": "Who asked",
+  "adminDesk": "Admin desk",
+  "account": "My account",
+  "closeMenu": "Close menu",
+  "yourPages": "Your pages"
 }

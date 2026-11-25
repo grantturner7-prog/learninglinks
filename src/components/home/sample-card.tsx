@@ -33,8 +33,31 @@ function SampleAvatar({ size = 72 }: { size?: number }) {
  * "each audience sees only its own side" rule: families see tutoring and the hourly rate, schools see
  * full-time or part-time openness and never a rate.
  */
-export async function SampleCard({ view }: { view: "family" | "school" }) {
+export async function SampleCard({ view, compact = false }: { view: "family" | "school"; compact?: boolean }) {
   const t = await getTranslations("home");
+  // The small version floats beside the map on the home page's hero: one glance, nothing to wrap.
+  if (compact) {
+    return (
+      <div className="rounded-[26px] bg-paper p-4 shadow-soft" aria-label={t("sample.tag", { view: t(`sample.view.${view}`) })}>
+        <SampleTag>{t("sample.tag", { view: t(`sample.view.${view}`) })}</SampleTag>
+        <div className="mt-3 flex items-center gap-3.5">
+          <SampleAvatar size={60} />
+          <div className="min-w-0">
+            <p className="text-lg font-extrabold leading-tight tracking-tight">{t("sample.name")}</p>
+            <p className="mt-0.5 text-[13.5px] leading-snug text-ink-600">{t("sample.line")}</p>
+          </div>
+        </div>
+        <p className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-ink-100 pt-3 text-[13.5px] font-semibold text-ink-600">
+          <span className="inline-flex items-center gap-1.5"><Icon name="pin" size={16} className="text-brand-700" />{t("sample.areas")}</span>
+          {view === "family" ? (
+            <span><b className="text-[15px] font-extrabold text-ink-900">{t("sample.rate")}</b> {t("sample.ratePer")}</span>
+          ) : (
+            <span>{t("sample.openSchool")}</span>
+          )}
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="rounded-[28px] bg-paper p-4 pb-5 inset-ring-2 inset-ring-ink-200 sm:p-5" aria-label={t("sample.tag", { view: t(`sample.view.${view}`) })}>
       <div className="mb-3">

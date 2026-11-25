@@ -116,5 +116,50 @@
     "submit": "Notify me",
     "success": "Thanks. We'll email you when we open in your country.",
     "errorEmail": "Please enter a valid email address."
+  },
+  "atlas": {
+    "eyebrow": "Taiwan · tutors, teachers, schools",
+    "title": "Find teachers and tutors near you, on one map.",
+    "sub": "Families find private tutors. Schools find full-time and part-time educators. Educators join free.",
+    "ctaFind": "Find educators",
+    "ctaTeach": "I teach: join free",
+    "ticks": {
+      "members": "Profiles for members only",
+      "district": "District, never address",
+      "fee": "No agency fee, no commission"
+    },
+    "numbers": {
+      "label": "LearningLinks in numbers",
+      "schools": "schools already on the map",
+      "districts": "districts across Taiwan",
+      "cities": "cities and counties",
+      "free": "for educators, always",
+      "zero": "NT$0"
+    },
+    "doorsTitle": "Which one are you?",
+    "doorsSub": "Pick your door. Each one opens a different side of the map.",
+    "howTitle": "How it works",
+    "districtsAria": "Sample map of the districts of Taichung City with made-up educator counts. An illustration, not real data.",
+    "districtsNote": "Zoom in to a city and its districts appear. Tap one to meet the people who teach there.",
+    "privateTitle": "Private by design",
+    "privateSub": "Educators are people, not listings. These rules never bend.",
+    "private": {
+      "members": {
+        "title": "Members only",
+        "body": "Nobody sees an educator without a paid membership. No public profiles, nothing on search engines."
+      },
+      "district": {
+        "title": "Districts, never addresses",
+        "body": "Educators appear on the map by district. Nobody's home is ever shown."
+      },
+      "contact": {
+        "title": "Contact on request",
+        "body": "Educators choose what to share. Members ask one educator at a time, and educators can see who asked."
+      },
+      "control": {
+        "title": "Hide or delete in one click",
+        "body": "Educators stay in charge of their own card. We never ask for ID numbers, home addresses or documents."
+      }
+    }
   }
 }

@@ -33,7 +33,8 @@ export interface SampleMapLabels {
  * A calm, static teaser of the member map: Taiwan with sample bubbles. It is inline SVG on purpose, so the
  * home page never loads the MapLibre bundle, and it carries no real educator, address or profile link.
  */
-export function SampleMap({ labels, className }: { labels: SampleMapLabels; className?: string }) {
+export function SampleMap({ labels, className, tone = "light" }: { labels: SampleMapLabels; className?: string; tone?: "light" | "dark" }) {
+  if (tone === "dark") return <DarkSampleMap labels={labels} className={className} />;
   return (
     <svg viewBox={TAIWAN_VIEWBOX} role="img" aria-label={labels.aria} className={className}>
       <defs>
@@ -69,6 +70,43 @@ export function SampleMap({ labels, className }: { labels: SampleMapLabels; clas
         <text x="150" y="150" textAnchor="middle" className="fill-accent-600">{labels.taichung}</text>
         <text x="82" y="230" textAnchor="end" className="fill-ink-900">{labels.tainan}</text>
         <text x="119" y="272" textAnchor="middle" className="fill-ink-900">{labels.kaohsiung}</text>
+      </g>
+    </svg>
+  );
+}
+
+/** The same teaser on the aubergine hero of the home page: lilac land, white bubbles, the highlighted area in apricot. */
+function DarkSampleMap({ labels, className }: { labels: SampleMapLabels; className?: string }) {
+  return (
+    <svg viewBox={TAIWAN_VIEWBOX} role="img" aria-label={labels.aria} className={className}>
+      <g>
+        {TAIWAN_PATHS.map(([id, d]) => (
+          <path
+            key={id}
+            d={d}
+            strokeWidth={id === HOT ? 1.4 : 0.8}
+            strokeLinejoin="round"
+            className={id === HOT ? "fill-accent-400 stroke-accent-300" : `stroke-brand-900 ${CITY.has(id) ? "fill-brand-600" : "fill-brand-800"}`}
+          />
+        ))}
+      </g>
+      <g>
+        {BUBBLES.map((b) => (
+          <g key={`${b.x}-${b.y}`}>
+            <circle cx={b.x} cy={b.y} r={b.halo} className={b.hot ? "fill-accent-300/45" : "fill-white/15"} />
+            <circle cx={b.x} cy={b.y} r={b.core} className={b.hot ? "fill-accent-300 stroke-white" : "fill-white stroke-brand-300"} strokeWidth={b.hot ? 2 : 1} />
+            <text x={b.x} y={b.y + 3.2} textAnchor="middle" fontSize="8.4" fontWeight="800" className="fill-ink-900">
+              {b.n}
+            </text>
+          </g>
+        ))}
+      </g>
+      <g fontSize="7.4" fontWeight="700" className="fill-white stroke-brand-900 [paint-order:stroke]" strokeWidth="2.6" strokeLinejoin="round">
+        <text x="196" y="12" textAnchor="middle">{labels.taipei}</text>
+        <text x="246" y="84" textAnchor="end">{labels.newTaipei}</text>
+        <text x="150" y="150" textAnchor="middle">{labels.taichung}</text>
+        <text x="82" y="230" textAnchor="end">{labels.tainan}</text>
+        <text x="119" y="272" textAnchor="middle">{labels.kaohsiung}</text>
       </g>
     </svg>
   );

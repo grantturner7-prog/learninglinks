@@ -90,20 +90,24 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
     return `/educators${s ? `?${s}` : ""}`;
   };
 
+  const tn = await getTranslations("notice");
+  const listTitle = selectedKey
+    ? t("map.listTitleArea", { area: !filters.district ? cityLabel(filters.city, locale) : locale.startsWith("zh") ? `${cityLabel(filters.city, locale)}${areaFullName(filters.district)}` : `${areaFullName(filters.district)}, ${cityLabel(filters.city, locale)}` })
+    : t("map.listTitleAll");
+
   return (
-    <div className="container-page py-10">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-extrabold">{t("title")}</h1>
-          <p className="mt-1 text-ink-600">{t(`audience.${audience}`)}</p>
-        </div>
-        <div role="group" aria-label={t("view.list") + " / " + t("view.map")} className="inline-flex overflow-hidden rounded-[10px] border border-ink-200">
-          <Link href={withView({}, "map")} className="seg-link" aria-current={view === "map" ? "true" : undefined}>{t("view.map")}</Link>
-          <Link href={withView({}, "list")} className="seg-link" aria-current={view === "list" ? "true" : undefined}>{t("view.list")}</Link>
-        </div>
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-        <aside>
+    <>
+      {/* Who you are looking at, and the filters, in one bar across the top. */}
+      <section aria-label={t("filters.title")} className="border-b border-ink-100 bg-paper">
+        <div className="container-wide flex flex-col gap-4 py-5">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <h1 className="text-[28px] font-extrabold leading-tight tracking-tight">{t(`heading.${audience}`)}</h1>
+            <p className="rounded-2xl bg-brand-100 px-3.5 py-1 text-[13px] font-bold text-brand-800 sm:rounded-full">{t(`audience.${audience}`)}</p>
+            <div role="group" aria-label={t("view.label")} className="ml-auto inline-flex overflow-hidden rounded-full border border-ink-200">
+              <Link href={withView({}, "map")} className="seg-link px-4" aria-current={view === "map" ? "true" : undefined}>{t("view.both")}</Link>
+              <Link href={withView({}, "list")} className="seg-link px-4" aria-current={view === "list" ? "true" : undefined}>{t("view.list")}</Link>
+            </div>
+          </div>
           <DirectoryFilters
             key={JSON.stringify(filters)}
             labels={{ title: t("filters.title"), subject: t("filters.subject"), level: t("filters.level"), city: t("filters.city"), district: t("filters.district"), language: t("filters.language"), mode: t("filters.mode"), any: t("filters.any"), apply: t("filters.apply"), clear: t("filters.clear") }}
@@ -117,38 +121,23 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
             clearHref={`/${locale}/educators${view === "list" ? "?view=list" : ""}`}
             hidden={view === "list" ? { view: "list" } : undefined}
           />
-        </aside>
-        <section aria-label={t("title")} className="min-w-0">
-          {mapLabels ? (
-            <div className="mb-5">
-              <AreaMapPanel bubbles={bubbles} selectedKey={selectedKey} locale={locale} labels={mapLabels} params={{ ...filterParams }} />
-              <p className="mt-2 text-sm text-ink-500">{t("map.areaHint")} · {t("map.mapSummary", { count: mapTotal })}</p>
-              {cityDistricts.length > 0 ? (
-                <nav aria-label={t("map.districtsIn", { city: cityLabel(filters.city, locale) })} className="mt-3" data-testid="district-chips">
-                  <p className="text-sm font-bold">{t("map.districtsIn", { city: cityLabel(filters.city, locale) })}</p>
-                  <ul className="mt-2 flex flex-wrap gap-2">
-                    <li><Link href={withView({ district: "" })} scroll={false} className="chip" aria-current={filters.district ? undefined : "true"}>{t("map.allOfCity", { city: cityLabel(filters.city, locale) })}</Link></li>
-                    {cityDistricts.map((b) => (
-                      <li key={b.key}><Link href={withView({ district: b.key })} scroll={false} className="chip" aria-current={filters.district === b.key ? "true" : undefined}>{areaName(b.key)} <span className="chip__n">{f.number(b.count)}</span></Link></li>
-                    ))}
-                  </ul>
-                </nav>
-              ) : null}
-              <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h2 className="text-lg font-bold" data-testid="list-title">{selectedKey ? t("map.listTitleArea", { area: !filters.district ? cityLabel(filters.city, locale) : locale.startsWith("zh") ? `${cityLabel(filters.city, locale)}${areaFullName(filters.district)}` : `${areaFullName(filters.district)}, ${cityLabel(filters.city, locale)}` }) : t("map.listTitleAll")}</h2>
-                {selectedKey ? <Link href={clearAreaHref} scroll={false} className="link text-sm">{t("map.clearArea")}</Link> : null}
-              </div>
-            </div>
-          ) : (
-            // The list view has no map heading, so give the results a (visually hidden) one: headings must not skip a level.
-            <h2 className="sr-only">{t("title")}</h2>
-          )}
-          <p className="mb-3 text-sm text-ink-500" aria-live="polite">{tc("results", { count: result.total })}</p>
+        </div>
+      </section>
+
+      {/* The list and the map, side by side: the same filters and the same area on both. On a phone the map is first. */}
+      <div className={`container-wide grid grid-cols-1 items-start gap-x-7 gap-y-6 py-6 ${mapLabels ? "lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]" : ""}`}>
+        <section aria-label={t("title")} className="order-2 min-w-0 lg:order-1">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h2 className={mapLabels ? "text-[22px] font-extrabold tracking-tight" : "sr-only"} data-testid="list-title">{mapLabels ? listTitle : t("title")}</h2>
+            <p className="text-sm font-semibold text-ink-600" aria-live="polite">{tc("results", { count: result.total })}</p>
+            {mapLabels && selectedKey ? <Link href={clearAreaHref} scroll={false} className="link text-sm">{t("map.clearArea")}</Link> : null}
+          </div>
+          {audience === "family" ? <p className="mt-2 text-[13.5px] leading-relaxed text-ink-600">{tn("tutoringWork")}</p> : null}
           {result.items.length === 0 ? (
-            <div className="card text-center"><h2 className="text-xl font-bold">{t("empty.title")}</h2><p className="mt-1 text-ink-600">{t("empty.body")}</p></div>
+            <div className="card mt-4 text-center"><h3 className="text-xl font-bold">{t("empty.title")}</h3><p className="mt-1 text-ink-600">{t("empty.body")}</p></div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {result.items.map((e) => <EducatorCard key={e.id} e={e} locale={locale} href={`/educators/${e.id}`} />)}
+            <div className={`mt-4 grid grid-cols-1 gap-3.5 ${mapLabels ? "" : "xl:grid-cols-2"}`}>
+              {result.items.map((e) => <EducatorCard key={e.id} e={e} locale={locale} href={`/educators/${e.id}`} audience={audience} />)}
             </div>
           )}
           {pages > 1 ? (
@@ -159,7 +148,27 @@ export default async function EducatorsPage({ params, searchParams }: Props) {
             </nav>
           ) : null}
         </section>
+
+        {mapLabels ? (
+          <aside aria-label={t("view.map")} className="order-1 min-w-0 lg:sticky lg:top-4 lg:order-2">
+            <div className="rounded-[28px] border border-ink-100 bg-paper p-2.5 shadow-card sm:p-3.5">
+              <AreaMapPanel bubbles={bubbles} selectedKey={selectedKey} locale={locale} labels={mapLabels} params={{ ...filterParams }} />
+              <p className="px-1.5 pb-1 pt-3 text-[13.5px] text-ink-600">{t("map.areaHint")} · {t("map.mapSummary", { count: mapTotal })}</p>
+            </div>
+            {cityDistricts.length > 0 ? (
+              <nav aria-label={t("map.districtsIn", { city: cityLabel(filters.city, locale) })} className="mt-4" data-testid="district-chips">
+                <p className="text-sm font-extrabold">{t("map.districtsIn", { city: cityLabel(filters.city, locale) })}</p>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  <li><Link href={withView({ district: "" })} scroll={false} className="chip" aria-current={filters.district ? undefined : "true"}>{t("map.allOfCity", { city: cityLabel(filters.city, locale) })}</Link></li>
+                  {cityDistricts.map((b) => (
+                    <li key={b.key}><Link href={withView({ district: b.key })} scroll={false} className="chip" aria-current={filters.district === b.key ? "true" : undefined}>{areaName(b.key)} <span className="chip__n">{f.number(b.count)}</span></Link></li>
+                  ))}
+                </ul>
+              </nav>
+            ) : null}
+          </aside>
+        ) : null}
       </div>
-    </div>
+    </>
   );
 }

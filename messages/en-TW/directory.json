@@ -15,11 +15,15 @@
     "mode": "Mode",
     "any": "Any",
     "apply": "Show educators",
-    "clear": "Clear filters"
+    "clear": "Clear filters",
+    "show": "Filters",
+    "hide": "Hide filters"
   },
   "view": {
-    "list": "List",
-    "map": "Map"
+    "list": "List only",
+    "map": "Map",
+    "label": "How to show the results",
+    "both": "Map and list"
   },
   "map": {
     "area": "Showing educators in {area}",
@@ -43,7 +47,13 @@
     "ratePerHour": "NT${min} to NT${max} per hour",
     "rateFrom": "From NT${min} per hour",
     "rateUpTo": "Up to NT${max} per hour",
-    "experience": "{years} years' experience"
+    "experience": "{years} years' experience",
+    "range": "NT${min}–{max}",
+    "from": "From NT${min}",
+    "upTo": "Up to NT${max}",
+    "perHour": "per hour",
+    "teachesIn": "Teaches in {languages}",
+    "viewOf": "View profile: {name}"
   },
   "detail": {
     "back": "Back to results",
@@ -60,10 +70,22 @@
     "rate": "Hourly rate",
     "openTo": "Open to",
     "proof": "Proof link",
-    "contactSoon": "Contact details are shown here when you ask for them."
+    "contactSoon": "Contact details are shown here when you ask for them.",
+    "experience": "Experience",
+    "whereTitle": "Where {name} teaches",
+    "districtOnly": "We show districts only, never an address.",
+    "contactFamily": "Private tutoring",
+    "contactSchool": "Open to",
+    "rateNone": "Ask about the hourly rate",
+    "aboutName": "About {name}",
+    "backArea": "Back to the map and list"
   },
   "locked": {
     "title": "This page is for members",
     "body": "Educators share their profiles only with paying schools and families."
+  },
+  "heading": {
+    "family": "Tutors near you",
+    "school": "Educators near you"
   }
 }

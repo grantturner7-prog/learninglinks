@@ -1,69 +1,79 @@
 import { getTranslations } from "next-intl/server";
-import { Lock } from "@/components/icons";
+import { SampleCard } from "@/components/home/sample-card";
+import { Building, Heart, Lock } from "@/components/icons";
+import { Icon } from "@/components/journey/icons";
 import { Link } from "@/i18n/navigation";
 
 /**
  * Nobody sees any educator without a paid membership. Everyone without an active membership gets this wall,
- * with a clearly labelled SAMPLE profile and no real educator data.
+ * with a clearly labelled SAMPLE profile (one per audience, each showing only that audience's side) and no real
+ * educator data.
  */
 export async function MembersWall() {
   const t = await getTranslations("wall");
   return (
-    <div className="container-page py-12">
-      <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
-        <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-brand-100 bg-brand-50 text-brand-700">
-          <Lock size={30} />
-        </span>
-        <h1 className="text-3xl font-extrabold sm:text-4xl">{t("title")}</h1>
-        <p className="text-lg leading-relaxed text-ink-600">{t("lead")}</p>
-      </div>
-
-      <div className="mx-auto mt-8 grid grid-cols-1 max-w-4xl gap-5 md:grid-cols-2">
-        <section className="rounded-2xl border-2 border-ink-200 bg-white p-6">
-          <h2 className="text-xl font-bold">{t("school.title")}</h2>
-          <p className="mt-2 text-3xl font-extrabold text-brand-800">
-            {t("school.price")} <span className="text-base font-semibold text-ink-500">{t("school.per")}</span>
-          </p>
-          <p className="text-sm text-ink-500">{t("school.note")}</p>
-          <p className="mt-3 text-sm">{t("school.body")}</p>
-          <Link href="/for-schools" className="btn btn-primary mt-4 w-full">
-            {t("school.cta")}
-          </Link>
-        </section>
-        <section className="rounded-2xl border-2 border-ink-200 bg-white p-6">
-          <h2 className="text-xl font-bold">{t("family.title")}</h2>
-          <p className="mt-2 text-3xl font-extrabold text-brand-800">{t("family.price")}</p>
-          <p className="text-sm text-ink-500">{t("family.note")}</p>
-          <p className="mt-3 text-sm">{t("family.body")}</p>
-          <Link href="/for-families" className="btn btn-accent mt-4 w-full">
-            {t("family.cta")}
-          </Link>
-        </section>
-      </div>
-
-      <section className="card mx-auto mt-7 flex max-w-4xl flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-xl font-bold">{t("sample.title")}</h2>
-          <span className="badge-warn">{t("sample.badge")}</span>
-        </div>
-        <div className="flex flex-col gap-2.5 rounded-xl border border-ink-200 p-3.5">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-rose-100 text-lg font-extrabold text-[#8a2447]">S</span>
-            <div>
-              <div className="font-bold">{t("sample.name")}</div>
-              <div className="text-sm text-ink-500">{t("sample.line")}</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2.5 rounded-xl border border-dashed border-ink-300 bg-ink-50 px-3.5 py-2.5 text-sm text-ink-600">
-            <Lock size={16} />
-            {t("sample.locked")}
-          </div>
+    <>
+      <section className="bg-brand-900 text-white">
+        <div className="container-wide flex flex-col items-start gap-4 pb-12 pt-9 sm:pb-14 sm:pt-12">
+          <span className="inline-flex h-14 w-14 items-center justify-center rounded-[18px] bg-brand-800 text-accent-400">
+            <Lock size={28} />
+          </span>
+          <h1 className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl">{t("title")}</h1>
+          <p className="max-w-2xl text-lg leading-relaxed text-brand-200">{t("lead")}</p>
         </div>
       </section>
 
-      <p className="mx-auto mt-6 max-w-xl text-center text-sm text-ink-500">
-        <b>{t("why.title")}</b> {t("why.body")}
-      </p>
-    </div>
+      <div className="container-wide py-10 sm:py-12">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <section className="card flex flex-col gap-2 p-6 sm:p-8">
+            <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-accent-300 text-warn-700">
+              <Heart size={26} />
+            </span>
+            <h2 className="mt-2 text-2xl font-extrabold tracking-tight">{t("family.title")}</h2>
+            <p className="text-4xl font-extrabold tracking-tight">{t("family.price")}</p>
+            <p className="text-sm font-semibold text-ink-600">{t("family.note")}</p>
+            <p className="mt-2 leading-relaxed text-ink-700">{t("family.body")}</p>
+            <Link href="/for-families" className="btn btn-primary btn-lg mt-auto w-full">
+              {t("family.cta")}
+              <Icon name="arrowR" size={18} />
+            </Link>
+          </section>
+          <section className="card flex flex-col gap-2 p-6 sm:p-8">
+            <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-brand-100 text-brand-800">
+              <Building size={26} />
+            </span>
+            <h2 className="mt-2 text-2xl font-extrabold tracking-tight">{t("school.title")}</h2>
+            <p className="flex flex-wrap items-baseline gap-x-2.5 text-4xl font-extrabold tracking-tight">
+              {t("school.price")} <span className="text-base font-semibold tracking-normal text-ink-600">{t("school.per")}</span>
+            </p>
+            <p className="text-sm font-semibold text-ink-600">{t("school.note")}</p>
+            <p className="mt-2 leading-relaxed text-ink-700">{t("school.body")}</p>
+            <Link href="/for-schools" className="btn btn-primary btn-lg mt-auto w-full">
+              {t("school.cta")}
+              <Icon name="arrowR" size={18} />
+            </Link>
+          </section>
+        </div>
+
+        <section className="mt-10">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h2 className="text-2xl font-extrabold tracking-tight">{t("sample.title")}</h2>
+            <span className="badge-warn">{t("sample.badge")}</span>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <SampleCard view="family" />
+            <SampleCard view="school" />
+          </div>
+          <p className="mt-4 flex items-center gap-2.5 text-sm font-semibold text-ink-700">
+            <Lock size={16} className="flex-none text-brand-700" />
+            {t("sample.locked")}
+          </p>
+        </section>
+
+        <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-ink-700">
+          <b className="text-ink-900">{t("why.title")}</b> {t("why.body")}
+        </p>
+      </div>
+    </>
   );
 }
