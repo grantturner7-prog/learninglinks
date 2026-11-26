@@ -1,33 +1,68 @@
 const V = {};
 
 /* ================= home ================= */
+/* A static, clearly labelled SAMPLE of the member map for the home page: made-up counts, no educator, nothing to tap.
+   Each entry is [made-up count, x, y]: where its light sits (nudged apart where the cities are close together). */
+const SAMPLE_SPOTS = { taipei: [18, 10300, 4250], "new-taipei": [30, 9950, 5000], taoyuan: [14, 9250, 4650], "hsinchu-city": [3, 8362, 5286], taichung: [23, 7560, 7130], changhua: [5, 7130, 7930], hualien: [2, 10383, 7942], tainan: [6, 6158, 11204], kaohsiung: [12, 6700, 12300], taitung: [1, 8821, 12023] };
+const LOCK = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin-top:1px"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
+function sampleMap() {
+  const b = GEO.main, pad = 320, hot = "taichung";
+  const land = (c) => `<path d="${c.d}" class="land ${c.key === hot ? "hot" : SAMPLE_SPOTS[c.key] ? "has" : ""}"/>`;
+  const shown = GEO.c.filter((c) => c.bbox && c.bbox[2] > b[0] && c.bbox[1] > b[1] - 200);
+  const lights = Object.keys(SAMPLE_SPOTS).map((k) => {
+    const [n, x, y] = SAMPLE_SPOTS[k], r = k === hot ? 400 : Math.round(230 + 30 * Math.sqrt(n));
+    return `<circle class="halo" cx="${x}" cy="${y}" r="${r + 120}"/><circle class="dot ${k === hot ? "hot" : ""}" cx="${x}" cy="${y}" r="${r}"/><text class="${k === hot ? "hot" : ""}" x="${x}" y="${y + (k === hot ? 115 : 95)}" font-size="${k === hot ? 320 : 265}">${n}</text>`;
+  }).join("");
+  return `<svg class="samplemap" viewBox="${b[0] - pad} ${b[1] - pad} ${b[2] - b[0] + 2 * pad} ${b[3] - b[1] + 2 * pad}" role="img" aria-label="${T("Sample map of Taiwan with made-up educator counts by area. An illustration, not real data.", "臺灣範例地圖，以虛構數字標示各區教師人數。僅為示意，並非真實資料。")}">
+    ${shown.filter((c) => c.key !== hot).map(land).join("")}${shown.filter((c) => c.key === hot).map(land).join("")}${lights}</svg>`;
+}
 V.home = () => {
-  const sample = EDU.find((e) => e.id === "e3");
-  return `<section class="hero"><div>
-    <div class="eyebrow">${T("Educators, schools and families in Taiwan", "連結臺灣的教師、學校與家庭")}</div>
-    <h1 style="margin-top:10px">${T("Find the right educator. Or the right school.", "找到合適的教師，或合適的學校。")}</h1>
-    <p class="lead">${T("A connection website. Educators are always free. Schools and families pay one flat membership and see the educators who match what they need, on a map.", "這是一個連結平台。教師永遠免費。學校與家庭只需支付一次固定會員費，就能在地圖上看到符合需求的教師。")}</p>
-    <div class="row" style="margin-top:22px">
-      <button class="btn btn-primary btn-lg" data-act="start" data-v="family">${T("Join as a family", "以家庭加入")}</button>
-      <button class="btn btn-lg" data-act="start" data-v="school">${T("Join as a school", "以學校加入")}</button>
-      <button class="btn btn-lg btn-ghost" data-act="start" data-v="educator">${T("I am an educator (free)", "我是教師（免費）")}</button>
-    </div></div>
-    <div class="card soft"><div class="row" style="justify-content:space-between"><span class="badge apricot">${T("Sample profile", "範例檔案")}</span><span class="tiny muted">${T("A made-up example", "虛構範例")}</span></div>
-      <div class="edu" style="margin-top:12px"><div class="row"><div class="avatar" style="background:var(--lilac-100)">${h(sample.name[0])}</div><div><div class="nm">${h(sample.name)}</div><div class="where">${h(placeName(sample))}</div></div></div>
-      <p>${h(sample.head)}</p><div class="tags">${sample.subjects.map((s) => `<span class="badge">${h(lab(SUBJECT[s]))}</span>`).join("")}</div>
-      <p class="small muted">${T("Real profiles are only shown to paying members. Nobody sees an educator without a membership, and there are no public profile pages.", "真實檔案只會顯示給付費會員。沒有會員資格的人看不到任何教師，也沒有公開的個人頁面。")}</p></div></div></section>
-  <section class="stack" style="margin-top:28px"><h2>${T("Who pays, and who does not", "誰付費，誰免費")}</h2>
-    <div class="grid g3">
-      <div class="card"><div class="eyebrow">${T("Educators", "教師")}</div><div class="price">${T("Free", "免費")}</div><p class="muted">${T("Create a profile, choose what you are open to, and decide who can see which side of it.", "建立檔案、選擇您開放的工作型態，並決定誰能看到哪一部分。")}</p></div>
-      <div class="card"><div class="eyebrow">${T("Schools and centres", "學校與補習班")}</div><div class="price">${nt(PRICE_CAMPUS)}</div><p class="muted">${T("per campus, for 12 months. Three campuses cost NT$30,000: no discount, and each campus gets its own 12 months from the day it starts.", "每校區 12 個月。三個校區為 NT$30,000：沒有折扣，每個校區從開始日起各有完整 12 個月。")}</p></div>
-      <div class="card"><div class="eyebrow">${T("Families", "家庭")}</div><div class="price">${nt(PRICE_FAMILY)}</div><p class="muted">${T("for 12 months. See educators who offer private tutoring, with their rates.", "12 個月。可查看提供私人家教的教師及其費用。")}</p></div>
+  const m = me();
+  const who = val("hwho", m && m.type !== "admin" ? m.type : "family"), city = val("hcity");
+  const people = [
+    ["E", "Emily R.", T("Kindergarten English: phonics and storytelling", "幼兒英語：自然發音與說故事"), T("Xitun · Nantun", "西屯 · 南屯"), "NT$600–900"],
+    ["D", "Daniel K.", T("Conversation and test preparation", "英語會話與檢定準備"), T("Xitun · West", "西屯 · 西區"), "NT$800–1,200"],
+    ["M", "Mei-Ling C.", T("Mandarin and maths homework help", "國語與數學課業輔導"), T("Xitun", "西屯"), "NT$500–700"],
+  ];
+  const ticks = (items) => `<ul class="ticks">${items.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+  const schools = Math.floor(REAL.rows.length / 100) * 100;
+  return `<section class="hero">
+    <span class="tagline">${T("Taiwan · tutors, teachers, schools", "臺灣 · 家教、教師、學校")}</span>
+    <h1>${T("Find a tutor or a teacher near you.", "找到您附近的家教與老師")}</h1>
+    <p class="lead">${T("LearningLinks is a connection website. Families and schools pay one flat membership and see educators nearby, on a map. Educators are always free.", "LearningLinks 是一個連結平台。家庭與學校只需支付一次固定會員費，就能在地圖上看到附近的教師。教師永遠免費。")}</p>
+    <div class="startbar" role="search" aria-label="${T("Start here", "從這裡開始")}" data-testid="start-bar">
+      <label class="sseg first" for="f-hwho"><span>${T("I am", "我是")}</span><select id="f-hwho" data-f="hwho">${[["family", T("A family", "家庭")], ["school", T("A school or centre", "學校或補習班")], ["educator", T("An educator", "教師")]].map(([k, l]) => `<option value="${k}" ${who === k ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+      <label class="sseg" for="f-hcity"><span>${T("Near", "地點")}</span><select id="f-hcity" data-f="hcity"><option value="">${T("All of Taiwan", "全臺灣")}</option>${DEMO_CITIES.map((c) => `<option value="${c}" ${city === c ? "selected" : ""}>${h(lab(CITY[c]))}</option>`).join("")}</select></label>
+      <button class="btn btn-primary btn-lg" data-act="homeSearch">${T("Search", "搜尋")}</button>
     </div>
-    <p class="muted">${T("VAT is included. One payment. A membership never renews by itself: we send a reminder before it ends.", "價格含稅。只需付款一次。會員資格不會自動續約，到期前我們會寄送提醒。")}</p></section>
-  <section class="stack" style="margin-top:28px"><h2>${T("How it works", "運作方式")}</h2>
-    <div class="grid g3"><div class="card flat"><h3>1. ${T("Educators create a profile", "教師建立檔案")}</h3><p class="muted">${T("One question at a time, with a live preview.", "一次一個問題，並即時預覽。")}</p></div>
-    <div class="card flat"><h3>2. ${T("Members search on a map", "會員在地圖上搜尋")}</h3><p class="muted">${T("Educators appear by area, never by address.", "教師只顯示所在地區，不顯示地址。")}</p></div>
-    <div class="card flat"><h3>3. ${T("You contact each other directly", "雙方直接聯絡")}</h3><p class="muted">${T("A member can ask to see an educator's contact details. We are not an employer or an agent.", "會員可以申請查看教師的聯絡方式。我們不是雇主，也不是仲介。")}</p></div></div></section>
-  <section class="card" style="margin-top:28px;background:var(--lilac-50)"><div class="row" style="justify-content:space-between"><div><h3>${T("Want to look inside?", "想看看裡面嗎？")}</h3><p class="muted" style="margin-top:4px">${T("Sign in as a family, a school, an educator or the site owner. This is a demo, so no password is needed.", "以家庭、學校、教師或網站管理員的身分登入。這是示範，不需要密碼。")}</p></div><button class="btn btn-primary" data-act="signinPage">${T("Sign in", "登入")}</button></div></section>`;
+    <div class="night stage" data-testid="stage"><div class="row" style="justify-content:space-between"><h2>${T("What a family sees after joining", "家庭加入後看到的畫面")}</h2><span class="badge night">${T("Sample profiles and numbers", "範例檔案與數字")}</span></div>
+      <div class="stage-grid">${sampleMap()}<div class="srows"><p class="count">${T("23 tutors in Taichung City", "臺中市有 23 位家教")}</p>
+        ${people.map(([ini, name, line, areas, rate]) => `<div class="srow"><div class="avatar" aria-hidden="true">${ini}</div><div class="grow"><div class="nm">${name}<span>${rate} <small>${T("per hour", "每小時")}</small></span></div><div class="what">${line} · ${areas}</div></div></div>`).join("")}
+        <p class="slock">${LOCK}<span>${T("Real profiles are only shown to paying members. Nobody sees an educator without a membership, and there are no public profile pages.", "真實檔案只會顯示給付費會員。沒有會員資格的人看不到任何教師，也沒有公開的個人頁面。")}</span></p></div></div></div>
+  </section>
+  <section class="band" style="margin-top:24px" aria-label="${T("LearningLinks in numbers", "LearningLinks 的數字")}"><dl class="numbers">
+    <div><dt>${T("schools and cram schools already on the map", "所學校與補習班已在地圖上")}</dt><dd class="num">${schools.toLocaleString("en-US")}+</dd></div>
+    <div><dt>${T("districts across Taiwan", "個行政區，遍及全臺")}</dt><dd class="num">${GEO.d.length}</dd></div>
+    <div><dt>${T("cities and counties", "個縣市")}</dt><dd class="num">${GEO.c.length}</dd></div>
+    <div><dt>${T("for educators, always", "教師永遠免費")}</dt><dd class="num zero">NT$0</dd></div></dl></section>
+  <section class="stack" style="margin-top:34px"><div class="center"><h2 style="font-size:clamp(26px,4vw,38px)">${T("Which one are you?", "您是哪一位？")}</h2>
+    <p class="muted" style="margin-top:6px">${T("VAT is included. One payment. A membership never renews by itself: we send a reminder before it ends.", "價格含稅。只需付款一次。會員資格不會自動續約，到期前我們會寄送提醒。")}</p></div>
+    <div class="doors">
+      <div class="door"><span class="who">${T("Families", "家庭")}</span><h3>${T("I'm looking for a tutor", "我想找家教")}</h3><div><span class="price">${nt(PRICE_FAMILY)}</span> <span class="per">${T("for 12 months", "12 個月")}</span></div>
+        ${ticks([T("Private tutors near your home, on the map", "住家附近的家教，一張地圖看清楚"), T("What they teach, their experience and hourly rates", "教學科目、經驗與時薪一目了然"), T("Ask for contact details and talk directly", "索取聯絡方式，直接與老師聯絡"), T("No agency fee and no commission", "沒有仲介費，也不抽成")])}
+        <button class="btn btn-primary btn-lg" data-act="start" data-v="family">${T("Join as a family", "以家庭加入")}</button></div>
+      <div class="door"><span class="who">${T("Schools and centres", "學校與補習班")}</span><h3>${T("I'm hiring for a school", "我要為學校找老師")}</h3><div><span class="price">${nt(PRICE_CAMPUS)}</span> <span class="per">${T("per campus, for 12 months", "每校區 12 個月")}</span></div>
+        ${ticks([T("Educators open to full-time or part-time work", "願意全職或兼職的教師"), T("Post your own full-time and part-time jobs", "刊登自己的全職與兼職職缺"), T("Three campuses cost NT$30,000: no discount", "三個校區為 NT$30,000：沒有折扣"), T("Each campus gets its own full 12 months", "每個校區各自享有完整 12 個月")])}
+        <button class="btn btn-primary btn-lg" data-act="start" data-v="school">${T("Join as a school", "以學校加入")}</button></div>
+      <div class="door night"><span class="who">${T("Educators", "教師")}</span><h3>${T("I teach", "我是教師")}</h3><div><span class="price">${T("Free", "免費")}</span> <span class="per">${T("always, for every educator", "教師永遠免費")}</span></div>
+        ${ticks([T("One profile, shown to schools, families or both", "一份檔案，可給學校、家庭或兩者查看"), T("You choose which contact details to share", "聯絡方式分享多少，由您決定"), T("Open jobs at schools near you, on the map", "在地圖上看附近學校的職缺"), T("Shown by district only, never your address", "只顯示行政區，絕不顯示住址")])}
+        <button class="btn btn-primary btn-lg" data-act="start" data-v="educator">${T("I am an educator (free)", "我是教師（免費）")}</button></div>
+    </div></section>
+  <section class="stack" style="margin-top:34px"><h2 class="center" style="font-size:clamp(26px,4vw,38px)">${T("How it works", "運作方式")}</h2>
+    <div class="grid g3"><div class="card flat"><span class="stepn" aria-hidden="true">1</span><h3>${T("Educators create a profile", "教師建立檔案")}</h3><p class="muted">${T("One question at a time, with a live preview.", "一次一個問題，並即時預覽。")}</p></div>
+    <div class="card flat"><span class="stepn" aria-hidden="true">2</span><h3>${T("Members search on a map", "會員在地圖上搜尋")}</h3><p class="muted">${T("Educators appear by area, never by address.", "教師只顯示所在地區，不顯示地址。")}</p></div>
+    <div class="card flat"><span class="stepn" aria-hidden="true">3</span><h3>${T("You contact each other directly", "雙方直接聯絡")}</h3><p class="muted">${T("A member can ask to see an educator's contact details. We are not an employer or an agent.", "會員可以申請查看教師的聯絡方式。我們不是雇主，也不是仲介。")}</p></div></div></section>
+  <section class="card" style="margin-top:28px"><div class="row" style="justify-content:space-between"><div><h3>${T("Want to look inside?", "想看看裡面嗎？")}</h3><p class="muted" style="margin-top:4px">${T("Sign in as a family, a school, an educator or the site owner. This is a demo, so no password is needed.", "以家庭、學校、教師或網站管理員的身分登入。這是示範，不需要密碼。")}</p></div><button class="btn btn-dark" data-act="signinPage">${T("Sign in", "登入")}</button></div></section>`;
 };
 
 /* ================= sign in: the demo's accounts ================= */

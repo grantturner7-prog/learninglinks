@@ -85,7 +85,7 @@ const MV = {};
 let MAP_PENDING = {}, MAP_FORCE = false;
 const mapReduced = () => { try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } };
 const clampN = (v, a, b) => Math.max(a, Math.min(b, v));
-const RAMP = ["", "var(--lilac-100)", "var(--lilac-200)", "var(--lilac-300)", "var(--lilac-400)"];
+const RAMP = ["", "var(--ramp-1)", "var(--ramp-2)", "var(--ramp-3)", "var(--ramp-4)"];
 const lvl = (n, max) => (n > 0 && max > 0 ? clampN(Math.ceil(4 * Math.sqrt(n / max)), 1, 4) : 0);
 
 let _measure = null; const _widths = new Map();
@@ -332,8 +332,8 @@ function mapPaint(m) {
   if (crumbD) parts.push(`<button type="button" data-act="${m.kind === "edu" ? "mdist" : "mfit"}" data-v="${crumbD}" aria-current="location">${h(distFull(crumbD))}</button>`);
   m.crumb.innerHTML = parts.join('<span class="zsep" aria-hidden="true">›</span>');
   m.legend.innerHTML = m.kind === "edu"
-    ? `<b>${T("Educators per area", "各地區教師人數")}</b><div class="scale"><i style="background:#fffaf6"></i>${RAMP.slice(1).map((f) => `<i style="background:${f}"></i>`).join("")}</div><div class="row small" style="gap:14px;justify-content:space-between"><span>${T("Fewer", "較少")}</span><span>${T("More", "較多")}</span></div>`
-    : `<div><span class="dot" style="background:var(--lilac-600)"></span>${T("School", "學校")}</div><div><span class="dot" style="background:var(--apricot-500)"></span>${T("Has open job posts", "有開放職缺")}</div>`;
+    ? `<b>${T("Educators per area", "各地區教師人數")}</b><div class="scale"><i style="background:var(--night-land)"></i>${RAMP.slice(1).map((f) => `<i style="background:${f}"></i>`).join("")}</div><div class="row small" style="gap:14px;justify-content:space-between"><span>${T("Fewer", "較少")}</span><span>${T("More", "較多")}</span></div>`
+    : `<div><span class="dot" style="background:var(--cream-3)"></span>${T("School", "學校")}</div><div><span class="dot" style="background:var(--accent-400)"></span>${T("Has open job posts", "有開放職缺")}</div>`;
 }
 
 /* ---------- every frame: the view box, and where bubbles, pins and names sit on screen ---------- */
@@ -430,8 +430,8 @@ function mapLayout(m) {
 function educatorMap(list, city, district, note) {
   return `${mapSlot("map-edu", { kind: "edu", list, city: city || "", district: district || "" })}<p class="mapnote">${note}</p>`;
 }
-/** The educators' school map: a bubble per city, then a pin per school inside its district; an apricot badge means open job posts. */
+/** The educators' school map: a bubble per city, then a pin per school inside its district; an amber light means open job posts. */
 function jobMap(schools, jobCount, selectedSchool, selectedCity) {
   return `${mapSlot("map-jobs", { kind: "jobs", schools, jobs: jobCount, pin: selectedSchool || "", city: selectedCity || "", district: "" })}
-    <p class="mapnote">${T("In this demo a school's pin sits inside its district, not at its street address. An apricot badge means open job posts.", "此示範將學校標示在所屬的行政區內，而不是實際地址。橘色標記代表有開放職缺。")}</p>`;
+    <p class="mapnote">${T("In this demo a school's pin sits inside its district, not at its street address. An amber light means open job posts.", "此示範將學校標示在所屬的行政區內，而不是實際地址。橘色標記代表有開放職缺。")}</p>`;
 }

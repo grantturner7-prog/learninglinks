@@ -92,8 +92,8 @@ const selm = (k, v) => `aria-pressed="${has(k, v)}"`;
 /* The map lives in map.js (zoomable, with every district). */
 
 /* ---------- guided flow frame: one question at a time, Link asks, a receipt or preview beside it ---------- */
-const LINK = `<svg width="56" height="56" viewBox="0 0 64 64" aria-hidden="true"><circle cx="26" cy="32" r="17" fill="#fde3cc" stroke="#f08f45" stroke-width="4.2"/><circle cx="38" cy="32" r="17" fill="#ebe3f8" fill-opacity=".85" stroke="#2b1730" stroke-width="4.2"/><path d="M28.95 15.26A17 17 0 0 1 35 17.58" fill="none" stroke="#f08f45" stroke-width="4.2"/><circle cx="28.6" cy="29.2" r="1.9" fill="#2b1730"/><circle cx="35.4" cy="29.2" r="1.9" fill="#2b1730"/><path d="M27.4 35.2Q32 40.2 36.6 35.2" fill="none" stroke="#2b1730" stroke-width="2.2" stroke-linecap="round"/></svg>`;
-const MARK = `<svg width="44" height="30" viewBox="0 0 44 30" role="img" aria-label="LearningLinks"><circle cx="15" cy="15" r="11" fill="none" stroke="#f08f45" stroke-width="4"/><circle cx="29" cy="15" r="11" fill="none" stroke="#2b1730" stroke-width="4"/><path d="M17.6 4.5A11 11 0 0 1 22.4 6.2" fill="none" stroke="#f08f45" stroke-width="4"/></svg>`;
+const LINK = `<svg width="56" height="56" viewBox="0 0 64 64" aria-hidden="true"><circle cx="26" cy="32" r="17" fill="#fbe5bd" stroke="#e09a2c" stroke-width="4.2"/><circle cx="38" cy="32" r="17" fill="#f7f4f2" fill-opacity=".85" stroke="#1f1a1c" stroke-width="4.2"/><path d="M28.95 15.26A17 17 0 0 1 35 17.58" fill="none" stroke="#e09a2c" stroke-width="4.2"/><circle cx="28.6" cy="29.2" r="1.9" fill="#1f1a1c"/><circle cx="35.4" cy="29.2" r="1.9" fill="#1f1a1c"/><path d="M27.4 35.2Q32 40.2 36.6 35.2" fill="none" stroke="#1f1a1c" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+const MARK = `<svg width="44" height="30" viewBox="0 0 44 30" role="img" aria-label="LearningLinks"><circle cx="15" cy="15" r="11" fill="none" stroke="#f2b45a" stroke-width="4"/><circle cx="29" cy="15" r="11" fill="none" stroke="#1f1a1c" stroke-width="4"/><path d="M17.6 4.5A11 11 0 0 1 22.4 6.2" fill="none" stroke="#f2b45a" stroke-width="4"/></svg>`;
 
 function dots(step, total) {
   let out = "";

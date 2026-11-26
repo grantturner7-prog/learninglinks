@@ -75,6 +75,16 @@ const A = {
   signin: (el) => { const v = el.dataset.v; if (!st.people[v]) { st.people[v] = { id: "p-" + v, type: v, name: DEFAULT_NAME[v] }; } st.role = v; go(v === "admin" ? "admin" : "dashboard"); },
   signout: () => { st.role = "visitor"; go("home"); },
   start: (el) => { const v = el.dataset.v; go("signup"); st.form.role = v || ""; render(true); },
+  /* The start bar on the home page only chooses where to go next: nobody reaches an educator through it without a
+     membership (the find page shows the members-only wall), and an educator goes to the jobs map or to the free sign-up. */
+  homeSearch: () => {
+    const m = me(), who = st.form.hwho || (m && m.type !== "admin" ? m.type : "family"), city = st.form.hcity || "";
+    if (who === "educator") {
+      if (m && m.type === "educator") { go("jobs"); st.form.city = city; return render(true); }
+      go("signup"); st.form.role = "educator"; return render(true);
+    }
+    go("educators"); st.form.city = city; render(true);
+  },
   preset: (el) => preset(el.dataset.v),
   pick: (el) => { st.form[el.dataset.k] = el.dataset.v; render(false); },
   toggle: (el) => { const k = el.dataset.k, v = el.dataset.v; const a = st.form[k] || []; st.form[k] = a.includes(v) ? a.filter((x) => x !== v) : a.concat(v); render(false); },
