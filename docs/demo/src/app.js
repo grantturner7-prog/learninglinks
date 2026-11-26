@@ -1,20 +1,27 @@
 /* ================= shell ================= */
-const ROLES = [["visitor", () => T("Visitor", "訪客")], ["family", () => T("Family", "家庭")], ["school", () => T("School", "學校")], ["educator", () => T("Educator", "教師")], ["admin", () => "Admin"]];
+/* The menu follows the person, as on the real site: a visitor sees what the site is, a family its tutors and membership,
+   a school its educators, job posts and campuses, an educator the jobs map and their profile. The name at the right
+   opens that person's own page. Nobody can jump between kinds of account: you sign out and sign in as someone else. */
+const KIND_LABEL = { family: () => T("Family", "家庭"), school: () => T("School", "學校"), educator: () => T("Educator", "教師"), admin: () => T("Site owner", "網站管理員") };
 function navItems() {
   const m = me();
   if (!m) return [["home", T("Home", "首頁")], ["educators", T("Find educators", "尋找教師")]];
-  if (m.type === "family") return [["dashboard", T("Dashboard", "儀表板")], ["educators", T("Find educators", "尋找教師")]];
-  if (m.type === "school") return [["dashboard", T("Dashboard", "儀表板")], ["educators", T("Find educators", "尋找教師")], ["campuses", T("My campuses", "我的校區")], ["myjobs", T("Jobs", "職缺")]];
-  if (m.type === "educator") return [["dashboard", T("Dashboard", "儀表板")], ["profile", T("My profile", "我的檔案")], ["jobs", T("Job posts", "職缺")]];
-  return [["admin", "Admin desk"]];
+  if (m.type === "family") return [["educators", T("Find tutors", "找家教")], ["dashboard", T("My membership", "我的會員")]];
+  if (m.type === "school") return [["educators", T("Find educators", "尋找教師")], ["myjobs", T("My job posts", "我的職缺")], ["campuses", T("My campuses", "我的校區")], ["dashboard", T("Membership", "會員")]];
+  if (m.type === "educator") return [["jobs", T("Jobs map", "職缺地圖")], ["profile", T("My profile", "我的檔案")], ["dashboard", T("Who asked", "誰索取過")]];
+  return [["admin", T("Admin desk", "管理後台")]];
 }
 const GROUP = { claim: "campuses", addschool: "campuses", join: "dashboard", order: "dashboard", ecpay: "dashboard", educator: "educators", jobnew: "myjobs", report: "dashboard", signup: "home" };
 function shell(inner) {
   const cur = GROUP[st.view] || st.view;
-  return `<div class="demo"><div class="wrap"><b>${T("DEMO", "示範")}</b><span>${T("Pretend people and data. Nothing is saved on a server and no money moves.", "虛構的人物與資料。沒有任何資料存到伺服器，也沒有任何款項移動。")}</span>
-      <span class="chips" role="group" aria-label="${T("Try the site as", "以此身分試用")}">${ROLES.map(([k, l]) => `<button class="chip" data-act="role" data-v="${k}" aria-pressed="${st.role === k}">${l()}</button>`).join("")}</span><button class="link" data-act="reset">${T("Start over", "重新開始")}</button></div></div>
-    <div class="wrap"><header class="top"><button class="brand" data-act="nav" data-v="${me() ? "dashboard" : "home"}">${MARK}<span>LearningLinks</span></button><nav class="nav" aria-label="${T("Main", "主要")}">${navItems().map(([v, l]) => `<button data-act="nav" data-v="${v}" ${cur === v ? 'aria-current="page"' : ""}>${l}</button>`).join("")}</nav>
-      <div class="lang" role="group" aria-label="Language"><button data-act="lang" data-v="zh" aria-pressed="${st.lang === "zh"}">繁中</button><button data-act="lang" data-v="en" aria-pressed="${st.lang === "en"}">EN</button></div>${me() ? `<button class="btn" data-act="signout">${T("Sign out", "登出")}</button>` : `<button class="btn btn-primary" data-act="start" data-v="">${T("Sign up", "註冊")}</button>`}</header>
+  const m = me();
+  const account = m
+    ? `<button class="acct" data-act="nav" data-v="${m.type === "admin" ? "admin" : "dashboard"}" data-testid="account"><span class="ini" aria-hidden="true">${h(([...(m.name || "?")][0] || "?").toUpperCase())}</span><span>${h(m.name)}</span><span class="kind">${KIND_LABEL[m.type]()}</span></button><button class="tlink" data-act="signout">${T("Sign out", "登出")}</button>`
+    : `<button class="tlink" data-act="signinPage">${T("Sign in", "登入")}</button><button class="btn btn-primary" data-act="start" data-v="">${T("Sign up", "註冊")}</button>`;
+  return `<div class="demo"><div class="wrap"><b>${T("DEMO", "示範")}</b><span>${T("Pretend people and data. Nothing is saved on a server and no money moves.", "虛構的人物與資料。沒有任何資料存到伺服器，也沒有任何款項移動。")}</span><button class="link" data-act="reset">${T("Start over", "重新開始")}</button></div></div>
+    <div class="topbar"><div class="wrap"><header class="top"><button class="brand" data-act="nav" data-v="${m ? (m.type === "admin" ? "admin" : "dashboard") : "home"}">${MARK}<span>LearningLinks</span></button><nav class="nav" aria-label="${m ? T("Your pages", "您的頁面") : T("Main", "主要")}">${navItems().map(([v, l]) => `<button data-act="nav" data-v="${v}" ${cur === v ? 'aria-current="page"' : ""}>${l}</button>`).join("")}</nav>
+      <div class="lang" role="group" aria-label="Language"><button data-act="lang" data-v="zh" aria-pressed="${st.lang === "zh"}">繁中</button><button data-act="lang" data-v="en" aria-pressed="${st.lang === "en"}">EN</button></div>${account}</header></div></div>
+    <div class="wrap">
     <main id="main">${inner}</main>
     <footer class="fine"><div class="notice" role="note"><b>${h(noticeFull().lead)}</b> ${h(noticeFull().full)}</div><div class="links"><span>${T("In the real site: Terms, Privacy policy and Educator waiver (drafts, to be reviewed by your lawyer), Safety guide.", "真實網站中：服務條款、隱私權政策、教師刊登同意書（草稿，待律師審閱）、安全指南。")}</span></div></footer></div>${st.toast ? `<div class="toast" role="status">${h(st.toast)}</div>` : ""}`;
 }
@@ -63,7 +70,9 @@ const A = {
   nav: (el) => { const v = el.dataset.v; if (v === "profile") return openProfile(); if (v === "dashboard" && !me()) return go("home"); go(v); },
   lang: (el) => { st.lang = el.dataset.v; save(); render(false); },
   reset: () => { st = fresh(); save(); render(true); },
-  role: (el) => { const v = el.dataset.v; if (v === "visitor") { st.role = "visitor"; return go("home"); } if (!st.people[v]) { st.people[v] = { id: "p-" + v, type: v, name: DEFAULT_NAME[v] }; } st.role = v; go(v === "admin" ? "admin" : "dashboard"); },
+  signinPage: () => go("signin"),
+  /* Sign in as the account of that kind used earlier in this demo, or as a new one with nothing set up yet. */
+  signin: (el) => { const v = el.dataset.v; if (!st.people[v]) { st.people[v] = { id: "p-" + v, type: v, name: DEFAULT_NAME[v] }; } st.role = v; go(v === "admin" ? "admin" : "dashboard"); },
   signout: () => { st.role = "visitor"; go("home"); },
   start: (el) => { const v = el.dataset.v; go("signup"); st.form.role = v || ""; render(true); },
   preset: (el) => preset(el.dataset.v),

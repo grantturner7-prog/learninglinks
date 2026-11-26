@@ -27,8 +27,26 @@ V.home = () => {
     <div class="grid g3"><div class="card flat"><h3>1. ${T("Educators create a profile", "教師建立檔案")}</h3><p class="muted">${T("One question at a time, with a live preview.", "一次一個問題，並即時預覽。")}</p></div>
     <div class="card flat"><h3>2. ${T("Members search on a map", "會員在地圖上搜尋")}</h3><p class="muted">${T("Educators appear by area, never by address.", "教師只顯示所在地區，不顯示地址。")}</p></div>
     <div class="card flat"><h3>3. ${T("You contact each other directly", "雙方直接聯絡")}</h3><p class="muted">${T("A member can ask to see an educator's contact details. We are not an employer or an agent.", "會員可以申請查看教師的聯絡方式。我們不是雇主，也不是仲介。")}</p></div></div></section>
-  <section class="card" style="margin-top:28px;background:var(--lilac-50)"><div class="eyebrow">${T("Demo shortcuts", "示範捷徑")}</div><h3 style="margin:4px 0 10px">${T("Skip the sign-up and payment steps", "跳過註冊與付款步驟")}</h3>
-    <div class="row"><button class="btn" data-act="preset" data-v="family_paid">${T("A family that has paid", "已付費的家庭")}</button><button class="btn" data-act="preset" data-v="school_paid">${T("A school with one campus paid", "已付一個校區的學校")}</button><button class="btn" data-act="preset" data-v="educator">${T("An educator with a published profile", "已發布檔案的教師")}</button><button class="btn" data-act="preset" data-v="admin">${T("The admin desk", "管理員後台")}</button></div></section>`;
+  <section class="card" style="margin-top:28px;background:var(--lilac-50)"><div class="row" style="justify-content:space-between"><div><h3>${T("Want to look inside?", "想看看裡面嗎？")}</h3><p class="muted" style="margin-top:4px">${T("Sign in as a family, a school, an educator or the site owner. This is a demo, so no password is needed.", "以家庭、學校、教師或網站管理員的身分登入。這是示範，不需要密碼。")}</p></div><button class="btn btn-primary" data-act="signinPage">${T("Sign in", "登入")}</button></div></section>`;
+};
+
+/* ================= sign in: the demo's accounts ================= */
+/* A real site asks for an email and a password. The demo has neither, so the sign-in page is where you choose who to be.
+   This is the only place to change account: once signed in, the header shows that person's own menu and Sign out. */
+V.signin = () => {
+  const row = (kind, title, what, blank, presetKey, ready) => {
+    const mine = st.people[kind];
+    return `<div class="card flat" data-testid="signin-${kind}"><h3>${title}</h3><p class="muted small" style="margin-top:2px">${what}</p><div class="row" style="margin-top:12px">
+      <button class="btn" data-act="signin" data-v="${kind}">${mine ? `${T("Continue as", "以此身分繼續：")} ${h(mine.name)}` : blank}</button>
+      ${presetKey ? `<button class="btn" data-act="preset" data-v="${presetKey}">${ready}</button>` : ""}</div></div>`;
+  };
+  return `<div class="stack" style="max-width:780px;margin:0 auto"><div><div class="eyebrow">${T("Demo", "示範")}</div><h1 style="margin-top:6px">${T("Sign in", "登入")}</h1>
+    <p class="lead">${T("The real site asks for your email and password. This demo has no passwords: choose who to sign in as. To try another kind of account, sign out and come back here.", "真實網站會要求您輸入電子郵件與密碼。這個示範沒有密碼：請選擇要以誰的身分登入。想試試另一種帳號時，請先登出再回到這裡。")}</p></div>
+    ${row("family", T("A family", "家庭"), T("Looks for private tutors. NT$2,000 for 12 months.", "尋找私人家教。12 個月 NT$2,000。"), T("A new family, not paid yet", "新家庭，尚未付費"), "family_paid", T("A family that has paid", "已付費的家庭"))}
+    ${row("school", T("A school or centre", "學校或補習班"), T("Looks for full-time and part-time educators and posts jobs. NT$10,000 per campus for 12 months.", "尋找全職與兼職教師，並刊登職缺。每校區 12 個月 NT$10,000。"), T("A new school, nothing paid yet", "新學校，尚未付費"), "school_paid", T("A school with one campus paid", "已付一個校區的學校"))}
+    ${row("educator", T("An educator", "教師"), T("Has a profile, sees schools and job posts on the map. Always free.", "擁有個人檔案，可在地圖上查看學校與職缺。永遠免費。"), T("A new educator, no profile yet", "新教師，尚未建立檔案"), "educator", T("An educator with a published profile", "已發布檔案的教師"))}
+    ${row("admin", T("The site owner", "網站管理員"), T("Confirms payments, records refunds and handles reports.", "確認付款、登記退款並處理檢舉。"), T("The admin desk", "管理員後台"), "", "")}
+    <p class="muted">${T("New here?", "第一次來？")} <button class="link-btn" data-act="start" data-v="">${T("Create an account", "建立帳號")}</button></p></div>`;
 };
 
 /* ================= sign-up: one question at a time ================= */
@@ -148,7 +166,7 @@ V.order = () => {
     <p class="num" style="font-size:clamp(30px,6vw,46px);font-weight:800;letter-spacing:.06em;margin:10px 0" data-ref>${o.ref}</p>
     <div class="notice">${T("The bank account details are not set yet. In the real site they appear here, from the server's private settings.", "尚未設定銀行帳號。在真實網站中，帳號會從伺服器的私人設定顯示在這裡。")}</div>
     <p class="small muted" style="margin-top:10px">${T("An administrator checks that the correct amount arrived and then confirms your order by hand, which starts your membership.", "管理員會核對款項金額無誤後，以人工確認您的訂單，會員資格才會開始。")}</p>
-    <div class="notice demo-only" style="margin-top:12px"><b>${T("Demo only:", "僅限示範：")}</b> ${T("switch to the Admin role at the top to confirm this transfer.", "請從上方切換到管理員角色來確認此轉帳。")} <button class="link-btn" data-act="adminAsk" data-v="${o.id}">${T("Take me there", "帶我過去")}</button></div></div>${tail}${cancel}</div>`;
+    <div class="notice demo-only" style="margin-top:12px"><b>${T("Demo only:", "僅限示範：")}</b> ${T("on the real site the owner confirms this transfer at the admin desk. Here you can go there yourself.", "在真實網站中，由網站管理員在管理後台確認這筆轉帳。在這裡您可以自己前往。")} <button class="link-btn" data-act="adminAsk" data-v="${o.id}">${T("Take me there", "帶我過去")}</button></div></div>${tail}${cancel}</div>`;
 };
 
 /* ================= the simulated ECPay page (the real one is ECPay's own, on ECPay's server) ================= */

@@ -38,14 +38,17 @@ a { color: var(--lilac-700); }
 .demo { background: var(--ink); color: #f3e3e8; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 8px max(16px, env(safe-area-inset-left, 0px)); font-size: 13.5px; }
 .demo .wrap { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
 .demo b { color: #fff; }
-.demo .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { border: 1.5px solid #6e5a73; background: transparent; color: #f3e3e8; border-radius: 999px; padding: 3px 12px; cursor: pointer; font-size: 13px; font-weight: 700; }
-.chip[aria-pressed="true"] { background: var(--apricot-400); border-color: var(--apricot-400); color: var(--ink); }
-.chip:hover { border-color: #fff; }
 .demo .link { color: #fde3cc; background: none; border: 0; cursor: pointer; text-decoration: underline; font-size: 13.5px; padding: 2px 4px; }
 
-/* header */
-.top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding: 14px 0; }
+/* header: one bar across the page. The menu follows whoever is signed in; the name at the right is their own page. */
+.topbar { background: var(--paper); border-bottom: 1px solid var(--line-2); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); margin-bottom: 22px; }
+.top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 10px 0; }
+.tlink { background: none; border: 0; cursor: pointer; padding: 10px 8px; font-weight: 800; color: var(--ink); border-radius: 10px; }
+.tlink:hover { background: var(--lilac-50); }
+.acct { display: inline-flex; align-items: center; gap: 9px; border: 1.5px solid var(--line); background: var(--blush); color: var(--ink); border-radius: 999px; padding: 5px 16px 5px 5px; font-weight: 800; cursor: pointer; max-width: 100%; }
+.acct:hover { background: var(--lilac-50); }
+.acct .ini { width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--apricot-400); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.acct .kind { font-size: 12.5px; font-weight: 700; color: var(--ink-3); border-left: 1.5px solid var(--line); padding-left: 9px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: var(--ink); text-decoration: none; background: none; border: 0; cursor: pointer; padding: 0; }
 .nav { display: flex; flex-wrap: wrap; gap: 4px; margin-right: auto; }
 .nav button { background: none; border: 0; cursor: pointer; padding: 8px 14px; border-radius: 999px; font-weight: 700; color: var(--ink-2); }
