@@ -2,22 +2,26 @@ import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/journey/icons";
 import { SampleTag } from "@/components/home/link-says";
 
-// The sample's own illustration palette (skin and hair), not brand colours.
-const SKIN = "#F6CDAE";
-const SKIN_NECK = "#E7AE88";
-const HAIR = "#8F4A2E";
+// The samples' own illustration palette (skin and hair), not brand colours.
+const LOOKS = {
+  1: { skin: "#F6CDAE", neck: "#E7AE88", hair: "#8F4A2E", back: "fill-accent-300", top: "fill-brand-300" },
+  2: { skin: "#E9B991", neck: "#D49C74", hair: "#2A211D", back: "fill-ink-100", top: "fill-ink-700" },
+  3: { skin: "#F3CDB0", neck: "#E2AC8A", hair: "#1F1A17", back: "fill-brand-100", top: "fill-accent-400" },
+} as const;
 
-/** An illustrated face for the made-up sample educator. It is a drawing, never a photo of a real person. */
-function SampleAvatar({ size = 72 }: { size?: number }) {
+/** An illustrated face for a made-up sample educator. It is a drawing, never a photo of a real person. */
+export function SampleAvatar({ size = 72, look = 1, ring = "ring-[3px] ring-white shadow-card" }: { size?: number; look?: 1 | 2 | 3; ring?: string }) {
+  const { skin: SKIN, neck: SKIN_NECK, hair: HAIR, back, top } = LOOKS[look];
   return (
-    <span className="inline-block flex-none overflow-hidden rounded-full ring-[3px] ring-white shadow-card" style={{ width: size, height: size }}>
+    <span className={`inline-block flex-none overflow-hidden rounded-full ${ring}`} style={{ width: size, height: size }}>
       <svg viewBox="0 0 96 96" width={size} height={size} aria-hidden="true" focusable="false" className="block">
-        <rect width="96" height="96" className="fill-accent-300" />
-        <path d="M26 52C21 25 36 11 49 11c13 0 28 14 22 41 2 11 4 21 0 29H27c-4-8-2-18-1-29z" fill={HAIR} />
-        <path d="M8 96c2-22 20-28 40-28s38 6 40 28z" className="fill-brand-300" />
+        <rect width="96" height="96" className={back} />
+        {look === 1 ? <path d="M26 52C21 25 36 11 49 11c13 0 28 14 22 41 2 11 4 21 0 29H27c-4-8-2-18-1-29z" fill={HAIR} /> : null}
+        {look === 3 ? <circle cx="48" cy="15" r="9.5" fill={HAIR} /> : null}
+        <path d="M8 96c2-22 20-28 40-28s38 6 40 28z" className={top} />
         <path d="M41 56h14v14c-3 4-11 4-14 0z" fill={SKIN_NECK} />
         <ellipse cx="48" cy="44" rx="17" ry="19" fill={SKIN} />
-        <path d="M30 43C29 25 41 19 50 20c10 1 17 9 16 23-5-7-12-11-20-11-6 0-12 4-16 11z" fill={HAIR} />
+        {look === 2 ? <path d="M29.5 44C27 26 39 17 50 18c11 1 19 10 16.500 26-2-8-7-13-14-14-9-1-17 4-23 14z" fill={HAIR} /> : <path d="M30 43C29 25 41 19 50 20c10 1 17 9 16 23-5-7-12-11-20-11-6 0-12 4-16 11z" fill={HAIR} />}
         <circle cx="41.5" cy="46.5" r="1.8" className="fill-ink-900" />
         <circle cx="54.5" cy="46.5" r="1.8" className="fill-ink-900" />
         <path d="M43 53q5 4.6 10 0" fill="none" className="stroke-ink-900" strokeWidth="1.9" strokeLinecap="round" />
@@ -38,7 +42,7 @@ export async function SampleCard({ view, compact = false }: { view: "family" | "
   // The small version floats beside the map on the home page's hero: one glance, nothing to wrap.
   if (compact) {
     return (
-      <div className="rounded-[26px] bg-paper p-4 shadow-soft" aria-label={t("sample.tag", { view: t(`sample.view.${view}`) })}>
+      <div className="rounded-[22px] border border-ink-100 bg-paper p-4 shadow-soft" aria-label={t("sample.tag", { view: t(`sample.view.${view}`) })}>
         <SampleTag>{t("sample.tag", { view: t(`sample.view.${view}`) })}</SampleTag>
         <div className="mt-3 flex items-center gap-3.5">
           <SampleAvatar size={60} />
@@ -59,7 +63,7 @@ export async function SampleCard({ view, compact = false }: { view: "family" | "
     );
   }
   return (
-    <div className="rounded-[28px] bg-paper p-4 pb-5 inset-ring-2 inset-ring-ink-200 sm:p-5" aria-label={t("sample.tag", { view: t(`sample.view.${view}`) })}>
+    <div className="rounded-[24px] border border-ink-200 bg-paper p-4 pb-5 shadow-card sm:p-5" aria-label={t("sample.tag", { view: t(`sample.view.${view}`) })}>
       <div className="mb-3">
         <SampleTag>{t("sample.tag", { view: t(`sample.view.${view}`) })}</SampleTag>
       </div>

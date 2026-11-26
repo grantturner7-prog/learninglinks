@@ -66,7 +66,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
             <p className="text-sm font-extrabold uppercase tracking-wide text-brand-700">{t("reference")}</p>
             <p className="mt-2 break-all font-mono text-4xl font-extrabold tracking-wider sm:text-5xl" data-testid="reference">{order.referenceCode}</p>
             <div className="mt-3 flex flex-wrap items-center gap-3"><CopyButton text={order.referenceCode} label={t("copy")} doneLabel={t("copied")} /><p className="text-sm text-ink-600">{t("referenceHint")}</p></div>
-            <div className="mt-6 border-t-2 border-dotted border-[#cbb8eb] pt-5">
+            <div className="mt-6 border-t-2 border-dotted border-ink-300 pt-5">
               <p className="text-sm font-bold text-ink-600">{t("amount")}</p>
               <p className="text-4xl font-extrabold tabular-nums" data-testid="amount">{money} <span className="text-base font-semibold text-ink-600">{t("vat")}</span></p>
             </div>
@@ -88,7 +88,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
             <h2 className="text-xl font-extrabold">{t("stepsTitle")}</h2>
             <ol className="mt-3 flex flex-col gap-3">
               {(["step1", "step2", "step3"] as const).map((k, i) => (
-                <li key={k} className="flex items-start gap-3"><span className="inline-flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full bg-brand-900 text-sm font-extrabold text-white">{i + 1}</span><span>{t(k)}</span></li>
+                <li key={k} className="flex items-start gap-3"><span className="inline-flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full bg-accent-400 text-sm font-extrabold text-ink-900">{i + 1}</span><span>{t(k)}</span></li>
               ))}
             </ol>
           </section>

@@ -35,28 +35,28 @@ export async function SiteFooter() {
   const tn = await getTranslations("nav");
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-brand-900 pb-8 pt-12 text-[15px] text-brand-200">
+    <footer className="border-t border-ink-100 bg-white pb-8 pt-12 text-[15px] text-ink-600">
       <div className="container-wide grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))]">
         <div className="col-span-2 flex max-w-sm flex-col gap-3 md:col-span-1">
-          <span className="inline-flex items-center gap-2.5 text-lg font-extrabold text-white">
-            <LogoMark size={22} light />
+          <span className="inline-flex items-center gap-2.5 text-lg font-extrabold text-ink-900">
+            <LogoMark size={22} />
             LearningLinks
           </span>
-          <p className="text-white">{t("tagline")}</p>
+          <p className="font-semibold text-ink-900">{t("tagline")}</p>
           <p className="text-sm">{t("about")}</p>
         </div>
         {COLUMNS.map((col) => (
           <nav key={col.title} aria-label={t(col.title)} className="flex flex-col items-start">
-            <h2 className="mb-1.5 text-sm font-extrabold uppercase tracking-[0.06em] text-white">{t(col.title)}</h2>
+            <h2 className="mb-1.5 text-[13px] font-extrabold uppercase tracking-[0.06em] text-ink-600">{t(col.title)}</h2>
             {col.links.map((l) => (
-              <Link key={l.href} href={l.href} className="inline-flex min-h-10 items-center text-brand-200 no-underline hover:text-white hover:underline">
+              <Link key={l.href} href={l.href} className="inline-flex min-h-10 items-center font-semibold text-ink-900 no-underline hover:underline">
                 {l.ns === "nav" ? tn(l.key) : t(l.key)}
               </Link>
             ))}
           </nav>
         ))}
       </div>
-      <p className="container-wide mt-10 flex flex-wrap gap-x-6 gap-y-1 border-t border-brand-800 pt-6 text-sm text-brand-300">
+      <p className="container-wide mt-10 flex flex-wrap gap-x-6 gap-y-1 border-t border-ink-100 pt-6 text-sm text-ink-600">
         <span>{t("rights", { year })}</span>
         <span>{t("based")}</span>
       </p>

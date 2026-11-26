@@ -18,7 +18,7 @@ function BilingualBox({ on, onChange }: { on: boolean; onChange: (v: boolean) =>
   const tb = useTranslations("school.bilingual");
   return (
     <label className={`${CARD} flex cursor-pointer items-start gap-3`}>
-      <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" checked={on} onChange={(e) => onChange(e.target.checked)} data-testid="bilingual-box" />
+      <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-ink-900" checked={on} onChange={(e) => onChange(e.target.checked)} data-testid="bilingual-box" />
       <span><span className="block text-[16px] font-extrabold leading-snug">{tb("label")}</span><span className="mt-1 block text-sm leading-relaxed text-ink-600">{tb("hint")}</span></span>
     </label>
   );
@@ -168,7 +168,7 @@ export function CampusFlow(p: Props) {
           </div>
           {p.mode === "claim" ? <BilingualBox on={bilingual} onChange={setBilingual} /> : null}
           <label className={`${CARD} flex cursor-pointer items-start gap-3`}>
-            <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" checked={ack} onChange={(e) => setAck(e.target.checked)} />
+            <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-ink-900" checked={ack} onChange={(e) => setAck(e.target.checked)} />
             <span className="text-[15px] font-semibold leading-relaxed">{tn("acknowledge")}</span>
           </label>
         </div>

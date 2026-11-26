@@ -182,7 +182,7 @@ async function EducatorHome({ user }: { locale: string; user: { id: string; name
         <ol className="flex flex-col gap-4">
           {steps.map((s, i) => (
             <li key={s.label} className="flex flex-wrap items-center gap-3">
-              <span className={`inline-flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full text-sm font-extrabold ${s.done ? "bg-brand-700 text-white" : i === next ? "border-2 border-brand-700 text-brand-800" : "border-2 border-ink-300 text-ink-500"}`}>{s.done ? "✓" : i + 1}</span>
+              <span className={`inline-flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full text-sm font-extrabold ${s.done ? "bg-ink-900 text-white" : i === next ? "border-2 border-brand-700 text-brand-800" : "border-2 border-ink-300 text-ink-500"}`}>{s.done ? "✓" : i + 1}</span>
               <span className="flex-1">{s.label} <span className={s.done ? "badge" : "badge-muted"}>{s.done ? t("done") : t("todo")}</span></span>
               {i === next ? <Link href={s.href} className="btn btn-primary">{s.cta}</Link> : null}
             </li>

@@ -13,7 +13,7 @@ function labelFor(locale: string): string {
 }
 
 /**
- * One language at a time: a switch between the locales of the current country, made for the dark top bar.
+ * One language at a time: a switch between the locales of the current country, made for the white top bar.
  * With exactly two languages it is one link to the OTHER language; with more, a small group.
  */
 export function LanguageSwitcher() {
@@ -23,11 +23,11 @@ export function LanguageSwitcher() {
   const country = current.split("-")[1];
   const options = routing.locales.filter((l) => l.split("-")[1] === country);
   const other = options.length === 2 ? options.find((l) => l !== current) : undefined;
-  const link = "inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] px-2.5 text-sm font-bold no-underline hover:text-white";
+  const link = "inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] px-2.5 text-sm font-bold no-underline hover:bg-ink-50 hover:text-ink-900";
 
   if (other) {
     return (
-      <Link href={pathname} locale={other} lang={other} hrefLang={other} className={`${link} text-brand-200`}>
+      <Link href={pathname} locale={other} lang={other} hrefLang={other} className={`${link} text-ink-600`}>
         {labelFor(other)}
       </Link>
     );
@@ -35,7 +35,7 @@ export function LanguageSwitcher() {
   return (
     <div role="group" aria-label={t("language")} className="inline-flex">
       {options.map((l) => (
-        <Link key={l} href={pathname} locale={l} lang={l} hrefLang={l} aria-current={l === current ? "true" : undefined} className={`${link} ${l === current ? "text-white underline decoration-accent-400 decoration-2 underline-offset-4" : "text-brand-200"}`}>
+        <Link key={l} href={pathname} locale={l} lang={l} hrefLang={l} aria-current={l === current ? "true" : undefined} className={`${link} ${l === current ? "text-ink-900 underline decoration-accent-500 decoration-2 underline-offset-4" : "text-ink-600"}`}>
           {labelFor(l)}
         </Link>
       ))}

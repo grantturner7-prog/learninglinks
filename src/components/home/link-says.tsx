@@ -32,9 +32,9 @@ export function LinkSays({
 }
 
 /** A small rounded label that marks illustrative material (never real people or numbers). */
-export function SampleTag({ children }: { children: ReactNode }) {
+export function SampleTag({ children, tone = "light" }: { children: ReactNode; tone?: "light" | "night" }) {
   return (
-    <span className="inline-flex min-h-[26px] items-center whitespace-nowrap rounded-full bg-brand-100 px-3 text-xs font-bold tracking-wide text-brand-700">
+    <span className={`inline-flex min-h-[26px] items-center whitespace-nowrap rounded-full px-3 text-xs font-bold tracking-wide ${tone === "night" ? "bg-night-700 text-accent-400" : "bg-brand-100 text-brand-700"}`}>
       {children}
     </span>
   );

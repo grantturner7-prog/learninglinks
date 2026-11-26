@@ -13,20 +13,21 @@ export async function MembersWall() {
   const t = await getTranslations("wall");
   return (
     <>
-      <section className="bg-brand-900 text-white">
-        <div className="container-wide flex flex-col items-start gap-4 pb-12 pt-9 sm:pb-14 sm:pt-12">
-          <span className="inline-flex h-14 w-14 items-center justify-center rounded-[18px] bg-brand-800 text-accent-400">
+      <section className="border-b border-ink-100 bg-ink-50">
+        <div className="container-wide flex flex-col items-start gap-4 pb-10 pt-9 sm:pb-12 sm:pt-12">
+          <span className="inline-flex h-14 w-14 items-center justify-center rounded-[18px] bg-accent-400 text-ink-900">
             <Lock size={28} />
           </span>
-          <h1 className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl">{t("title")}</h1>
-          <p className="max-w-2xl text-lg leading-relaxed text-brand-200">{t("lead")}</p>
+          <h1 className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl">{t("title")}</h1>
+          <p className="max-w-2xl text-lg leading-relaxed text-ink-700">{t("lead")}</p>
         </div>
       </section>
 
+      <div className="bg-white">
       <div className="container-wide py-10 sm:py-12">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <section className="card flex flex-col gap-2 p-6 sm:p-8">
-            <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-accent-300 text-warn-700">
+            <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-accent-300 text-ink-900">
               <Heart size={26} />
             </span>
             <h2 className="mt-2 text-2xl font-extrabold tracking-tight">{t("family.title")}</h2>
@@ -39,7 +40,7 @@ export async function MembersWall() {
             </Link>
           </section>
           <section className="card flex flex-col gap-2 p-6 sm:p-8">
-            <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-brand-100 text-brand-800">
+            <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-accent-300 text-ink-900">
               <Building size={26} />
             </span>
             <h2 className="mt-2 text-2xl font-extrabold tracking-tight">{t("school.title")}</h2>
@@ -73,6 +74,7 @@ export async function MembersWall() {
         <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-ink-700">
           <b className="text-ink-900">{t("why.title")}</b> {t("why.body")}
         </p>
+      </div>
       </div>
     </>
   );

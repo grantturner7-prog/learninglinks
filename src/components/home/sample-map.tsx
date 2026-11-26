@@ -75,7 +75,7 @@ export function SampleMap({ labels, className, tone = "light" }: { labels: Sampl
   );
 }
 
-/** The same teaser on the aubergine hero of the home page: lilac land, white bubbles, the highlighted area in apricot. */
+/** The same teaser on the night stage of the home page: charcoal land, cream lights, the highlighted area in amber. */
 function DarkSampleMap({ labels, className }: { labels: SampleMapLabels; className?: string }) {
   return (
     <svg viewBox={TAIWAN_VIEWBOX} role="img" aria-label={labels.aria} className={className}>
@@ -86,22 +86,22 @@ function DarkSampleMap({ labels, className }: { labels: SampleMapLabels; classNa
             d={d}
             strokeWidth={id === HOT ? 1.4 : 0.8}
             strokeLinejoin="round"
-            className={id === HOT ? "fill-accent-400 stroke-accent-300" : `stroke-brand-900 ${CITY.has(id) ? "fill-brand-600" : "fill-brand-800"}`}
+            className={id === HOT ? "fill-accent-400 stroke-accent-300" : `stroke-brand-900 ${CITY.has(id) ? "fill-night-500" : "fill-night-700"}`}
           />
         ))}
       </g>
       <g>
         {BUBBLES.map((b) => (
           <g key={`${b.x}-${b.y}`}>
-            <circle cx={b.x} cy={b.y} r={b.halo} className={b.hot ? "fill-accent-300/45" : "fill-white/15"} />
-            <circle cx={b.x} cy={b.y} r={b.core} className={b.hot ? "fill-accent-300 stroke-white" : "fill-white stroke-brand-300"} strokeWidth={b.hot ? 2 : 1} />
-            <text x={b.x} y={b.y + 3.2} textAnchor="middle" fontSize="8.4" fontWeight="800" className="fill-ink-900">
+            <circle cx={b.x} cy={b.y} r={b.halo} className={b.hot ? "fill-accent-400/25" : "fill-night-100/15"} />
+            <circle cx={b.x} cy={b.y} r={b.core} className={b.hot ? "fill-brand-900 stroke-accent-400" : "fill-night-100 stroke-brand-900"} strokeWidth={b.hot ? 2 : 0.6} />
+            <text x={b.x} y={b.y + 3.2} textAnchor="middle" fontSize="8.4" fontWeight="800" className={b.hot ? "fill-accent-400" : "fill-brand-900"}>
               {b.n}
             </text>
           </g>
         ))}
       </g>
-      <g fontSize="7.4" fontWeight="700" className="fill-white stroke-brand-900 [paint-order:stroke]" strokeWidth="2.6" strokeLinejoin="round">
+      <g fontSize="7.4" fontWeight="700" className="fill-night-100 stroke-brand-900 [paint-order:stroke]" strokeWidth="2.6" strokeLinejoin="round">
         <text x="196" y="12" textAnchor="middle">{labels.taipei}</text>
         <text x="246" y="84" textAnchor="end">{labels.newTaipei}</text>
         <text x="150" y="150" textAnchor="middle">{labels.taichung}</text>

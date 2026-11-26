@@ -65,7 +65,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
         {found && found.status === "pending" ? <p className="mt-3">{found.referenceCode} is <b>waiting for payment</b>. It is in the list further down.</p> : null}
 
         {found && found.status === "paid" && foundState ? (
-          <div className="mt-4 border-t-2 border-dotted border-[#cbb8eb] pt-4" data-testid="paid-order">
+          <div className="mt-4 border-t-2 border-dotted border-ink-300 pt-4" data-testid="paid-order">
             <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <span className="font-mono text-xl font-extrabold">{found.referenceCode}</span>
               <span className="text-xl font-extrabold">{money(foundState.paid, found.currency)}</span>

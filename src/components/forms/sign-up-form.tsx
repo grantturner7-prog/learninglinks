@@ -243,7 +243,7 @@ export function SignUpForm({ initialType }: { initialType: AccountType | null })
                   <DoorArt kind={kind} className="h-[120px] w-auto" />
                   <span className="mt-3 text-2xl font-extrabold leading-tight tracking-tight">{t(`signUp.${k}.title`)}</span>
                   <span className="mb-4 mt-2 text-[15px] leading-relaxed text-ink-900">{t(`signUp.${k}.body`)}</span>
-                  <span className="mt-auto inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand-900 text-white" aria-hidden>
+                  <span className="mt-auto inline-flex h-11 w-11 items-center justify-center rounded-full bg-accent-400 text-ink-900" aria-hidden>
                     <Icon name="arrowR" size={20} />
                   </span>
                 </button>
@@ -274,7 +274,7 @@ export function SignUpForm({ initialType }: { initialType: AccountType | null })
                   {t(`errors.${error}`)}
                 </div>
               ) : null}
-              <label className="flex cursor-pointer items-start gap-4 rounded-[24px] bg-brand-50 p-4 ring-2 ring-brand-200 has-[:checked]:ring-brand-700 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent-500">
+              <label className="flex cursor-pointer items-start gap-4 rounded-[24px] bg-brand-50 p-4 ring-2 ring-brand-200 has-[:checked]:ring-brand-700 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-focus">
                 <input
                   ref={ackBox}
                   type="checkbox"

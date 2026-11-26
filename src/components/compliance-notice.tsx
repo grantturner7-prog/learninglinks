@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
  * flows that need more (sign-up, checkout) add it again with the acknowledgement checkbox.
  * Wording lives in messages/<locale>/notice.json and is guarded by tests/messages.test.ts.
  *
- * "band" is the every-page presentation (Atlas look): the full canonical wording, stated once and calmly in a band
+ * "band" is the every-page presentation: the full canonical wording, stated once and calmly in a band
  * above the footer, with a link to the safety guide. "full" and "tight" are the boxed versions used inside flows.
  */
 export async function ComplianceNotice({ variant = "full" }: { variant?: "band" | "full" | "tight" }) {

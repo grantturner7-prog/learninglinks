@@ -59,10 +59,10 @@ export async function SiteHeader() {
   const initial = user ? ([...user.name.trim()][0] ?? "·").toUpperCase() : "";
 
   return (
-    <header className="relative z-30 bg-brand-900 text-white">
-      <div className="container-wide flex h-16 items-center gap-1.5 lg:gap-6">
-        <Link href="/" className="mr-auto inline-flex min-h-11 items-center gap-2.5 text-[17px] font-extrabold tracking-tight text-white no-underline lg:mr-2 lg:text-[19px]">
-          <LogoMark size={22} light />
+    <header className="relative z-30 border-b border-ink-100 bg-white text-ink-900">
+      <div className="container-wide flex h-[68px] items-center gap-1.5 lg:gap-4">
+        <Link href="/" className="mr-auto inline-flex min-h-11 items-center gap-2.5 text-[18px] font-extrabold tracking-tight text-ink-900 no-underline lg:mr-3 lg:text-[20px]">
+          <LogoMark size={22} />
           LearningLinks
         </Link>
         <NavLinks items={items} label={t(user ? "yourPages" : "main")} />
@@ -70,19 +70,19 @@ export async function SiteHeader() {
           <LanguageSwitcher />
           {user ? (
             <>
-              <Link href="/dashboard" className="hidden min-h-11 items-center gap-2.5 rounded-full bg-brand-800 py-1.5 pl-1.5 pr-4 text-sm font-bold text-white no-underline hover:bg-brand-700 sm:inline-flex">
+              <Link href="/dashboard" className="hidden min-h-11 items-center gap-2.5 rounded-full border border-ink-200 bg-white py-1.5 pl-1.5 pr-4 text-sm font-bold text-ink-900 no-underline hover:border-ink-900 sm:inline-flex">
                 <span aria-hidden className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-accent-400 text-[13px] font-extrabold text-ink-900">{initial}</span>
                 <span className="sr-only">{t("dashboard")}: </span>
                 <span className="max-w-[10rem] truncate">{user.name}</span>
               </Link>
-              <SignOutButton className="hidden min-h-11 items-center rounded-full px-3 text-sm font-bold text-brand-200 hover:text-white disabled:opacity-50 lg:inline-flex" />
+              <SignOutButton className="hidden min-h-11 items-center rounded-full px-3 text-sm font-bold text-ink-600 hover:bg-ink-50 hover:text-ink-900 disabled:opacity-50 lg:inline-flex" />
             </>
           ) : (
             <>
-              <Link href="/sign-in" className="inline-flex min-h-11 items-center px-2.5 text-sm font-bold text-white no-underline hover:underline lg:px-3 lg:text-[15px]">
+              <Link href="/sign-in" className="inline-flex min-h-11 items-center px-2.5 text-sm font-extrabold text-ink-900 no-underline hover:underline lg:px-3 lg:text-[15px]">
                 {t("signIn")}
               </Link>
-              <Link href="/sign-up" className="btn btn-accent hidden sm:inline-flex">
+              <Link href="/sign-up" className="btn btn-primary hidden rounded-full sm:inline-flex">
                 {t("signUp")}
               </Link>
             </>

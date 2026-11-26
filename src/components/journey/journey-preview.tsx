@@ -9,7 +9,7 @@ import { isOneOf, SUBJECTS } from "@/lib/taxonomy";
 import { openToForAudience, type Audience } from "@/lib/visibility";
 
 const initials = (n: string) => [...n.trim()].slice(0, 2).join("").toUpperCase() || "·";
-const ghost = "inline-flex min-h-7 items-center rounded-full border-2 border-dashed border-[#cbb8eb] px-3 text-[12.5px] font-semibold text-brand-700";
+const ghost = "inline-flex min-h-7 items-center rounded-full border-2 border-dashed border-ink-300 px-3 text-[12.5px] font-semibold text-brand-700";
 
 /** "Your card builds as you answer": the card members will see, rebuilt on every change. */
 export function JourneyPreview({ d, step, view, onView, photoUrl, locale }: {
@@ -39,7 +39,7 @@ export function JourneyPreview({ d, step, view, onView, photoUrl, locale }: {
       <div className="flex flex-col gap-1">
         <h2 className="flex items-center gap-2 text-lg font-extrabold tracking-tight"><Icon name="sparkle" size={20} className="text-accent-500" />{t("title")}</h2>
       </div>
-      <div role="group" aria-label={`${t("families")} / ${t("schools")}`} className="flex rounded-full bg-[#f7e8e3] p-1.5">
+      <div role="group" aria-label={`${t("families")} / ${t("schools")}`} className="flex rounded-full bg-ink-100 p-1.5">
         {(["family", "school"] as const).map((a) => (
           <button key={a} type="button" aria-pressed={view === a} onClick={() => onView(a)}
             className={`min-h-11 flex-1 rounded-full text-sm font-bold ${view === a ? "bg-paper text-ink-900 shadow-card" : "text-ink-600"}`}>
@@ -53,9 +53,9 @@ export function JourneyPreview({ d, step, view, onView, photoUrl, locale }: {
         <div className="flex items-center gap-4 pt-3">
           {photoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element -- private, gated, already-resized photo
-            <img src={photoUrl} alt="" width={88} height={88} className="h-[88px] w-[88px] rounded-full object-cover shadow-[0_0_0_3px_#fff,0_8px_18px_-8px_rgb(60_25_70/0.35)]" />
+            <img src={photoUrl} alt="" width={88} height={88} className="h-[88px] w-[88px] rounded-full object-cover shadow-[0_0_0_3px_#fff,0_8px_18px_-8px_rgb(31_26_28/0.35)]" />
           ) : (
-            <span aria-hidden className="inline-flex h-[88px] w-[88px] flex-none items-center justify-center rounded-full bg-brand-100 text-2xl font-extrabold text-brand-700 shadow-[0_0_0_3px_#fff,0_8px_18px_-8px_rgb(60_25_70/0.35)]">{initials(d.displayName)}</span>
+            <span aria-hidden className="inline-flex h-[88px] w-[88px] flex-none items-center justify-center rounded-full bg-brand-100 text-2xl font-extrabold text-brand-700 shadow-[0_0_0_3px_#fff,0_8px_18px_-8px_rgb(31_26_28/0.35)]">{initials(d.displayName)}</span>
           )}
           <div className="min-w-0">
             <p className="truncate text-2xl font-extrabold tracking-tight">{d.displayName.trim() || t("yourName")}</p>
@@ -68,7 +68,7 @@ export function JourneyPreview({ d, step, view, onView, photoUrl, locale }: {
           <div className="mt-2 flex flex-wrap gap-2">
             {input.subjects.length === 0 ? <span className={ghost}>{tp("fields.subjects")}</span> : null}
             {input.subjects.map((s) => (
-              <span key={s} className={`inline-flex min-h-8 items-center rounded-full px-3.5 text-sm font-bold ${step === 4 ? "bg-accent-300 text-ink-900 shadow-[inset_0_0_0_2px_#f08f45]" : "bg-brand-100 text-brand-700"}`}>
+              <span key={s} className={`inline-flex min-h-8 items-center rounded-full px-3.5 text-sm font-bold ${step === 4 ? "bg-accent-300 text-ink-900 shadow-[inset_0_0_0_2px_var(--color-ink-900)]" : "bg-brand-100 text-brand-700"}`}>
                 {isOneOf(SUBJECTS, s) ? tt(`subjects.${s}`) : s}
               </span>
             ))}
@@ -122,7 +122,7 @@ export function JourneyPreview({ d, step, view, onView, photoUrl, locale }: {
       <div className="rounded-[28px] bg-paper p-5 shadow-card ring-1 ring-ink-100">
         <div className="flex items-baseline justify-between"><b className="text-[15.5px] font-extrabold">{t("strength")}</b><span className="text-[13.5px] font-extrabold text-accent-600">{strength.percent}% · {strength.percent >= 80 ? t("great") : t("gettingThere")}</span></div>
         <div role="progressbar" aria-valuenow={strength.percent} aria-valuemin={0} aria-valuemax={100} aria-label={t("strength")} className="mt-3 flex gap-1.5">
-          {[0, 1, 2, 3, 4].map((i) => <i key={i} className={`h-3 flex-1 rounded-full ${i < filled ? "bg-accent-500" : "bg-[#f7e8e3]"}`} />)}
+          {[0, 1, 2, 3, 4].map((i) => <i key={i} className={`h-3 flex-1 rounded-full ${i < filled ? "bg-accent-500" : "bg-ink-100"}`} />)}
         </div>
         {strength.missing[0] ? <p className="mt-3 text-[13.5px] leading-relaxed text-ink-600">{tp(`strength.tips.${strength.missing[0]}`)}</p> : null}
       </div>

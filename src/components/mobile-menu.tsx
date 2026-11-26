@@ -42,20 +42,20 @@ export function MobileMenu({ items, account, labels, children }: {
         aria-controls="site-menu"
         aria-label={open ? labels.close : labels.open}
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex h-11 w-11 items-center justify-center rounded-[14px] bg-brand-800 text-white hover:bg-brand-700"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-[14px] border border-ink-200 bg-white text-ink-900 hover:border-ink-900"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
           {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
         </svg>
       </button>
       {open ? (
-        <nav id="site-menu" aria-label={labels.nav} className="absolute inset-x-0 top-16 z-40 flex flex-col gap-1 border-t border-brand-800 bg-brand-900 px-3 pb-5 pt-3 shadow-soft">
+        <nav id="site-menu" aria-label={labels.nav} className="absolute inset-x-0 top-[68px] z-40 flex flex-col gap-1 border-y border-ink-100 bg-white px-3 pb-5 pt-3 shadow-soft">
           {items.map((i) => (
             <Link key={i.href} href={i.href} className="menu-link" onClick={close} aria-current={isCurrentPage(pathname, i.href) ? "page" : undefined}>
               {i.label}
             </Link>
           ))}
-          <hr className="my-2 border-brand-800" />
+          <hr className="my-2 border-ink-100" />
           {account.map((i) => (
             <Link key={i.href} href={i.href} className="menu-link" onClick={close} aria-current={isCurrentPage(pathname, i.href) ? "page" : undefined}>
               {i.label}

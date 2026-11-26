@@ -1,19 +1,22 @@
 import type { Map as MlMap, LayerSpecification, StyleSpecification } from "maplibre-gl";
 import type { CountryMapConfig } from "@/lib/geo";
 
-/** Brand tokens (see globals.css) as literals, because MapLibre paints need real colour values. */
+/**
+ * The night map (owner choice, 26 Nov 2026): charcoal land on a darker sea, warming where there are more people,
+ * with amber for what is chosen. Literals, because MapLibre paints need real colour values; they follow the night
+ * tokens in globals.css.
+ */
 export const PALETTE = {
-  land: "#fbf6f1",
-  landEdge: "#c9b9d6",
-  countyLine: "#bfaed0",
-  districtLine: "#e3d6e6",
-  shadow: "rgba(60, 25, 70, 0.20)",
-  /** Density ramp, lightest to deepest (index 0 is "no data" and uses the land colour). */
-  ramp: ["#f1e9fa", "#dccff3", "#c3a9e8", "#9a80d1", "#66489e"],
-  brand700: "#553a8c",
-  brand800: "#3f2a68",
-  amber: "#f7a96b",
-  amberDeep: "#a94a0e",
+  land: "#2b2622",
+  landEdge: "#151311",
+  countyLine: "#151311",
+  districtLine: "#1c1917",
+  shadow: "rgba(244, 238, 229, 0.07)",
+  /** Density ramp, fewest to most (below the first step an area has no one and keeps the land colour). */
+  ramp: ["#39322b", "#473d31", "#574a38", "#685841", "#7a6748"],
+  hoverLine: "#d9cfc1",
+  amber: "#f2b45a",
+  amberDeep: "#ffe6b8",
 } as const;
 
 /** No tiles, no glyphs, no sprites: nothing is requested from any other server. The sea is CSS. */
@@ -29,7 +32,7 @@ export function addBase(map: MlMap, country: CountryMapConfig): void {
   map.addSource(SOURCE.districts, { type: "geojson", data: country.districtsUrl, promoteId: "key" });
 
   const layers: LayerSpecification[] = [
-    // Soft shadow around the coast; the land fill drawn next hides the half that falls on land.
+    // A faint glow around the coast; the land fill drawn next hides the half that falls on land.
     {
       id: "land-glow", type: "line", source: SOURCE.counties,
       layout: { "line-join": "round" },
@@ -40,7 +43,7 @@ export function addBase(map: MlMap, country: CountryMapConfig): void {
     {
       id: "land-inner", type: "line", source: SOURCE.counties,
       layout: { "line-join": "round" },
-      paint: { "line-color": "rgba(60, 25, 70, 0.07)", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 9], "line-blur": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 7], "line-offset": ["interpolate", ["linear"], ["zoom"], 5, -1.5, 10, -4] },
+      paint: { "line-color": "rgba(244, 238, 229, 0.05)", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 9], "line-blur": ["interpolate", ["linear"], ["zoom"], 5, 3, 10, 7], "line-offset": ["interpolate", ["linear"], ["zoom"], 5, -1.5, 10, -4] },
     },
     {
       id: LAYER.districtLine, type: "line", source: SOURCE.districts,

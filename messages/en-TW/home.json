@@ -161,5 +161,62 @@
         "body": "Educators stay in charge of their own card. We never ask for ID numbers, home addresses or documents."
       }
     }
+  },
+  "open": {
+    "title": "Find a tutor or a teacher near you.",
+    "sub": "LearningLinks connects families and schools in Taiwan with educators nearby. Pick who you are and where you are, and see them on the map.",
+    "start": {
+      "label": "Start here",
+      "who": "I am",
+      "family": "A family",
+      "school": "A school",
+      "educator": "An educator",
+      "subject": "Looking for",
+      "anySubject": "Any subject",
+      "near": "Near",
+      "anywhere": "All of Taiwan",
+      "go": "Search"
+    },
+    "altSchool": "I'm hiring for a school",
+    "stage": {
+      "title": "What a family sees after joining",
+      "tag": "Sample people and numbers",
+      "count": "23 tutors in Taichung City",
+      "locked": "Real educators are for members only. They are never on public pages or search engines.",
+      "p2": {
+        "name": "Daniel K.",
+        "line": "Conversation and test preparation",
+        "areas": "Xitun · West",
+        "rate": "NT$800–1,200"
+      },
+      "p3": {
+        "name": "Mei-Ling C.",
+        "line": "Mandarin and maths homework help",
+        "areas": "Xitun",
+        "rate": "NT$500–700"
+      }
+    },
+    "doorsSub": "One payment. VAT included. A membership lasts 12 months and never renews by itself.",
+    "ticks": {
+      "family": {
+        "t1": "Private tutors near your home, on the map",
+        "t2": "What they teach, their experience and hourly rates",
+        "t3": "Ask for contact details and talk directly",
+        "t4": "No agency fee and no commission"
+      },
+      "school": {
+        "t1": "Educators open to full-time or part-time work",
+        "t2": "Post your own full-time and part-time jobs",
+        "t3": "Your jobs appear on the educators' map",
+        "t4": "Each campus gets its own full 12 months"
+      },
+      "teach": {
+        "t1": "One profile, shown to schools, families or both",
+        "t2": "You choose which contact details to share",
+        "t3": "Open jobs at schools near you, on the map",
+        "t4": "Shown by district only, never your address"
+      }
+    },
+    "districtsCaption": "Zoom in to a city and its districts appear. Educators are shown by district, never at an address."
   }
 }

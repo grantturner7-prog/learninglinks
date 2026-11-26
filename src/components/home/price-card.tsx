@@ -43,7 +43,7 @@ export function PriceCard({
       <ul className="mt-6 flex flex-col gap-3 rounded-[28px] bg-paper/85 p-5">
         {bullets.map((b) => (
           <li key={b} className="flex items-start gap-3 text-[15.5px] leading-snug">
-            <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-brand-900 text-white">
+            <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-accent-400 text-ink-900">
               <Icon name="check" size={14} stroke={3} />
             </span>
             <span>{b}</span>

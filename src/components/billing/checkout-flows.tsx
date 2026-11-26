@@ -59,7 +59,7 @@ function Receipt({ lines, total, note, noDiscount }: { lines: string[]; total: s
     <div className="rounded-[36px] bg-paper p-6 shadow-soft" aria-live="polite">
       <p className="text-sm font-extrabold uppercase tracking-wide text-brand-700">{t("title")}</p>
       <ul className="mt-4 flex flex-col gap-2 text-[15.5px] font-semibold">{lines.map((l) => <li key={l} className="flex items-start gap-2"><Icon name="check" size={18} className="mt-0.5 flex-none text-brand-700" />{l}</li>)}</ul>
-      <div className="mt-5 border-t-2 border-dotted border-[#cbb8eb] pt-4">
+      <div className="mt-5 border-t-2 border-dotted border-ink-300 pt-4">
         {total ? (
           <p className="flex items-baseline justify-between gap-3"><span className="text-sm font-bold text-ink-600">{t("total")}</span><span className="text-3xl font-extrabold tabular-nums">{total}</span></p>
         ) : (
@@ -102,7 +102,7 @@ function AckBox({ checked, onChange }: { checked: boolean; onChange: (v: boolean
   const tn = useTranslations("notice");
   return (
     <label className="flex cursor-pointer items-start gap-3 rounded-[26px] bg-brand-50 p-4">
-      <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <input type="checkbox" className="mt-1 h-5 w-5 flex-none accent-ink-900" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <span className="text-[15px] font-semibold leading-relaxed">{tn("acknowledge")}</span>
     </label>
   );

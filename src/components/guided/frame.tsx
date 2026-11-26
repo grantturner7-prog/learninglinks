@@ -48,7 +48,7 @@ export function FlowFrame({ step, total, labels: l, cheer, say, question, help, 
             {cheer ? <p className="text-base font-semibold">{cheer}</p> : null}
           </div>
           <ol className="relative mt-8 hidden items-center justify-between px-1 sm:flex" aria-label={l.path}>
-            <span aria-hidden className="absolute left-3 right-3 top-1/2 -translate-y-1/2 border-t-[3px] border-dotted border-[#cbb8eb]" />
+            <span aria-hidden className="absolute left-3 right-3 top-1/2 -translate-y-1/2 border-t-[3px] border-dotted border-ink-300" />
             <span aria-hidden className="absolute left-3 top-1/2 -translate-y-1/2 border-t-4 border-ink-900" style={{ width: `calc((100% - 24px) * ${total > 1 ? (step - 1) / (total - 1) : 0})` }} />
             {Array.from({ length: total }, (_, i) => i + 1).map((n) => (
               <li key={n} className="relative z-10">
@@ -56,16 +56,16 @@ export function FlowFrame({ step, total, labels: l, cheer, say, question, help, 
                   {n < step ? (
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink-900 text-white"><Icon name="check" size={14} stroke={3} /></span>
                   ) : n === step ? (
-                    <span className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-paper shadow-[0_0_0_4px_#f7a96b,0_22px_44px_-18px_rgb(60_25_70/0.24)]"><LinkGuide size={44} /></span>
+                    <span className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-paper shadow-[0_0_0_4px_var(--color-accent-400),0_22px_44px_-18px_rgb(31_26_28/0.24)]"><LinkGuide size={44} /></span>
                   ) : (
-                    <span className="h-6 w-6 rounded-full bg-paper shadow-[inset_0_0_0_3px_#cbb8eb]" />
+                    <span className="h-6 w-6 rounded-full bg-paper shadow-[inset_0_0_0_3px_var(--color-ink-300)]" />
                   )}
                 </button>
                 {n === step ? <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent-400 px-3 py-1 text-xs font-extrabold">{l.here}</span> : null}
               </li>
             ))}
           </ol>
-          <div className="mt-5 h-2 overflow-hidden rounded-full bg-[#f7e8e3] sm:hidden" aria-hidden><div className="h-full rounded-full bg-ink-900" style={{ width: `${(step / total) * 100}%` }} /></div>
+          <div className="mt-5 h-2 overflow-hidden rounded-full bg-ink-100 sm:hidden" aria-hidden><div className="h-full rounded-full bg-ink-900" style={{ width: `${(step / total) * 100}%` }} /></div>
 
           <div className="mt-8 flex items-center gap-4 sm:gap-5">
             <span className="flex-none"><LinkGuide size={56} /></span>

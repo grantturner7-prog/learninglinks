@@ -91,7 +91,7 @@ export default async function ForFamiliesPage({ params }: Props) {
             <ol className="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2">
               {before.map((b, i) => (
                 <li key={b.t} className="flex items-start gap-4 rounded-[26px] bg-ink-50 p-5 inset-ring-2 inset-ring-ink-200">
-                  <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-brand-900 text-base font-extrabold text-white">{i + 1}</span>
+                  <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent-400 text-base font-extrabold text-ink-900">{i + 1}</span>
                   <p className="leading-relaxed">
                     <b className="font-extrabold">{b.t}</b> {b.b}
                   </p>

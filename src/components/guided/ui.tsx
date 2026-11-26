@@ -4,12 +4,12 @@ import type { ReactNode } from "react";
 import { Icon } from "@/components/journey/icons";
 
 /** Shared look of the guided (one question at a time) flows. Tokens only; colours come from globals.css. */
-export const PILL = "inline-flex min-h-11 items-center gap-2 rounded-full bg-paper px-5 text-[15px] font-bold text-ink-900 shadow-[inset_0_0_0_2px_#e2cdd0] transition";
+export const PILL = "inline-flex min-h-11 items-center gap-2 rounded-full bg-paper px-5 text-[15px] font-bold text-ink-900 shadow-[inset_0_0_0_2px_var(--color-ink-300)] transition";
 export const PILL_HOVER = "hover:bg-white";
-export const PILL_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_#f08f45]";
-export const TILE = "relative flex min-h-[132px] w-full flex-col items-center justify-center gap-1.5 rounded-[30px] bg-[#fff8f4] px-3 pb-3.5 pt-4 text-center shadow-[inset_0_0_0_2px_#e2cdd0] transition";
-export const TILE_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_#f08f45,0_14px_24px_-14px_rgb(240_143_69/0.8)]";
-export const CARD = "rounded-[30px] bg-[#fff8f4] p-5 shadow-[inset_0_0_0_2px_#e2cdd0]";
+export const PILL_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_var(--color-ink-900)]";
+export const TILE = "relative flex min-h-[132px] w-full flex-col items-center justify-center gap-1.5 rounded-[30px] bg-paper px-3 pb-3.5 pt-4 text-center shadow-[inset_0_0_0_2px_var(--color-ink-300)] transition";
+export const TILE_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_var(--color-ink-900)]";
+export const CARD = "rounded-[30px] bg-paper p-5 shadow-[inset_0_0_0_2px_var(--color-ink-300)]";
 
 export function Pill({ on, onClick, children }: { on: boolean; onClick: () => void; children: ReactNode }) {
   return (

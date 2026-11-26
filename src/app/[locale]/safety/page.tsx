@@ -42,7 +42,7 @@ export default async function SafetyPage({ params }: Props) {
             <ol className="mt-6 flex flex-col gap-3">
               {items.map((item, i) => (
                 <li key={item} className="flex items-start gap-4 rounded-[24px] bg-paper/85 p-4">
-                  <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-brand-900 text-base font-extrabold text-white">{i + 1}</span>
+                  <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent-400 text-base font-extrabold text-ink-900">{i + 1}</span>
                   <span className="pt-1 leading-relaxed">{item}</span>
                 </li>
               ))}

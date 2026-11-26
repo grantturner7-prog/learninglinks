@@ -7,7 +7,7 @@ export function StepCards({ steps, icons = ["sparkle", "pencil", "link"] }: { st
       {steps.map((s, i) => (
         <li key={s.body} className="flex flex-col gap-3 rounded-[32px] bg-paper p-6 shadow-card sm:p-7">
           <div className="flex items-center justify-between">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-900 text-xl font-extrabold text-white">{i + 1}</span>
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-400 text-xl font-extrabold text-ink-900">{i + 1}</span>
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-300 text-accent-600">
               <Icon name={icons[i] ?? "sparkle"} size={24} />
             </span>

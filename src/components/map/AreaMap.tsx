@@ -185,7 +185,8 @@ function AreaLayers({ bubbles, selected, onPick, onClear, locale }: { bubbles: r
     for (const [suffix, source] of [["c", SOURCE.counties], ["d", SOURCE.districts]] as const) {
       above.push(
         { id: `hl-hover-fill-${suffix}`, type: "fill", source, filter: NO_MATCH, paint: { "fill-color": PALETTE.amber, "fill-opacity": 0.1 } },
-        { id: `hl-hover-line-${suffix}`, type: "line", source, filter: NO_MATCH, layout: { "line-join": "round" }, paint: { "line-color": PALETTE.brand700, "line-width": 1.8, "line-opacity": 0.85 } },
+        { id: `hl-hover-line-${suffix}`, type: "line", source, filter: NO_MATCH, layout: { "line-join": "round" }, paint: { "line-color": PALETTE.hoverLine, "line-width": 1.8, "line-opacity": 0.85 } },
+        { id: `hl-sel-fill-${suffix}`, type: "fill", source, filter: NO_MATCH, paint: { "fill-color": PALETTE.amber, "fill-opacity": 0.24 } },
         { id: `hl-sel-glow-${suffix}`, type: "line", source, filter: NO_MATCH, layout: { "line-join": "round" }, paint: { "line-color": PALETTE.amber, "line-width": 10, "line-blur": 7, "line-opacity": 0.6 } },
         { id: `hl-sel-line-${suffix}`, type: "line", source, filter: NO_MATCH, layout: { "line-join": "round" }, paint: { "line-color": PALETTE.amberDeep, "line-width": 2.4 } },
       );
@@ -223,7 +224,7 @@ function AreaLayers({ bubbles, selected, onPick, onClear, locale }: { bubbles: r
     for (const s of ["c", "d"]) for (const id of [`hl-hover-fill-${s}`, `hl-hover-line-${s}`]) if (map.getLayer(id)) map.setFilter(id, hover ? matchKey(hover) : NO_MATCH);
   }, [map, hover]);
   useEffect(() => {
-    for (const s of ["c", "d"]) for (const id of [`hl-sel-glow-${s}`, `hl-sel-line-${s}`]) if (map.getLayer(id)) map.setFilter(id, selected ? matchKey(selected) : NO_MATCH);
+    for (const s of ["c", "d"]) for (const id of [`hl-sel-fill-${s}`, `hl-sel-glow-${s}`, `hl-sel-line-${s}`]) if (map.getLayer(id)) map.setFilter(id, selected ? matchKey(selected) : NO_MATCH);
     const dim = dimFilters(selected);
     if (map.getLayer("area-dim-c")) map.setFilter("area-dim-c", dim.c);
     if (map.getLayer("area-dim-d")) map.setFilter("area-dim-d", dim.d);
@@ -337,7 +338,7 @@ function AreaLayers({ bubbles, selected, onPick, onClear, locale }: { bubbles: r
     for (const c of Object.keys(country.cityAnchors)) offer(c, "city");
     if (districtMode) for (const k of Object.keys(country.districtAnchors)) offer(k, "district");
     const names = placeNames(cands, [...boxes, ...reserved], { w, h }, narrow, { inside: (c, x, y) => areaAt(map, "hit-district", x, y)?.[c.tier] === c.key });
-    // A name on the deepest shade needs light text; everywhere else the ink colour reads well (4.5:1 or better).
+    // A name on the warmest shade needs white text; everywhere else the cream reads well (4.5:1 or better).
     const onDeep = (key: string): boolean => {
       if (levelOfKey(key) !== "district" || !districtMode) return false;
       if (selected && (levelOfKey(selected) === "city" ? cityOfKey(key) !== selected : key !== selected)) return false; // veiled, so light

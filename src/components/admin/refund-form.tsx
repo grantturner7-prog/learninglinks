@@ -26,7 +26,7 @@ export function RefundForm({ orderId, requestId, today, refundable, endable, buy
     startTransition(() => dispatch(data));
   };
   return (
-    <form key={requestId} onSubmit={submit} className="mt-4 flex flex-col gap-4 rounded-2xl border-2 border-dotted border-[#cbb8eb] p-4" data-testid="refund-form">
+    <form key={requestId} onSubmit={submit} className="mt-4 flex flex-col gap-4 rounded-2xl border-2 border-dotted border-ink-300 p-4" data-testid="refund-form">
       <input type="hidden" name="orderId" value={orderId} />
       <input type="hidden" name="requestId" value={requestId} />
       <h3 className="text-lg font-extrabold">Refund or end membership</h3>
@@ -36,7 +36,7 @@ export function RefundForm({ orderId, requestId, today, refundable, endable, buy
           <legend className="label">End membership now</legend>
           {endable.map((m) => (
             <label key={m.id} className="flex items-start gap-3">
-              <input type="checkbox" name="end" value={m.id} className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" />
+              <input type="checkbox" name="end" value={m.id} className="mt-1 h-5 w-5 flex-none accent-ink-900" />
               <span><b>{m.label}</b> <span className="text-sm text-ink-600">{m.runs}</span></span>
             </label>
           ))}
@@ -75,13 +75,13 @@ export function RefundForm({ orderId, requestId, today, refundable, endable, buy
 
       {buyerEmail ? (
         <label className="flex items-start gap-3">
-          <input type="checkbox" name="notify" defaultChecked className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" />
+          <input type="checkbox" name="notify" defaultChecked className="mt-1 h-5 w-5 flex-none accent-ink-900" />
           <span>Email the buyer ({buyerEmail}) to say what was done</span>
         </label>
       ) : null}
 
       <label className="flex items-start gap-3">
-        <input type="checkbox" name="understood" required className="mt-1 h-5 w-5 flex-none accent-[#2b1730]" />
+        <input type="checkbox" name="understood" required className="mt-1 h-5 w-5 flex-none accent-ink-900" />
         <span>I understand this takes effect straight away and cannot be undone from here. Any money has already been sent back, or none is being returned.</span>
       </label>
 

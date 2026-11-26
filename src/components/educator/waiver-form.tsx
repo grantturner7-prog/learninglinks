@@ -6,7 +6,7 @@ import { acceptWaiverAction } from "@/app/[locale]/educator/actions";
 import { WAIVER_REQUIRED_ITEMS } from "@/lib/consent/waiver-items";
 import { Link } from "@/i18n/navigation";
 
-const ROW = "flex cursor-pointer items-start gap-3 rounded-xl border border-ink-200 bg-white p-4 has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent-400";
+const ROW = "flex cursor-pointer items-start gap-3 rounded-xl border border-ink-200 bg-white p-4 has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-focus";
 
 export function WaiverForm({ locale }: { locale: string }) {
   const t = useTranslations("educator.waiver");

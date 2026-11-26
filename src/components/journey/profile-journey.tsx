@@ -33,11 +33,11 @@ type SayKey = `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 const skey = (n: number) => `s${n}` as SayKey;
 const ckey = (n: number) => `c${n}` as `c${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 
-const PILL = "inline-flex min-h-11 items-center gap-2 rounded-full bg-paper px-5 text-[15px] font-bold text-ink-900 shadow-[inset_0_0_0_2px_#e2cdd0] transition hover:bg-white";
-const PILL_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_#f08f45]";
-const TILE = "relative flex min-h-[150px] w-full flex-col items-center justify-center gap-1.5 rounded-[30px] bg-[#fff8f4] px-2 pb-3.5 pt-4 text-center shadow-[inset_0_0_0_2px_#e2cdd0] transition hover:bg-white";
-const TILE_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_#f08f45,0_14px_24px_-14px_rgb(240_143_69/0.8)]";
-const CARD = "rounded-[30px] bg-[#fff8f4] p-5 shadow-[inset_0_0_0_2px_#e2cdd0]";
+const PILL = "inline-flex min-h-11 items-center gap-2 rounded-full bg-paper px-5 text-[15px] font-bold text-ink-900 shadow-[inset_0_0_0_2px_var(--color-ink-300)] transition hover:bg-white";
+const PILL_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_var(--color-ink-900)]";
+const TILE = "relative flex min-h-[150px] w-full flex-col items-center justify-center gap-1.5 rounded-[30px] bg-paper px-2 pb-3.5 pt-4 text-center shadow-[inset_0_0_0_2px_var(--color-ink-300)] transition hover:bg-white";
+const TILE_ON = "!bg-accent-300 shadow-[inset_0_0_0_3px_var(--color-ink-900)]";
+const CARD = "rounded-[30px] bg-paper p-5 shadow-[inset_0_0_0_2px_var(--color-ink-300)]";
 
 function Pill({ on, onClick, children }: { on: boolean; onClick: () => void; children: ReactNode }) {
   return (
@@ -367,7 +367,7 @@ export function ProfileJourney(p: JourneyProps) {
                     ["notice", tn("acknowledge"), true],
                     ["marketing", tw("confirm.marketing"), false],
                   ] as const).map(([k, body, required]) => (
-                    <label key={k} className="flex cursor-pointer items-start gap-4 rounded-[24px] bg-brand-50 p-4 ring-2 ring-brand-200 has-[:checked]:ring-brand-700 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent-500">
+                    <label key={k} className="flex cursor-pointer items-start gap-4 rounded-[24px] bg-brand-50 p-4 ring-2 ring-brand-200 has-[:checked]:ring-brand-700 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-focus">
                       <input type="checkbox" className="mt-1 h-6 w-6 flex-none accent-brand-700" checked={!!items[k]} onChange={(e) => setItems((s) => ({ ...s, [k]: e.target.checked }))} />
                       <span className="text-[15px] leading-relaxed">{body} <span className={required ? "badge-warn ml-1" : "badge-muted ml-1"}>{required ? tw("confirm.required") : tw("confirm.optional")}</span></span>
                     </label>
@@ -425,7 +425,7 @@ export function ProfileJourney(p: JourneyProps) {
                 <p className="text-base font-semibold">{t(`cheer.${ckey(step)}`)}</p>
               </div>
               <ol className="relative mt-9 hidden items-center justify-between px-1 sm:flex" aria-label={t("top.path")}>
-                <span aria-hidden className="absolute left-3 right-3 top-1/2 -translate-y-1/2 border-t-[3px] border-dotted border-[#cbb8eb]" />
+                <span aria-hidden className="absolute left-3 right-3 top-1/2 -translate-y-1/2 border-t-[3px] border-dotted border-ink-300" />
                 <span aria-hidden className="absolute left-3 top-1/2 -translate-y-1/2 border-t-4 border-ink-900" style={{ width: `calc((100% - 24px) * ${(step - 1) / (STEP_COUNT - 1)})` }} />
                 {Array.from({ length: STEP_COUNT }, (_, i) => i + 1).map((n) => (
                   <li key={n} className="relative z-10">
@@ -434,16 +434,16 @@ export function ProfileJourney(p: JourneyProps) {
                       {n < step ? (
                         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink-900 text-white"><Icon name="check" size={14} stroke={3} /></span>
                       ) : n === step ? (
-                        <span className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-paper shadow-[0_0_0_4px_#f7a96b,0_22px_44px_-18px_rgb(60_25_70/0.24)]"><LinkGuide size={44} /></span>
+                        <span className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-paper shadow-[0_0_0_4px_var(--color-accent-400),0_22px_44px_-18px_rgb(31_26_28/0.24)]"><LinkGuide size={44} /></span>
                       ) : (
-                        <span className="h-6 w-6 rounded-full bg-paper shadow-[inset_0_0_0_3px_#cbb8eb]" />
+                        <span className="h-6 w-6 rounded-full bg-paper shadow-[inset_0_0_0_3px_var(--color-ink-300)]" />
                       )}
                     </button>
                     {n === step ? <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent-400 px-3 py-1 text-xs font-extrabold">{t("top.here")}</span> : null}
                   </li>
                 ))}
               </ol>
-              <div className="mt-5 h-2 overflow-hidden rounded-full bg-[#f7e8e3] sm:hidden" aria-hidden><div className="h-full rounded-full bg-ink-900" style={{ width: `${(step / STEP_COUNT) * 100}%` }} /></div>
+              <div className="mt-5 h-2 overflow-hidden rounded-full bg-ink-100 sm:hidden" aria-hidden><div className="h-full rounded-full bg-ink-900" style={{ width: `${(step / STEP_COUNT) * 100}%` }} /></div>
 
               <div className="mt-8 flex items-center gap-4 sm:gap-5">
                 <span className="flex-none"><LinkGuide size={56} /></span>
