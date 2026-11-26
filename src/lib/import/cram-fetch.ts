@@ -11,6 +11,36 @@ export const DATASET_PAGE = "https://data.gov.tw/dataset/16461";
 export const DATASET_API = "https://data.gov.tw/api/v2/rest/dataset/16461";
 export const fileUrl = (code: string) => `https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=${code}`;
 
+/**
+ * Cities that also publish their own list on their own open-data site (found on data.gov.tw, Nov 2026). These sites
+ * answer from anywhere, unlike the Ministry's national server, so they are the way to load the big cities when the
+ * national file cannot be reached. Together they hold about 10,100 of Taiwan's roughly 17,800 cram schools. A school
+ * loaded from a city list and later from the national file is the same record (same name and district).
+ */
+export interface CitySource {
+  city: string;
+  label: string;
+  datasetId: number;
+  fallbackUrl: string;
+}
+export const CITY_SOURCES: readonly CitySource[] = [
+  { city: "taipei", label: "臺北市立案補習班資訊 (Taipei)", datasetId: 130907, fallbackUrl: "https://data.taipei/api/dataset/b124a967-fc88-4c45-bea8-41b4ef158a15/resource/4c2d87de-a09b-4636-8a7d-7eec71dc873d/download" },
+  { city: "new-taipei", label: "新北市短期補習班立案資訊 (New Taipei)", datasetId: 124223, fallbackUrl: "https://data.ntpc.gov.tw/api/datasets/a3716c81-3652-4450-897d-3574b875888b/csv/file" },
+  { city: "taichung", label: "臺中市立案補習班資料 (Taichung)", datasetId: 83903, fallbackUrl: "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=c2c3e17b-99e4-464e-8899-f40946d5da9c" },
+  { city: "tainan", label: "臺南市立案補習班資訊 (Tainan)", datasetId: 179130, fallbackUrl: "https://data.tainan.gov.tw/File/ResourceCsvDownload/068ce90f-5e63-4031-bb66-dd68ce9c42d2" },
+  { city: "nantou", label: "南投縣補習班 (Nantou)", datasetId: 38307, fallbackUrl: "https://data.nantou.gov.tw/dataset/3b0a0b70-711f-4ddb-8b46-47f9ff2176da/resource/e0510896-0de9-437f-a855-be9ae1d0b73b/download/afterschool1.csv" },
+];
+/** The cities' own open-data hosts. The link comes from a web page, so nothing else is followed. */
+const CITY_HOSTS = new Set(["data.taipei", "data.ntpc.gov.tw", "newdatacenter.taichung.gov.tw", "data.tainan.gov.tw", "data.nantou.gov.tw"]);
+export const isCityListSource = (u: string) => {
+  try {
+    const x = new URL(u);
+    return x.protocol === "https:" && CITY_HOSTS.has(x.hostname);
+  } catch {
+    return false;
+  }
+};
+
 /** The 22 city and county codes seen on data.gov.tw (Sept 2026), used only if the dataset page cannot be read. */
 export const FALLBACK_CITY_CODES = ["24", "20", "21", "33", "35", "36", "37", "42", "47", "55", "49", "52", "53", "62", "70", "87", "39", "38", "89", "69", "82", "83"] as const;
 
@@ -133,6 +163,53 @@ export async function fetchNational(opts: FetchOptions = {}): Promise<NationalRe
       log(`  ${f.label}: FAILED (${err instanceof Error ? err.message : err})`);
     }
     await o.sleep(pause);
+  }
+  return result;
+}
+
+/* ---------------- the cities' own lists ---------------- */
+
+export interface CityFile {
+  source: CitySource;
+  /** The file as text (CSV, or JSON), with any BOM removed. */
+  text: string;
+  url: string;
+}
+export interface CityResult {
+  files: CityFile[];
+  failed: { label: string; url: string; error: string }[];
+}
+
+/** Where a city's file is today: the JSON or CSV link on its data.gov.tw page, or the address we last saw. */
+async function cityFileUrl(s: CitySource, o: Required<Pick<FetchOptions, "fetchFn" | "sleep" | "attempts" | "timeoutMs">>): Promise<string> {
+  try {
+    const json = JSON.parse(stripBom(await getText(`https://data.gov.tw/api/v2/rest/dataset/${s.datasetId}`, { ...o, attempts: 2 }))) as { result?: { distribution?: { resourceDownloadUrl?: string; resourceFormat?: string }[] } };
+    const usable = (json.result?.distribution ?? []).filter((d) => d.resourceDownloadUrl && isCityListSource(d.resourceDownloadUrl));
+    const pick = usable.find((d) => (d.resourceFormat ?? "").toUpperCase() === "JSON") ?? usable.find((d) => (d.resourceFormat ?? "").toUpperCase() === "CSV");
+    if (pick?.resourceDownloadUrl) return pick.resourceDownloadUrl;
+  } catch {
+    /* fall through to the address we last saw */
+  }
+  return s.fallbackUrl;
+}
+
+/** Fetch the lists the cities publish themselves. A city that fails is reported, never hidden. */
+export async function fetchCityLists(opts: FetchOptions = {}, sources: readonly CitySource[] = CITY_SOURCES): Promise<CityResult> {
+  const o = { fetchFn: opts.fetchFn ?? (fetch as unknown as FetchFn), sleep: opts.sleep ?? realSleep, attempts: opts.attempts ?? 3, timeoutMs: opts.timeoutMs ?? 90_000 };
+  const log = opts.log ?? (() => {});
+  const result: CityResult = { files: [], failed: [] };
+  for (const s of sources) {
+    const url = await cityFileUrl(s, o);
+    try {
+      const text = stripBom(await getText(url, o));
+      if (text.trim().length < 20) throw new Error("the file is empty");
+      result.files.push({ source: s, text, url });
+      log(`  ${s.label}: fetched`);
+    } catch (err) {
+      result.failed.push({ label: s.label, url, error: err instanceof Error ? err.message : String(err) });
+      log(`  ${s.label}: FAILED (${err instanceof Error ? err.message : err})`);
+    }
+    await o.sleep(opts.pauseMs ?? 500);
   }
   return result;
 }

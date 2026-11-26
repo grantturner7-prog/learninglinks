@@ -60,7 +60,7 @@ const groupWhere = (g: SchoolGroup) =>
   : g === "university" ? eq(organizations.type, "university")
   : g === "international" ? sql`(${inArray(organizations.type, ["international_school", "bilingual_school"])} or ${organizations.bilingual} = true)`
   : g === "kindergarten" ? eq(organizations.type, "kindergarten")
-  : inArray(organizations.type, ["cram_school", "language_school"]);
+  : inArray(organizations.type, ["cram_school", "language_school", "after_school"]);
 
 /** `%` and `_` are wildcards in LIKE; a school name search must treat them as plain characters. */
 const likeEscape = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);

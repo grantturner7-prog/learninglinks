@@ -39,7 +39,8 @@ export type WorkAuthorization = (typeof WORK_AUTHORIZATION)[number];
 
 export const SCHOOL_TYPES = [
   "kindergarten", "elementary", "junior_high", "senior_high", "university",
-  "cram_school", "language_school", "international_school", "bilingual_school", "other",
+  "cram_school", "language_school", "after_school", "international_school", "bilingual_school",
+  "special_education", "community_college", "other",
 ] as const;
 export type SchoolType = (typeof SCHOOL_TYPES)[number];
 

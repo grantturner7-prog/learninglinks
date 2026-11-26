@@ -56,8 +56,11 @@
     "university": "大專院校",
     "cram_school": "補習班",
     "language_school": "語言學校",
+    "after_school": "課後照顧中心（安親班）",
     "international_school": "國際學校",
     "bilingual_school": "雙語學校",
+    "special_education": "特殊教育學校",
+    "community_college": "社區大學",
     "other": "其他"
   },
   "languages": {

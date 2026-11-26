@@ -56,8 +56,11 @@
     "university": "University",
     "cram_school": "Cram school (buxiban)",
     "language_school": "Language school",
+    "after_school": "After-school care centre (anqinban)",
     "international_school": "International school",
     "bilingual_school": "Bilingual school",
+    "special_education": "Special-education school",
+    "community_college": "Community college",
     "other": "Other"
   },
   "languages": {

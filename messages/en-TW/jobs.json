@@ -61,7 +61,7 @@
     "government": "Government school",
     "private": "Private school",
     "contactLater": "Contact details appear here once the school has joined and entered them itself.",
-    "attribution": "Boundaries: Ministry of the Interior open data · School locations © OpenStreetMap contributors",
+    "attribution": "Boundaries: Ministry of the Interior open data · School lists: Ministry of Education and city governments open data · Locations © OpenStreetMap contributors",
     "mapHint": "Schools are shown at their location. Pins with an amber badge have open job posts.",
     "loadError": "The school map could not be loaded. The list below shows the same jobs.",
     "schoolsOnMap": "{count, plural, one {# school on the map} other {# schools on the map}}"

@@ -42,8 +42,9 @@ export function parseCsv(text: string): string[][] {
 
 /** Header names different publishers use for the same thing (matched after trimming and removing spaces). */
 const ALIASES = {
-  name: ["補習班名稱", "短期補習班名稱", "補習班名", "班名", "機構名稱", "名稱", "name"],
-  address: ["地址", "補習班地址", "班址", "立案地址", "address"],
+  // The city portals (Taipei, New Taipei, Taichung, Tainan, Nantou) each name the same columns their own way.
+  name: ["補習班名稱", "短期補習班名稱", "補習班中文名稱", "補習班班名", "補習班名", "班名", "機構名稱", "名稱", "c_schoolname", "name"],
+  address: ["地址", "補習班地址", "補習班中文住址", "補習班住址", "住址", "班址", "立案地址", "address"],
   city: ["縣市", "縣市別", "縣市名稱", "所在縣市", "地區縣市", "city"],
   district: ["鄉鎮市區", "鄉鎮區", "行政區", "鄉鎮市區名稱", "district"],
   regNo: ["立案字號", "立案證書字號", "立案證號", "許可證號", "證號", "登記字號", "regno"],
@@ -109,6 +110,16 @@ export function matchArea(r: Pick<RawRow, "city" | "district" | "address">): Are
     if (same.length !== 1) return null;
   }
   return { city: best.city, district: best.key };
+}
+
+/**
+ * A city's own list does not repeat the city on every row ("110信義區忠孝東路…"): say which city the file is for.
+ * A row that already names a city keeps it.
+ */
+export function withCity(rows: RawRow[], cityKey: string): RawRow[] {
+  const zh = CITIES.find((c) => c.key === cityKey)?.zh;
+  if (!zh) throw new Error(`Unknown city: ${cityKey}`);
+  return rows.map((r) => (r.city ? r : { ...r, city: zh }));
 }
 
 /* ---------------- record ---------------- */

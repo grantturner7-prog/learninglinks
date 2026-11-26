@@ -61,7 +61,7 @@
     "government": "公立學校",
     "private": "私立學校",
     "contactLater": "學校加入並自行填寫後，聯絡方式才會顯示在這裡。",
-    "attribution": "行政區界線：內政部開放資料 · 學校位置 © OpenStreetMap 貢獻者",
+    "attribution": "行政區界線：內政部開放資料 · 學校名錄：教育部及各縣市政府開放資料 · 位置 © OpenStreetMap 貢獻者",
     "mapHint": "學校顯示在實際位置。有琥珀色標記的圖釘表示有職缺。",
     "loadError": "無法載入學校地圖，下方列表顯示相同的職缺。",
     "schoolsOnMap": "地圖上共 {count} 所學校"

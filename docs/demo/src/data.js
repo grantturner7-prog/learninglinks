@@ -41,10 +41,10 @@ const SUBJECT = {
 };
 const LEVEL = { kindergarten: ["Kindergarten", "幼兒園"], elementary: ["Elementary", "國小"], "junior-high": ["Junior high", "國中"], "senior-high": ["Senior high", "高中"], adult: ["Adults", "成人"] };
 const OPEN = { full_time: ["Full-time work", "全職工作"], part_time: ["Part-time work", "兼職工作"], private_tutoring: ["Private tutoring", "私人家教"] };
-const KIND = { kindergarten: ["Kindergarten", "幼兒園"], elementary: ["Elementary school", "國小"], junior_high: ["Junior high school", "國中"], senior_high: ["Senior high school", "高中職"], university: ["University or college", "大專校院"], cram_school: ["Cram school", "補習班"], language_school: ["Language school", "語言學校"], international_school: ["International school", "國際學校"], bilingual_school: ["Bilingual school", "雙語學校"], other: ["Other", "其他"] };
+const KIND = { kindergarten: ["Kindergarten", "幼兒園"], elementary: ["Elementary school", "國小"], junior_high: ["Junior high school", "國中"], senior_high: ["Senior high school", "高中職"], university: ["University or college", "大專校院"], cram_school: ["Cram school", "補習班"], language_school: ["Language school", "語言學校"], after_school: ["After-school care centre (anqinban)", "課後照顧中心（安親班）"], international_school: ["International school", "國際學校"], bilingual_school: ["Bilingual school", "雙語學校"], special_education: ["Special-education school", "特殊教育學校"], community_college: ["Community college", "社區大學"], other: ["Other", "其他"] };
 /** Ways to browse the school list (the same groups the real site uses). */
-const GROUPS = { public: ["Government schools", "公立學校"], private: ["Private schools", "私立學校"], university: ["Universities and colleges", "大專校院"], international: ["International and bilingual", "國際與雙語學校"], kindergarten: ["Kindergartens", "幼兒園"], cram: ["Cram and language schools", "補習班與語言學校"] };
-const inGroup = (s, g) => g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" || !!st.bil[s.id] : g === "public" ? s.ownership === "public" : g === "private" ? s.ownership === "private" : g === "university" ? s.kind === "university" : g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" : g === "kindergarten" ? s.kind === "kindergarten" : g === "cram" ? s.kind === "cram_school" || s.kind === "language_school" : true;
+const GROUPS = { public: ["Government schools", "公立學校"], private: ["Private schools", "私立學校"], university: ["Universities and colleges", "大專校院"], international: ["International and bilingual", "國際與雙語學校"], kindergarten: ["Kindergartens", "幼兒園"], cram: ["Cram, language and after-school", "補習班、語言學校與安親班"] };
+const inGroup = (s, g) => g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" || !!st.bil[s.id] : g === "public" ? s.ownership === "public" : g === "private" ? s.ownership === "private" : g === "university" ? s.kind === "university" : g === "international" ? s.kind === "international_school" || s.kind === "bilingual_school" : g === "kindergarten" ? s.kind === "kindergarten" : g === "cram" ? s.kind === "cram_school" || s.kind === "language_school" || s.kind === "after_school" : true;
 
 /* ---------- fictional educators (made up for this demo; nobody real) ---------- */
 let _seed = 7;
@@ -98,7 +98,9 @@ const SCHOOLS = SCHOOL_ROWS.map((r, i) => ({ id: "s" + (i + 1), name: r[0], kind
 /* ---------- the Ministry of Education's school lists (government and private schools, universities, schools for international residents) ---------- */
 REAL.cities.forEach(([k, en, zh]) => { if (!CITY[k]) CITY[k] = [en, zh]; });
 REAL.dists.forEach(([k, en, zh]) => { if (!DIST[k]) DIST[k] = [en, zh]; });
-const REAL_SCHOOLS = REAL.rows.map((r, i) => ({ id: "r" + i, name: r[0], kind: REAL.types[r[1]], ownership: r[2] === 1 ? "public" : r[2] === 2 ? "private" : null, city: REAL.cities[r[3]][0], district: r[4] >= 0 ? REAL.dists[r[4]][0] : null, real: true }));
+const REAL_SCHOOLS = REAL.rows.map((r, i) => ({ id: "r" + i, name: r[0], kind: REAL.types[r[1]], ownership: r[2] === 1 ? "public" : r[2] === 2 ? "private" : null, city: REAL.cities[r[3]][0], district: r[4] >= 0 ? REAL.dists[r[4]][0] : null, en: r[5] || "", real: true }));
+/** A school matches what was typed when its Chinese name or its English name (when it has one) contains it. */
+const nameHas = (s, q) => s.name.toLowerCase().includes(q) || (!!s.en && s.en.toLowerCase().includes(q));
 const REAL_BY_ID = new Map(REAL_SCHOOLS.map((s) => ({ s })).map(({ s }) => [s.id, s]));
 const SEED_JOBS = [
   { id: "j1", schoolId: "s1", title: "English teacher, afternoons", type: "part_time", subject: "english-conversation", desc: "Teach small groups of elementary students, Monday to Thursday, 3 to 7 pm. Materials provided.", contact: "hr@sunshine.example.invalid", status: "open" },

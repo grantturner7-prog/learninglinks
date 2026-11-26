@@ -4,6 +4,9 @@
  *   npm run db:import-cram -- --national [--dry-run] [--save-dir ./cram-raw] [--allow-partial]
  *       Fetches the whole national table itself (22 files, one per city or county, from data.gov.tw dataset 16461).
  *       Run it from a network in Taiwan: the Ministry's server refuses some foreign and cloud addresses.
+ *   npm run db:import-cram -- --cities [--dry-run] [--allow-partial]
+ *       Fetches the lists that Taipei, New Taipei, Taichung, Tainan and Nantou publish on their own open-data sites
+ *       (about 10,100 schools). These sites answer from anywhere, so this works where --national does not.
  *   npm run db:import-cram -- --dir ./cram-raw [--dry-run]
  *       Reads every .json / .csv file in a folder (for example files saved with --save-dir, or downloaded by hand).
  *   npm run db:import-cram -- --file cram-schools.csv [--encoding big5] [--dry-run]
@@ -18,8 +21,8 @@ import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { sql } from "drizzle-orm";
 import { closeDb, getDb, schema } from "../src/lib/db";
-import { columnsOf, planImport, rowsFromCsv, rowsFromObjects, type Field, type RawRow } from "../src/lib/import/cram";
-import { DATASET_PAGE, fetchNational } from "../src/lib/import/cram-fetch";
+import { columnsOf, planImport, rowsFromCsv, rowsFromObjects, withCity, type Field, type RawRow } from "../src/lib/import/cram";
+import { DATASET_PAGE, fetchCityLists, fetchNational } from "../src/lib/import/cram-fetch";
 
 function arg(name: string): string | undefined {
   const i = process.argv.indexOf(name);
@@ -65,6 +68,21 @@ async function load(): Promise<Parsed> {
     return merge(res.files.map((f) => ({ ...rowsFromObjects(f.rows), columns: columnsOf(f.rows) })));
   }
 
+  if (process.argv.includes("--cities")) {
+    console.log("Fetching the cram-school lists the cities publish themselves ...");
+    const res = await fetchCityLists({ log: console.log });
+    if (res.files.length === 0) throw new Error(`Nothing could be fetched (${res.failed[0]?.error ?? "no files"}).`);
+    if (res.failed.length > 0 && !process.argv.includes("--allow-partial")) {
+      throw new Error(`${res.failed.length} of ${res.files.length + res.failed.length} city lists failed (${res.failed.map((f) => f.label).join(", ")}). Nothing was imported. Run it again, or add --allow-partial to import what arrived.`);
+    }
+    return merge(res.files.map((f) => {
+      const p = parseText(f.text);
+      console.log(`  ${f.source.label}: ${p.rows.length} rows`);
+      // A city's own file does not repeat the city on every row.
+      return { ...p, rows: withCity(p.rows, f.source.city) };
+    }));
+  }
+
   const dir = arg("--dir");
   if (dir) {
     const names = (await readdir(dir)).filter((n) => /\.(json|csv)$/i.test(n)).sort();
@@ -74,7 +92,7 @@ async function load(): Promise<Parsed> {
   }
 
   const file = arg("--file");
-  if (!file) throw new Error("Usage: npm run db:import-cram -- --national | --dir <folder> | --file <csv-or-json>  [--encoding big5] [--dry-run]");
+  if (!file) throw new Error("Usage: npm run db:import-cram -- --national | --cities | --dir <folder> | --file <csv-or-json>  [--encoding big5] [--dry-run]");
   return parseText(decode(await readFile(file)));
 }
 

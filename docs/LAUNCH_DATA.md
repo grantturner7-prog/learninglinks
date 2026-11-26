@@ -2,6 +2,64 @@
 
 Educators are never imported: they create their own profile. What the site needs before launch is a list of **schools and cram schools**, so a school can find and claim its campus and educators can see where jobs are.
 
+## Everything on the map, and what is still missing (26 Nov 2026)
+
+The owner asked for every educational institution in Taiwan. A sweep of the government open-data portal (data.gov.tw: 437 datasets looked at) found these official lists. Loaded so far: **about 22,150 institutions**.
+
+| Kind | In Taiwan | Loaded | Source | Command |
+|---|---|---|---|---|
+| Kindergartens | about 6,750 | all | Ministry directory | `db:import-moe` |
+| Elementary, junior high, senior high and vocational | about 3,840 | all | Ministry directory | `db:import-moe` |
+| Universities, colleges, military and police academies | 148 | all | Ministry directory | `db:import-moe` |
+| Schools for international residents | 22 | all | Ministry directory | `db:import-moe` |
+| **Cram schools (補習班)** | **about 17,800** | **10,114** (Taipei, New Taipei, Taichung, Tainan, Nantou) | the cities' own open-data sites | `db:import-cram -- --cities` |
+| Cram schools in the other 17 cities and counties | about 7,700 | **not yet** | the Ministry's national file | `db:import-cram -- --national` from a network in Taiwan |
+| After-school care centres (課後照顧中心, "anqinban") | 787 | 23 (Taichung) | the Ministry's national file is refused from abroad; Taichung publishes its own | `db:import-more` |
+| Special-education schools | 28 | all | Ministry (K-12 administration) | `db:import-more` |
+| Community colleges (社區大學) | 90 | all | Ministry (lifelong education) | `db:import-more` |
+| Mandarin centres at universities | 72 | all | Ministry (international education) | `db:import-more` |
+| Religious seminaries, open universities | 8 and 2 | all | Ministry directory | `db:import-more` |
+
+Left out on purpose, for the owner to decide: senior-citizen learning centres (樂齡學習中心, 368, mostly run inside township offices and schools already listed), infant-care centres (托嬰中心, a Ministry of Health and Welfare list of carers, not teachers), evening divisions attached to schools already listed, and Taiwanese schools overseas.
+
+**Why two lists cannot be fetched from here.** The national cram-school file and the national after-school file sit on Ministry servers (`bsb.kh.edu.tw`, `afterschool.moe.gov.tw`) that drop connections from outside Taiwan. So do the Hsinchu City and Hsinchu County sites. Run the commands above from the live server, or from any computer in Taiwan, and the rest loads. A school loaded from a city list and later from the national file is the same record: nothing appears twice.
+
+Run order on a fresh database: `db:import-schools` (map data), `db:import-moe -- --prune`, `db:import-more`, `db:import-cram -- --cities` (and `--national` where it works), `db:dedupe-schools`, `db:import-wikidata`.
+
+### The smaller lists (`db:import-more`)
+
+```bash
+npm run db:import-more -- --dry-run     # fetch and report, write nothing
+npm run db:import-more                  # fetch and load
+npm run db:import-more -- --after-school-file centres.csv   # the national after-school list, saved by hand
+```
+
+Three kinds of institution were added for them: **after-school care centre**, **special-education school** and **community college**. Mandarin centres are language schools; seminaries and open universities are listed with the universities. Official institutions keep the address the Ministry publishes; after-school care centres are kept at district level like cram schools, because a small one can be run from a home. Phone and fax numbers, email addresses and people's names in these files are never stored. The same file gives 154 official English names for universities.
+
+### Schools listed twice (`db:dedupe-schools`)
+
+The map data (OpenStreetMap) uses the name on the gate ("天主教育仁小學") and the Ministry the official name ("私立育仁國小"). When the two spellings differ the school appeared twice: once at its exact spot under the gate name, once at an approximate pin under the official name.
+
+```bash
+npm run db:dedupe-schools -- --dry-run --all   # list every pair, write nothing
+npm run db:dedupe-schools                      # join them
+```
+
+The official listing is kept and moved to the exact spot. A pair is joined only when the city, the level and the school's own name agree and exactly one official school in the city answers to that name; a private and a government school that share a name are never joined. A listing that is claimed, applied for, or has a job post or a picture is never removed. 69 pairs were joined on 26 Nov 2026 (Yu-Jen Catholic school in Taichung among them).
+
+### English names and exact positions (`db:import-wikidata`)
+
+Most Ministry lists are in Chinese only, so a school could not be found by typing its English name. Wikidata (CC0, free to reuse) lists Taiwan's schools with the Ministry's own school code, about 1,400 of them with an English name and about 2,000 with a position.
+
+```bash
+npm run db:import-wikidata -- --dry-run
+npm run db:import-wikidata
+```
+
+A school is matched by its code. It gets an English name only when it has none, and a Ministry-sourced listing moves from its approximate pin to the real position. On 26 Nov 2026 this named 463 schools and moved 205.
+
+**Still true after all this:** about 2,100 of the 22,150 institutions have an English name. Kindergartens and cram schools almost never publish one. Two things would close the gap and both need the owner's decision: matching a typed "Yu-Jen" or "Yuren" against the Chinese name (needs a pinyin library added to the project), and looking the published addresses up on a map so official schools sit at their real position instead of somewhere in their district (needs a geocoding service).
+
 ## Government and private schools, universities, international schools (Ministry of Education)
 
 The Ministry of Education publishes its school directories as open data (data.gov.tw datasets 6086 (kindergartens), 6087, 6088, 6089, 6090, 24393, 6091, 28589 and 32958; Government Open Data License v1). One command fetches and loads them:
@@ -80,6 +138,7 @@ Phase 1 needs the licensed cram schools too (about 17,800 in Taiwan). The Minist
 ```bash
 npm run db:import-cram -- --national --dry-run     # fetch and report, write nothing
 npm run db:import-cram -- --national               # fetch and load
+npm run db:import-cram -- --cities                 # the five cities that publish their own list: works from anywhere
 ```
 
 **Run it from a network in Taiwan** (your own computer on home or office internet, or the live server once it is in Taiwan or Japan). The Ministry's server (`bsb.kh.edu.tw`) refuses connections from the cloud environment this code was written in, so it could not be tried on the real files there. That is a limit of that environment, not of your data.
