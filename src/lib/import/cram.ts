@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { CITIES } from "@/lib/geo/taiwan";
-import { ALL_TW_DISTRICTS, TW_DISTRICT_ANCHORS, TW_DISTRICT_BBOX } from "@/lib/geo/tw-centroids.generated";
+import { ALL_TW_DISTRICTS, TW_CITY_ANCHORS, TW_CITY_BBOX, TW_DISTRICT_ANCHORS, TW_DISTRICT_BBOX } from "@/lib/geo/tw-centroids.generated";
 
 /**
  * Import of licensed cram schools (補習班) from a government open-data table (CSV or JSON rows).
@@ -147,17 +147,57 @@ export function placeInDistrict(districtKey: string, seed: string): { lat: numbe
   return { lng: Math.round((anchor[0] + (u - 0.5) * 2 * spreadLng) * 1e5) / 1e5, lat: Math.round((anchor[1] + (v - 0.5) * 2 * spreadLat) * 1e5) / 1e5 };
 }
 
+/** A stable spot inside a city (used only when the district is unknown): its centre plus an offset of up to about 2 km. */
+export function placeInCity(city: string, seed: string): { lat: number; lng: number } | null {
+  const a = TW_CITY_ANCHORS[city];
+  const box = TW_CITY_BBOX[city];
+  if (!a || !box) return null;
+  const [w, s, e, n] = box;
+  const sl = Math.min((e - w) * 0.1, 0.02), sa = Math.min((n - s) * 0.1, 0.02);
+  const [u, v] = unit(seed);
+  return { lng: Math.round((a[0] + (u - 0.5) * 2 * sl) * 1e5) / 1e5, lat: Math.round((a[1] + (v - 0.5) * 2 * sa) * 1e5) / 1e5 };
+}
+
+/** The city or county a row names, when its address gives no district we know ("新竹市復興路16-5號"). */
+export function matchCity(r: Pick<RawRow, "city" | "address">): string | null {
+  const text = norm(`${r.city ?? ""}${r.address ?? ""}`);
+  let best: { key: string; at: number } | null = null;
+  for (const c of CITY_BY_ZH) for (const n of c.names) {
+    const at = text.indexOf(n);
+    if (at >= 0 && (!best || at < best.at)) best = { key: c.key, at };
+  }
+  return best?.key ?? null;
+}
+
 export interface CramRecord {
   countryCode: "TW";
   name: string;
   type: CramType;
   city: string;
-  district: string;
+  /** Null for the few whose address names the city but no district: they sit at city level. */
+  district: string | null;
   latitude: number;
   longitude: number;
   source: "gov_open_data";
   sourceId: string;
 }
+
+const CITY_ZH = CITIES.map((c) => norm(c.zh));
+
+/**
+ * A cram school's own name, for telling one school listed twice from two schools. The national register writes
+ * "南投縣私立弘勵文理短期補習班" where the county's own list writes "私立弘勵文理短期補習班": the city and "私立" are
+ * left out before comparing.
+ */
+export function cramKey(name: string): string {
+  let n = norm(name);
+  for (const c of CITY_ZH) n = n.split(c).join("");
+  n = n.replace(/私立/g, "");
+  return n.length >= 2 ? n : norm(name);
+}
+
+/** The id of a cram school that has no registration number: its own name and its district. */
+export const cramSourceId = (name: string, district: string): string => `gov-cram:${createHash("sha1").update(`${cramKey(name)}|${district}`).digest("hex").slice(0, 16)}`;
 
 export type SkipReason = "no_name" | "no_area" | "duplicate";
 
@@ -176,24 +216,72 @@ export function planImport(rows: RawRow[]): ImportPlan {
   for (const r of rows) {
     const name = (r.name ?? "").replace(/[\s　]+/g, " ").trim().slice(0, 200);
     if (name.length < 2) { plan.skipped.no_name++; continue; }
-    const area = matchArea(r);
-    if (!area) {
+    const found = matchArea(r);
+    const cityOnly = found ? null : matchCity(r);
+    if (!found && !cityOnly) {
       plan.skipped.no_area++;
       if (plan.unplaced.length < 8) plan.unplaced.push(`${name}: ${[r.city, r.district, r.address].filter(Boolean).join(" ").slice(0, 40)}`);
       continue;
     }
+    // District level when the address names one; otherwise the school still appears, at city level.
+    const area: { city: string; district: string | null } = found ?? { city: cityOnly!, district: null };
+    const place = area.district ?? area.city;
     const regNo = (r.regNo ?? "").replace(/\s+/g, "");
-    const sourceId = regNo ? `gov-cram:${regNo}` : `gov-cram:${createHash("sha1").update(`${norm(name)}|${area.district}`).digest("hex").slice(0, 16)}`;
-    const dupKey = `${norm(name)}|${area.district}`;
+    const sourceId = regNo ? `gov-cram:${regNo}` : cramSourceId(name, place);
+    const dupKey = `${cramKey(name)}|${place}`;
     if (seen.has(sourceId) || seen.has(dupKey)) { plan.skipped.duplicate++; continue; }
     seen.add(sourceId);
     seen.add(dupKey);
-    const pos = placeInDistrict(area.district, sourceId);
+    const pos = area.district ? placeInDistrict(area.district, sourceId) : placeInCity(area.city, sourceId);
     if (!pos) { plan.skipped.no_area++; continue; }
     plan.records.push({ countryCode: "TW", name, type: inferType({ name, category: r.category }), city: area.city, district: area.district, latitude: pos.lat, longitude: pos.lng, source: "gov_open_data", sourceId });
     plan.perCity[area.city] = (plan.perCity[area.city] ?? 0) + 1;
   }
   return plan;
+}
+
+/* ---------------- listings already in the database ---------------- */
+
+export interface ExistingCram {
+  id: string;
+  name: string;
+  district: string | null;
+  sourceId: string | null;
+  /** Claimed, applied for, or with a job post: never removed. */
+  locked: boolean;
+}
+
+export interface Reconcile {
+  /** Listings whose id was made from an older spelling: give them the id the importer makes today. */
+  reId: { id: string; sourceId: string }[];
+  /** The same school listed twice (for example from a city's list and from the national register). */
+  remove: string[];
+}
+
+/**
+ * Bring earlier imports in line with today's ids, so a re-run updates a school instead of adding it again.
+ * Only listings identified by name and district are touched (never one that has a registration number).
+ */
+export function reconcileExisting(rows: ExistingCram[]): Reconcile {
+  const out: Reconcile = { reId: [], remove: [] };
+  const groups = new Map<string, ExistingCram[]>();
+  for (const r of rows) {
+    if (!r.district || !r.sourceId || !/^gov-cram:[0-9a-f]{16}$/.test(r.sourceId)) continue;
+    const id = cramSourceId(r.name, r.district);
+    groups.set(id, [...(groups.get(id) ?? []), r]);
+  }
+  for (const [id, group] of groups) {
+    const keep = group.find((r) => r.sourceId === id) ?? group.find((r) => r.locked) ?? group[0]!;
+    for (const r of group) if (r !== keep && !r.locked) out.remove.push(r.id);
+    // A locked twin keeps its own id; the kept listing only takes the new id when no twin still holds it.
+    if (keep.sourceId !== id && !group.some((r) => r !== keep && r.sourceId === id)) out.reId.push({ id: keep.id, sourceId: id });
+  }
+  return out;
+}
+
+/** Listings no longer on the register: closed or renamed schools. Never a locked one. */
+export function staleListings(rows: ExistingCram[], current: ReadonlySet<string>): ExistingCram[] {
+  return rows.filter((r) => !r.locked && !!r.sourceId && r.sourceId.startsWith("gov-cram:") && !current.has(r.sourceId));
 }
 
 /** JSON tables: an array of objects whose keys are the column names. */

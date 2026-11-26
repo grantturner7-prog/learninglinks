@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
 import { CITIES } from "@/lib/geo/taiwan";
-import { ALL_TW_DISTRICTS, TW_CITY_ANCHORS, TW_CITY_BBOX } from "@/lib/geo/tw-centroids.generated";
-import { matchArea, parseCsv, placeInDistrict } from "./cram";
+import { ALL_TW_DISTRICTS } from "@/lib/geo/tw-centroids.generated";
+import { matchArea, parseCsv, placeInCity, placeInDistrict } from "./cram";
+
+export { placeInCity };
 
 /**
  * Import of the Ministry of Education's school directories (全國各級學校名錄, open data, Government Open Data
@@ -157,21 +159,6 @@ function districtFromEnglish(city: string, address: string): string | null {
     if (!best || e.length > best.len) best = { key: d.key, len: e.length };
   }
   return best?.key ?? null;
-}
-
-function unit(seed: string): [number, number] {
-  const h = createHash("sha256").update(seed).digest();
-  return [h.readUInt32BE(0) / 2 ** 32, h.readUInt32BE(4) / 2 ** 32];
-}
-/** A stable spot inside a city (used only when the district is unknown): its centre plus an offset of up to about 2 km. */
-export function placeInCity(city: string, seed: string): { lat: number; lng: number } | null {
-  const a = TW_CITY_ANCHORS[city];
-  const box = TW_CITY_BBOX[city];
-  if (!a || !box) return null;
-  const [w, s, e, n] = box;
-  const sl = Math.min((e - w) * 0.1, 0.02), sa = Math.min((n - s) * 0.1, 0.02);
-  const [u, v] = unit(seed);
-  return { lng: Math.round((a[0] + (u - 0.5) * 2 * sl) * 1e5) / 1e5, lat: Math.round((a[1] + (v - 0.5) * 2 * sa) * 1e5) / 1e5 };
 }
 
 /* ---------------- records ---------------- */

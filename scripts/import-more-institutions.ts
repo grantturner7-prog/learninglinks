@@ -17,7 +17,7 @@ import { readFile } from "node:fs/promises";
 import { eq, ne, sql } from "drizzle-orm";
 import { closeDb, getDb, schema } from "../src/lib/db";
 import { parseCsv } from "../src/lib/import/cram";
-import { extractObjects, getText, realSleep, stripBom, type FetchFn } from "../src/lib/import/cram-fetch";
+import { extractObjects, getText, portalCopies, realSleep, stripBom, type FetchFn } from "../src/lib/import/cram-fetch";
 import { coreName } from "../src/lib/import/moe";
 import { planAfterSchool, planCommunityColleges, planMandarinCentres, planOpenUniversities, planSeminaries, planSpecialEducation, tableFromObjects, universityEnglishNames, type MorePlan, type MoreRecord } from "../src/lib/import/more";
 
@@ -51,7 +51,16 @@ async function fetchSource(s: Source): Promise<string> {
   } catch {
     /* use the address we last saw */
   }
-  return stripBom(await getText(url, net));
+  try {
+    return stripBom(await getText(url, net));
+  } catch (err) {
+    // Some Ministry servers refuse connections from outside Taiwan. data.gov.tw keeps its own copy of every file.
+    const copies = await portalCopies(s.datasetId, net);
+    const copy = copies.get(url) ?? (copies.size === 1 ? [...copies.values()][0] : undefined);
+    if (!copy) throw err;
+    console.log(`    (the publisher's server does not answer from here: using data.gov.tw's own copy${copy.checked ? ` of ${copy.checked}` : ""})`);
+    return stripBom(await getText(copy.json, net));
+  }
 }
 
 async function main() {

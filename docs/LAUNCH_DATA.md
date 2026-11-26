@@ -4,7 +4,7 @@ Educators are never imported: they create their own profile. What the site needs
 
 ## Everything on the map, and what is still missing (26 Nov 2026)
 
-The owner asked for every educational institution in Taiwan. A sweep of the government open-data portal (data.gov.tw: 437 datasets looked at) found these official lists. Loaded so far: **about 22,150 institutions**.
+The owner asked for every educational institution in Taiwan. A sweep of the government open-data portal (data.gov.tw: 437 datasets looked at) found these official lists. Loaded: **30,565 institutions, in all 22 cities and counties and in 367 of the 368 districts** (the one without any is 烏坵鄉, a small island township of Kinmen).
 
 | Kind | In Taiwan | Loaded | Source | Command |
 |---|---|---|---|---|
@@ -12,9 +12,8 @@ The owner asked for every educational institution in Taiwan. A sweep of the gove
 | Elementary, junior high, senior high and vocational | about 3,840 | all | Ministry directory | `db:import-moe` |
 | Universities, colleges, military and police academies | 148 | all | Ministry directory | `db:import-moe` |
 | Schools for international residents | 22 | all | Ministry directory | `db:import-moe` |
-| **Cram schools (補習班)** | **about 17,800** | **10,114** (Taipei, New Taipei, Taichung, Tainan, Nantou) | the cities' own open-data sites | `db:import-cram -- --cities` |
-| Cram schools in the other 17 cities and counties | about 7,700 | **not yet** | the Ministry's national file | `db:import-cram -- --national` from a network in Taiwan |
-| After-school care centres (課後照顧中心, "anqinban") | 787 | 23 (Taichung) | the Ministry's national file is refused from abroad; Taichung publishes its own | `db:import-more` |
+| **Cram schools (補習班, "buxiban")** | **17,761** | **all**, in all 22 cities and counties | the Ministry's national register | `db:import-cram -- --national --prune` |
+| After-school care centres (課後照顧中心, "anqinban") | 787 on the national register | all, plus 8 that only Taichung's own list has | the Ministry's national register and Taichung's list | `db:import-more` |
 | Special-education schools | 28 | all | Ministry (K-12 administration) | `db:import-more` |
 | Community colleges (社區大學) | 90 | all | Ministry (lifelong education) | `db:import-more` |
 | Mandarin centres at universities | 72 | all | Ministry (international education) | `db:import-more` |
@@ -22,9 +21,13 @@ The owner asked for every educational institution in Taiwan. A sweep of the gove
 
 Left out on purpose, for the owner to decide: senior-citizen learning centres (樂齡學習中心, 368, mostly run inside township offices and schools already listed), infant-care centres (托嬰中心, a Ministry of Health and Welfare list of carers, not teachers), evening divisions attached to schools already listed, and Taiwanese schools overseas.
 
-**Why two lists cannot be fetched from here.** The national cram-school file and the national after-school file sit on Ministry servers (`bsb.kh.edu.tw`, `afterschool.moe.gov.tw`) that drop connections from outside Taiwan. So do the Hsinchu City and Hsinchu County sites. Run the commands above from the live server, or from any computer in Taiwan, and the rest loads. A school loaded from a city list and later from the national file is the same record: nothing appears twice.
+**The Ministry's servers refuse connections from outside Taiwan, and it does not matter.** The national cram-school register and the national after-school list sit on Ministry servers (`bsb.kh.edu.tw`, `afterschool.moe.gov.tw`) that drop connections from abroad. But data.gov.tw fetches every published file for its own quality check and keeps the result on `quality.data.gov.tw`, which answers from anywhere. Both importers try the Ministry's server first and fall back to that copy by themselves; the run says how many files came from the copy and on what day the copy was made (22 Sept 2026 for the load of 26 Nov 2026). From a network in Taiwan the same command gets today's files.
 
-Run order on a fresh database: `db:import-schools` (map data), `db:import-moe -- --prune`, `db:import-more`, `db:import-cram -- --cities` (and `--national` where it works), `db:dedupe-schools`, `db:import-wikidata`.
+`--prune` (with `--national` only) removes unclaimed cram schools that are no longer on the register: closed or renamed. It refuses to run on anything less than the whole register. A listing that is claimed, applied for, or has a job post is never removed. A school loaded earlier from a city's own list (`--cities`) is recognised under the register's spelling ("南投縣私立弘勵…" and "私立弘勵…" are one school), so nothing appears twice.
+
+A few after-school numbers look small (Taichung 17, New Taipei 38) because that is what the register holds: most "anqinban" are licensed as cram schools and are in that register instead.
+
+Run order on a fresh database: `db:import-schools` (map data), `db:import-moe -- --prune`, `db:import-more`, `db:import-cram -- --national --prune`, `db:dedupe-schools`, `db:import-wikidata`. Re-run the cram and "more" imports every few months to pick up new schools.
 
 ### The smaller lists (`db:import-more`)
 
@@ -58,7 +61,7 @@ npm run db:import-wikidata
 
 A school is matched by its code. It gets an English name only when it has none, and a Ministry-sourced listing moves from its approximate pin to the real position. On 26 Nov 2026 this named 463 schools and moved 205.
 
-**Still true after all this:** about 2,100 of the 22,150 institutions have an English name. Kindergartens and cram schools almost never publish one. Two things would close the gap and both need the owner's decision: matching a typed "Yu-Jen" or "Yuren" against the Chinese name (needs a pinyin library added to the project), and looking the published addresses up on a map so official schools sit at their real position instead of somewhere in their district (needs a geocoding service).
+**Still true after all this:** about 2,100 of the 30,565 institutions have an English name. Kindergartens and cram schools almost never publish one. Two things would close the gap and both need the owner's decision: matching a typed "Yu-Jen" or "Yuren" against the Chinese name (needs a pinyin library added to the project), and looking the published addresses up on a map so official schools sit at their real position instead of somewhere in their district (needs a geocoding service).
 
 ## Government and private schools, universities, international schools (Ministry of Education)
 
@@ -141,7 +144,7 @@ npm run db:import-cram -- --national               # fetch and load
 npm run db:import-cram -- --cities                 # the five cities that publish their own list: works from anywhere
 ```
 
-**Run it from a network in Taiwan** (your own computer on home or office internet, or the live server once it is in Taiwan or Japan). The Ministry's server (`bsb.kh.edu.tw`) refuses connections from the cloud environment this code was written in, so it could not be tried on the real files there. That is a limit of that environment, not of your data.
+It works from anywhere. The Ministry's server (`bsb.kh.edu.tw`) refuses connections from outside Taiwan; when it does, the importer takes each file from the copy data.gov.tw keeps itself (see the top of this page). Loaded on 26 Nov 2026: all 22 files, 17,761 schools, every row placed (15 whose address names no district sit at city level).
 
 What it does:
 
@@ -158,7 +161,7 @@ npm run db:import-cram -- --dir ./cram-raw --dry-run                   # load fr
 npm run db:import-cram -- --file cram-schools.csv [--encoding big5]    # a single file
 ```
 
-**Not yet tried on the real files.** The column names used (地區縣市, 短期補習班名稱, 短期補習班類別, 地址) come from the dataset's published field list on data.gov.tw. If the real files use different key names, the importer stops and prints the column names it found; adding a name is a one-line change in `src/lib/import/cram.ts`. The published field list has no column that is clearly a registration number (the "主管機關文件單位代碼" column is not described, so it is deliberately **not** used as an id), so each school is identified by its name and district.
+**Tried on the real files** (26 Nov 2026). The columns used are 地區縣市, 短期補習班名稱, 短期補習班類別 and 地址. If a future file uses different key names, the importer stops and prints the column names it found; adding a name is a one-line change in `src/lib/import/cram.ts`. The published field list has no column that is clearly a registration number (the "主管機關文件單位代碼" column is not described, so it is deliberately **not** used as an id), so each school is identified by its name and district.
 
 ### What is kept and what is thrown away
 

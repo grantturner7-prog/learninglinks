@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { mapHeaders, planImport, rowsFromCsv, rowsFromObjects, withCity } from "@/lib/import/cram";
-import { CITY_SOURCES, fetchCityLists, isCityListSource, type FetchFn } from "@/lib/import/cram-fetch";
+import { cramKey, cramSourceId, mapHeaders, matchCity, planImport, reconcileExisting, rowsFromCsv, rowsFromObjects, staleListings, withCity, type ExistingCram } from "@/lib/import/cram";
+import { CITY_SOURCES, DATASET_API, datasetDetailApi, fetchCityLists, fetchNational, isCityListSource, NATIONAL_DATASET_ID, portalCopies, type FetchFn } from "@/lib/import/cram-fetch";
 import { kindFamily, levelOf, planDedupe, stemName, type DedupeRow } from "@/lib/import/dedupe";
 import { cityOnly, ownershipFromName, planAfterSchool, planCommunityColleges, planMandarinCentres, planOpenUniversities, planSeminaries, planSpecialEducation, tableFromObjects, universityEnglishNames } from "@/lib/import/more";
 import { cleanEnglishName, codeOfSourceId, parsePoint, planWikidata, type OrgForWikidata } from "@/lib/import/wikidata";
@@ -67,6 +67,93 @@ describe("cram schools from the cities' own lists", () => {
     expect(res.failed).toHaveLength(1);
     expect(res.failed[0]!.url).toBe(ntpc.fallbackUrl);
     expect(calls).not.toContain("https://elsewhere.example/file.csv");
+  });
+});
+
+describe("the national register, from anywhere", () => {
+  const origin = (n: number) => `https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=${n}`;
+  const copyUrl = (n: number) => `https://quality.data.gov.tw/dq_download_json.php?nid=16461&md5_url=${n}`;
+  const listing = JSON.stringify({ result: { distribution: Array.from({ length: 12 }, (_, n) => ({ resourceDownloadUrl: origin(n), resourceFormat: "JSON", resourceAmount: 1, resourceDescription: `file ${n}` })) } });
+  const detail = (hosts: (n: number) => string) => JSON.stringify({ payload: { resources: Array.from({ length: 12 }, (_, n) => ({ url: origin(n), quality_download: { json: hosts(n) }, quality_check_time: { date: n === 3 ? "2026-09-20 08:00:00.000000" : "2026-09-22 18:29:21.000000" } })) } });
+  const rows = JSON.stringify([{ 地區縣市: "高雄市政府", 短期補習班名稱: "高雄市私立好學外語短期補習班", 地址: "三民區建興路357號1-2樓", 短期補習班類別: "外語類", 電子郵件: "someone@example.com" }]);
+  const good = (text: string) => ({ ok: true, status: 200, text: async () => text });
+
+  it("takes each file from data.gov.tw's own copy when the Ministry's server refuses, and says how old the copy is", async () => {
+    const calls: string[] = [];
+    const fetchFn: FetchFn = async (u) => {
+      calls.push(u);
+      if (u === DATASET_API) return good(listing);
+      if (u === datasetDetailApi(NATIONAL_DATASET_ID)) return good(detail(copyUrl));
+      if (u.startsWith("https://quality.data.gov.tw/")) return good(rows);
+      throw Object.assign(new Error("fetch failed"), { cause: new Error("read ECONNRESET") });
+    };
+    const res = await fetchNational({ fetchFn, sleep: async () => {}, attempts: 1 });
+    expect(res.files).toHaveLength(12);
+    expect(res.failed).toHaveLength(0);
+    expect(res.fromPortalCopy).toBe(12);
+    expect(res.portalCopyDate).toBe("2026-09-20");
+    // After two refusals in a row the Ministry's server is left alone.
+    expect(calls.filter((c) => c.startsWith("https://bsb.kh.edu.tw/"))).toHaveLength(2);
+  });
+
+  it("does not follow a copy that is not on data.gov.tw's own server, and then reports the Ministry's refusal", async () => {
+    const fetchFn: FetchFn = async (u) => {
+      if (u === DATASET_API) return good(listing);
+      if (u === datasetDetailApi(NATIONAL_DATASET_ID)) return good(detail((n) => `https://elsewhere.example/copy-${n}.json`));
+      if (u.startsWith("https://elsewhere.example/")) return good(rows);
+      throw Object.assign(new Error("fetch failed"), { cause: new Error("read ECONNRESET") });
+    };
+    const res = await fetchNational({ fetchFn, sleep: async () => {}, attempts: 1 });
+    expect(res.files).toHaveLength(0);
+    expect(res.failed).toHaveLength(12);
+    expect(res.failed[0]!.error).toContain("ECONNRESET");
+    expect((await portalCopies(NATIONAL_DATASET_ID, { fetchFn, sleep: async () => {}, attempts: 1, timeoutMs: 1000 })).size).toBe(0);
+  });
+
+  it("reads a national row: the city from the authority's name, the kind from the category, and no email", () => {
+    const plan = planImport(rowsFromObjects(JSON.parse(rows) as Record<string, unknown>[]).rows);
+    expect(plan.records[0]).toMatchObject({ city: "kaohsiung", district: "kaohsiung:sanmin", type: "language_school" });
+    expect(JSON.stringify(plan.records)).not.toMatch(/example\.com|建興路/);
+  });
+
+  it("keeps a school whose address names the city but no district, at city level", () => {
+    const plan = planImport(rowsFromObjects([{ 地區縣市: "新竹市政府", 短期補習班名稱: "新竹市私立山葉鴻韻音樂短期補習班", 地址: "新竹市復興路16-5號2-4樓" }]).rows);
+    expect(plan.skipped.no_area).toBe(0);
+    expect(plan.records[0]).toMatchObject({ city: "hsinchu-city", district: null });
+    expect(plan.records[0]!.latitude).toBeGreaterThan(24.6);
+    expect(matchCity({ address: "somewhere" })).toBeNull();
+  });
+
+  it("knows one school under the county's spelling and the register's spelling", () => {
+    expect(cramKey("南投縣私立弘勵文理短期補習班")).toBe(cramKey("私立弘勵文理短期補習班"));
+    expect(cramKey("智碩資優文教事業有限公司附設臺中市私立智碩語文短期補習班")).toBe(cramKey("智碩資優文教事業有限公司附設私立智碩語文短期補習班"));
+    expect(cramSourceId("南投縣私立弘勵文理短期補習班", "nantou:nantou")).toBe(cramSourceId("私立弘勵文理短期補習班", "nantou:nantou"));
+    expect(cramSourceId("私立弘勵文理短期補習班", "nantou:nantou")).not.toBe(cramSourceId("私立弘勵文理短期補習班", "nantou:caotun"));
+  });
+
+  it("brings earlier imports up to date instead of adding a school twice", () => {
+    const now = cramSourceId("私立弘勵文理短期補習班", "nantou:nantou");
+    const row = (o: Partial<ExistingCram> & { id: string }): ExistingCram => ({ name: "私立弘勵文理短期補習班", district: "nantou:nantou", sourceId: "gov-cram:0123456789abcdef", locked: false, ...o });
+    // One listing with an old id: it takes today's id.
+    expect(reconcileExisting([row({ id: "a" })])).toEqual({ reId: [{ id: "a", sourceId: now }], remove: [] });
+    // Two spellings of one school: one is kept, the other removed.
+    const two = reconcileExisting([row({ id: "a" }), row({ id: "b", name: "南投縣私立弘勵文理短期補習班", sourceId: now })]);
+    expect(two).toEqual({ reId: [], remove: ["a"] });
+    // A claimed listing is never removed, and it is the one that is kept.
+    const claimed = reconcileExisting([row({ id: "a", locked: true }), row({ id: "b", sourceId: "gov-cram:fedcba9876543210" })]);
+    expect(claimed.remove).toEqual(["b"]);
+    expect(claimed.reId).toEqual([{ id: "a", sourceId: now }]);
+    // A listing identified by a registration number is left alone.
+    expect(reconcileExisting([row({ id: "a", sourceId: "gov-cram:府教社字第123號" })])).toEqual({ reId: [], remove: [] });
+  });
+
+  it("finds schools that left the register, never a claimed one", () => {
+    const rowsNow: ExistingCram[] = [
+      { id: "a", name: "仍在", district: "taipei:daan", sourceId: "gov-cram:aaaaaaaaaaaaaaaa", locked: false },
+      { id: "b", name: "已停辦", district: "taipei:daan", sourceId: "gov-cram:bbbbbbbbbbbbbbbb", locked: false },
+      { id: "c", name: "已停辦但已認領", district: "taipei:daan", sourceId: "gov-cram:cccccccccccccccc", locked: true },
+    ];
+    expect(staleListings(rowsNow, new Set(["gov-cram:aaaaaaaaaaaaaaaa"])).map((r) => r.id)).toEqual(["b"]);
   });
 });
 

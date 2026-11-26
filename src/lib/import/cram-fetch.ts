@@ -138,6 +138,10 @@ export interface NationalResult {
   /** Files whose row count is far from what data.gov.tw says they hold. */
   suspicious: string[];
   fromDataset: boolean;
+  /** How many files came from data.gov.tw's own copy because the Ministry's server did not answer. */
+  fromPortalCopy: number;
+  /** The oldest date among those copies (YYYY-MM-DD), so the owner knows how fresh the data is. */
+  portalCopyDate: string | null;
 }
 
 /** Counts that differ by more than a tenth (and more than 5 rows) from the published figure deserve a look. */
@@ -149,22 +153,83 @@ export async function fetchNational(opts: FetchOptions = {}): Promise<NationalRe
   const pause = opts.pauseMs ?? 500;
   const { files: list, fromDataset } = await listSourceFiles({ ...opts, ...o });
   log(fromDataset ? `Dataset list read from data.gov.tw: ${list.length} files.` : `Could not read the dataset list from data.gov.tw; using the known list of ${list.length} files.`);
-  const result: NationalResult = { files: [], failed: [], suspicious: [], fromDataset };
+  const result: NationalResult = { files: [], failed: [], suspicious: [], fromDataset, fromPortalCopy: 0, portalCopyDate: null };
+  // The Ministry's server refuses connections from outside Taiwan. data.gov.tw keeps its own copy of every file; it is
+  // looked up only when a file cannot be fetched, and once the Ministry's server has failed twice it is not tried again.
+  let copies: Map<string, PortalCopy> | null = null;
+  let originFailures = 0;
+  const take = (f: SourceFile, raw: string) => {
+    const rows = extractObjects(JSON.parse(raw));
+    result.files.push({ ...f, rows, raw });
+    const off = countLooksOff(rows.length, f.expected);
+    if (off) result.suspicious.push(`${f.label}: ${rows.length} rows, data.gov.tw says ${f.expected}`);
+    return `${rows.length} rows${f.expected !== null ? ` (published count ${f.expected})` : ""}${off ? "  <-- check" : ""}`;
+  };
   for (const f of list) {
+    let originError: unknown = null;
+    // After two failures in a row, go straight to the copy for the files that have one.
+    if (!(originFailures >= 2 && copies?.has(f.url))) {
+      try {
+        log(`  ${f.label}: ${take(f, stripBom(await getText(f.url, o)))}`);
+        originFailures = 0;
+        await o.sleep(pause);
+        continue;
+      } catch (err) {
+        originError = err;
+        originFailures++;
+      }
+    }
+    copies ??= await portalCopies(NATIONAL_DATASET_ID, { ...o, attempts: 2 });
+    const copy = copies.get(f.url);
     try {
-      const raw = stripBom(await getText(f.url, o));
-      const rows = extractObjects(JSON.parse(raw));
-      result.files.push({ ...f, rows, raw });
-      const off = countLooksOff(rows.length, f.expected);
-      if (off) result.suspicious.push(`${f.label}: ${rows.length} rows, data.gov.tw says ${f.expected}`);
-      log(`  ${f.label}: ${rows.length} rows${f.expected !== null ? ` (published count ${f.expected})` : ""}${off ? "  <-- check" : ""}`);
+      if (!copy) throw originError ?? new Error("the Ministry's server is not answering and data.gov.tw has no copy of this file");
+      const said = take(f, stripBom(await getText(copy.json, o)));
+      result.fromPortalCopy++;
+      if (copy.checked && (!result.portalCopyDate || copy.checked < result.portalCopyDate)) result.portalCopyDate = copy.checked;
+      log(`  ${f.label}: ${said}, from data.gov.tw's own copy${copy.checked ? ` of ${copy.checked}` : ""}`);
     } catch (err) {
-      result.failed.push({ url: f.url, label: f.label, error: err instanceof Error ? err.message : String(err) });
-      log(`  ${f.label}: FAILED (${err instanceof Error ? err.message : err})`);
+      // Say why the Ministry's server failed when that is what we know; otherwise why the copy failed.
+      const shown = originError ?? err;
+      result.failed.push({ url: f.url, label: f.label, error: shown instanceof Error ? shown.message : String(shown) });
+      log(`  ${f.label}: FAILED (${shown instanceof Error ? shown.message : shown})`);
     }
     await o.sleep(pause);
   }
   return result;
+}
+
+/* ---------------- data.gov.tw's own copy of a dataset's files ---------------- */
+
+export const NATIONAL_DATASET_ID = 16461;
+export const datasetDetailApi = (id: number) => `https://data.gov.tw/api/front/dataset/detail?nid=${id}`;
+
+export interface PortalCopy {
+  /** The copy as JSON rows, on quality.data.gov.tw. */
+  json: string;
+  /** The day data.gov.tw last fetched the file (YYYY-MM-DD), when it says so. */
+  checked: string | null;
+}
+
+/**
+ * data.gov.tw fetches every published file for its quality check and keeps the result on quality.data.gov.tw, which
+ * answers from anywhere. Returns those copies keyed by the file's own address. Empty when the page cannot be read.
+ */
+export async function portalCopies(datasetId: number, o: Required<Pick<FetchOptions, "fetchFn" | "sleep" | "attempts" | "timeoutMs">>): Promise<Map<string, PortalCopy>> {
+  const out = new Map<string, PortalCopy>();
+  try {
+    const json = JSON.parse(stripBom(await getText(datasetDetailApi(datasetId), o))) as { payload?: { resources?: { url?: string; quality_download?: { json?: string }; quality_check_time?: { date?: string } }[] } };
+    for (const r of json.payload?.resources ?? []) {
+      const copy = r.quality_download?.json;
+      if (!r.url || !copy) continue;
+      let host = "";
+      try { host = new URL(copy).hostname; } catch { continue; }
+      if (!copy.startsWith("https://") || host !== "quality.data.gov.tw") continue;
+      out.set(r.url, { json: copy, checked: /^\d{4}-\d{2}-\d{2}/.exec(r.quality_check_time?.date ?? "")?.[0] ?? null });
+    }
+  } catch {
+    /* no copies known */
+  }
+  return out;
 }
 
 /* ---------------- the cities' own lists ---------------- */
